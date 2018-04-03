@@ -32,7 +32,7 @@ public class RSSNewsHandlerFunctionalTest extends TestCase {
         FeedFetcherCache feedInfoCache = HashMapFeedInfoCache.getInstance();
         HttpClientFeedFetcher fetcher = new HttpClientFeedFetcher(feedInfoCache);
 
-        SyndFeed feed = fetcher.retrieveFeed(new URL("http://feeds.finance.yahoo.com/rss/2.0/category-stocks?region=US&lang=en-US"), client);
+        SyndFeed feed = fetcher.retrieveFeed(new URL("https://news.google.com/news/rss/headlines/section/topic/BUSINESS?ned=us&hl=en&gl=US"), client);
         List entries = feed.getEntries();
         assertFalse(entries.size() == 0);
 
@@ -48,7 +48,7 @@ public class RSSNewsHandlerFunctionalTest extends TestCase {
         FeedFetcherCache feedInfoCache = HashMapFeedInfoCache.getInstance();
         HttpClientFeedFetcher fetcher = new HttpClientFeedFetcher(feedInfoCache);
 
-        SyndFeed feed = fetcher.retrieveFeed(new URL("http://eu.feeds.finance.yahoo.com/rss/2.0/category-affari-legali?region=IT&lang=it-IT"), client);
+        SyndFeed feed = fetcher.retrieveFeed(new URL("https://news.google.com/news/rss/headlines/section/topic/BUSINESS.it_it/Economia?ned=it&hl=it&gl=IT"), client);
         List entries = feed.getEntries();
         assertFalse(entries.size() == 0);
 

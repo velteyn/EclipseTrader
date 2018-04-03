@@ -151,10 +151,12 @@ public class Util {
 
     public static HttpMethod get1DayHistoryFeedMethod(IFeedIdentifier identifier) throws URIException {
         String symbol = getSymbol(identifier);
+        
+        //https://www.google.com/finance/getprices?i=[PERIOD]&p=[DAYS]d&f=d,o,h,l,c,v&df=cpct&q=[TICKER]
 
-        String prefix = "/instrument/1.0/";
-        String suffix = "/chartdata;type=quote;range=1d/csv/";
-        URI uri = new URI("http", "chartapi.finance.yahoo.com", prefix + symbol.toLowerCase() + suffix, "");
+        String prefix = "/finance/getprices?i=1&p=1d&f=d,o,h,l,c,v&df=cpct&q=";
+        //String suffix = "/chartdata;type=quote;range=1d/csv/";
+        URI uri = new URI("https", "www.google.com", prefix + symbol.toUpperCase(), "");
 
         GetMethod method = new GetMethod();
         method.setURI(uri);
