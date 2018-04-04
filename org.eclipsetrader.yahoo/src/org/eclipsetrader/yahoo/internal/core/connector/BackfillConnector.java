@@ -231,7 +231,7 @@ public class BackfillConnector implements IBackfillConnector, IExecutableExtensi
         String inputLine;
 
         while ((inputLine = in.readLine()) != null) {
-            if (!Character.isDigit(inputLine.charAt(0))) {
+            if (inputLine.charAt(0) != 'a') {
                 continue;
             }
 
@@ -309,7 +309,7 @@ public class BackfillConnector implements IBackfillConnector, IExecutableExtensi
             return null;
         }
 
-        Date date = new Date(Long.parseLong(item[0]) * 1000);
+        Date date = new Date(Long.parseLong(item[0].substring(1))*1000);
         double close = pf.parse(item[1].replace(',', '.')).doubleValue();
         double high = pf.parse(item[2].replace(',', '.')).doubleValue();
         double low = pf.parse(item[3].replace(',', '.')).doubleValue();

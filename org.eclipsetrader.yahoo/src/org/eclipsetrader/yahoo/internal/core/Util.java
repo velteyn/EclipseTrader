@@ -151,6 +151,7 @@ public class Util {
 
     public static HttpMethod get1DayHistoryFeedMethod(IFeedIdentifier identifier) throws URIException {
         String symbol = getSymbol(identifier);
+
         /*
         In Google Finance, intra-day data is available free for several stock markets. The complete list can be found here.
 
@@ -167,7 +168,7 @@ public class Util {
         
 
         String prefix = "/finance/getprices?i=10&p=1d&f=d,o,h,l,c,v&df=cpct&q=";
-        //String suffix = "/chartdata;type=quote;range=1d/csv/";
+
         URI uri = new URI("https", "www.google.com", prefix + symbol.toUpperCase(), "");
 
         GetMethod method = new GetMethod();
