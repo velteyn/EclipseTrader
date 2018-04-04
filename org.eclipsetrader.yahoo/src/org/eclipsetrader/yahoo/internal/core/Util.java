@@ -151,10 +151,24 @@ public class Util {
 
     public static HttpMethod get1DayHistoryFeedMethod(IFeedIdentifier identifier) throws URIException {
         String symbol = getSymbol(identifier);
+        /*
+        In Google Finance, intra-day data is available free for several stock markets. The complete list can be found here.
 
-        String prefix = "/instrument/1.0/";
-        String suffix = "/chartdata;type=quote;range=1d/csv/";
-        URI uri = new URI("http", "chartapi.finance.yahoo.com", prefix + symbol.toLowerCase() + suffix, "");
+        Data is available in several frequencies with the lowest one being one-minute time frame.
+
+        The URL format is: https://www.google.com/finance/getprices?i=[PERIOD]&p=[DAYS]d&f=d,o,h,l,c,v&df=cpct&q=[TICKER]
+
+        Example: https://www.google.com/finance/getprices?i=60&p=10d&f=d,o,h,l,c,v&df=cpct&q=IBM
+
+        [PERIOD]: Interval or frequency in seconds
+        [DAYS]: The historical data period, where "10d" means that we need historical stock prices data for the past 10 days.
+        [TICKER]: This is the ticker symbol of the stock
+        */
+        
+
+        String prefix = "/finance/getprices?i=10&p=1d&f=d,o,h,l,c,v&df=cpct&q=";
+        //String suffix = "/chartdata;type=quote;range=1d/csv/";
+        URI uri = new URI("https", "www.google.com", prefix + symbol.toUpperCase(), "");
 
         GetMethod method = new GetMethod();
         method.setURI(uri);
