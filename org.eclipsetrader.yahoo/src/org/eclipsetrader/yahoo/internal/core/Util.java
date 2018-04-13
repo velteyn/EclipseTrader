@@ -153,10 +153,16 @@ public class Util {
         String symbol = getSymbol(identifier);
         
         //https://www.google.com/finance/getprices?i=[PERIOD]&p=[DAYS]d&f=d,o,h,l,c,v&df=cpct&q=[TICKER]
+        
+        // API key: XXXXXXX
+        
+        //https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=1min&apikey=demo&datatype=csv
+        
+        //https://iextrading.com/developer/docs/
 
-        String prefix = "/finance/getprices?i=1&p=1d&f=d,o,h,l,c,v&df=cpct&q=";
-        //String suffix = "/chartdata;type=quote;range=1d/csv/";
-        URI uri = new URI("https", "www.google.com", prefix + symbol.toUpperCase(), "");
+        String prefix = "/query?function=TIME_SERIES_INTRADAY&symbol=";
+        String suffix = "&interval=1min&apikey=demo&datatype=csv";
+        URI uri = new URI("https", "www.alphavantage.co", prefix + symbol.toUpperCase()+suffix, "");
 
         GetMethod method = new GetMethod();
         method.setURI(uri);

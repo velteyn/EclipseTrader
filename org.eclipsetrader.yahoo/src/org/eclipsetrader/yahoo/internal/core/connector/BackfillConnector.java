@@ -231,9 +231,6 @@ public class BackfillConnector implements IBackfillConnector, IExecutableExtensi
         String inputLine;
 
         while ((inputLine = in.readLine()) != null) {
-            if (inputLine.charAt(0) != 'a') {
-                continue;
-            }
 
             try {
                 OHLC bar = parse1DayResponseLine(inputLine);
@@ -308,12 +305,13 @@ public class BackfillConnector implements IBackfillConnector, IExecutableExtensi
         if (item.length < 6) {
             return null;
         }
-
-        Date date = new Date(Long.parseLong(item[0].substring(1))*1000);
-        double close = pf.parse(item[1].replace(',', '.')).doubleValue();
-        double high = pf.parse(item[2].replace(',', '.')).doubleValue();
-        double low = pf.parse(item[3].replace(',', '.')).doubleValue();
-        double open = pf.parse(item[4].replace(',', '.')).doubleValue();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        Date date = df.parse(item[0]);
+        double open = pf.parse(item[4]).doubleValue();
+        double high = pf.parse(item[2]).doubleValue();
+        double low = pf.parse(item[3]).doubleValue();
+        double close = pf.parse(item[1]).doubleValue();
         long volume = nf.parse(item[5]).longValue();
 
         OHLC bar = new OHLC(date, open, high, low, close, volume);
