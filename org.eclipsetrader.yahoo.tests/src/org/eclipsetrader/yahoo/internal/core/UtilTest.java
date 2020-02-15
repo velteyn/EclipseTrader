@@ -46,7 +46,7 @@ public class UtilTest extends TestCase {
 
     public void testGet1DaysBackfillMethod() throws Exception {
         FeedIdentifier identifier = new FeedIdentifier("MSFT", new FeedProperties());
-        String expected = "http://chartapi.finance.yahoo.com/instrument/1.0/msft/chartdata;type=quote;range=1d/csv/";
+        String expected = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=1min&apikey=demo&datatype=csv";
 
         HttpMethod method = Util.get1DayHistoryFeedMethod(identifier);
         assertEquals(expected, method.getURI().toString());
