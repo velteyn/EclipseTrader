@@ -25,12 +25,15 @@ import org.eclipsetrader.core.views.IDataProviderFactory;
 public class ChangeAmountFactory extends AbstractProviderFactory {
 
     private NumberFormat formatter = NumberFormat.getInstance();
-    private Color positiveColor = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
-    private Color negativeColor = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+    private Color positiveColor = null;
+    private Color negativeColor = null;
 
     public class DataProvider implements IDataProvider {
 
         public DataProvider() {
+        	
+        	positiveColor = Display.getDefault().getSystemColor(SWT.COLOR_GREEN); 
+        	negativeColor = Display.getDefault().getSystemColor(SWT.COLOR_RED);   
         }
 
         /* (non-Javadoc)

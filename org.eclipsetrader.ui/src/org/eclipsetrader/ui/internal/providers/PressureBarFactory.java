@@ -35,17 +35,35 @@ public class PressureBarFactory extends AbstractProviderFactory {
     private static final int IMAGE_HEIGHT = 16;
     private static final int IMAGE_HALF_WIDTH = IMAGE_WIDTH / 2;
 
-    private Color bidColor = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-    private Color bidFillColor = new Color(Display.getDefault(), blend(bidColor.getRGB(), new RGB(0, 0, 0), 75));
-    private Color askColor = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
-    private Color askFillColor = new Color(Display.getDefault(), blend(askColor.getRGB(), new RGB(0, 0, 0), 75));
-    private Color backgroundColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
+    private Color bidColor        = null;
+    private Color bidFillColor    = null;
+    private Color askColor        = null;
+    private Color askFillColor    = null;
+    private Color backgroundColor = null;
 
+    
+    
+    public PressureBarFactory(){
+    	
+    	 bidColor = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+         bidFillColor = new Color(Display.getDefault(), blend(bidColor.getRGB(), new RGB(0, 0, 0), 75));
+         askColor = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
+         askFillColor = new Color(Display.getDefault(), blend(askColor.getRGB(), new RGB(0, 0, 0), 75));
+         backgroundColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
+    	
+    }
+    
+    
     private class Data {
 
         IBook book;
         Image image;
         ImageDataValue value;
+        
+        
+    
+        
+        
     }
 
     public class DataProvider implements IDataProvider {
@@ -138,8 +156,7 @@ public class PressureBarFactory extends AbstractProviderFactory {
         }
     }
 
-    public PressureBarFactory() {
-    }
+
 
     /* (non-Javadoc)
      * @see org.eclipsetrader.core.views.IDataProviderFactory#createProvider()
