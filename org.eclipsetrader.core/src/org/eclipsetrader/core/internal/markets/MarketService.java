@@ -247,6 +247,9 @@ public class MarketService extends Observable implements IMarketService, Runnabl
                     thread.wait(delay);
                 } catch (InterruptedException e) {
                     // Ignore exception, not important at this time
+                }catch(Exception e){
+                	
+                	e.printStackTrace();
                 }
             }
         }
