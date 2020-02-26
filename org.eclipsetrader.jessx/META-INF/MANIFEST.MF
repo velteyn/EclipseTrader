@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jessx
+Bundle-SymbolicName: org.eclipsetrader.jessx; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipsetrader.jessx.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.net;bundle-version="1.2.200",
+ org.eclipse.ui,
+ org.eclipsetrader.core;bundle-version="1.0.0",
+ org.eclipsetrader.news;bundle-version="1.0.0",
+ org.eclipse.nebula.widgets.cdatetime;bundle-version="0.14.0",
+ org.eclipsetrader.ui;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-Vendor: https://github.com/velteyn/jessx
+Import-Package: javax.xml.bind;version="[2.1.0,2.2.0)",
+ javax.xml.bind.annotation;version="[2.1.0,2.2.0)",
+ javax.xml.bind.annotation.adapters;version="[2.1.0,2.2.0)",
+ javax.xml.bind.attachment;version="[2.1.0,2.2.0)",
+ javax.xml.bind.helpers;version="[2.1.0,2.2.0)",
+ javax.xml.bind.util;version="[2.1.0,2.2.0)"

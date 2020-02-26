@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         name="Jessx"
+         point="org.eclipsetrader.core.connectors">
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="Sample Preferences"
+            class="org.eclipsetrader.jessx.preferences.SamplePreferencePage"
+            id="org.eclipsetrader.jessx.preferences.SamplePreferencePage">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipsetrader.jessx.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            name="Sample File Import"
+            id="org.eclipsetrader.jessx.importWizards.sampleCategory">
+      </category>
+      <wizard
+            name="Import File"
+            icon="icons/sample.gif"
+            category="org.eclipsetrader.jessx.importWizards.sampleCategory"
+            class="org.eclipsetrader.jessx.importWizards.ImportWizard"
+            id="org.eclipsetrader.jessx.importWizards.ImportWizard">
+         <description>
+            Import a file from the local file system into the workspace.
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>
