@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Jessx
 Bundle-SymbolicName: org.eclipsetrader.jessx; singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.eclipsetrader.jessx.Activator
+Bundle-Activator: org.eclipsetrader.jessx.internal.JessxActivator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.net;bundle-version="1.2.200",
  org.eclipse.ui,
@@ -20,3 +20,4 @@ Import-Package: javax.xml.bind;version="[2.1.0,2.2.0)",
  javax.xml.bind.attachment;version="[2.1.0,2.2.0)",
  javax.xml.bind.helpers;version="[2.1.0,2.2.0)",
  javax.xml.bind.util;version="[2.1.0,2.2.0)"
+Export-Package: org.eclipsetrader.jessx.internal.core.connector;uses:="org.eclipse.core.runtime,org.eclipsetrader.core.feed"

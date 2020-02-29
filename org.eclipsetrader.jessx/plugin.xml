@@ -4,13 +4,34 @@
    <extension
          name="Jessx"
          point="org.eclipsetrader.core.connectors">
+          <connector
+                class="org.eclipsetrader.jessx.internal.core.connector.FeedConnector"
+                id="org.eclipsetrader.jessx"
+                name="JessX! Finance">
+          </connector>
+           <backfill
+            class="org.eclipsetrader.jessx.internal.core.connector.BackfillConnector"
+            id="org.eclipsetrader.jessx"
+            name="JessX! Finance">
+      </backfill>
+      <property
+            id="org.eclipsetrader.jessx.symbol"
+            name="Symbol">
+      </property>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
+     <page
+            category="org.eclipsetrader.ui.preferences.plugins"
+            class="org.eclipsetrader.jessx.internal.ui.preferences.AuthenticationPage"
+            id="org.eclipsetrader.jessx.general"
+            name="JessX! Finance">
+      </page>
       <page
-            name="Sample Preferences"
-            class="org.eclipsetrader.jessx.preferences.SamplePreferencePage"
-            id="org.eclipsetrader.jessx.preferences.SamplePreferencePage">
+            category="org.eclipsetrader.ui.preferences.news"
+            class="org.eclipsetrader.jessx.internal.ui.preferences.NewsPreferencesPage"
+            id="org.eclipsetrader.jessx.news"
+            name="JessX! Finance">
       </page>
    </extension>
    <extension
@@ -23,19 +44,35 @@
    <extension
          point="org.eclipse.ui.importWizards">
       <category
-            name="Sample File Import"
-            id="org.eclipsetrader.jessx.importWizards.sampleCategory">
+            name="Finence data importer (JessX)"
+            id="org.eclipsetrader.jessx.importWizards">
       </category>
       <wizard
-            name="Import File"
-            icon="icons/sample.gif"
-            category="org.eclipsetrader.jessx.importWizards.sampleCategory"
-            class="org.eclipsetrader.jessx.importWizards.ImportWizard"
-            id="org.eclipsetrader.jessx.importWizards.ImportWizard">
+            category="org.eclipsetrader.ui.import.data"
+            class="org.eclipsetrader.jessx.internal.ui.wizards.DataImportWizard"
+            icon="logo_JessX_16.gif"
+            id="org.eclipsetrader.jessx.data"
+            name="JessX! Finance">
          <description>
-            Import a file from the local file system into the workspace.
+            Import historical data from JessX! Finance.
          </description>
       </wizard>
+   </extension>
+   <extension
+         point="org.eclipsetrader.news.providers">
+      <provider
+            class="org.eclipsetrader.jessx.internal.news.NewsProviderFactory"
+            id="org.eclipsetrader.news.jessx"
+            name="JessX! Finance">
+      </provider>
+   </extension>
+   <extension
+         point="org.eclipsetrader.core.providers">
+      <provider
+            class="org.eclipsetrader.jessx.internal.ui.FeedIdentifierFactory"
+            id="org.eclipsetrader.jessx.providers.symbol"
+            name="JessX! Finance">
+      </provider>
    </extension>
 
 </plugin>
