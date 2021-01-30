@@ -19,5 +19,11 @@ Import-Package: javax.xml.bind;version="[2.1.0,2.2.0)",
  javax.xml.bind.annotation.adapters;version="[2.1.0,2.2.0)",
  javax.xml.bind.attachment;version="[2.1.0,2.2.0)",
  javax.xml.bind.helpers;version="[2.1.0,2.2.0)",
- javax.xml.bind.util;version="[2.1.0,2.2.0)"
-Export-Package: org.eclipsetrader.jessx.internal.core.connector;uses:="org.eclipse.core.runtime,org.eclipsetrader.core.feed"
+ javax.xml.bind.util;version="[2.1.0,2.2.0)",
+ org.apache.log4j;version="1.2.14",
+ org.jdom;version="1.0.0",
+ org.jdom.input;version="1.0.0",
+ org.jdom.output;version="1.0.0"
+Export-Package: org.eclipsetrader.jessx.internal;x-internal:=true,
+ org.eclipsetrader.jessx.internal.core.connector;x-internal:=true;uses:="org.eclipse.core.runtime,org.eclipsetrader.core.feed",
+ org.eclipsetrader.jessx.internal.core.repository;x-internal:=true

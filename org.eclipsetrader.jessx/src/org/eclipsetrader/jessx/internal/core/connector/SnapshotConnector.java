@@ -7,16 +7,28 @@
  *
  * Contributors:
  *     Marco Maccaferri - initial API and implementation
- *     Edoardo BAROLO - virtual investor 
+ *     Edoardo BAROLO   - virtual investor 
+ *     
  */
 
-package org.eclipsetrader.yahoo.internal.core.connector;
+
+package org.eclipsetrader.jessx.internal.core.connector;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,8 +40,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
@@ -44,11 +54,21 @@ import org.eclipsetrader.core.feed.LastClose;
 import org.eclipsetrader.core.feed.Quote;
 import org.eclipsetrader.core.feed.TodayOHL;
 import org.eclipsetrader.core.feed.Trade;
-import org.eclipsetrader.yahoo.internal.YahooActivator;
-import org.eclipsetrader.yahoo.internal.core.Util;
-import org.eclipsetrader.yahoo.internal.core.repository.IdentifierType;
-import org.eclipsetrader.yahoo.internal.core.repository.IdentifiersList;
-import org.eclipsetrader.yahoo.internal.core.repository.PriceDataType;
+import org.eclipsetrader.jessx.client.ClientCore;
+import org.eclipsetrader.jessx.client.LoginMessage;
+import org.eclipsetrader.jessx.internal.JessxActivator;
+import org.eclipsetrader.jessx.internal.core.Util;
+import org.eclipsetrader.jessx.internal.core.repository.IdentifierType;
+import org.eclipsetrader.jessx.internal.core.repository.IdentifiersList;
+import org.eclipsetrader.jessx.internal.core.repository.PriceDataType;
+import org.eclipsetrader.jessx.net.NetworkWritable;
+import org.eclipsetrader.jessx.utils.Utils;
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
+
 
 public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableExtension, PropertyChangeListener {
 
@@ -82,6 +102,14 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
     protected Thread thread;
     private boolean stopping = false;
     private boolean subscriptionsChanged = false;
+    
+    
+    private Socket socket;
+    private int state;
+    private OutputStream output;
+    private InputStream input;
+    private DataInputStream dataInput;
+    private DataOutputStream dataOutput;
 
     public SnapshotConnector() {
         symbolSubscriptions = new HashMap<String, FeedSubscription>();
@@ -185,6 +213,65 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
             thread.start();
         }
     }
+    
+    
+    //EDOARDO CONNECT DESTINATION
+    public void connect(final String hostName, final String login, final String password) throws IOException {
+        try {
+            Utils.logger.debug("Getting the socket to the server...");
+            this.socket = new Socket(InetAddress.getByName(hostName), Integer.parseInt(Utils.appsProperties.getProperty("ServerWaitingPort")));
+        }
+        catch (UnknownHostException ex4) {
+            Utils.logger.error("Host " + hostName + " unknown. Connection aborted. Retry with an other hostname.");
+            return;
+        }
+        catch (NumberFormatException ex) {
+            Utils.logger.fatal("Could not connect: property ServerWaitingPort in client.properties is not an integer: " + ex.toString());
+            throw ex;
+        }
+        catch (IOException ex2) {
+            Utils.logger.fatal("IOError while trying to connect to server: " + ex2.toString());
+            throw ex2;
+        }
+        this.setState(1);
+        try {
+            Utils.logger.debug("Getting communications streams...");
+            this.input = this.socket.getInputStream();
+            this.dataInput = new DataInputStream(this.input);
+            this.output = this.socket.getOutputStream();
+            this.dataOutput = new DataOutputStream(this.output);
+        }
+        catch (IOException ex3) {
+            Utils.logger.error("Error getting streams from the socket: " + ex3.toString() + ". try to reconnect later.");
+            return;
+        }
+        final String javaversion = System.getProperty("java.version");
+        this.send(new LoginMessage(login, password, javaversion));
+        thread.start();
+    }
+    
+    private void setState(final int newState) {
+        if (newState != this.state) {
+            ClientCore.fireConnectionStateChanged(this.state = newState);
+        }
+    }
+    
+    
+    public synchronized void send(final NetworkWritable object) {
+        try {
+            Utils.logger.debug("Preparing the stream and object (" + object.getClass().toString() + ") for output...");
+            final StringWriter writer = new StringWriter();
+            new XMLOutputter(Format.getRawFormat()).output(new Document(object.prepareForNetworkOutput(null)), writer);
+            final String message = writer.getBuffer().toString();
+            Utils.logger.debug("Writing to server:" + message);
+            this.dataOutput.writeUTF(String.valueOf(message) + "[JessX-end]");
+            this.dataOutput.flush();
+            Utils.logger.debug("Output done successfully.");
+        }
+        catch (IOException ex) {
+            Utils.logger.error("Unable to write to output streams: " + ex.toString());
+        }
+    }
 
     /* (non-Javadoc)
      * @see org.eclipsetrader.core.feed.IFeedConnector#disconnect()
@@ -200,8 +287,8 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
                 }
                 thread.join(30 * 1000);
             } catch (InterruptedException e) {
-                Status status = new Status(IStatus.ERROR, YahooActivator.PLUGIN_ID, 0, "Error stopping thread", e);
-                YahooActivator.log(status);
+                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping thread", e);
+                JessxActivator.log(status);
             }
             thread = null;
         }
@@ -216,17 +303,31 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
      */
     @Override
     public void run() {
+    	//nuova gstione
+    	 String dataRemaining = "";
+         Utils.logger.debug("Listenning to input streams...");
+         while (this.state == 1) {
+             try {
+                 Utils.logger.debug("Waiting for data...");
+                 dataRemaining = this.readXmlFromNetwork(String.valueOf(dataRemaining) + this.dataInput.readUTF());
+             }
+             catch (IOException ex) {
+                 Utils.logger.error("Error reading input stream: " + ex.toString());
+                 this.setState(0);
+             }
+         }
+    	//fine nuova gestione
+    	
+    	
+    	
         try {
-            HttpClient client = new HttpClient();
-            client.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
-            Util.setupProxy(client, Util.snapshotFeedHost);
-
-            synchronized (thread) {
+          
+           synchronized (thread) {
                 while (!isStopping()) {
                     synchronized (symbolSubscriptions) {
                         if (symbolSubscriptions.size() != 0) {
                             String[] symbols = symbolSubscriptions.keySet().toArray(new String[symbolSubscriptions.size()]);
-                            fetchLatestSnapshot(client, symbols, false);
+                           // fetchLatestSnapshot(null, symbols, false);
                             setSubscriptionsChanged(false);
                         }
                     }
@@ -239,22 +340,51 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
                 }
             }
         } catch (Exception e) {
-            Status status = new Status(IStatus.ERROR, YahooActivator.PLUGIN_ID, 0, "Error reading data", e);
-            YahooActivator.log(status);
+            Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error reading data", e);
+            JessxActivator.log(status);
         }
     }
+    
+    
+    private String readXmlFromNetwork(final String data) {
+        final int begin = data.indexOf("<?");
+        final int end = data.indexOf("[JessX-end]", begin);
+        if (begin != -1 && end != -1) {
+            final String message = data.substring(begin, end);
+            final SAXBuilder sax = new SAXBuilder();
+            try {
+                Utils.logger.debug(message);
+                this.fireObjectReceived(sax.build(new StringReader(message)));
+            }
+            catch (IOException ex2) {}
+            catch (JDOMException ex) {
+                Utils.logger.error("Could not read message : " + message + ". Error: " + ex.toString());
+            }
+            return this.readXmlFromNetwork(data.substring(end + "[JessX-end]".length()));
+        }
+        if (begin == -1) {
+            return "";
+        }
+        return data.substring(begin);
+    }
+    
 
-    protected void fetchLatestSnapshot(HttpClient client, String[] symbols, boolean isStaleUpdate) {
-        HttpMethod method = null;
+    private void fireObjectReceived(Document build) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected void fetchLatestSnapshot( String[] symbols, boolean isStaleUpdate) {
+
         BufferedReader in = null;
         String line = ""; //$NON-NLS-1$
 
         try {
-            method = Util.getSnapshotFeedMethod(symbols);
+         
 
-            client.executeMethod(method);
 
-            in = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
+
+            in = new BufferedReader(new InputStreamReader(null));
             while ((line = in.readLine()) != null) {
                 processSnapshotData(line, isStaleUpdate);
             }
@@ -269,19 +399,17 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
             }
 
         } catch (Exception e) {
-            Status status = new Status(IStatus.ERROR, YahooActivator.PLUGIN_ID, 0, "Error reading data", e);
-            YahooActivator.log(status);
+            Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error reading data", e);
+            JessxActivator.log(status);
         } finally {
             try {
                 if (in != null) {
                     in.close();
                 }
-                if (method != null) {
-                    method.releaseConnection();
-                }
+               
             } catch (Exception e) {
-                Status status = new Status(IStatus.WARNING, YahooActivator.PLUGIN_ID, 0, "Connection wasn't closed cleanly", e);
-                YahooActivator.log(status);
+                Status status = new Status(IStatus.WARNING, JessxActivator.PLUGIN_ID, 0, "Connection wasn't closed cleanly", e);
+                JessxActivator.log(status);
             }
         }
     }
@@ -355,8 +483,8 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
 
             return c.getTime();
         } catch (ParseException e) {
-            Status status = new Status(IStatus.ERROR, YahooActivator.PLUGIN_ID, 0, "Error parsing date/time values", e);
-            YahooActivator.log(status);
+            Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing date/time values", e);
+            JessxActivator.log(status);
         }
 
         return null;
@@ -368,8 +496,8 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
                 return numberFormat.parse(value).doubleValue();
             }
         } catch (ParseException e) {
-            Status status = new Status(IStatus.ERROR, YahooActivator.PLUGIN_ID, 0, "Error parsing number", e);
-            YahooActivator.log(status);
+            Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing number", e);
+            JessxActivator.log(status);
         }
         return null;
     }
@@ -380,8 +508,8 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
                 return numberFormat.parse(value).longValue();
             }
         } catch (ParseException e) {
-            Status status = new Status(IStatus.ERROR, YahooActivator.PLUGIN_ID, 0, "Error parsing number", e);
-            YahooActivator.log(status);
+            Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing number", e);
+            JessxActivator.log(status);
         }
         return null;
     }

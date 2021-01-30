@@ -11,6 +11,7 @@ import javax.xml.bind.ValidationEventHandler;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipsetrader.jessx.internal.core.repository.IdentifiersList;
 import org.osgi.framework.BundleContext;
@@ -126,4 +127,15 @@ public class JessxActivator extends AbstractUIPlugin {
         }
         plugin.getLog().log(status);
     }
+    
+    /**
+	 * Returns an image descriptor for the image file at the given
+	 * plug-in relative path
+	 *
+	 * @param path the path
+	 * @return the image descriptor
+	 */
+	public static ImageDescriptor getImageDescriptor(String path) {
+		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
 }

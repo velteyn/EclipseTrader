@@ -3,7 +3,8 @@ package org.eclipsetrader.jessx.preferences;
 import org.eclipse.jface.preference.*;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
-import org.eclipsetrader.jessx.Activator;
+import org.eclipsetrader.jessx.internal.JessxActivator;
+
 
 /**
  * This class represents a preference page that
@@ -25,7 +26,7 @@ public class SamplePreferencePage
 
 	public SamplePreferencePage() {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(JessxActivator.getDefault().getPreferenceStore());
 		setDescription("A demonstration of a preference page implementation");
 	}
 	
