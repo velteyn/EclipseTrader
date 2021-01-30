@@ -14,7 +14,7 @@ import org.eclipsetrader.jessx.utils.XmlLoadable;
 
 public interface GeneralParameters extends XmlLoadable, XmlExportable
 {
-    JPanel getGeneralParameterSetupGui();
+    //JPanel getGeneralParameterSetupGui();
     
     void addPeriodCountChangeListener(final ChangeListener p0);
     

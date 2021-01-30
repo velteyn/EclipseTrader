@@ -6,6 +6,7 @@ package org.eclipsetrader.jessx.server;
 
 import javax.swing.UIManager;
 import org.apache.log4j.PropertyConfigurator;
+import org.eclipse.trader.jessx.business.BusinessCore;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.utils.Utils;
 
@@ -27,7 +28,7 @@ public class Server
     public static int SERVER_STATE_OFFLINE;
     public static int SERVER_STATE_ONLINE;
     boolean packFrame;
-    private GeneralServerFrame frame;
+  //  private GeneralServerFrame frame;
     private static int experimentState;
     private static int serverState;
     private static final FileFilter filter;
@@ -75,7 +76,8 @@ public class Server
     
     public Server(final String scenarioFile, final boolean graphicalMode) {
         this.packFrame = true;
-        BusinessCore.setGeneralParameters(new GeneralParameterSetupGui(graphicalMode));
+       // BusinessCore.setGeneralParameters(new GeneralParameterSetupGui(graphicalMode));
+        BusinessCore.setGeneralParameters(new GeneralParametersLocal());
         Server.experimentState = Server.EXPERIMENT_STATE_SETUP;
         Server.serverState = Server.SERVER_STATE_OFFLINE;
         this.loadServerProperties();
@@ -87,7 +89,7 @@ public class Server
             if (scenarioFile != "") {
                 System.out.println("Il y a un fichier, chargement...");
                 final Document xmlDoc = Utils.readXmlFile(scenarioFile);
-                BusinessCore.loadFromXml(xmlDoc.getRootElement(), this.frame);
+                BusinessCore.loadFromXml(xmlDoc.getRootElement(), new JFrame()); //FIXME !! This is utterly wrong EDOARDO
             }
         }
         catch (Exception ex) {}
@@ -105,6 +107,8 @@ public class Server
     }
     
     private void buildFrame() {
+    	/* FRAME EXCLUDED BECAUSE WE MUST IMPLEMENT ANOTHER TYPE ON EclipseTrader
+    	 * EDOARDO
         Utils.logger.info("Building frame...");
         this.frame = new GeneralServerFrame();
         if (this.packFrame) {
@@ -127,6 +131,7 @@ public class Server
         this.frame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
         Utils.logger.debug("Setting the frame visible.");
         this.frame.setVisible(true);
+        */
     }
     
     private void loadServerProperties() {

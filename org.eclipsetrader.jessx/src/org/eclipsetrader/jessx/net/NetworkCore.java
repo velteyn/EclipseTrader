@@ -3,6 +3,14 @@ package org.eclipsetrader.jessx.net;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
+
+import org.eclipse.trader.jessx.business.BusinessCore;
+import org.eclipse.trader.jessx.business.event.PlayerListener;
+import org.eclipsetrader.jessx.client.PlayerEvent;
+import org.eclipsetrader.jessx.server.LogManager;
+import org.eclipsetrader.jessx.server.net.ClientConnectionPoint;
+import org.eclipsetrader.jessx.server.net.ExperimentManager;
+import org.eclipsetrader.jessx.server.net.Player;
 import org.jdom.Document;
 
 public abstract class NetworkCore {
