@@ -1,0 +1,6 @@
+1) Capire come funziona il server di JESSX per farlo partire senza gui del menga e preconfigurarlo in modo che funzioni
+    Giocarci col suo client
+    
+2) Capire come si crea un plugin di eclips con un bottone play per far partire il server, vedere directa (control_play.png) 
+3) Il feed connector lo abbiamo fatto come mai non esce ? Quello sarebbe il nostro client
+4) sarebbe da inserire il server dentro a Eclipse al posto di Directa, Quello start (plaY) li dovrebbe far partire il server (cercare * LIve data Feed)
