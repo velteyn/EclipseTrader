@@ -369,6 +369,10 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
      */
     @Override
     public synchronized void connect() {
+    	
+    	//EDOARDO We are going to remove this so for now we comment it out
+    	//dunno if it works, I don't want to  try to create an account with directa to try it out so .. bye  bye directa
+    	/*
         WebConnector.getInstance().login();
 
         stopping = false;
@@ -382,6 +386,7 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
             thread = new Thread(this, name + " - Data Reader"); //$NON-NLS-1$
             thread.start();
         }
+        */
     }
 
     /* (non-Javadoc)
