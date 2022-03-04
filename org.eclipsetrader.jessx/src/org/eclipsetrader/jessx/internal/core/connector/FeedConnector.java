@@ -36,7 +36,7 @@ public class FeedConnector implements IFeedConnector, IExecutableExtension{
 
 	@Override
 	public void connect() {
-		// TODO Auto-generated method stub
+		System.out.println("Sono qua!");
 		
 	}
 
