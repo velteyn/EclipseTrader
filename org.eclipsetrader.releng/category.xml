@@ -24,5 +24,8 @@
    <feature url="features/org.eclipsetrader.repository.hibernate.postgresql_1.0.0.qualifier.jar" id="org.eclipsetrader.repository.hibernate.postgresql" version="1.0.0.qualifier">
       <category name="platform"/>
    </feature>
+   <feature url="features/org.eclipsetrader.jessx_1.0.0.qualifier.jar" id="org.eclipsetrader.jessx" version="1.0.0.qualifier">
+      <category name="platform"/>
+   </feature>
    <category-def name="platform" label="EclipseTrader"/>
 </site>
