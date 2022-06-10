@@ -8,7 +8,10 @@ import org.eclipsetrader.core.feed.IFeedConnector;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedSubscription;
 
+
 public class FeedConnector implements IFeedConnector, IExecutableExtension{
+	
+	private SnapshotConnector connector;
 
 	@Override
 	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
@@ -36,14 +39,12 @@ public class FeedConnector implements IFeedConnector, IExecutableExtension{
 
 	@Override
 	public void connect() {
-		System.out.println("Sono qua!");
-		
+		connector.connect();
 	}
 
 	@Override
 	public void disconnect() {
-		// TODO Auto-generated method stub
-		
+		connector.disconnect();
 	}
 
 	@Override
