@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipsetrader.core;bundle-version="1.0.0",
  org.eclipsetrader.news;bundle-version="1.0.0",
  org.eclipse.nebula.widgets.cdatetime;bundle-version="0.14.0",
- org.eclipsetrader.ui;bundle-version="1.0.0"
+ org.eclipsetrader.ui;bundle-version="1.0.0",
+ org.eclipse.equinox.security;bundle-version="1.1.100"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: https://github.com/velteyn/jessx
@@ -20,7 +21,16 @@ Import-Package: javax.xml.bind;version="[2.1.0,2.2.0)",
  javax.xml.bind.attachment;version="[2.1.0,2.2.0)",
  javax.xml.bind.helpers;version="[2.1.0,2.2.0)",
  javax.xml.bind.util;version="[2.1.0,2.2.0)",
+ org.apache.commons.httpclient;version="3.1.0",
+ org.apache.commons.httpclient.auth;version="3.1.0",
+ org.apache.commons.httpclient.methods;version="3.1.0",
+ org.apache.commons.logging,
  org.apache.log4j;version="1.2.14",
+ org.htmlparser;version="1.6.0",
+ org.htmlparser.filters;version="1.6.0",
+ org.htmlparser.nodes;version="1.6.0",
+ org.htmlparser.tags;version="1.6.0",
+ org.htmlparser.util;version="1.6.0",
  org.jdom;version="1.0.0",
  org.jdom.input;version="1.0.0",
  org.jdom.output;version="1.0.0"
