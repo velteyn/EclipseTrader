@@ -23,7 +23,8 @@ import org.eclipsetrader.core.instruments.Security;
 import org.eclipsetrader.core.repositories.IRepositoryService;
 import org.eclipsetrader.core.trading.IPosition;
 import org.eclipsetrader.jessx.internal.JessxActivator;
-import org.eclipsetrader.jessx.internal.core.repository.SecurityAdapter;
+import org.eclipsetrader.jessx.internal.news.SecurityAdapter;
+
 
 
 import org.osgi.framework.BundleContext;

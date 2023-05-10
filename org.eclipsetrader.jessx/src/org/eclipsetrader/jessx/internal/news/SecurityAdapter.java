@@ -9,7 +9,7 @@
  *     Marco Maccaferri - initial API and implementation
  */
 
-package org.eclipsetrader.jessx.internal.core.repository;
+package org.eclipsetrader.jessx.internal.news;
 
 import java.net.URI;
 

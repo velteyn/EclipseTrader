@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedProperties;
 
-
+@XmlRootElement(name = "list")
+@XmlType(name = "org.eclipsetrader.jessx.IdentifiersList")
 public class IdentifiersList {
 	  private static IdentifiersList instance;
 
