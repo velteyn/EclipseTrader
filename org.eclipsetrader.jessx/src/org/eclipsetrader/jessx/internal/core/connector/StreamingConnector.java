@@ -23,11 +23,16 @@ import java.util.Map;
 import java.util.Set;
 
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
+import org.eclipsetrader.core.feed.IConnectorListener;
 import org.eclipsetrader.core.feed.Quote;
 import org.eclipsetrader.core.feed.TodayOHL;
 import org.eclipsetrader.core.feed.Trade;
+
 import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.internal.core.Util;
 import org.eclipsetrader.jessx.internal.core.repository.IdentifierType;
@@ -50,6 +55,17 @@ public class StreamingConnector extends SnapshotConnector {
     private StringBuilder script;
     private boolean inTag;
     private boolean inScript;
+    
+    
+
+    private String id;
+    private String name;
+    
+    private boolean stopping = false;
+    
+    private Thread notificationThread;
+    
+    private ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
 
     public StreamingConnector() {
     }
@@ -321,4 +337,70 @@ public class StreamingConnector extends SnapshotConnector {
 
         return map;
     }
+    
+    @Override
+    public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
+    	 id = config.getAttribute("id"); //$NON-NLS-1$
+         name = config.getAttribute("name"); //$NON-NLS-1$
+         instance = this;
+    }
+    
+    
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipsetrader.core.feed.IFeedConnector#getName()
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public synchronized void disconnect() {
+    	   stopping = true;
+
+           if (thread != null) {
+               try {
+                   thread.join(30 * 1000);
+               } catch (InterruptedException e) {
+                   Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping thread", e); //$NON-NLS-1$
+                   JessxActivator.log(status);
+               }
+               thread = null;
+           }
+
+           if (notificationThread != null) {
+               try {
+                   synchronized (notificationThread) {
+                       notificationThread.notify();
+                   }
+                   notificationThread.join(30 * 1000);
+               } catch (InterruptedException e) {
+                   Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping notification thread", e); //$NON-NLS-1$
+                   JessxActivator.log(status);
+               }
+               notificationThread = null;
+           }
+    }
+    
+    /* (non-Javadoc)
+     * @see org.eclipsetrader.core.feed.IFeedConnector#addConnectorListener(org.eclipsetrader.core.feed.IConnectorListener)
+     */
+    @Override
+    public void addConnectorListener(IConnectorListener listener) {
+        listeners.add(listener);
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipsetrader.core.feed.IFeedConnector#removeConnectorListener(org.eclipsetrader.core.feed.IConnectorListener)
+     */
+    @Override
+    public void removeConnectorListener(IConnectorListener listener) {
+        listeners.remove(listener);
+    }
+
 }

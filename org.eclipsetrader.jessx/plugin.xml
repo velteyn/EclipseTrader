@@ -6,18 +6,23 @@
          point="org.eclipsetrader.core.connectors">
           <connector
                 class="org.eclipsetrader.jessx.internal.core.connector.FeedConnector"
-                id="org.eclipsetrader.jessx"
+                id="org.eclipsetrader.jessx.feed"
                 name="JessX! Finance">
           </connector>
            <backfill
             class="org.eclipsetrader.jessx.internal.core.connector.BackfillConnector"
-            id="org.eclipsetrader.jessx"
-            name="JessX! Finance">
+            id="org.eclipsetrader.jessx.bf"
+            name="JessX! Finance BF">
       </backfill>
       <property
             id="org.eclipsetrader.jessx.symbol"
             name="Symbol">
       </property>
+      <connector
+            class="org.eclipsetrader.jessx.internal.core.connector.StreamingConnector"
+            id="org.eclipsetrader.jessx.connector"
+            name="JessX! Finance Streaming">
+      </connector>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">

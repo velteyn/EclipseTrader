@@ -235,6 +235,8 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
 	// EDOARDO CONNECT DESTINATION
 	
 	//TODO Edoz:  STARTUP THE SERVER FIRST !!!
+	
+	//TODO EDoz mettere il client qua e attivare log4j
 	public void connect(final String hostName, final String login, final String password) throws IOException {
 		try {
 			Utils.logger.debug("Getting the socket to the server...");
