@@ -119,11 +119,10 @@ public class WebConnector {
     public synchronized void login() {
         final IPreferenceStore preferenceStore = JessxActivator.getDefault().getPreferenceStore();
 
-   //TODO sistemare non dobbiamo fare login da nessun parte
+   //TODO EDOZ Qui potrebbe essere inizializzato il client di JESSX con la sua login
     }
 
     public Account getAccount() {
-       //account ?
         return account;
     }
 

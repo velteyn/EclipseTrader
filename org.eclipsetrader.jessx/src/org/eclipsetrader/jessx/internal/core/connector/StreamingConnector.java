@@ -15,6 +15,7 @@ package org.eclipsetrader.jessx.internal.core.connector;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
@@ -33,8 +36,10 @@ import org.eclipsetrader.core.feed.Quote;
 import org.eclipsetrader.core.feed.TodayOHL;
 import org.eclipsetrader.core.feed.Trade;
 
+
 import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.internal.core.Util;
+import org.eclipsetrader.jessx.internal.core.WebConnector;
 import org.eclipsetrader.jessx.internal.core.repository.IdentifierType;
 import org.eclipsetrader.jessx.internal.core.repository.PriceDataType;
 
@@ -64,11 +69,39 @@ public class StreamingConnector extends SnapshotConnector {
     private boolean stopping = false;
     
     private Thread notificationThread;
-    
+      
     private ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
 
     public StreamingConnector() {
     }
+    
+    
+    private Log logger = LogFactory.getLog(getClass());
+
+    private Runnable notificationRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            synchronized (notificationThread) {
+                while (!isStopping()) {
+                    FeedSubscription[] subscriptions;
+                    synchronized (symbolSubscriptions) {
+                        Collection<FeedSubscription> c = symbolSubscriptions.values();
+                        subscriptions = c.toArray(new FeedSubscription[c.size()]);
+                    }
+                    for (int i = 0; i < subscriptions.length; i++) {
+                        subscriptions[i].fireNotification();
+                    }
+
+                    try {
+                        notificationThread.wait();
+                    } catch (InterruptedException e) {
+                        // Ignore exception, not important at this time
+                    }
+                }
+            }
+        }
+    };
 
     public synchronized static StreamingConnector getInstance() {
         if (instance == null) {
@@ -401,6 +434,35 @@ public class StreamingConnector extends SnapshotConnector {
     @Override
     public void removeConnectorListener(IConnectorListener listener) {
         listeners.remove(listener);
+    }
+    
+    
+    /* (non-Javadoc)
+     * @see org.eclipsetrader.core.feed.IFeedConnector#connect()
+     */
+    @Override
+    public synchronized void connect() {
+    	
+    	
+    	 
+        WebConnector.getInstance().login();
+
+        stopping = false;
+
+        if (notificationThread == null || !notificationThread.isAlive()) {
+            notificationThread = new Thread(notificationRunnable, name + " - Notification"); //$NON-NLS-1$
+            notificationThread.start();
+        }
+
+        if (thread == null || !thread.isAlive()) {
+            thread = new Thread(this, name + " - Data Reader"); //$NON-NLS-1$
+            thread.start();
+        }
+       
+    }
+    
+    public boolean isStopping() {
+        return stopping;
     }
 
 }
