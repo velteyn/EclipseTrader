@@ -76,7 +76,7 @@ public class Server
     
     public Server(final String scenarioFile, final boolean graphicalMode) {
         this.packFrame = true;
-       // BusinessCore.setGeneralParameters(new GeneralParameterSetupGui(graphicalMode));
+        //BusinessCore.setGeneralParameters(new GeneralParameterSetupGui(graphicalMode));
         BusinessCore.setGeneralParameters(new GeneralParametersLocal());
         Server.experimentState = Server.EXPERIMENT_STATE_SETUP;
         Server.serverState = Server.SERVER_STATE_OFFLINE;

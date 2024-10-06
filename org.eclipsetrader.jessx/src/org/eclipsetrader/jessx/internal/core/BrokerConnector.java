@@ -60,6 +60,7 @@ import org.eclipsetrader.core.trading.OrderChangeEvent;
 import org.eclipsetrader.core.trading.OrderDelta;
 import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.internal.ui.StatusLineContributionItem;
+import org.eclipsetrader.jessx.server.Server;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -150,11 +151,9 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
         
     	//TODO vedi quello di directa , qua facciamo parirre il server incvece di "collegarci"
     	//e i read che facciamo partire è il server i JESSX !
-    	/*
-    	if ("".equals(WebConnector.getInstance().getUser())) { //$NON-NLS-1$
-            WebConnector.getInstance().login();
-        }
-        */
+       Server srv = new Server("default.xml",false);
+       srv.startServer();
+    	
 
         if (thread == null || !thread.isAlive()) {
             thread = new Thread(this, getName() + " - Orders Monitor"); //$NON-NLS-1$
