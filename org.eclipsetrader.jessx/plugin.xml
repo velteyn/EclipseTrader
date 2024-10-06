@@ -45,6 +45,14 @@
             class="org.eclipsetrader.jessx.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipsetrader.core.trading.brokers">
+      <broker
+            class="org.eclipsetrader.jessx.internal.core.BrokerConnector"
+            id="org.eclipsetrader.brokers.jessx"
+            name="Jessx">
+      </broker>
+   </extension>
 
    <extension
          point="org.eclipse.ui.importWizards">
