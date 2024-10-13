@@ -33,10 +33,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.eclipse.trader.jessx.business.ClientInputPanel;
+import org.eclipsetrader.jessx.client.ClientCore;
+import org.eclipsetrader.jessx.utils.Constants;
 
 public class BestLimitOrderClientPanel extends JPanel implements ClientInputPanel
 {
-    JLabel jLabelQuantityTransaction;
+	private static final long serialVersionUID = -8338558506904932310L;
+	
+	JLabel jLabelQuantityTransaction;
     JSpinner jSpinnerQuantity;
     JToggleButton jToggleButtonBuyBestLimitOrder;
     JToggleButton jToggleButtonSellBestLimitOrder;

@@ -4,8 +4,7 @@
 
 package org.eclipse.trader.jessx.business.operations;
 
-import jessx.net.NetworkWritable;
-import jessx.client.ClientCore;
+ 
 import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
 import javax.swing.text.DefaultFormatter;
@@ -17,7 +16,6 @@ import javax.swing.SpinnerModel;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import jessx.utils.Constants;
 import java.awt.event.ActionListener;
 import java.awt.Font;
 import java.awt.Color;
@@ -29,8 +27,11 @@ import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import javax.swing.JSpinner;
 import javax.swing.JLabel;
-import jessx.business.ClientInputPanel;
 import javax.swing.JPanel;
+
+import org.eclipse.trader.jessx.business.ClientInputPanel;
+import org.eclipsetrader.jessx.client.ClientCore;
+import org.eclipsetrader.jessx.utils.Constants;
 
 public class MarketOrderClientPanel extends JPanel implements ClientInputPanel
 {

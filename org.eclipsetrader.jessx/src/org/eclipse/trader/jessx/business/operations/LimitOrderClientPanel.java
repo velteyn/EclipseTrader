@@ -5,11 +5,9 @@
 package org.eclipse.trader.jessx.business.operations;
 
 import javax.swing.JFrame;
-import jessx.utils.PopupWithTimer;
+
 import javax.swing.JTextArea;
 import java.text.ParseException;
-import jessx.net.NetworkWritable;
-import jessx.client.ClientCore;
 import java.awt.event.ActionEvent;
 import javax.swing.text.DefaultFormatter;
 import javax.swing.text.NumberFormatter;
@@ -18,7 +16,7 @@ import java.text.NumberFormat;
 import javax.swing.SpinnerModel;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
-import jessx.utils.Constants;
+
 import java.awt.event.ActionListener;
 import java.awt.Font;
 import java.awt.Color;
@@ -35,8 +33,13 @@ import javax.swing.JToggleButton;
 import javax.swing.JSpinner;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import jessx.business.ClientInputPanel;
+
 import javax.swing.JPanel;
+
+import org.eclipse.trader.jessx.business.ClientInputPanel;
+import org.eclipsetrader.jessx.client.ClientCore;
+import org.eclipsetrader.jessx.utils.Constants;
+import org.eclipsetrader.jessx.utils.PopupWithTimer;
 
 public class LimitOrderClientPanel extends JPanel implements ClientInputPanel
 {

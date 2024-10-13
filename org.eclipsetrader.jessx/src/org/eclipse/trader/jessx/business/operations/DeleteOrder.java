@@ -4,15 +4,17 @@
 
 package org.eclipse.trader.jessx.business.operations;
 
+import org.eclipse.trader.jessx.business.BusinessCore;
+import org.eclipse.trader.jessx.business.ClientInputPanel;
+import org.eclipse.trader.jessx.business.Operation;
+import org.eclipse.trader.jessx.business.OperationCreator;
+import org.eclipse.trader.jessx.business.Order;
+import org.eclipse.trader.jessx.business.Portfolio;
+import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Content;
-import jessx.utils.Utils;
+
 import org.jdom.Element;
-import jessx.business.ClientInputPanel;
-import jessx.business.BusinessCore;
-import jessx.business.Portfolio;
-import jessx.business.Order;
-import jessx.business.OperationCreator;
-import jessx.business.Operation;
+
 
 public class DeleteOrder extends Operation
 {

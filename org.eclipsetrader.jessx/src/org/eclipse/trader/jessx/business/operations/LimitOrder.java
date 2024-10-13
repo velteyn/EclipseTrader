@@ -4,12 +4,15 @@
 
 package org.eclipse.trader.jessx.business.operations;
 
-import jessx.business.ClientInputPanel;
+
+import org.eclipse.trader.jessx.business.ClientInputPanel;
+import org.eclipse.trader.jessx.business.OperationCreator;
+import org.eclipse.trader.jessx.business.Order;
+import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Content;
-import jessx.utils.Utils;
+
 import org.jdom.Element;
-import jessx.business.OperationCreator;
-import jessx.business.Order;
+
 
 public class LimitOrder extends Order
 {
