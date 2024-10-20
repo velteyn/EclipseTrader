@@ -97,18 +97,19 @@ public class Server
     
     private void loadJessXModules() {
         Utils.logger.debug("Loading all available modules.");
-        Utils.loadModules("jessx.business.operations.LimitOrder");
-        Utils.loadModules("jessx.business.operations.DeleteOrder");
-        Utils.loadModules("jessx.business.operations.MarketOrder");
-        Utils.loadModules("jessx.business.operations.BestLimitOrder");
-        Utils.loadModules("jessx.business.institutions.OrderMarket");
-        Utils.loadModules("jessx.business.assets.Stock");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.LimitOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.DeleteOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.MarketOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.BestLimitOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.institutions.OrderMarket");
+        Utils.loadModules("org.eclipse.trader.jessx.business.assets.Stock");
         Utils.logger.debug("All available modules loaded.");
     }
     
     private void buildFrame() {
     	/* FRAME EXCLUDED BECAUSE WE MUST IMPLEMENT ANOTHER TYPE ON EclipseTrader
-    	 * EDOARDO
+    	 * 
+    	TODO FIXME !! EDOZ
         Utils.logger.info("Building frame...");
         this.frame = new GeneralServerFrame();
         if (this.packFrame) {
