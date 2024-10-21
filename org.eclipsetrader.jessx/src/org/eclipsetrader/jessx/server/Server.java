@@ -4,20 +4,18 @@
 
 package org.eclipsetrader.jessx.server;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.util.Properties;
+
+import javax.swing.JFrame;
 import javax.swing.UIManager;
+
 import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.trader.jessx.business.BusinessCore;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.utils.Utils;
-
-import java.util.Properties;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import org.jdom.Document;
-import javax.swing.JFrame;
-
-import java.io.File;
-import java.io.FileFilter;
 
 
 public class Server

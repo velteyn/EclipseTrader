@@ -22,7 +22,11 @@ import org.jdom.Element;
 
 public class OrderMarket extends Institution
 {
-     OrderMarketSetupGui orderMarketSetupGui;
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1944245087811976082L;
+	OrderMarketSetupGui orderMarketSetupGui;
     
     static {
         try {

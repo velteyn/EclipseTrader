@@ -149,7 +149,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     @Override
     public void connect() {
         
-    	//TODO vedi quello di directa , qua facciamo parirre il server incvece di "collegarci"
+    	//TODO vedi quello di directa , qua facciamo partire  il server incvece di "collegarci"
     	//e i read che facciamo partire è il server i JESSX !
        Server srv = new Server("default.xml",false);
        srv.startServer();

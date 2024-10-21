@@ -9,14 +9,16 @@ import org.eclipse.trader.jessx.business.ClientInputPanel;
 import org.eclipse.trader.jessx.business.OperationCreator;
 import org.eclipse.trader.jessx.business.Order;
 import org.eclipsetrader.jessx.utils.Utils;
-import org.jdom.Content;
 import org.jdom.Element;
 
 
 public class BestLimitOrder extends Order
 {
-    private static final String operationName = "Best Limit Order";
-    private Integer quantity;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3819749718145300569L;
+	private Integer quantity;
     private Float price;
     private boolean priceDefined;
     

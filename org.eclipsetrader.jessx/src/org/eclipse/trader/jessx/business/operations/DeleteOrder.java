@@ -11,8 +11,6 @@ import org.eclipse.trader.jessx.business.OperationCreator;
 import org.eclipse.trader.jessx.business.Order;
 import org.eclipse.trader.jessx.business.Portfolio;
 import org.eclipsetrader.jessx.utils.Utils;
-import org.jdom.Content;
-
 import org.jdom.Element;
 
 
