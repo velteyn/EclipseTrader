@@ -37,3 +37,5 @@ Import-Package: javax.xml.bind;version="[2.1.0,2.2.0)",
 Export-Package: org.eclipsetrader.jessx.internal;x-internal:=true,
  org.eclipsetrader.jessx.internal.core.connector;x-internal:=true;uses:="org.eclipse.core.runtime,org.eclipsetrader.core.feed",
  org.eclipsetrader.jessx.internal.core.repository;x-internal:=true
+Bundle-ClassPath: src/,
+ .

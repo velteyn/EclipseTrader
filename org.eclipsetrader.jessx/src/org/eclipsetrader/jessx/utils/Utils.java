@@ -144,15 +144,16 @@ public abstract class Utils implements Constants {
   }
   
   public static void loadModules(String className) {
-    try {
-      logger.debug("loading class: " + className);
-      Class<?> tempClass = Class.forName(className);
-      tempClass.newInstance();
-    } catch (Exception ex1) {
-      logger.error("Error while loading module: " + ex1.toString());
-      ex1.printStackTrace();
-    } 
-    logger.info("Finished loading module.");
+	  try {
+		    logger.debug("loading class: " + className);
+		    ClassLoader classLoader = Utils.class.getClassLoader();
+		    Class<?> tempClass = classLoader.loadClass(className);
+		    tempClass.newInstance();
+		  } catch (Exception ex1) {
+		    logger.error("Error while loading module: " + ex1.toString());
+		    ex1.printStackTrace();
+		  }
+		  logger.info("Finished loading module.");
   }
   
   public static Document readXmlFromNetwork(String data) {
