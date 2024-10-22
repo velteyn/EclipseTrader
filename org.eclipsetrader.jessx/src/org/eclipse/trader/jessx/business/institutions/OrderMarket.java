@@ -31,7 +31,7 @@ public class OrderMarket extends Institution
     static {
         try {
             System.out.println("Loading OrderMarket...");
-            InstitutionCreator.institutionFactories.put("OrderMarket", Class.forName("jessx.business.institutions.OrderMarket"));
+            InstitutionCreator.institutionFactories.put("OrderMarket", Class.forName("org.eclipse.trader.jessx.business.institutions.OrderMarket"));
         }
         catch (ClassNotFoundException exception) {
             System.out.println("Unabled to locate the OrderMarket class. Reason: bad class name spelling.");

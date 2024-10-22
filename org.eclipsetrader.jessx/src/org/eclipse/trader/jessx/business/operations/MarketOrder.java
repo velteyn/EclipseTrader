@@ -24,7 +24,7 @@ public class MarketOrder extends Order
     static {
         try {
             System.out.println("Loading MarketOrder...");
-            OperationCreator.operationFactories.put("Market Order", Class.forName("jessx.business.operations.MarketOrder"));
+            OperationCreator.operationFactories.put("Market Order", Class.forName("org.eclipse.trader.jessx.business.operations.MarketOrder"));
         }
         catch (ClassNotFoundException exception) {
             System.out.println("Unabled to locate the MarketOrder class. Reason: bad class name spelling.");

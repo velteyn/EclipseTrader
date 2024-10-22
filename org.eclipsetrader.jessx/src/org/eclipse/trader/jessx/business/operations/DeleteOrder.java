@@ -26,7 +26,7 @@ public class DeleteOrder extends Operation
     static {
         try {
             System.out.println("Loading DeleteOrder...");
-            OperationCreator.operationFactories.put("Delete Order", Class.forName("jessx.business.operations.DeleteOrder"));
+            OperationCreator.operationFactories.put("Delete Order", Class.forName("org.eclipse.trader.jessx.business.operations.DeleteOrder"));
         }
         catch (ClassNotFoundException exception) {
             System.out.println("Unabled to locate the DeleteOrder class. Reason: probably a bad class name spelling.");

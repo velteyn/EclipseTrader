@@ -25,7 +25,7 @@ public class LimitOrder extends Order
     static {
         try {
             System.out.println("Loading LimitOrder...");
-            OperationCreator.operationFactories.put("Limit Order", Class.forName("jessx.business.operations.LimitOrder"));
+            OperationCreator.operationFactories.put("Limit Order", Class.forName("org.eclipse.trader.jessx.business.operations.LimitOrder"));
         }
         catch (ClassNotFoundException exception) {
             System.out.println("Unabled to locate the LimitOrder class. Reason: bad class name spelling.");

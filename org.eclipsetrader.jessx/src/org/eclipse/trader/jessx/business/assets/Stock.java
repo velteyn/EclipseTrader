@@ -15,7 +15,7 @@ public class Stock extends Asset
     static {
         try {
             System.out.println("Loading stock...");
-            AssetCreator.assetFactories.put("Stock", Class.forName("jessx.business.assets.Stock"));
+            AssetCreator.assetFactories.put("Stock", Class.forName("org.eclipse.trader.jessx.business.assets.Stock"));
         }
         catch (ClassNotFoundException exception) {
             System.out.println("Unabled to locate the Stock class. Reason: bad class name spelling.");

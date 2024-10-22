@@ -85,7 +85,7 @@ public class Server
         }
         try {
             if (scenarioFile != "") {
-                System.out.println("Il y a un fichier, chargement...");
+                System.out.println("Scenary file loading...");
                 final Document xmlDoc = Utils.readXmlFile(scenarioFile);
                 BusinessCore.loadFromXml(xmlDoc.getRootElement(), new JFrame()); //FIXME !! This is utterly wrong EDOARDO
             }
