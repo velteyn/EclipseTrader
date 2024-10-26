@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <JessXSetup>
   <GeneralParameters>
-    <WorkingDirectory>C:\Projects\Virtual Investor\Server1.6</WorkingDirectory>
+    <WorkingDirectory>./</WorkingDirectory>
     <SetupFileName>Title of the Experiment</SetupFileName>
     <XMLVersion>1.6</XMLVersion>
     <LoggingFileName>provaedo Log 1.xml</LoggingFileName>

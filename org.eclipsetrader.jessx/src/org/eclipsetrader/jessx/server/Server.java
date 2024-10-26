@@ -90,7 +90,10 @@ public class Server
                 BusinessCore.loadFromXml(xmlDoc.getRootElement(), new JFrame()); //FIXME !! This is utterly wrong EDOARDO
             }
         }
-        catch (Exception ex) {}
+        catch (Exception ex) {
+        	Utils.logger.error("Error loading default scenary");
+        	ex.printStackTrace();
+        }
     }
     
     private void loadJessXModules() {
