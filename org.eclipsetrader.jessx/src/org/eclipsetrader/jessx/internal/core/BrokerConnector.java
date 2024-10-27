@@ -152,6 +152,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     	//TODO vedi quello di directa , qua facciamo partire  il server incvece di "collegarci"
     	//e i read che facciamo partire è il server i JESSX !
        Server srv = new Server("default.xml",false);
+       Server.setServerState(Server.SERVER_STATE_ONLINE);
        srv.startServer();
     	
 

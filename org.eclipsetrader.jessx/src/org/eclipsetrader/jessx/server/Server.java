@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Properties;
 
-import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -87,7 +86,7 @@ public class Server
             if (scenarioFile != "") {
                 System.out.println("Scenary file loading...");
                 final Document xmlDoc = Utils.readXmlFile(scenarioFile);
-                BusinessCore.loadFromXml(xmlDoc.getRootElement(), new JFrame()); //FIXME !! This is utterly wrong EDOARDO
+                BusinessCore.loadFromXml(xmlDoc.getRootElement());
             }
         }
         catch (Exception ex) {

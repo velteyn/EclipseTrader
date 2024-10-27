@@ -98,7 +98,8 @@ public abstract class Utils implements Constants {
 	}
 
 	public static Document readXmlFile(String fileName) throws Exception {
-		InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(fileName);
+		//InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(fileName);
+		InputStream inputStream = Utils.class.getResourceAsStream(fileName);
 		String xmlString;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		StringBuilder sb = new StringBuilder();
