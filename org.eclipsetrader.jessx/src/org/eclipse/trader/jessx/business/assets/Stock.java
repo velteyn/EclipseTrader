@@ -10,6 +10,8 @@ import org.jdom.Element;
 import javax.swing.JPanel;
 
 
+
+
 public class Stock extends Asset
 {
     static {
@@ -25,7 +27,12 @@ public class Stock extends Asset
     
     @Override
     public JPanel getAssetSetupGui() {
-        return null; //TODO EDOZ remove Jpanels new StockSetupGui(this);
+    	 try {
+			throw new Exception("EDOZ sono schiantato !!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
     }
     
     public void saveToXml(final Element node) {

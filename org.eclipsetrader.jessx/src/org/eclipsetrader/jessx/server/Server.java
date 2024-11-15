@@ -72,7 +72,9 @@ public class Server
     }
     
     public Server(final String scenarioFile, final boolean graphicalMode) {
+    	InitLogs();
         this.packFrame = true;
+        
         //BusinessCore.setGeneralParameters(new GeneralParameterSetupGui(graphicalMode));
         BusinessCore.setGeneralParameters(new GeneralParametersLocal());
         Server.experimentState = Server.EXPERIMENT_STATE_SETUP;

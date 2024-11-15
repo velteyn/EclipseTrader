@@ -107,8 +107,7 @@ public class GeneralParametersLocal implements GeneralParameters {
 
 	@Override
 	public int getPeriodCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 5;
 	}
 
 	@Override
