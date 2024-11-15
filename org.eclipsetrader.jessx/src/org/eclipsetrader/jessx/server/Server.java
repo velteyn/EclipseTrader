@@ -12,6 +12,10 @@ import javax.swing.UIManager;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.trader.jessx.business.BusinessCore;
+import org.eclipse.trader.jessx.trobot.Discreet;
+import org.eclipse.trader.jessx.trobot.DiscreetIT;
+import org.eclipse.trader.jessx.trobot.NotDiscreet;
+import org.eclipse.trader.jessx.trobot.Robot;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Document;
@@ -24,6 +28,7 @@ public class Server
     public static int EXPERIMENT_STATE_ENDED;
     public static int SERVER_STATE_OFFLINE;
     public static int SERVER_STATE_ONLINE;
+    public static int NUMBER_DISCREET_BOTS = 16;
     boolean packFrame;
   //  private GeneralServerFrame frame;
     private static int experimentState;
@@ -95,6 +100,28 @@ public class Server
         	Utils.logger.error("Error loading default scenary");
         	ex.printStackTrace();
         }
+    }
+    
+    public void loadBots(){
+        final int temp = 10;
+        final int tempIT = 10;
+        for (int i = 0; i < NUMBER_DISCREET_BOTS; ++i) {
+            final Robot zitDiscreet = new Discreet(i, temp);
+            System.out.println("in for, after creating the discreet "+ i +" and before start");
+            zitDiscreet.start();
+            System.out.println("after discreet start " + i);
+        }
+        for (int i = 0; i < 19; ++i) {
+            final Robot zitDiscreetIT = new DiscreetIT(i, tempIT);
+            System.out.println("dans for, apr\u00e8s cr\u00e9ation du discreet " + i + " et avant start");
+            zitDiscreetIT.start();
+            System.out.println("apr\u00e8s start du discreetIT " + i);
+        }
+        for (int i = 0; i < 15; ++i) {
+            final Robot zitNotDiscreet = new NotDiscreet(i, 10, 0, 100);
+            zitNotDiscreet.start();
+        }
+
     }
     
     private void loadJessXModules() {
