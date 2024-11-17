@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JessXSetup>
+  <GeneralParameters>
+    <WorkingDirectory>./</WorkingDirectory>
+    <SetupFileName>Title of the Experiment</SetupFileName>
+    <XMLVersion>1.6</XMLVersion>
+    <LoggingFileName>provaedo Log 1.xml</LoggingFileName>
+    <PeriodNumber>5</PeriodNumber>
+    <PeriodDuration>120</PeriodDuration>
+    <InterestRate periodCount="5">
+      <PeriodRate Rate="2.0" />
+      <PeriodRate Rate="2.0" />
+      <PeriodRate Rate="2.0" />
+      <PeriodRate Rate="2.0" />
+      <PeriodRate Rate="2.0" />
+    </InterestRate>
+    <JoiningAfterStartup>true</JoiningAfterStartup>
+  </GeneralParameters>
+  <Asset type="Stock" name="AAT">
+    <DividendModel periodCount="5">
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+    </DividendModel>
+  </Asset>
+  <Asset type="Stock" name="GPLRF">
+    <DividendModel periodCount="5" biggestWindow="Fucker" size="2">
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+    </DividendModel>
+  </Asset>
+  <Asset type="Stock" name="MSFT">
+    <DividendModel periodCount="5">
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+    </DividendModel>
+  </Asset>
+  <Asset type="Stock" name="PLS">
+    <DividendModel periodCount="5">
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+      <Dividend mean="0.0" variance="0.0" />
+    </DividendModel>
+  </Asset>
+  <Institution type="OrderMarket" name="BANK CANARIE" quotedAsset="AAT">
+    <KeepOrderBook allow="false" />
+    <OperationsCost>
+      <Operation name="Market Order" percentageCost="2.0" minimalCost="1.0" />
+      <Operation name="Delete Order" percentageCost="2.0" minimalCost="1.0" />
+      <Operation name="Limit Order" percentageCost="2.0" minimalCost="1.0" />
+      <Operation name="Best Limit Order" percentageCost="2.0" minimalCost="0.0" />
+    </OperationsCost>
+    <Operators>
+      <Operator name="Porcon" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+    </Operators>
+  </Institution>
+  <Institution type="OrderMarket" name="Mank America" quotedAsset="MSFT">
+    <KeepOrderBook allow="false" />
+    <OperationsCost>
+      <Operation name="Market Order" percentageCost="2.0" minimalCost="0.0" />
+      <Operation name="Delete Order" percentageCost="2.0" minimalCost="0.0" />
+      <Operation name="Limit Order" percentageCost="2.0" minimalCost="0.0" />
+      <Operation name="Best Limit Order" percentageCost="0.0" minimalCost="0.0" />
+    </OperationsCost>
+    <Operators>
+      <Operator name="Cazzon 2" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+      <Operator name="culon 1" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+    </Operators>
+  </Institution>
+  <Scenario>
+    <PlayerType name="Fucker">
+      <OperatorsPlayed />
+      <Portfolio cash="3000000.0">
+        <Owning asset="AAT" qtty="400" />
+        <Owning asset="GPLRF" qtty="300" />
+        <Owning asset="PLS" qtty="500" />
+        <Owning asset="MSFT" qtty="200" />
+      </Portfolio>
+      <DividendInfo asset="AAT">
+        <DividendDetailledProperties value="Dividends not shown" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+      <DividendInfo asset="GPLRF">
+        <DividendDetailledProperties value="Dividends shown for the experiment" />
+        <WindowSize value="2" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="true" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+      <DividendInfo asset="PLS">
+        <DividendDetailledProperties value="Dividends not shown" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+      <DividendInfo asset="MSFT">
+        <DividendDetailledProperties value="Dividends shown for the experiment" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+    </PlayerType>
+    <PlayerType name="Merdon">
+      <OperatorsPlayed />
+      <Portfolio cash="5000.0">
+        <Owning asset="AAT" qtty="110" />
+        <Owning asset="GPLRF" qtty="100" />
+        <Owning asset="PLS" qtty="100" />
+        <Owning asset="MSFT" qtty="0" />
+      </Portfolio>
+      <DividendInfo asset="AAT">
+        <DividendDetailledProperties value="Dividends not shown" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+      <DividendInfo asset="GPLRF">
+        <DividendDetailledProperties value="Dividends shown for the experiment" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+      <DividendInfo asset="PLS">
+        <DividendDetailledProperties value="Dividends not shown" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+      <DividendInfo asset="MSFT">
+        <DividendDetailledProperties value="Dividends not shown" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+    </PlayerType>
+    <PlayerType name="Riccon">
+      <OperatorsPlayed>
+        <Operator name="Cazzon 2 on Mank America" />
+        <Operator name="Porcon on BANK CANARIE" />
+      </OperatorsPlayed>
+      <Portfolio cash="5000000.0">
+        <Owning asset="AAT" qtty="1000" />
+        <Owning asset="GPLRF" qtty="1000" />
+        <Owning asset="PLS" qtty="1000" />
+        <Owning asset="MSFT" qtty="1000" />
+      </Portfolio>
+      <DividendInfo asset="AAT">
+        <DividendDetailledProperties value="Dividends not shown" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+      <DividendInfo asset="GPLRF">
+        <DividendDetailledProperties value="Dividends shown for the experiment" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+      <DividendInfo asset="PLS">
+        <DividendDetailledProperties value="Dividends not shown" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+      <DividendInfo asset="MSFT">
+        <DividendDetailledProperties value="Dividends not shown" />
+        <WindowSize value="1" />
+        <DisplayWindowSize value="false" />
+        <DisplaySessionLength value="false" />
+        <DisplayHoldingValueForExperiment value="false" />
+        <DisplayHoldingValueForWindow value="false" />
+        <DisplayOperationsCosts value="false" />
+      </DividendInfo>
+    </PlayerType>
+    <Information />
+  </Scenario>
+  <Chat />
+  <Robots>
+    <ZitNotDiscreets>
+      <NumberOfRobots>15</NumberOfRobots>
+      <LowLimit>0</LowLimit>
+      <HighLimit>100</HighLimit>
+      <Periodpercentage>10</Periodpercentage>
+    </ZitNotDiscreets>
+    <ZitDiscreets>
+      <NumberOfRobots>16</NumberOfRobots>
+      <PeriodPercentage>10</PeriodPercentage>
+    </ZitDiscreets>
+    <ItDiscreet>
+      <NumberOfRobots>19</NumberOfRobots>
+      <PeriodPercentage>10</PeriodPercentage>
+    </ItDiscreet>
+  </Robots>
+</JessXSetup>
+
