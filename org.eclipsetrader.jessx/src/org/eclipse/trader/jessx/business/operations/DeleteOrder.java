@@ -16,7 +16,7 @@ import org.jdom.Element;
 
 public class DeleteOrder extends Operation
 {
-    private static final String operationName = "Delete Order";
+    private static final String operationName = "DeleteOrder";
     public static final int DELETE_ORDER_VALID = 1;
     public static final int NOT_ENOUGH_CASH_FOR_DELETE_ORDER = 2;
     private int orderId;
@@ -26,7 +26,7 @@ public class DeleteOrder extends Operation
     static {
         try {
             System.out.println("Loading DeleteOrder...");
-            OperationCreator.operationFactories.put("Delete Order", Class.forName("org.eclipse.trader.jessx.business.operations.DeleteOrder"));
+            OperationCreator.operationFactories.put("DeleteOrder", Class.forName("org.eclipse.trader.jessx.business.operations.DeleteOrder"));
         }
         catch (ClassNotFoundException exception) {
             System.out.println("Unabled to locate the DeleteOrder class. Reason: probably a bad class name spelling.");
@@ -60,8 +60,8 @@ public class DeleteOrder extends Operation
         final String institutionName = order.getInstitutionName();
         final float orderPercentageCost = BusinessCore.getInstitution(order.getInstitutionName()).getPercentageCost(order.getOperationName());
         final float orderMinimalCost = BusinessCore.getInstitution(order.getInstitutionName()).getMinimalCost(order.getOperationName());
-        final float deletionPercentageCost = BusinessCore.getInstitution(order.getInstitutionName()).getPercentageCost("Delete Order");
-        final float deletionMinimalCost = BusinessCore.getInstitution(order.getInstitutionName()).getMinimalCost("Delete Order");
+        final float deletionPercentageCost = BusinessCore.getInstitution(order.getInstitutionName()).getPercentageCost("DeleteOrder");
+        final float deletionMinimalCost = BusinessCore.getInstitution(order.getInstitutionName()).getMinimalCost("DeleteOrder");
         this.price = new Float(order.getOrderPrice(order.getSide()));
         this.quantity = new Integer(order.getMaxQtty());
         if (this.getOperationCost(deletionPercentageCost, deletionMinimalCost) <= portfolio.getNonInvestedCash()) {
@@ -85,7 +85,7 @@ public class DeleteOrder extends Operation
     
     @Override
     public String getOperationName() {
-        return "Delete Order";
+        return "DeleteOrder";
     }
     
     @Override

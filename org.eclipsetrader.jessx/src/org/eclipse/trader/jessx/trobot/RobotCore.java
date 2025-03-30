@@ -40,11 +40,11 @@ public class RobotCore
         this.portfolio = new Portfolio(0.0f, new HashMap());
         this.connectionListeners = new Vector();
         Utils.SetApplicationProperties("ServerWaitingPort", "6290");
-        Utils.loadModules("jessx.business.operations.LimitOrder");
-        Utils.loadModules("jessx.business.operations.DeleteOrder");
-        Utils.loadModules("jessx.business.operations.MarketOrder");
-        Utils.loadModules("jessx.business.operations.BestLimitOrder");
-        Utils.loadModules("jessx.business.institutions.OrderMarket");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.LimitOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.DeleteOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.MarketOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.BestLimitOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.institutions.OrderMarket");
         this.networkListener = new HashMap();
         this.operatorPlayedListeners = new Vector();
         this.experimentManager = new RobotExperimentManager(this);

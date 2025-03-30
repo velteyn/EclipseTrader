@@ -240,8 +240,8 @@ public class MarketOrderClientPanel extends JPanel implements ClientInputPanel
         final boolean response = true;
         final int qtty = Integer.parseInt(this.jSpinnerQuantity.getValue().toString());
         final String assetName = ClientCore.getInstitution(this.institution).getAssetName();
-        final float operationMinimalCost = ClientCore.getInstitution(this.institution).getMinimalCost("Market Order");
-        final float operationPercentageCost = ClientCore.getInstitution(this.institution).getPercentageCost("Market Order");
+        final float operationMinimalCost = ClientCore.getInstitution(this.institution).getMinimalCost("MarketOrder");
+        final float operationPercentageCost = ClientCore.getInstitution(this.institution).getPercentageCost("MarketOrder");
         if (this.jToggleButtonBuyMarketOrder.isSelected()) {
             final float price = Float.MAX_VALUE;
         }
@@ -250,6 +250,6 @@ public class MarketOrderClientPanel extends JPanel implements ClientInputPanel
     
     @Override
     public String toString() {
-        return "Market Order";
+        return "MarketOrder";
     }
 }

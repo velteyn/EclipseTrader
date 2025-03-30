@@ -25,7 +25,7 @@ public class BestLimitOrder extends Order
     static {
         try {
             System.out.println("Loading BestLimitOrder...");
-            OperationCreator.operationFactories.put("Best Limit Order", Class.forName("org.eclipse.trader.jessx.business.operations.BestLimitOrder"));
+            OperationCreator.operationFactories.put("BestLimitOrder", Class.forName("org.eclipse.trader.jessx.business.operations.BestLimitOrder"));
         }
         catch (ClassNotFoundException exception) {
             System.out.println("Unabled to locate the BestLimitOrder class. Reason: bad class name spelling.");
@@ -60,7 +60,7 @@ public class BestLimitOrder extends Order
     
     @Override
     public String getOperationName() {
-        return "Best Limit Order";
+        return "BestLimitOrder";
     }
     
     @Override

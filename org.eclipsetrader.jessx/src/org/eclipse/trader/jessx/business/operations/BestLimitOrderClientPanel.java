@@ -245,8 +245,8 @@ public class BestLimitOrderClientPanel extends JPanel implements ClientInputPane
         final boolean response = true;
         final int qtty = Integer.parseInt(this.jSpinnerQuantity.getValue().toString());
         final String assetName = ClientCore.getInstitution(this.institution).getAssetName();
-        final float operationMinimalCost = ClientCore.getInstitution(this.institution).getMinimalCost("BestLimit Order");
-        final float operationPercentageCost = ClientCore.getInstitution(this.institution).getPercentageCost("BestLimit Order");
+        final float operationMinimalCost = ClientCore.getInstitution(this.institution).getMinimalCost("BestLimitOrder");
+        final float operationPercentageCost = ClientCore.getInstitution(this.institution).getPercentageCost("BestLimitOrder");
         if (this.jToggleButtonBuyBestLimitOrder.isSelected()) {
             final float price = Float.MAX_VALUE;
         }
@@ -255,6 +255,6 @@ public class BestLimitOrderClientPanel extends JPanel implements ClientInputPane
     
     @Override
     public String toString() {
-        return "BestLimit Order";
+        return "BestLimitOrder";
     }
 }

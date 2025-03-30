@@ -49,10 +49,10 @@ public abstract class ClientCore
         Utils.logger.debug("Sets WaitingPort");
         Utils.SetApplicationProperties("ServerWaitingPort", "6290");
         Utils.logger.info("Loading operations and institutions modules...");
-        Utils.loadModules("jessx.business.operations.LimitOrder");
-        Utils.loadModules("jessx.business.operations.DeleteOrder");
-        Utils.loadModules("jessx.business.operations.MarketOrder");
-        Utils.loadModules("jessx.business.operations.BestLimitOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.LimitOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.DeleteOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.MarketOrder");
+        Utils.loadModules("org.eclipse.trader.jessx.business.operations.BestLimitOrder");
         Utils.loadModules("jessx.business.institutions.OrderMarket");
         Utils.logger.info("Loading modules done.");
         ClientCore.networkListener = new HashMap();

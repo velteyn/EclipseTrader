@@ -23,11 +23,14 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 
@@ -40,6 +43,9 @@ import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.trader.jessx.business.BusinessCore;
+import org.eclipse.trader.jessx.business.PlayerType;
+import org.eclipse.trader.jessx.business.Scenario;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedProperties;
 import org.eclipsetrader.core.instruments.ISecurity;
@@ -61,6 +67,8 @@ import org.eclipsetrader.core.trading.OrderDelta;
 import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.internal.ui.StatusLineContributionItem;
 import org.eclipsetrader.jessx.server.Server;
+import org.eclipsetrader.jessx.server.net.NetworkCore;
+import org.eclipsetrader.jessx.server.net.Player;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -155,7 +163,31 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
        Server.setServerState(Server.SERVER_STATE_ONLINE);
        srv.loadBots();
        srv.startServer();
-    	
+       
+       Map pList = NetworkCore.getPlayerList();
+       
+		Map<String, Player> playerList = NetworkCore.getPlayerList();
+
+		// Itera sulla lista per accedere a ciascun giocatore
+		Iterator<Map.Entry<String, Player>> pIter = playerList.entrySet().iterator();
+		
+    	Scenario  scn = BusinessCore.getScenario();
+		Map plTypes = scn.getPlayerTypes();
+		List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
+		Random random = new Random();
+		// setta una categoria randomica di players
+		while (pIter.hasNext()) {
+			Map.Entry<String, Player> entry = pIter.next();
+			Player player = entry.getValue();
+		     
+		    int index = random.nextInt(categories.size());
+			
+			player.setPlayerCategory(categories.get(index).getPlayerTypeName());
+			  
+		}
+		
+		//Qua dovrebbe collegarsi il client fatto da nuovo del brooker (come in jessx) caricare i propri assets e iniziare a fare trading
+		// sul server
 
         if (thread == null || !thread.isAlive()) {
             thread = new Thread(this, getName() + " - Orders Monitor"); //$NON-NLS-1$

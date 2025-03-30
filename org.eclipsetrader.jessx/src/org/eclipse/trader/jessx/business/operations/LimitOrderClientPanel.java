@@ -284,8 +284,8 @@ public class LimitOrderClientPanel extends JPanel implements ClientInputPanel
             this.lastPrice = price;
             final int qtty = Integer.parseInt(this.jSpinnerQuantity.getValue().toString());
             final String assetName = ClientCore.getInstitution(this.institution).getAssetName();
-            final float operationMinimalCost = ClientCore.getInstitution(this.institution).getMinimalCost("Limit Order");
-            final float operationPercentageCost = ClientCore.getInstitution(this.institution).getPercentageCost("Limit Order");
+            final float operationMinimalCost = ClientCore.getInstitution(this.institution).getMinimalCost("LimitOrder");
+            final float operationPercentageCost = ClientCore.getInstitution(this.institution).getPercentageCost("LimitOrder");
             this.jToggleButtonBuy.isSelected();
         }
         catch (Exception ex) {}
@@ -294,6 +294,6 @@ public class LimitOrderClientPanel extends JPanel implements ClientInputPanel
     
     @Override
     public String toString() {
-        return "Limit Order";
+        return "LimitOrder";
     }
 }

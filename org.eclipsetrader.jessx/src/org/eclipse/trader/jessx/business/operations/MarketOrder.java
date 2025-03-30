@@ -17,14 +17,14 @@ public class MarketOrder extends Order
 	 * 
 	 */
 	private static final long serialVersionUID = 5056226190751523759L;
-	private static final String operationName = "Market Order";
+	private static final String operationName = "MarketOrder";
     private Integer quantity;
     private Float price;
     
     static {
         try {
             System.out.println("Loading MarketOrder...");
-            OperationCreator.operationFactories.put("Market Order", Class.forName("org.eclipse.trader.jessx.business.operations.MarketOrder"));
+            OperationCreator.operationFactories.put("MarketOrder", Class.forName("org.eclipse.trader.jessx.business.operations.MarketOrder"));
         }
         catch (ClassNotFoundException exception) {
             System.out.println("Unabled to locate the MarketOrder class. Reason: bad class name spelling.");
@@ -55,7 +55,7 @@ public class MarketOrder extends Order
     
     @Override
     public String getOperationName() {
-        return "Market Order";
+        return "MarketOrder";
     }
     
     @Override

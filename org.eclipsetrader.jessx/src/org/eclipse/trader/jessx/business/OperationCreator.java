@@ -23,7 +23,7 @@ public abstract class OperationCreator
             Utils.logger.debug("Class not found. The operation has never been loaded.");
             Utils.logger.debug("As all operations from the modules/operations directory has already been loaded, we are looking in the classPath.");
             try {
-                Class.forName("jessx.business.operations." + name);
+                Class.forName("org.eclipse.trader.jessx.business.operations." + name);
                 operationClass = (Class) OperationCreator.operationFactories.get(name);
                 if (operationClass == null) {
                     throw new OperationNotCreatedException();

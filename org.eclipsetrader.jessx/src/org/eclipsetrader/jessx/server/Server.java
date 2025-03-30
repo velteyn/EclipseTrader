@@ -136,32 +136,7 @@ public class Server
     }
     
     private void buildFrame() {
-    	/* FRAME EXCLUDED BECAUSE WE MUST IMPLEMENT ANOTHER TYPE ON EclipseTrader
-    	 * 
-    	TODO FIXME !! EDOZ
-        Utils.logger.info("Building frame...");
-        this.frame = new GeneralServerFrame();
-        if (this.packFrame) {
-            this.frame.pack();
-            Utils.logger.debug("Frame packed.");
-        }
-        else {
-            this.frame.validate();
-            Utils.logger.debug("Frame validated.");
-        }
-        Utils.logger.debug("Placing frame...");
-        final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        final Dimension frameSize = this.frame.getSize();
-        if (frameSize.height > screenSize.height) {
-            frameSize.height = screenSize.height;
-        }
-        if (frameSize.width > screenSize.width) {
-            frameSize.width = screenSize.width;
-        }
-        this.frame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
-        Utils.logger.debug("Setting the frame visible.");
-        this.frame.setVisible(true);
-        */
+    	
     }
     
     private void loadServerProperties() {

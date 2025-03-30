@@ -18,14 +18,14 @@ public class LimitOrder extends Order
 	 * 
 	 */
 	private static final long serialVersionUID = -6441046244450114107L;
-	private static final String operationName = "Limit Order";
+	private static final String operationName = "LimitOrder";
     private Integer quantity;
     private Float price;
     
     static {
         try {
             System.out.println("Loading LimitOrder...");
-            OperationCreator.operationFactories.put("Limit Order", Class.forName("org.eclipse.trader.jessx.business.operations.LimitOrder"));
+            OperationCreator.operationFactories.put("LimitOrder", Class.forName("org.eclipse.trader.jessx.business.operations.LimitOrder"));
         }
         catch (ClassNotFoundException exception) {
             System.out.println("Unabled to locate the LimitOrder class. Reason: bad class name spelling.");
@@ -56,7 +56,7 @@ public class LimitOrder extends Order
     
     @Override
     public String getOperationName() {
-        return "Limit Order";
+        return "LimitOrder";
     }
     
     @Override
