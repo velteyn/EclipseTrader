@@ -69,7 +69,7 @@ import org.osgi.framework.ServiceReference;
 public class WebConnector {
 
     private static WebConnector instance;
-    private static final String HOST = "www1.directatrading.com"; //$NON-NLS-1$
+    private static final String HOST = "localhost";  
     
     
     

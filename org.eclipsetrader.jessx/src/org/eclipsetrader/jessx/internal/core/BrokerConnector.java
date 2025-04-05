@@ -32,6 +32,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.Vector;
+
+ 
 
 
 import org.eclipse.core.runtime.CoreException;
@@ -64,11 +67,14 @@ import org.eclipsetrader.core.trading.IOrderValidity;
 import org.eclipsetrader.core.trading.Order;
 import org.eclipsetrader.core.trading.OrderChangeEvent;
 import org.eclipsetrader.core.trading.OrderDelta;
+import org.eclipsetrader.jessx.client.ClientCore;
 import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.internal.ui.StatusLineContributionItem;
 import org.eclipsetrader.jessx.server.Server;
+import org.eclipsetrader.jessx.server.net.ClientConnectionPoint;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.server.net.Player;
+import org.eclipsetrader.jessx.utils.gui.MessageTimer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -157,7 +163,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     @Override
     public void connect() {
         
-    	//TODO vedi quello di directa , qua facciamo partire  il server incvece di "collegarci"
+    	//EDOZ TODO vedi quello di directa , qua facciamo partire  il server incvece di "collegarci"
     	//e i read che facciamo partire è il server i JESSX !
        Server srv = new Server("default.xml",false);
        Server.setServerState(Server.SERVER_STATE_ONLINE);
@@ -187,7 +193,25 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		}
 		
 		//Qua dovrebbe collegarsi il client fatto da nuovo del brooker (come in jessx) caricare i propri assets e iniziare a fare trading
-		// sul server
+		 try {
+			ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
+			Player thePlayer = NetworkCore.getPlayer( "ThePlayer");
+			thePlayer.setPlayerCategory(categories.get(0).getPlayerTypeName());
+			
+		} catch (IOException e) {
+			System.out.println("Client connect error "+e.getMessage());
+		}
+		// sul server 
+		
+		
+		//faccio partire l'essperimento (credo)
+		System.out.println("-- LAUNCH EXPERIMENT ! --");
+        if (NetworkCore.getExperimentManager().beginExperiment()) {
+            new MessageTimer((Vector)BusinessCore.getScenario().getListInformation().clone()).start();
+            
+        }
+		
+		
 
         if (thread == null || !thread.isAlive()) {
             thread = new Thread(this, getName() + " - Orders Monitor"); //$NON-NLS-1$

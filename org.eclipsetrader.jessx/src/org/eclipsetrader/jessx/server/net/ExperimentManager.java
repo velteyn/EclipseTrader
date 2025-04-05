@@ -66,7 +66,7 @@ public class ExperimentManager extends Thread implements Constants {
     return this.periodNum;
   }
   
-  public boolean beginExperiment(JFrame ParentFrame) {
+  public boolean beginExperiment() {
     Utils.logger.info("Experiment is initiated...");
     Vector information = BusinessCore.getScenario().getListInformation();
     int size = information.size();
@@ -81,12 +81,6 @@ public class ExperimentManager extends Thread implements Constants {
         periodCount) {
         String warnMessage = "Some pieces of information are sent after the end of a period\nor after the end of the experiment.\nDo you want to correct this mistake?";
         Utils.logger.warn(warnMessage);
-        int reponse = JOptionPane.showConfirmDialog(ParentFrame, warnMessage, 
-            "Initiating experiment error.", 
-            0, 
-            2);
-        if (reponse == 0)
-          return false; 
         noProblem = false;
       } 
       i++;
@@ -98,25 +92,21 @@ public class ExperimentManager extends Thread implements Constants {
       if (NetworkCore.getPlayer(login).getPlayerStatus() == 1 && (pc == null || !BusinessCore.getScenario().getPlayerTypes().containsKey(pc))) {
         String warnMessage = "Some players don't have a player type. The experiment won't begin before.";
         Utils.logger.warn(warnMessage);
-        JOptionPane.showConfirmDialog(ParentFrame, warnMessage, "Initiating experiment error.", -1, 2);
+   
         return false;
       } 
     } 
     if (NetworkCore.getPlayerList().size() == 0) {
-      JOptionPane.showConfirmDialog(ParentFrame, "No player connected", 
-          "Initiating experiment error.", 
-          -1, 
-          2);
+    	 Utils.logger.warn("No player connected");
+      
       return false;
     } 
     String pwd = BusinessCore.getGeneralParameters().getWorkingDirectory();
     String fileName = BusinessCore.getGeneralParameters().getLoggingFileName();
     if (pwd == null || pwd.equalsIgnoreCase("") || 
       fileName == null || fileName.equalsIgnoreCase("")) {
-      JOptionPane.showConfirmDialog(ParentFrame, "You have to choose a name in the general parameters\n to save the results of the experiment.", 
-          "Initiating experiment error.", 
-          -1, 
-          2);
+    	 Utils.logger.warn("You have to choose a name in the general parameters\n to save the results of the experiment.");
+      
       return false;
     } 
     if (!pwd.substring(pwd.length() - 1).equals(System.getProperty("file.separator")))
@@ -138,10 +128,7 @@ public class ExperimentManager extends Thread implements Constants {
     try {
       file.createNewFile();
     } catch (IOException ex) {
-      JOptionPane.showConfirmDialog(ParentFrame, "An error occured.\nCheck the working directory and the name of the logging file in the general parameters\nThen, try to start the experiment.", 
-          "Initiating experiment error.", 
-          -1, 
-          2);
+    	 Utils.logger.warn("An error occured.\nCheck the working directory and the name of the logging file in the general parameters\nThen, try to start the experiment.");
       return false;
     } 
     Iterator<String> iter2 = NetworkCore.getPlayerList().keySet().iterator();
