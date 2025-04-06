@@ -34,6 +34,11 @@ public class JessxActivator extends AbstractUIPlugin {
 	public static final String PREFS_SUBSCRIBE_PREFIX = "SUBSCRIBE_"; //$NON-NLS-1$
 	
 	
+	 
+    public static final String PROP_CODE = "org.eclipsetrader.jessx.code"; //$NON-NLS-1$
+    public static final String PROP_ISIN = "org.eclipsetrader.jessx.isin"; 
+	
+	
 	  // The shared instance
     private static JessxActivator plugin;
 
