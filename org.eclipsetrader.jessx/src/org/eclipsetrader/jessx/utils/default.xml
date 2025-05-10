@@ -186,7 +186,6 @@
     </PlayerType>
     <PlayerType name="Riccon">
       <OperatorsPlayed>
-        <Operator name="Cazzon 2 on Mank America" />
         <Operator name="Porcon on BANK CANARIE" />
       </OperatorsPlayed>
       <Portfolio cash="5000000.0">
@@ -252,3 +251,4 @@
     </ItDiscreet>
   </Robots>
 </JessXSetup>
+
