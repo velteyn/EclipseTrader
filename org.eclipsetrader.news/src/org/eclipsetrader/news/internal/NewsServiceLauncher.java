@@ -66,18 +66,6 @@ public class NewsServiceLauncher implements ILauncher, IExecutableExtension {
      */
     @Override
     public void launch(IProgressMonitor monitor) {
-        /*Display.getDefault().syncExec(new Runnable() {
-            public void run() {
-            	IWorkbenchPage[] page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPages();
-            	for (int p = 0; p < page.length; p++) {
-                	IViewReference[] viewReference = page[p].getViewReferences();
-                	for (int i = 0; i < viewReference.length; i++) {
-                		if (viewReference[i].getId().equals(HeadLineViewer.VIEW_ID))
-                			viewReference[i].getView(true);
-                	}
-            	}
-            }
-        });*/
 
         try {
             BundleContext context = Activator.getDefault().getBundle().getBundleContext();
