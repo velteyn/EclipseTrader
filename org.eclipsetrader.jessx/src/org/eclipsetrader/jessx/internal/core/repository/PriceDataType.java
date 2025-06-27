@@ -34,6 +34,7 @@ public class PriceDataType {
     private Double high;
     private Double low;
     private Double close;
+    private Double lastClose;
 
     public PriceDataType() {
     }
@@ -146,4 +147,12 @@ public class PriceDataType {
     public void setClose(Double close) {
         this.close = close;
     }
+
+	public Double getLastClose() {
+		return lastClose;
+	}
+
+	public void setLastClose(Double lastClose) {
+		this.lastClose = lastClose;
+	}
 }

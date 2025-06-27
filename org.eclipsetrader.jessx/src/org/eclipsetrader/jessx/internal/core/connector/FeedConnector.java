@@ -17,7 +17,7 @@ import org.eclipsetrader.jessx.internal.JessxActivator;
 
 public class FeedConnector implements IFeedConnector, IExecutableExtension{
 	
-	private SnapshotConnector connector;
+	private StreamingConnector connector;
 	
 	private String id;
 	private String name;
@@ -39,7 +39,7 @@ public class FeedConnector implements IFeedConnector, IExecutableExtension{
 	     
 	     String className = JessxActivator.getDefault().getPreferenceStore().getString(JessxActivator.PREFS_DRIVER);
 	        try {
-	            connector = (SnapshotConnector) Class.forName(className).newInstance();
+	            connector = (StreamingConnector) Class.forName(className).newInstance();
 	        } catch (Exception e) {
 	        	JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error loding driver " + className, e));
 	            connector = new StreamingConnector();

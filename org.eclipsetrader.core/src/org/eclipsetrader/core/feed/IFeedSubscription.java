@@ -80,4 +80,6 @@ public interface IFeedSubscription {
      * @param listener the listener to remove.
      */
     public void removeSubscriptionListener(ISubscriptionListener listener);
+
+	 
 }

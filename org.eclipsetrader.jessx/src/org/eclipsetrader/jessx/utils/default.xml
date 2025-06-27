@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <JessXSetup>
   <GeneralParameters>
-    <WorkingDirectory>C:\tmp</WorkingDirectory>
+    <WorkingDirectory>R:\tmp</WorkingDirectory>
     <SetupFileName>PROVA EDOZ</SetupFileName>
     <XMLVersion>1.6</XMLVersion>
     <LoggingFileName>provaedo Log 1.xml</LoggingFileName>

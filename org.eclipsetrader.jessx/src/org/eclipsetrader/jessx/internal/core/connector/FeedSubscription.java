@@ -18,9 +18,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
 import org.eclipsetrader.core.feed.IBar;
+import org.eclipsetrader.core.feed.IBook;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedSubscription;
+import org.eclipsetrader.core.feed.IFeedSubscription2;
 import org.eclipsetrader.core.feed.ILastClose;
+import org.eclipsetrader.core.feed.IPrice;
 import org.eclipsetrader.core.feed.IQuote;
 import org.eclipsetrader.core.feed.ISubscriptionListener;
 import org.eclipsetrader.core.feed.ITodayOHL;
@@ -32,31 +35,35 @@ import org.eclipsetrader.jessx.internal.core.repository.IdentifierType;
 
 
 
-public class FeedSubscription implements IFeedSubscription {
+public class FeedSubscription implements IFeedSubscription2 {
 
-    private SnapshotConnector connector;
-    private IFeedIdentifier identifier;
+    private StreamingConnector connector;
+    private IPrice price;
     private ITrade trade;
     private IQuote quote;
     private ITodayOHL todayOHL;
     private ILastClose lastClose;
-    private IBar bar;
+    private IBook book;
     private ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
     private IdentifierType identifierType;
     private List<QuoteDelta> deltaList = new ArrayList<QuoteDelta>();
     private int instanceCount = 0;
+    private int level2InstanceCount = 0;
 
-    public FeedSubscription(SnapshotConnector connector, IdentifierType identifierType) {
+    public FeedSubscription(StreamingConnector connector, IdentifierType identifierType) {
         this.connector = connector;
         this.identifierType = identifierType;
-        this.identifier = identifierType.getIdentifier();
         this.trade = identifierType.getTrade();
         this.quote = identifierType.getQuote();
         this.todayOHL = identifierType.getTodayOHL();
         this.lastClose = identifierType.getLastClose();
     }
 
-    public IdentifierType getIdentifierType() {
+    public FeedSubscription(SnapshotConnector snapshotConnector, IdentifierType identifierType2) {
+    	 this.identifierType = identifierType2;
+	}
+
+	public IdentifierType getIdentifierType() {
         return identifierType;
     }
 
@@ -72,8 +79,9 @@ public class FeedSubscription implements IFeedSubscription {
         connector.disposeSubscription(this);
     }
 
-    protected void incrementInstanceCount() {
+    protected int incrementInstanceCount() {
         instanceCount++;
+        return instanceCount;
     }
 
     protected int decrementInstanceCount() {
@@ -83,6 +91,20 @@ public class FeedSubscription implements IFeedSubscription {
 
     protected int getInstanceCount() {
         return instanceCount;
+    }
+
+    protected int incrementLevel2InstanceCount() {
+        level2InstanceCount++;
+        return level2InstanceCount;
+    }
+
+    protected int decrementLevel2InstanceCount() {
+        level2InstanceCount--;
+        return level2InstanceCount;
+    }
+
+    public int getLevel2InstanceCount() {
+        return level2InstanceCount;
     }
 
     /* (non-Javadoc)
@@ -106,7 +128,7 @@ public class FeedSubscription implements IFeedSubscription {
      */
     @Override
     public IFeedIdentifier getIdentifier() {
-        return identifier;
+        return identifierType.getIdentifier();
     }
 
     /* (non-Javadoc)
@@ -165,6 +187,15 @@ public class FeedSubscription implements IFeedSubscription {
         }
     }
 
+    public IPrice getPrice() {
+        return price;
+    }
+
+    public void setPrice(IPrice price) {
+        this.price = price;
+        addDelta(new QuoteDelta(identifierType.getIdentifier(), null, price));
+    }
+
     /* (non-Javadoc)
      * @see org.eclipsetrader.core.feed.IFeedSubscription#getLastClose()
      */
@@ -179,6 +210,19 @@ public class FeedSubscription implements IFeedSubscription {
             this.lastClose = lastClose;
             this.identifierType.setLastClose(lastClose);
         }
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipsetrader.core.feed.IFeedSubscription2#getBook()
+     */
+    @Override
+    public IBook getBook() {
+        return book;
+    }
+
+    public void setBook(IBook book) {
+        addDelta(new QuoteDelta(identifierType.getIdentifier(), this.book, book));
+        this.book = book;
     }
 
     public void addDelta(QuoteDelta delta) {
@@ -206,12 +250,18 @@ public class FeedSubscription implements IFeedSubscription {
             try {
                 ((ISubscriptionListener) l[i]).quoteUpdate(event);
             } catch (Exception e) {
-                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error notifying a quote update", e);
+                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error notifying a quote update", e); //$NON-NLS-1$
                 JessxActivator.log(status);
             } catch (LinkageError e) {
-                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error notifying a quote update", e);
+                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error notifying a quote update", e); //$NON-NLS-1$
                 JessxActivator.log(status);
             }
+        }
+    }
+
+    public boolean hasPendingChanges() {
+        synchronized (deltaList) {
+            return deltaList.size() != 0;
         }
     }
 }
