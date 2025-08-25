@@ -258,14 +258,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
             return false;
         }
 
-        IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
-        if (properties != null) {
-            for (int p = 0; p < WebConnector.PROPERTIES.length; p++) {
-                if (properties.getProperty(WebConnector.PROPERTIES[p]) != null) {
-                    return true;
-                }
-            }
-        }
 
         return false;
     }
@@ -280,14 +272,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
             return null;
         }
 
-        IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
-        if (properties != null) {
-            for (int p = 0; p < WebConnector.PROPERTIES.length; p++) {
-                if (properties.getProperty(WebConnector.PROPERTIES[p]) != null) {
-                    return properties.getProperty(WebConnector.PROPERTIES[p]);
-                }
-            }
-        }
 
         return null;
     }
@@ -336,7 +320,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
             throw new BrokerException(Messages.BrokerConnector_InvalidOrderValidity);
         }
 
-        return new OrderMonitor(WebConnector.getInstance(), this, order);
+        String username = StreamingConnector.getInstance().getUsername();
+        return new OrderMonitor(this, order, username);
     }
 
     /* (non-Javadoc)
@@ -470,76 +455,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
                         // Register an interest in writing on this channel
                         key.interestOps(SelectionKey.OP_WRITE);
-                    }
-                    if (key.isWritable()) {
-                        logger.trace(">" + LOGIN + WebConnector.getInstance().getUser()); //$NON-NLS-1$
-                        socketChannel.write(ByteBuffer.wrap(new String(LOGIN + WebConnector.getInstance().getUser() + "\r\n").getBytes())); //$NON-NLS-1$
-
-                        // Register an interest in reading on this channel
-                        key.interestOps(SelectionKey.OP_READ);
-                    }
-                    if (key.isReadable()) {
-                        dst.clear();
-                        int readed = socketChannel.read(dst);
-                        if (readed > 0) {
-                            String[] s = new String(dst.array(), 0, readed).split("\r\n"); //$NON-NLS-1$
-                            for (int i = 0; i < s.length; i++) {
-                                logger.trace("<" + s[i]); //$NON-NLS-1$
-
-                                if (s[i].endsWith(";" + WebConnector.getInstance().getUser() + ";")) { //$NON-NLS-1$ //$NON-NLS-2$
-                                    logger.trace(">" + UNKNOWN70); //$NON-NLS-1$
-                                    socketChannel.write(ByteBuffer.wrap(new String(UNKNOWN70 + "\r\n").getBytes())); //$NON-NLS-1$
-                                    logger.trace(">" + UNKNOWN55); //$NON-NLS-1$
-                                    socketChannel.write(ByteBuffer.wrap(new String(UNKNOWN55 + "\r\n").getBytes())); //$NON-NLS-1$
-                                }
-
-                                if (s[i].indexOf(";6;5;") != -1 || s[i].indexOf(";8;0;") != -1) { //$NON-NLS-1$ //$NON-NLS-2$
-                                    try {
-                                        OrderMonitor monitor = parseOrderLine(s[i]);
-
-                                        OrderDelta[] delta;
-                                        synchronized (orders) {
-                                            if (!orders.contains(monitor)) {
-                                                orders.add(monitor);
-                                                delta = new OrderDelta[] {
-                                                    new OrderDelta(OrderDelta.KIND_ADDED, monitor)
-                                                };
-                                            }
-                                            else {
-                                                delta = new OrderDelta[] {
-                                                    new OrderDelta(OrderDelta.KIND_UPDATED, monitor)
-                                                };
-                                            }
-                                        }
-                                        fireUpdateNotifications(delta);
-
-                                        if (monitor.getFilledQuantity() != null && monitor.getAveragePrice() != null) {
-                                            Account account = WebConnector.getInstance().getAccount();
-                                            account.updatePosition(monitor);
-                                        }
-                                    } catch (ParseException e) {
-                                        Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing line: " + s[i], e); //$NON-NLS-1$
-                                        JessxActivator.log(status);
-                                    }
-                                }
-                                if (s[i].indexOf(";6;0;") != -1) { //$NON-NLS-1$
-                                    updateStatusLine(s[i]);
-                                }
-                                if (s[i].indexOf(";7;0;") != -1) { //$NON-NLS-1$
-                                    try {
-                                        positions.add(new Position(s[i]));
-                                    } catch (Exception e) {
-                                        Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing line: " + s[i], e); //$NON-NLS-1$
-                                        JessxActivator.log(status);
-                                    }
-                                }
-                                if (s[i].indexOf(";7;9;") != -1) { //$NON-NLS-1$
-                                    Account account = WebConnector.getInstance().getAccount();
-                                    account.setPositions(positions.toArray(new Position[positions.size()]));
-                                    positions.clear();
-                                }
-                            }
-                        }
                     }
                 } catch (Exception e) {
                     Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Connection error", e); //$NON-NLS-1$
@@ -773,8 +688,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
      */
     @Override
     public IAccount[] getAccounts() {
-        return new IAccount[] {
-            WebConnector.getInstance().getAccount(),
-        };
+        return new IAccount[0];
     }
 }

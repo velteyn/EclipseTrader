@@ -133,14 +133,6 @@ public class Position implements IPosition {
             return null;
         }
 
-        IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
-        if (properties != null) {
-            for (int p = 0; p < WebConnector.PROPERTIES.length; p++) {
-                if (properties.getProperty(WebConnector.PROPERTIES[p]) != null) {
-                    return properties.getProperty(WebConnector.PROPERTIES[p]);
-                }
-            }
-        }
 
         return null;
     }

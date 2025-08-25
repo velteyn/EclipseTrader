@@ -12,6 +12,7 @@
 package org.eclipsetrader.jessx.internal.core;
 
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.ListenerList;
@@ -21,7 +22,10 @@ import org.eclipsetrader.core.trading.IOrder;
 import org.eclipsetrader.core.trading.IOrderMonitor;
 import org.eclipsetrader.core.trading.IOrderMonitorListener;
 import org.eclipsetrader.core.trading.IOrderStatus;
+import org.eclipsetrader.core.trading.IOrderType;
 import org.eclipsetrader.core.trading.OrderMonitorEvent;
+import org.eclipsetrader.jessx.internal.core.connector.StreamingConnector;
+import org.jdom.Element;
 
 public class OrderMonitor implements IOrderMonitor, IAdaptable {
 
@@ -29,33 +33,27 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
 
     private BrokerConnector brokerConnector;
     private String id;
+    private String username;
 
     private Long filledQuantity;
     private Double averagePrice;
     private IOrderStatus status = IOrderStatus.New;
     private String message;
 
-    private WebConnector connector;
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
     private ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
 
-    public OrderMonitor(WebConnector connector, BrokerConnector brokerConnector, IOrder order) {
-        this.connector = connector;
+    public OrderMonitor(BrokerConnector brokerConnector, IOrder order, String username) {
         this.brokerConnector = brokerConnector;
         this.order = order;
+        this.username = username;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#getBrokerConnector()
-     */
     @Override
     public IBroker getBrokerConnector() {
         return brokerConnector;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#getId()
-     */
     @Override
     public String getId() {
         return id;
@@ -65,85 +63,70 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
         this.id = assignedId;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#getOrder()
-     */
     @Override
     public IOrder getOrder() {
         return order;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#submit()
-     */
     @Override
     public void submit() throws BrokerException {
-        if (!connector.isLoggedIn()) {
-            connector.login();
-            if (!connector.isLoggedIn()) {
-                throw new BrokerException(Messages.OrderMonitor_UnableToLogin);
-            }
-        }
-
-        if (connector.sendOrder(this)) {
-            brokerConnector.addWithNotification(this);
+        try {
+            StreamingConnector.getInstance().send(getOrderElement());
+        } catch (IOException e) {
+            throw new BrokerException(e);
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#cancel()
-     */
+    private Element getOrderElement() {
+        Element root = new Element("Operation");
+        root.setAttribute("type", "Limit Order");
+
+        root.setAttribute("emitter", username);
+
+        root.setAttribute("institution", order.getSecurity().getIdentifier().getSymbol());
+
+        Element orderElement = new Element("Order");
+        orderElement.setAttribute("id", "0"); // Server will assign ID
+        orderElement.setAttribute("side", String.valueOf(order.getSide().getId()));
+        orderElement.setAttribute("timestamp", String.valueOf(System.currentTimeMillis()));
+
+        Element limitOrderElement = new Element("LimitOrder");
+        if (order.getType() == IOrderType.Limit) {
+            limitOrderElement.setAttribute("price", String.valueOf(order.getPrice()));
+        }
+        limitOrderElement.setAttribute("quantity", String.valueOf(order.getQuantity()));
+
+        orderElement.addContent(limitOrderElement);
+        root.addContent(orderElement);
+
+        return root;
+    }
+
     @Override
     public void cancel() throws BrokerException {
-        if (!connector.isLoggedIn()) {
-            connector.login();
-            if (!connector.isLoggedIn()) {
-                throw new BrokerException(Messages.OrderMonitor_UnableToLogin);
-            }
-        }
-
-        if (getId() == null) {
-            throw new BrokerException(Messages.OrderMonitor_InvalidOrder);
-        }
-
-        connector.cancelOrder(this);
+        // TODO: Implement order cancellation
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#allowModify()
-     */
     @Override
     public boolean allowModify() {
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#modify(org.eclipsetrader.core.trading.IOrder)
-     */
     @Override
     public void modify(IOrder order) throws BrokerException {
         throw new BrokerException(Messages.OrderMonitor_ModifyNotAllowed);
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#addOrderMonitorListener(org.eclipsetrader.core.trading.IOrderMonitorListener)
-     */
     @Override
     public void addOrderMonitorListener(IOrderMonitorListener listener) {
         listeners.add(listener);
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#removeOrderMonitorListener(org.eclipsetrader.core.trading.IOrderMonitorListener)
-     */
     @Override
     public void removeOrderMonitorListener(IOrderMonitorListener listener) {
         listeners.remove(listener);
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#getStatus()
-     */
     @Override
     public IOrderStatus getStatus() {
         return status;
@@ -157,9 +140,6 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#getFilledQuantity()
-     */
     @Override
     public Long getFilledQuantity() {
         return filledQuantity;
@@ -173,9 +153,6 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#getAveragePrice()
-     */
     @Override
     public Double getAveragePrice() {
         return averagePrice;
@@ -189,9 +166,6 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IOrderMonitor#getMessage()
-     */
     @Override
     public String getMessage() {
         return message;
@@ -201,9 +175,6 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
         this.message = message;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
-     */
     @Override
     @SuppressWarnings("unchecked")
     public Object getAdapter(Class adapter) {
@@ -233,17 +204,11 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
         return propertyChangeSupport;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof OrderMonitor)) {
@@ -252,11 +217,8 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
         return id != null && id.equals(((OrderMonitor) obj).id);
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
-        return "OrderMonitor: id=" + getId() + ", status=" + getStatus() + ", filledQuantity=" + getFilledQuantity() + ", averagePrice=" + getAveragePrice() + " [" + order.toString() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+        return "OrderMonitor: id=" + getId() + ", status=" + getStatus() + ", filledQuantity=" + getFilledQuantity() + ", averagePrice=" + getAveragePrice() + " [" + order.toString() + "]";
     }
 }

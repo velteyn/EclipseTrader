@@ -13,7 +13,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipsetrader.jessx.internal.core.repository.IdentifiersList;
 import org.osgi.framework.BundleContext;
 
 
@@ -25,7 +24,6 @@ import org.osgi.framework.BundleContext;
 public class JessxActivator extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "org.eclipsetrader.jessx"; //$NON-NLS-1$
-	public static final String REPOSITORY_FILE = "identifiers.xml"; //$NON-NLS-1$
 
 	public static final String PREFS_DRIVER = "DRIVER"; //$NON-NLS-1$
 	public static final String PREFS_NEWS_UPDATE_INTERVAL = "NEWS_UPDATE_INTERVAL"; //$NON-NLS-1$
@@ -42,21 +40,16 @@ public class JessxActivator extends AbstractUIPlugin {
 	  // The shared instance
     private static JessxActivator plugin;
 
-    private IdentifiersList identifiersList;
     
     
     @Override
     public void start(BundleContext context) throws Exception {
        	super.start(context);
         plugin = this;
-
-        startupRepository(getStateLocation().append(REPOSITORY_FILE).toFile());
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
-    	 shutdownRepository(getStateLocation().append(REPOSITORY_FILE).toFile());
-
          plugin = null;
          super.stop(context);
     }
@@ -68,59 +61,6 @@ public class JessxActivator extends AbstractUIPlugin {
      */
     public static JessxActivator getDefault() {
         return plugin;
-    }
-
-	private void startupRepository(File file) {
-        if (file.exists() == true) {
-            try {
-                JAXBContext jaxbContext = JAXBContext.newInstance(IdentifiersList.class);
-                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-                unmarshaller.setEventHandler(new ValidationEventHandler() {
-
-                    @Override
-                    public boolean handleEvent(ValidationEvent event) {
-                        Status status = new Status(IStatus.WARNING, PLUGIN_ID, 0, "Error validating XML: " + event.getMessage(), null); //$NON-NLS-1$
-                        getLog().log(status);
-                        return true;
-                    }
-                });
-                identifiersList = (IdentifiersList) unmarshaller.unmarshal(file);
-            } catch (Exception e) {
-                Status status = new Status(IStatus.ERROR, PLUGIN_ID, 0, "Error loading repository", e); //$NON-NLS-1$
-                getLog().log(status);
-            }
-        }
-
-        // Fail safe, create an empty repository
-        if (identifiersList == null) {
-            identifiersList = new IdentifiersList();
-        }
-		
-	}
-    public void shutdownRepository(File file) {
-        try {
-            if (file.exists()) {
-                file.delete();
-            }
-
-            JAXBContext jaxbContext = JAXBContext.newInstance(IdentifiersList.class);
-            Marshaller marshaller = jaxbContext.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.setProperty(Marshaller.JAXB_ENCODING, System.getProperty("file.encoding")); //$NON-NLS-1$
-            marshaller.setEventHandler(new ValidationEventHandler() {
-
-                @Override
-                public boolean handleEvent(ValidationEvent event) {
-                    Status status = new Status(IStatus.WARNING, PLUGIN_ID, 0, "Error validating XML: " + event.getMessage(), null); //$NON-NLS-1$
-                    getLog().log(status);
-                    return true;
-                }
-            });
-            marshaller.marshal(identifiersList, new FileWriter(file));
-        } catch (Exception e) {
-            Status status = new Status(IStatus.ERROR, PLUGIN_ID, 0, "Error saving repository", e); //$NON-NLS-1$
-            getLog().log(status);
-        }
     }
     
     public static void log(IStatus status) {

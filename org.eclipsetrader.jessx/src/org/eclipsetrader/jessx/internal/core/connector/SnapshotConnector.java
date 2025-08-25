@@ -57,9 +57,6 @@ import org.eclipsetrader.jessx.client.ClientCore;
 import org.eclipsetrader.jessx.client.LoginMessage;
 import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.internal.core.Util;
-import org.eclipsetrader.jessx.internal.core.repository.IdentifierType;
-import org.eclipsetrader.jessx.internal.core.repository.IdentifiersList;
-import org.eclipsetrader.jessx.internal.core.repository.PriceDataType;
 import org.eclipsetrader.jessx.net.NetworkWritable;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Document;
@@ -175,41 +172,12 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
 	 */
 	@Override
 	public IFeedSubscription subscribe(IFeedIdentifier identifier) {
-		synchronized (symbolSubscriptions) {
-			IdentifierType identifierType = IdentifiersList.getInstance().getIdentifierFor(identifier);
-			FeedSubscription subscription = symbolSubscriptions.get(identifierType.getSymbol());
-			if (subscription == null) {
-				subscription = new FeedSubscription(this, identifierType);
-
-				PropertyChangeSupport propertyChangeSupport = (PropertyChangeSupport) identifier.getAdapter(PropertyChangeSupport.class);
-				if (propertyChangeSupport != null) {
-					propertyChangeSupport.addPropertyChangeListener(this);
-				}
-
-				symbolSubscriptions.put(identifierType.getSymbol(), subscription);
-				setSubscriptionsChanged(true);
-			}
-			subscription.incrementInstanceCount();
-			return subscription;
-		}
+		// TODO: Auto-generated method stub
+		return null;
 	}
 
 	protected void disposeSubscription(FeedSubscription subscription) {
-		synchronized (symbolSubscriptions) {
-			if (subscription.decrementInstanceCount() <= 0) {
-				IdentifierType identifierType = subscription.getIdentifierType();
-
-				if (subscription.getIdentifier() != null) {
-					PropertyChangeSupport propertyChangeSupport = (PropertyChangeSupport) subscription.getIdentifier().getAdapter(PropertyChangeSupport.class);
-					if (propertyChangeSupport != null) {
-						propertyChangeSupport.removePropertyChangeListener(this);
-					}
-				}
-
-				symbolSubscriptions.remove(identifierType.getSymbol());
-				setSubscriptionsChanged(true);
-			}
-		}
+        // TODO: Auto-generated method stub
 	}
 
 	/*
@@ -425,44 +393,7 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
 	}
 
 	void processSnapshotData(String line, boolean isStaleUpdate) {
-		String[] elements;
-		if (line.indexOf(";") != -1) {
-			elements = line.split(";"); //$NON-NLS-1$
-		} else {
-			elements = line.split(","); //$NON-NLS-1$
-		}
-
-		String symbol = stripQuotes(elements[I_CODE]);
-		FeedSubscription subscription = symbolSubscriptions.get(symbol);
-		if (subscription != null) {
-			IdentifierType identifierType = subscription.getIdentifierType();
-			PriceDataType priceData = identifierType.getPriceData();
-
-			priceData.setTime(getDateValue(elements[I_DATE], elements[I_TIME]));
-			priceData.setLast(getDoubleValue(elements[I_LAST]));
-			priceData.setVolume(getLongValue(elements[I_VOLUME]));
-			subscription.setTrade(new Trade(priceData.getTime(), priceData.getLast(), null, priceData.getVolume()));
-
-			priceData.setBid(getDoubleValue(elements[I_BID]));
-			if (!isStaleUpdate) {
-				priceData.setBidSize(null); // getLongValue(elements[I_BID_SIZE]));
-			}
-			priceData.setAsk(getDoubleValue(elements[I_ASK]));
-			if (!isStaleUpdate) {
-				priceData.setAskSize(null); // getLongValue(elements[I_ASK_SIZE]));
-			}
-			subscription.setQuote(new Quote(priceData.getBid(), priceData.getAsk(), priceData.getBidSize(), priceData.getAskSize()));
-
-			priceData.setOpen(getDoubleValue(elements[I_OPEN]));
-			priceData.setHigh(getDoubleValue(elements[I_HIGH]));
-			priceData.setLow(getDoubleValue(elements[I_LOW]));
-			if (priceData.getOpen() != null && priceData.getOpen() != 0.0 && priceData.getHigh() != null && priceData.getHigh() != 0.0 && priceData.getLow() != null && priceData.getLow() != 0.0) {
-				subscription.setTodayOHL(new TodayOHL(priceData.getOpen(), priceData.getHigh(), priceData.getLow()));
-			}
-
-			priceData.setClose(getDoubleValue(elements[I_CLOSE]));
-			subscription.setLastClose(new LastClose(priceData.getClose(), null));
-		}
+        // TODO: Auto-generated method stub
 	}
 
 	protected Date getDateValue(String dateValue, String timeValue) {
@@ -553,21 +484,7 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getSource() instanceof IFeedIdentifier) {
-			IFeedIdentifier identifier = (IFeedIdentifier) evt.getSource();
-			synchronized (symbolSubscriptions) {
-				for (FeedSubscription subscription : symbolSubscriptions.values()) {
-					if (subscription.getIdentifier() == identifier) {
-						symbolSubscriptions.remove(subscription.getIdentifierType().getSymbol());
-						IdentifierType identifierType = IdentifiersList.getInstance().getIdentifierFor(identifier);
-						subscription.setIdentifierType(identifierType);
-						symbolSubscriptions.put(identifierType.getSymbol(), subscription);
-						setSubscriptionsChanged(true);
-						break;
-					}
-				}
-			}
-		}
+        // TODO: Auto-generated method stub
 	}
 
 	/*

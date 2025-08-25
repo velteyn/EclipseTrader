@@ -17,10 +17,8 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
-import org.eclipsetrader.core.feed.IBar;
 import org.eclipsetrader.core.feed.IBook;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
-import org.eclipsetrader.core.feed.IFeedSubscription;
 import org.eclipsetrader.core.feed.IFeedSubscription2;
 import org.eclipsetrader.core.feed.ILastClose;
 import org.eclipsetrader.core.feed.IPrice;
@@ -28,16 +26,16 @@ import org.eclipsetrader.core.feed.IQuote;
 import org.eclipsetrader.core.feed.ISubscriptionListener;
 import org.eclipsetrader.core.feed.ITodayOHL;
 import org.eclipsetrader.core.feed.ITrade;
+import org.eclipsetrader.core.feed.LastClose;
 import org.eclipsetrader.core.feed.QuoteDelta;
 import org.eclipsetrader.core.feed.QuoteEvent;
+import org.eclipsetrader.core.feed.TodayOHL;
 import org.eclipsetrader.jessx.internal.JessxActivator;
-import org.eclipsetrader.jessx.internal.core.repository.IdentifierType;
-
-
 
 public class FeedSubscription implements IFeedSubscription2 {
 
     private StreamingConnector connector;
+    private IFeedIdentifier identifier;
     private IPrice price;
     private ITrade trade;
     private IQuote quote;
@@ -45,38 +43,30 @@ public class FeedSubscription implements IFeedSubscription2 {
     private ILastClose lastClose;
     private IBook book;
     private ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
-    private IdentifierType identifierType;
     private List<QuoteDelta> deltaList = new ArrayList<QuoteDelta>();
     private int instanceCount = 0;
     private int level2InstanceCount = 0;
 
-    public FeedSubscription(StreamingConnector connector, IdentifierType identifierType) {
+    private double open;
+    private double high;
+    private double low;
+
+    public FeedSubscription(StreamingConnector connector, IFeedIdentifier identifier) {
         this.connector = connector;
-        this.identifierType = identifierType;
-        this.trade = identifierType.getTrade();
-        this.quote = identifierType.getQuote();
-        this.todayOHL = identifierType.getTodayOHL();
-        this.lastClose = identifierType.getLastClose();
+        this.identifier = identifier;
+        resetOHL();
     }
 
-    public FeedSubscription(SnapshotConnector snapshotConnector, IdentifierType identifierType2) {
-    	 this.identifierType = identifierType2;
-	}
-
-	public IdentifierType getIdentifierType() {
-        return identifierType;
+    public void resetOHL() {
+        this.open = 0.0;
+        this.high = 0.0;
+        this.low = Double.MAX_VALUE;
     }
 
-    public void setIdentifierType(IdentifierType identifierType) {
-        this.identifierType = identifierType;
-    }
-
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedSubscription#dispose()
-     */
     @Override
     public void dispose() {
-        connector.disposeSubscription(this);
+        // This needs to be adapted in StreamingConnector
+        // connector.disposeSubscription(this);
     }
 
     protected int incrementInstanceCount() {
@@ -107,83 +97,73 @@ public class FeedSubscription implements IFeedSubscription2 {
         return level2InstanceCount;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedSubscription#addSubscriptionListener(org.eclipsetrader.core.feed.ISubscriptionListener)
-     */
     @Override
     public void addSubscriptionListener(ISubscriptionListener listener) {
         listeners.add(listener);
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedSubscription#removeSubscriptionListener(org.eclipsetrader.core.feed.ISubscriptionListener)
-     */
     @Override
     public void removeSubscriptionListener(ISubscriptionListener listener) {
         listeners.remove(listener);
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedSubscription#getIdentifier()
-     */
     @Override
     public IFeedIdentifier getIdentifier() {
-        return identifierType.getIdentifier();
+        return identifier;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedSubscription#getSymbol()
-     */
     @Override
     public String getSymbol() {
-        return identifierType.getSymbol();
+        return identifier.getSymbol();
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedSubscription#getQuote()
-     */
     @Override
     public IQuote getQuote() {
         return quote;
     }
 
     public void setQuote(IQuote quote) {
-        if (!quote.equals(this.quote)) {
-            addDelta(new QuoteDelta(identifierType.getIdentifier(), this.quote, quote));
+        if (this.quote == null || !this.quote.equals(quote)) {
+            addDelta(new QuoteDelta(identifier, this.quote, quote));
             this.quote = quote;
-            this.identifierType.setQuote(quote);
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedSubscription#getTodayOHL()
-     */
     @Override
     public ITodayOHL getTodayOHL() {
         return todayOHL;
     }
 
     public void setTodayOHL(ITodayOHL todayOHL) {
-        if (!todayOHL.equals(this.todayOHL)) {
-            addDelta(new QuoteDelta(identifierType.getIdentifier(), this.todayOHL, todayOHL));
+        if (this.todayOHL == null || !this.todayOHL.equals(todayOHL)) {
+            addDelta(new QuoteDelta(identifier, this.todayOHL, todayOHL));
             this.todayOHL = todayOHL;
-            this.identifierType.setTodayOHL(todayOHL);
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedSubscription#getTrade()
-     */
+    public void updateOHL(double price) {
+        if (open == 0.0) {
+            open = price;
+        }
+        if (price > high) {
+            high = price;
+        }
+        if (price < low) {
+            low = price;
+        }
+        setTodayOHL(new TodayOHL(open, high, low));
+    }
+
     @Override
     public ITrade getTrade() {
         return trade;
     }
 
     public void setTrade(ITrade trade) {
-        if (!trade.equals(this.trade)) {
-            addDelta(new QuoteDelta(identifierType.getIdentifier(), this.trade, trade));
+        if (this.trade == null || !this.trade.equals(trade)) {
+            addDelta(new QuoteDelta(identifier, this.trade, trade));
             this.trade = trade;
-            this.identifierType.setTrade(trade);
+            updateOHL(trade.getPrice());
         }
     }
 
@@ -193,35 +173,32 @@ public class FeedSubscription implements IFeedSubscription2 {
 
     public void setPrice(IPrice price) {
         this.price = price;
-        addDelta(new QuoteDelta(identifierType.getIdentifier(), null, price));
+        addDelta(new QuoteDelta(identifier, null, price));
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedSubscription#getLastClose()
-     */
     @Override
     public ILastClose getLastClose() {
         return lastClose;
     }
 
+    public void setLastClose(double price) {
+        setLastClose(new LastClose(price, null));
+    }
+
     public void setLastClose(ILastClose lastClose) {
-        if (!lastClose.equals(this.lastClose)) {
-            addDelta(new QuoteDelta(identifierType.getIdentifier(), this.lastClose, lastClose));
+        if (this.lastClose == null || !this.lastClose.equals(lastClose)) {
+            addDelta(new QuoteDelta(identifier, this.lastClose, lastClose));
             this.lastClose = lastClose;
-            this.identifierType.setLastClose(lastClose);
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedSubscription2#getBook()
-     */
     @Override
     public IBook getBook() {
         return book;
     }
 
     public void setBook(IBook book) {
-        addDelta(new QuoteDelta(identifierType.getIdentifier(), this.book, book));
+        addDelta(new QuoteDelta(identifier, this.book, book));
         this.book = book;
     }
 
@@ -250,10 +227,10 @@ public class FeedSubscription implements IFeedSubscription2 {
             try {
                 ((ISubscriptionListener) l[i]).quoteUpdate(event);
             } catch (Exception e) {
-                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error notifying a quote update", e); //$NON-NLS-1$
+                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error notifying a quote update", e);
                 JessxActivator.log(status);
             } catch (LinkageError e) {
-                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error notifying a quote update", e); //$NON-NLS-1$
+                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error notifying a quote update", e);
                 JessxActivator.log(status);
             }
         }
