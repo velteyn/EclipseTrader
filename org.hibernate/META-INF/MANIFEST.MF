@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Hibernate Relational Persistence
 Bundle-SymbolicName: org.hibernate
-Bundle-Version: 3.2.6.20080315
+Bundle-Version: 1.0.0.qualifier
 Export-Package: javax.persistence;version="1.0.0",
  javax.persistence.spi;version="1.0.0",
  org.hibernate;version="3.2.6",
@@ -96,20 +96,7 @@ Export-Package: javax.persistence;version="1.0.0",
  org.hibernate.util;version="3.2.6"
 Bundle-Vendor: Hibernate.org
 Eclipse-BuddyPolicy: global
-Import-Package: org.apache.commons.collections,
- org.apache.commons.collections.bag,
- org.apache.commons.collections.bidimap,
- org.apache.commons.collections.buffer,
- org.apache.commons.collections.collection,
- org.apache.commons.collections.comparators,
- org.apache.commons.collections.functors,
- org.apache.commons.collections.iterators,
- org.apache.commons.collections.keyvalue,
- org.apache.commons.collections.list,
- org.apache.commons.collections.map,
- org.apache.commons.collections.set,
- org.apache.commons.logging
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Import-Package: org.apache.commons.logging
 Bundle-ClassPath: hibernate3.jar,
  hibernate-annotations.jar,
  hibernate-commons-annotations.jar,

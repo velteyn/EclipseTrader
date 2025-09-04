@@ -15,48 +15,40 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.internal.theme.ButtonDrawData;
-import org.eclipse.swt.internal.theme.DrawData;
-import org.eclipse.swt.internal.theme.Theme;
 import org.eclipse.swt.widgets.Event;
 
-@SuppressWarnings("restriction")
 public class VButtonPainter extends VControlPainter {
 
 	@Override
 	public void paintBackground(VControl control, Event e) {
 		VButton button = (VButton) control;
-		if(button.paintNative) {
-			if(button.paintInactive || button.hasState(VButton.STATE_ACTIVE | VButton.STATE_SELECTED)
-					|| (button == VTracker.getFocusControl())) {
-				ButtonDrawData data = new ButtonDrawData();
-				data.style = SWT.PUSH;
-				if(button.hasState(VButton.STATE_SELECTED)) {
-					data.state[0] |= DrawData.HOT;
-					data.state[0] |= DrawData.PRESSED;
-				} else if(button.hasState(VButton.STATE_ACTIVE)) {
-					data.state[0] |= DrawData.HOT;
-				}
-				if(button == VTracker.getFocusControl()) {
-					data.state[0] |= DrawData.FOCUSED;
-				}
-				if(e.gc.getAlpha() == 255) {
-					Theme theme = new Theme(e.display);
-					theme.drawBackground(e.gc, button.bounds, data);
-					theme.dispose();
-				} else {
-					// Bug 260624 - ButtonDrawData#draw does not respect alpha setting
-					Image img = new Image(e.display, new Rectangle(0, 0, button.bounds.width, button.bounds.height));
-					GC gc = new GC(img);
-					Theme theme = new Theme(e.display);
-					theme.drawBackground(gc, img.getBounds(), data);
-					e.gc.drawImage(img, button.bounds.x, button.bounds.y);
-					theme.dispose();
-					gc.dispose();
-					img.dispose();
-				}
+		if (button.paintNative) {
+			Rectangle b = button.getBounds();
+			e.gc.setAntialias(SWT.ON);
+
+			// Determine colors based on state
+			org.eclipse.swt.graphics.Color bg;
+			org.eclipse.swt.graphics.Color border = e.display.getSystemColor(SWT.COLOR_WIDGET_BORDER);
+
+			if (button.hasState(VButton.STATE_SELECTED)) {
+				bg = e.display.getSystemColor(SWT.COLOR_WIDGET_DARK_SHADOW);
+			} else if (button.hasState(VButton.STATE_ACTIVE)) {
+				bg = e.display.getSystemColor(SWT.COLOR_LIST_SELECTION);
 			} else {
-				super.paintBackground(control, e);
+				bg = button.getBackground();
+			}
+
+			// Paint the button background
+			e.gc.setBackground(bg);
+			e.gc.fillRoundRectangle(b.x, b.y, b.width, b.height, 6, 6);
+
+			// Paint the border
+			e.gc.setForeground(border);
+			e.gc.drawRoundRectangle(b.x, b.y, b.width - 1, b.height - 1, 6, 6);
+
+			// Paint focus rectangle if necessary
+			if (button == VTracker.getFocusControl()) {
+				e.gc.drawFocus(b.x + 2, b.y + 2, b.width - 4, b.height - 4);
 			}
 		} else {
 			super.paintBackground(control, e);

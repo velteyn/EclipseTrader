@@ -604,7 +604,7 @@ public class SyndFeedImpl implements Serializable, SyndFeed {
      * @param uri the URI of the ModuleImpl.
      * @return The module with the given URI, <b>null</b> if none.
      */
-    public Module getModule(String uri) {
+    public com.sun.syndication.feed.module.Module getModule(String uri) {
         return ModuleUtils.getModule(getModules(),uri);
     }
 
@@ -640,7 +640,7 @@ public class SyndFeedImpl implements Serializable, SyndFeed {
         basePropInterfaceMap.put("description",String.class);
         basePropInterfaceMap.put("image",SyndImage.class);
         basePropInterfaceMap.put("entries",SyndEntry.class);
-        basePropInterfaceMap.put("modules",Module.class);
+        basePropInterfaceMap.put("modules",com.sun.syndication.feed.module.Module.class);
 
         Map basePropClassImplMap = new HashMap();
         basePropClassImplMap.put(SyndEntry.class,SyndEntryImpl.class);

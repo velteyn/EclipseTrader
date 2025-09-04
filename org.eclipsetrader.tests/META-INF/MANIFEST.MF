@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Tests Plug-in
 Bundle-SymbolicName: org.eclipsetrader.tests
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
 Require-Bundle: org.eclipse.core.runtime,
  org.junit
@@ -26,4 +26,3 @@ Bundle-ClassPath: plugin.jar,
  easymockclassextension.jar,
  cglib-2.1.3.jar,
  asm.jar
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
