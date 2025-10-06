@@ -50,7 +50,7 @@ public class FeedConnector implements IFeedConnector, IExecutableExtension{
 	}
 
 	protected void onChangeDriver(String className) {
-		// TODO Qua è da capire cosa fare, cosa sono i driver ???
+		// TODO Qua Ã¨ da capire cosa fare, cosa sono i driver ???
 		
 	}
 

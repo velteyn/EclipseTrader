@@ -159,7 +159,7 @@ public class Translate
      */
     protected static final CharacterReference[] mCharacterReferences =
     {
-        // Portions © International Organization for Standardization 1986
+        // Portions Â© International Organization for Standardization 1986
         // Permission to copy in any form is granted for use with
         // conforming SGML systems and applications as defined in
         // ISO 8879, provided this notice is included in all copies.
@@ -268,7 +268,7 @@ public class Translate
         // <!ENTITY % HTMLsymbol PUBLIC
         // "-//W3C//ENTITIES Symbols//EN//HTML">
         // %HTMLsymbol;
-        // Portions © International Organization for Standardization 1986:
+        // Portions Â© International Organization for Standardization 1986:
         // Permission to copy in any form is granted for use with
         // conforming SGML systems and applications as defined in
         // ISO 8879, provided this notice is included in all copies.
@@ -442,7 +442,7 @@ public class Translate
         // <!ENTITY % HTMLspecial PUBLIC
         // "-//W3C//ENTITIES Special//EN//HTML">
         // %HTMLspecial;
-        // Portions © International Organization for Standardization 1986:
+        // Portions Â© International Organization for Standardization 1986:
         // Permission to copy in any form is granted for use with
         // conforming SGML systems and applications as defined in
         // ISO 8879, provided this notice is included in all copies.

@@ -164,7 +164,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     public void connect() {
         
     	//EDOZ TODO vedi quello di directa , qua facciamo partire  il server incvece di "collegarci"
-    	//e i read che facciamo partire è il server i JESSX !
+    	//e i read che facciamo partire Ã¨ il server i JESSX !
        Server srv = new Server("default.xml",false);
        Server.setServerState(Server.SERVER_STATE_ONLINE);
        srv.loadBots();
@@ -226,7 +226,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     @Override
     public void disconnect() {
     	
-    	//TODO qua c'è da spegnere il server di JESSX (un bel kill e tutto si risolve)
+    	//TODO qua c'Ã¨ da spegnere il server di JESSX (un bel kill e tutto si risolve)
         if (thread != null) {
             try {
                 if (socketChannel != null) {
@@ -252,7 +252,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     @Override
     public boolean canTrade(ISecurity security) {
     	
-    	//TODO !! Cazzo è sta rob a ? 
+    	//TODO !! Cazzo Ã¨ sta rob a ? 
         IFeedIdentifier identifier = security.getIdentifier();
         if (identifier == null) {
             return false;

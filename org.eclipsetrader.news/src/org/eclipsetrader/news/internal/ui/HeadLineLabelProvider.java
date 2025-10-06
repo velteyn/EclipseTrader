@@ -83,12 +83,12 @@ public class HeadLineLabelProvider extends LabelProvider implements ITableLabelP
     }
 
     protected String getSafeString(String title) {
-        title = title.replaceAll("&agrave;", "à"); //$NON-NLS-1$ //$NON-NLS-2$
-        title = title.replaceAll("&egrave;", "è"); //$NON-NLS-1$ //$NON-NLS-2$
-        title = title.replaceAll("&eacute;", "é"); //$NON-NLS-1$ //$NON-NLS-2$
-        title = title.replaceAll("&igrave;", "ì"); //$NON-NLS-1$ //$NON-NLS-2$
-        title = title.replaceAll("&ograve;", "ò"); //$NON-NLS-1$ //$NON-NLS-2$
-        title = title.replaceAll("&pgrave;", "ù"); //$NON-NLS-1$ //$NON-NLS-2$
+        title = title.replaceAll("&agrave;", "Ã "); //$NON-NLS-1$ //$NON-NLS-2$
+        title = title.replaceAll("&egrave;", "Ã¨"); //$NON-NLS-1$ //$NON-NLS-2$
+        title = title.replaceAll("&eacute;", "Ã©"); //$NON-NLS-1$ //$NON-NLS-2$
+        title = title.replaceAll("&igrave;", "Ã¬"); //$NON-NLS-1$ //$NON-NLS-2$
+        title = title.replaceAll("&ograve;", "Ã²"); //$NON-NLS-1$ //$NON-NLS-2$
+        title = title.replaceAll("&pgrave;", "Ã¹"); //$NON-NLS-1$ //$NON-NLS-2$
         return title;
     }
 
