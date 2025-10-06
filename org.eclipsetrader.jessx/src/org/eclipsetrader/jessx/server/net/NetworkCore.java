@@ -76,8 +76,9 @@ public abstract class NetworkCore {
 	}
 
 	public static void setServerOffline() {
-		if (!connectionPoint.isAlive())
-			connectionPoint.destroy();
+		if (connectionPoint.isAlive()) {
+			connectionPoint.shutdown();
+        }
 	}
 
 	public static void sendToAllPlayers(NetworkWritable message) {

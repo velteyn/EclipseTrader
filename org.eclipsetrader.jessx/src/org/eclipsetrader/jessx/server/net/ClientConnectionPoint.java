@@ -58,6 +58,7 @@ public class ClientConnectionPoint extends Thread {
 
   private ServerSocket serverSocket;
   private String AddressIP ;
+  private volatile boolean running = true;
 
   public ClientConnectionPoint() {
   super("ClientConnectionPoint");
@@ -101,20 +102,26 @@ public class ClientConnectionPoint extends Thread {
      Utils.logger.warn("Unabled to get host IP address. [IGNORED]");
    }
 
-   while (Server.getServerState() == Server.SERVER_STATE_ONLINE) {
-
+   while (running) {
      try {
-       new PreConnectionClient(serverSocket.accept()).initiatePlayer();
-       // serveur.accept() wait until a client try to connect and return
-       // a socket with which we will be able to communicate with the client.
-       // Then we create a thread that will be dedicated to the communication
-       // with this client.
+       Socket clientSocket = serverSocket.accept();
+       if (running) {
+           new PreConnectionClient(clientSocket).initiatePlayer();
+       }
+     }
+     catch (IOException e) {
+        if (!running) {
+            // This is expected during shutdown
+            Utils.logger.info("ClientConnectionPoint thread is shutting down.");
+        } else {
+            Utils.logger.error("IOException in ClientConnectionPoint", e);
+        }
      }
      catch (Exception ex1) {
-       System.out.println(ex1.toString());
+        if (running) {
+            System.out.println(ex1.toString());
+        }
      }
-
-     // Waiting next client.
    }
  }
 
@@ -122,6 +129,17 @@ public class ClientConnectionPoint extends Thread {
   *
   */
  public void run() {
- this.attenteConnexion();
+    this.attenteConnexion();
  }
+
+  public void shutdown() {
+    running = false;
+    try {
+        if (serverSocket != null && !serverSocket.isClosed()) {
+            serverSocket.close();
+        }
+    } catch (IOException e) {
+        Utils.logger.warn("Exception while closing server socket: " + e.toString());
+    }
+  }
 }

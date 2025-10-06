@@ -179,7 +179,8 @@ public abstract class Order extends Operation implements NetworkWritable, Networ
         String warnMessage = "This bid has not been fully passed because the orderbook is not deep enough";
         NetworkCore.getPlayer(order.getEmitter()).send((NetworkWritable)new WarnForClient(warnMessage));
       } 
-    } 
+    }
+    NetworkCore.sendToAllPlayers(orderbook);
   }
   
   private void insertOrderWithoutExec(Order order) {

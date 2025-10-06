@@ -14,6 +14,9 @@ import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.trader.jessx.business.BusinessCore;
 import org.eclipse.trader.jessx.trobot.Discreet;
 import org.eclipse.trader.jessx.trobot.DiscreetIT;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.trader.jessx.trobot.NotDiscreet;
 import org.eclipse.trader.jessx.trobot.Robot;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
@@ -35,6 +38,7 @@ public class Server
     private static int serverState;
     private static final FileFilter filter;
     public static final String SERVER_LOG_FILE = "./server.log";
+    private List<Robot> bots = new ArrayList<Robot>();
     
     static {
         Server.EXPERIMENT_STATE_SETUP = 0;
@@ -108,17 +112,20 @@ public class Server
         for (int i = 0; i < NUMBER_DISCREET_BOTS; ++i) {
             final Robot zitDiscreet = new Discreet(i, temp);
             System.out.println("in for, after creating the discreet "+ i +" and before start");
+            bots.add(zitDiscreet);
             zitDiscreet.start();
             System.out.println("after discreet start " + i);
         }
         for (int i = 0; i < 19; ++i) {
             final Robot zitDiscreetIT = new DiscreetIT(i, tempIT);
             System.out.println("dans for, apr\u00e8s cr\u00e9ation du discreet " + i + " et avant start");
+            bots.add(zitDiscreetIT);
             zitDiscreetIT.start();
             System.out.println("apr\u00e8s start du discreetIT " + i);
         }
         for (int i = 0; i < 15; ++i) {
             final Robot zitNotDiscreet = new NotDiscreet(i, 10, 0, 100);
+            bots.add(zitNotDiscreet);
             zitNotDiscreet.start();
         }
 
@@ -145,6 +152,16 @@ public class Server
     }
     
     public void startServer() {
+    }
+
+    public void shutdown() {
+        Utils.logger.info("Shutting down JessX server...");
+        for (Robot bot : bots) {
+            bot.kill();
+        }
+        bots.clear();
+        NetworkCore.setServerOffline();
+        Utils.logger.info("JessX server shutdown complete.");
     }
     
     public static void InitLogs() {

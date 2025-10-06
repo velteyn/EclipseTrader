@@ -219,4 +219,8 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
   public boolean isOrdersAllowed() {
     return this.ordersAllowed;
   }
+
+  public void kill() {
+      this.hasToRun = false;
+  }
 }

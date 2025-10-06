@@ -146,7 +146,8 @@ public class OrderBook implements NetworkWritable, NetworkReadable, XmlExportabl
         this.bid.removeElementAt(i);
         Utils.logger.debug("Order successfully removed.");
       } 
-    } 
+    }
+    NetworkCore.sendToAllPlayers(this);
   }
   
   public void clearPlayer(String playerName) {
