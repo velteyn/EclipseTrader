@@ -194,9 +194,9 @@ public class JessxActivator extends AbstractUIPlugin {
         if (serviceReference != null) {
             IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
             try {
-                Map<String, Stock> stocks = BusinessCore.getStocks();
-                if (stocks == null) {
-                    log(new Status(IStatus.WARN, PLUGIN_ID, "BusinessCore.getStocks() returned null. Cannot register securities."));
+                Map<String, Object> assets = BusinessCore.getAssets();
+                if (assets == null) {
+                    log(new Status(IStatus.WARN, PLUGIN_ID, "BusinessCore.getAssets() returned null. Cannot register securities."));
                     return;
                 }
 
@@ -205,17 +205,20 @@ public class JessxActivator extends AbstractUIPlugin {
                     existingSymbols.add(s.getName());
                 }
 
-                for (Stock stock : stocks.values()) {
-                    String stockName = stock.getAssetName();
-                    if (stockName != null && !existingSymbols.contains(stockName)) {
-                        FeedProperties properties = new FeedProperties();
-                        properties.setProperty("org.eclipsetrader.jessx.symbol", stockName);
+                for (Object asset : assets.values()) {
+                    if (asset instanceof Stock) {
+                        Stock stock = (Stock) asset;
+                        String stockName = stock.getAssetName();
+                        if (stockName != null && !existingSymbols.contains(stockName)) {
+                            FeedProperties properties = new FeedProperties();
+                            properties.setProperty("org.eclipsetrader.jessx.symbol", stockName);
 
-                        IFeedIdentifier feedIdentifier = new FeedIdentifier(stockName, properties);
-                        ISecurity security = new Security(stockName, feedIdentifier);
+                            IFeedIdentifier feedIdentifier = new FeedIdentifier(stockName, properties);
+                            ISecurity security = new Security(stockName, feedIdentifier);
 
-                        repositoryService.save(new ISecurity[] { security });
-                        log(new Status(IStatus.INFO, PLUGIN_ID, "Registered new security from simulation: " + stockName));
+                            repositoryService.save(new ISecurity[] { security });
+                            log(new Status(IStatus.INFO, PLUGIN_ID, "Registered new security from simulation: " + stockName));
+                        }
                     }
                 }
             }

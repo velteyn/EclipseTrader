@@ -214,7 +214,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
         if (identifier == null) {
             return false;
         }
-        return BusinessCore.getStocks().get(security.getName()) != null;
+        return BusinessCore.getAssets().get(security.getName()) != null;
     }
 
     /* (non-Javadoc)
@@ -244,10 +244,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
                 ISecurity[] securities = service.getSecurities();
                 for (int i = 0; i < securities.length; i++) {
-                    Stock stock = BusinessCore.getStocks().get(securities[i].getName());
-                    if (stock != null && stock.getCode().equals(symbol)) {
-                        security = securities[i];
-                        break;
+                    Object asset = BusinessCore.getAssets().get(securities[i].getName());
+                    if (asset instanceof Stock) {
+                        Stock stock = (Stock) asset;
+                        if (stock.getCode().equals(symbol)) {
+                            security = securities[i];
+                            break;
+                        }
                     }
                 }
 
