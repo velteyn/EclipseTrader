@@ -41,7 +41,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.trader.jessx.business.BusinessCore;
 import org.eclipse.trader.jessx.business.PlayerType;
 import org.eclipse.trader.jessx.business.Scenario;
-import org.eclipse.trader.jessx.business.Stock;
+import org.eclipse.trader.jessx.business.assets.Stock;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.repositories.IRepositoryService;

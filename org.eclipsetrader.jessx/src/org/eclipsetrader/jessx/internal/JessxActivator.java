@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.trader.jessx.business.BusinessCore;
-import org.eclipse.trader.jessx.business.Stock;
+import org.eclipse.trader.jessx.business.assets.Stock;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.feed.FeedProperties;
