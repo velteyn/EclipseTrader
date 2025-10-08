@@ -13,6 +13,7 @@ import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IExecutableExtensionFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -201,7 +202,7 @@ public class JessxActivator extends AbstractUIPlugin implements IExecutableExten
                             IFeedIdentifier feedIdentifier = new FeedIdentifier(stockName, properties);
                             ISecurity security = new Security(stockName, feedIdentifier);
 
-                            repositoryService.save(security);
+                            repositoryService.saveAdaptable(new IAdaptable[] { security });
                             log(new Status(IStatus.INFO, PLUGIN_ID, "Registered new security from simulation: " + stockName));
                         }
                     }
