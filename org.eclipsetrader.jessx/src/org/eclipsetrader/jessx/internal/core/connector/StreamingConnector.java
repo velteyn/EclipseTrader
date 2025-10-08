@@ -327,7 +327,7 @@ public class StreamingConnector implements IFeedConnector2, IExecutableExtension
             return;
         }
 
-        final FeedSubscription subscription;
+        FeedSubscription subscription;
         synchronized (symbolSubscriptions) {
             subscription = symbolSubscriptions.get(symbol);
             if (subscription == null) {
@@ -362,6 +362,7 @@ public class StreamingConnector implements IFeedConnector2, IExecutableExtension
             }
 
             IBook book = new org.eclipsetrader.core.feed.Book(bids.toArray(new IBookEntry[0]), asks.toArray(new IBookEntry[0]));
+            final FeedSubscription finalSubscription = subscription;
             subscription.setBook(book);
 
             if (!bids.isEmpty() && !asks.isEmpty()) {
@@ -374,7 +375,7 @@ public class StreamingConnector implements IFeedConnector2, IExecutableExtension
             Display.getDefault().asyncExec(new Runnable() {
                 @Override
                 public void run() {
-                    subscription.fireNotification();
+                    finalSubscription.fireNotification();
                 }
             });
 
