@@ -48,7 +48,7 @@
    <extension
          point="org.eclipsetrader.core.trading.brokers">
       <broker
-            class="org.eclipsetrader.jessx.internal.core.BrokerConnector"
+            class="org.eclipsetrader.jessx.internal.JessxActivator"
             id="org.eclipsetrader.brokers.jessx"
             name="Jessx">
       </broker>

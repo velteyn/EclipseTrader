@@ -69,7 +69,7 @@ import org.eclipsetrader.jessx.utils.gui.MessageTimer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-public class BrokerConnector implements IBroker, IExecutableExtension, IExecutableExtensionFactory {
+public class BrokerConnector implements IBroker, IExecutableExtension {
 
     public static final IOrderRoute Immediate = new OrderRoute("1", "immed"); //$NON-NLS-1$ //$NON-NLS-2$
     public static final IOrderRoute MTA = new OrderRoute("2", "MTA"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -77,17 +77,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     public static final IOrderRoute AfterHours = new OrderRoute("5", "AfterHours"); //$NON-NLS-1$ //$NON-NLS-2$
     public static final IOrderRoute Open = new OrderRoute("7", "open//"); //$NON-NLS-1$ //$NON-NLS-2$
    
-    private static BrokerConnector instance;
-    
-    public synchronized static BrokerConnector getInstance() {
-        if (instance == null) {
-            instance = new BrokerConnector();
-        }
-        return instance;
-    }
-
-    
-    
     private String id;
     private String name;
 
@@ -115,14 +104,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
         id = config.getAttribute("id"); //$NON-NLS-1$
         name = config.getAttribute("name"); //$NON-NLS-1$
-    }
-
-    /* (non-Javadoc)
-     * @see org.eclipse.core.runtime.IExecutableExtensionFactory#create()
-     */
-    @Override
-    public Object create() throws CoreException {
-        return this;
     }
 
     /* (non-Javadoc)
@@ -258,7 +239,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                     Object asset = BusinessCore.getAssets().get(securities[i].getName());
                     if (asset instanceof Stock) {
                         Stock stock = (Stock) asset;
-                        if (stock.getAssetName().equals(symbol)) {
+                        if (stock.getCode().equals(symbol)) {
                             security = securities[i];
                             break;
                         }

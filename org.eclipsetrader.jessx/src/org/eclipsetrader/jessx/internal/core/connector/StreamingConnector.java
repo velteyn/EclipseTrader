@@ -334,6 +334,7 @@ public class StreamingConnector implements IFeedConnector2, IExecutableExtension
                 logger.warn("Received update for unsubscribed symbol: " + symbol + ". Subscribing dynamically.");
                 FeedIdentifier identifier = new FeedIdentifier(symbol, new FeedProperties());
                 subscribe(identifier);
+                subscription = symbolSubscriptions.get(symbol);
                 if (subscription == null) {
                     logger.error("Failed to dynamically subscribe to symbol: " + symbol);
                     return;

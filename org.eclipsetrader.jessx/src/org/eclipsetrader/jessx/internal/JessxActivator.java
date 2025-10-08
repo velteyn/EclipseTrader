@@ -12,6 +12,8 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IExecutableExtensionFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -24,7 +26,6 @@ import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.instruments.Security;
 import org.eclipsetrader.core.repositories.IRepositoryService;
-import org.eclipsetrader.core.trading.IBroker;
 import org.eclipsetrader.jessx.internal.core.BrokerConnector;
 import org.eclipsetrader.jessx.internal.core.repository.IdentifiersList;
 import org.osgi.framework.BundleContext;
@@ -36,7 +37,7 @@ import org.osgi.framework.ServiceReference;
  * @author Edoardo BAROLO
  * 
  */
-public class JessxActivator extends AbstractUIPlugin {
+public class JessxActivator extends AbstractUIPlugin implements IExecutableExtensionFactory {
 
 	public static final String PLUGIN_ID = "org.eclipsetrader.jessx"; //$NON-NLS-1$
 	public static final String REPOSITORY_FILE = "identifiers.xml"; //$NON-NLS-1$
@@ -65,12 +66,12 @@ public class JessxActivator extends AbstractUIPlugin {
        	super.start(context);
         plugin = this;
 
-        this.brokerConnector = findBrokerConnector();
-        if (this.brokerConnector != null) {
-            this.brokerConnector.startServer();
-        } else {
-            log(new Status(IStatus.ERROR, PLUGIN_ID, "Jessx BrokerConnector not found."));
+        // The broker connector is now created by the create() method when requested by the framework.
+        // We can start the server here to ensure it's running when the plugin is active.
+        if (brokerConnector == null) {
+            brokerConnector = new BrokerConnector();
         }
+        brokerConnector.startServer();
 
         registerSecurities();
 
@@ -172,22 +173,6 @@ public class JessxActivator extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
-    private BrokerConnector findBrokerConnector() {
-        BundleContext context = getBundle().getBundleContext();
-        try {
-            ServiceReference<?>[] serviceReferences = context.getServiceReferences(IBroker.class.getName(), "(id=org.eclipsetrader.brokers.jessx)");
-            if (serviceReferences != null && serviceReferences.length > 0) {
-                Object service = context.getService(serviceReferences[0]);
-                if (service instanceof BrokerConnector) {
-                    return (BrokerConnector) service;
-                }
-            }
-        } catch (Exception e) {
-            log(new Status(IStatus.ERROR, PLUGIN_ID, "Error finding BrokerConnector service", e));
-        }
-        return null;
-    }
-
     private void registerSecurities() {
         BundleContext context = getBundle().getBundleContext();
         ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
@@ -196,7 +181,7 @@ public class JessxActivator extends AbstractUIPlugin {
             try {
                 Map<String, Object> assets = BusinessCore.getAssets();
                 if (assets == null) {
-                    log(new Status(IStatus.WARNING, PLUGIN_ID, "BusinessCore.getAssets() returned null. Cannot register securities."));
+                    log(new Status(IStatus.WARN, PLUGIN_ID, "BusinessCore.getAssets() returned null. Cannot register securities."));
                     return;
                 }
 
@@ -216,7 +201,7 @@ public class JessxActivator extends AbstractUIPlugin {
                             IFeedIdentifier feedIdentifier = new FeedIdentifier(stockName, properties);
                             ISecurity security = new Security(stockName, feedIdentifier);
 
-                            repositoryService.saveAdaptable(new ISecurity[] { security });
+                            repositoryService.save(new ISecurity[] { security });
                             log(new Status(IStatus.INFO, PLUGIN_ID, "Registered new security from simulation: " + stockName));
                         }
                     }
@@ -229,4 +214,12 @@ public class JessxActivator extends AbstractUIPlugin {
             log(new Status(IStatus.ERROR, PLUGIN_ID, "IRepositoryService not found. Cannot register securities."));
         }
     }
+
+	@Override
+	public Object create() throws CoreException {
+		if (brokerConnector == null) {
+			brokerConnector = new BrokerConnector();
+		}
+		return brokerConnector;
+	}
 }

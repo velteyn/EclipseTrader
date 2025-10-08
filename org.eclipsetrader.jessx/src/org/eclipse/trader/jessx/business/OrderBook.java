@@ -6,7 +6,6 @@ import java.util.Vector;
 
 import org.eclipsetrader.jessx.net.NetworkReadable;
 import org.eclipsetrader.jessx.net.NetworkWritable;
-import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.eclipsetrader.jessx.utils.XmlExportable;
 import org.jdom.Content;
