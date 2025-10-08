@@ -77,6 +77,17 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     public static final IOrderRoute AfterHours = new OrderRoute("5", "AfterHours"); //$NON-NLS-1$ //$NON-NLS-2$
     public static final IOrderRoute Open = new OrderRoute("7", "open//"); //$NON-NLS-1$ //$NON-NLS-2$
    
+    private static BrokerConnector instance;
+    
+    public synchronized static BrokerConnector getInstance() {
+        if (instance == null) {
+            instance = new BrokerConnector();
+        }
+        return instance;
+    }
+
+    
+    
     private String id;
     private String name;
 
@@ -247,7 +258,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                     Object asset = BusinessCore.getAssets().get(securities[i].getName());
                     if (asset instanceof Stock) {
                         Stock stock = (Stock) asset;
-                        if (stock.getCode().equals(symbol)) {
+                        if (stock.getAssetName().equals(symbol)) {
                             security = securities[i];
                             break;
                         }

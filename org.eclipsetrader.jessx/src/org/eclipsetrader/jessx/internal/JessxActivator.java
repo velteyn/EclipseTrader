@@ -196,7 +196,7 @@ public class JessxActivator extends AbstractUIPlugin {
             try {
                 Map<String, Object> assets = BusinessCore.getAssets();
                 if (assets == null) {
-                    log(new Status(IStatus.WARN, PLUGIN_ID, "BusinessCore.getAssets() returned null. Cannot register securities."));
+                    log(new Status(IStatus.WARNING, PLUGIN_ID, "BusinessCore.getAssets() returned null. Cannot register securities."));
                     return;
                 }
 
@@ -216,7 +216,7 @@ public class JessxActivator extends AbstractUIPlugin {
                             IFeedIdentifier feedIdentifier = new FeedIdentifier(stockName, properties);
                             ISecurity security = new Security(stockName, feedIdentifier);
 
-                            repositoryService.save(new ISecurity[] { security });
+                            repositoryService.saveAdaptable(new ISecurity[] { security });
                             log(new Status(IStatus.INFO, PLUGIN_ID, "Registered new security from simulation: " + stockName));
                         }
                     }
