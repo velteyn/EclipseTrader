@@ -30,11 +30,13 @@ import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
-import org.eclipse.core.runtime.IExecutableExtensionFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.widgets.Display;
@@ -66,8 +68,10 @@ import org.eclipsetrader.jessx.server.Server;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.server.net.Player;
 import org.eclipsetrader.jessx.utils.gui.MessageTimer;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import java.net.URL;
 
 public class BrokerConnector implements IBroker, IExecutableExtension {
 
@@ -133,7 +137,16 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
     }
 
     public void startServer() {
-       srv = new Server("default.xml",false);
+        try {
+            Bundle bundle = Platform.getBundle(JessxActivator.PLUGIN_ID);
+            URL fileURL = FileLocator.find(bundle, new Path("org/eclipsetrader/jessx/utils/default.xml"), null);
+            String scenarioFilePath = FileLocator.toFileURL(fileURL).getFile();
+            srv = new Server(scenarioFilePath, false);
+        }
+        catch (Exception e) {
+            logger.error("Failed to locate scenario file, falling back to empty server.", e);
+            srv = new Server("", false); // Fallback to prevent NPE
+        }
        Server.setServerState(Server.SERVER_STATE_ONLINE);
        srv.loadBots();
        srv.startServer();
