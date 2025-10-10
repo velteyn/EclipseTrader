@@ -13,6 +13,7 @@ package org.eclipsetrader.jessx.internal.core;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -67,6 +68,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 public class BrokerConnector implements IBroker, IExecutableExtension {
+
+    public static final IOrderRoute Immediate = new OrderRoute("1", "immed"); //$NON-NLS-1$ //$NON-NLS-2$
+    public static final IOrderRoute MTA = new OrderRoute("2", "MTA"); //$NON-NLS-1$ //$NON-NLS-2$
+    public static final IOrderRoute CloseMTA = new OrderRoute("4", "clos-MTA"); //$NON-NLS-1$ //$NON-NLS-2$
+    public static final IOrderRoute AfterHours = new OrderRoute("5", "AfterHours"); //$NON-NLS-1$ //$NON-NLS-2$
+    public static final IOrderRoute Open = new OrderRoute("7", "open//"); //$NON-NLS-1$ //$NON-NLS-2$
+    public static final IOrderValidity Valid30Days = new OrderValidity("30days", "30 Days");
 
     private String id;
     private String name;
@@ -200,6 +208,16 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
     }
 
     @Override
+    public String getSymbolFromSecurity(ISecurity security) {
+        IFeedIdentifier identifier = security.getIdentifier();
+        if (identifier == null) {
+            return null;
+        }
+        return identifier.getSymbol();
+    }
+
+
+    @Override
     public ISecurity getSecurityFromSymbol(String symbol) {
         ISecurity security = null;
         BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
@@ -257,6 +275,17 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
         synchronized (orders) {
             return orders.toArray(new IOrderMonitor[orders.size()]);
         }
+    }
+
+    public void addWithNotification(OrderMonitor orderMonitor) {
+        synchronized (orders) {
+            if (!orders.contains(orderMonitor)) {
+                orders.add(orderMonitor);
+            }
+        }
+        fireUpdateNotifications(new OrderDelta[] {
+            new OrderDelta(OrderDelta.KIND_ADDED, orderMonitor),
+        });
     }
 
     @Override
