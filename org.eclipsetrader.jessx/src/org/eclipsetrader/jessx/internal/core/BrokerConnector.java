@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -114,6 +113,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
     }
 
     public void startServer() {
+        // 1. Start the server
         try {
             Bundle bundle = Platform.getBundle(JessxActivator.PLUGIN_ID);
             URL fileURL = FileLocator.find(bundle, new Path("org/eclipsetrader/jessx/utils/default.xml"), null);
@@ -127,6 +127,10 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
         Server.setServerState(Server.SERVER_STATE_ONLINE);
         srv.startServer();
 
+        // 2. Connect the bots
+        srv.loadBots();
+
+        // Assign categories to bots
         Map<String, Player> playerList = NetworkCore.getPlayerList();
         Scenario scn = BusinessCore.getScenario();
         if (scn != null) {
@@ -140,6 +144,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
             }
         }
 
+        // 3. Connect the client
         try {
             ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
             Player thePlayer = NetworkCore.getPlayer("ThePlayer");
@@ -151,11 +156,10 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
             logger.error("Client connect error", e);
         }
 
+        // 4. Start the simulation / experiment
         if (NetworkCore.getExperimentManager().beginExperiment()) {
             new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
         }
-
-        srv.loadBots();
     }
 
     public void stopServer() {
