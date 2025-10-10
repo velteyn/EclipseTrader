@@ -2,9 +2,6 @@ package org.eclipsetrader.jessx.internal;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -12,25 +9,12 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IExecutableExtensionFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.trader.jessx.business.BusinessCore;
-import org.eclipse.trader.jessx.business.assets.Stock;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipsetrader.core.feed.FeedIdentifier;
-import org.eclipsetrader.core.feed.FeedProperties;
-import org.eclipsetrader.core.feed.IFeedIdentifier;
-import org.eclipsetrader.core.instruments.ISecurity;
-import org.eclipsetrader.core.instruments.Security;
-import org.eclipsetrader.core.repositories.IRepositoryService;
-import org.eclipsetrader.jessx.internal.core.BrokerConnector;
 import org.eclipsetrader.jessx.internal.core.repository.IdentifiersList;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 
 
 /**
@@ -38,7 +22,7 @@ import org.osgi.framework.ServiceReference;
  * @author Edoardo BAROLO
  * 
  */
-public class JessxActivator extends AbstractUIPlugin implements IExecutableExtensionFactory {
+public class JessxActivator extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "org.eclipsetrader.jessx"; //$NON-NLS-1$
 	public static final String REPOSITORY_FILE = "identifiers.xml"; //$NON-NLS-1$
@@ -59,34 +43,18 @@ public class JessxActivator extends AbstractUIPlugin implements IExecutableExten
     private static JessxActivator plugin;
 
     private IdentifiersList identifiersList;
-    private BrokerConnector brokerConnector;
     
     
     @Override
     public void start(BundleContext context) throws Exception {
        	super.start(context);
         plugin = this;
-
-        // The broker connector is now created by the create() method when requested by the framework.
-        // We can start the server here to ensure it's running when the plugin is active.
-        if (brokerConnector == null) {
-            brokerConnector = new BrokerConnector();
-        }
-        brokerConnector.startServer();
-
-        registerSecurities();
-
         startupRepository(getStateLocation().append(REPOSITORY_FILE).toFile());
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
     	 shutdownRepository(getStateLocation().append(REPOSITORY_FILE).toFile());
-
-	 if (this.brokerConnector != null) {
-	     this.brokerConnector.stopServer();
-	 }
-
          plugin = null;
          super.stop(context);
     }
@@ -172,55 +140,5 @@ public class JessxActivator extends AbstractUIPlugin implements IExecutableExten
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
-	}
-
-    private void registerSecurities() {
-        BundleContext context = getBundle().getBundleContext();
-        ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
-        if (serviceReference != null) {
-            IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
-            try {
-                Map<String, Object> assets = BusinessCore.getAssets();
-                if (assets == null) {
-                    log(new Status(IStatus.WARNING, PLUGIN_ID, "BusinessCore.getAssets() returned null. Cannot register securities."));
-                    return;
-                }
-
-                Set<String> existingSymbols = new HashSet<String>();
-                for (ISecurity s : repositoryService.getSecurities()) {
-                    existingSymbols.add(s.getName());
-                }
-
-                for (Object asset : assets.values()) {
-                    if (asset instanceof Stock) {
-                        Stock stock = (Stock) asset;
-                        String stockName = stock.getAssetName();
-                        if (stockName != null && !existingSymbols.contains(stockName)) {
-                            FeedProperties properties = new FeedProperties();
-                            properties.setProperty("org.eclipsetrader.jessx.symbol", stockName);
-
-                            IFeedIdentifier feedIdentifier = new FeedIdentifier(stockName, properties);
-                            ISecurity security = new Security(stockName, feedIdentifier);
-
-                            repositoryService.saveAdaptable(new IAdaptable[] { security });
-                            log(new Status(IStatus.INFO, PLUGIN_ID, "Registered new security from simulation: " + stockName));
-                        }
-                    }
-                }
-            }
-            finally {
-                context.ungetService(serviceReference);
-            }
-        } else {
-            log(new Status(IStatus.ERROR, PLUGIN_ID, "IRepositoryService not found. Cannot register securities."));
-        }
-    }
-
-	@Override
-	public Object create() throws CoreException {
-		if (brokerConnector == null) {
-			brokerConnector = new BrokerConnector();
-		}
-		return brokerConnector;
 	}
 }
