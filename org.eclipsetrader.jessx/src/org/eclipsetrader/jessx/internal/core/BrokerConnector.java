@@ -125,7 +125,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
             srv = new Server("", false);
         }
         Server.setServerState(Server.SERVER_STATE_ONLINE);
-        srv.loadBots();
         srv.startServer();
 
         Map<String, Player> playerList = NetworkCore.getPlayerList();
@@ -155,6 +154,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
         if (NetworkCore.getExperimentManager().beginExperiment()) {
             new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
         }
+
+        srv.loadBots();
     }
 
     public void stopServer() {
