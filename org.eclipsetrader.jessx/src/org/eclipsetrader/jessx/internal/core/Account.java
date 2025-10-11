@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -86,7 +87,7 @@ public class Account implements IAccount {
     }
 
     public void setBalance(double amount) {
-        this.balance = new Cash(amount, "USD"); // Assuming USD for now
+        this.balance = new Cash(new Double(amount), Currency.getInstance("USD"));
     }
 
     /* (non-Javadoc)
