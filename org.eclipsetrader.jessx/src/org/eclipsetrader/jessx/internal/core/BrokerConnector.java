@@ -14,9 +14,11 @@ package org.eclipsetrader.jessx.internal.core;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
@@ -38,6 +40,7 @@ import org.eclipse.trader.jessx.business.Scenario;
 import org.eclipse.trader.jessx.business.assets.Stock;
 import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.feed.FeedProperties;
+import org.eclipsetrader.core.feed.IFeedConnector;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.instruments.Security;
@@ -58,6 +61,7 @@ import org.eclipsetrader.core.trading.OrderDelta;
 import org.eclipsetrader.jessx.client.ClientCore;
 import org.eclipsetrader.jessx.client.event.NetworkListener;
 import org.eclipsetrader.jessx.internal.JessxActivator;
+import org.eclipsetrader.jessx.internal.core.connector.FeedConnector;
 import org.eclipsetrader.jessx.server.Server;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.server.net.Player;
@@ -109,6 +113,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, NetworkLi
     public void connect() {
         startServer();
         registerSecurities();
+        startFeedConnector();
         ClientCore.addNetworkListener(this, "Portfolio");
     }
 
@@ -136,15 +141,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, NetworkLi
         // 2. Load and connect the bots
         srv.loadBots();
 
-        // 3. Connect the main client
-        try {
-            ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
-        }
-        catch (IOException e) {
-            logger.error("Client connect error", e);
-        }
-
-        // 4. Assign player types to all connected players (bots and main client)
+        // 3. Assign player types to all connected players (bots and main client)
         Scenario scn = BusinessCore.getScenario();
         if (scn != null && !scn.getPlayerTypes().isEmpty()) {
             PlayerType defaultPlayerType = (PlayerType) scn.getPlayerTypes().values().iterator().next();
@@ -152,6 +149,18 @@ public class BrokerConnector implements IBroker, IExecutableExtension, NetworkLi
             for (Player player : playerList.values()) {
                 player.setPlayerCategory(defaultPlayerType.getPlayerTypeName());
             }
+        }
+
+        // 4. Connect the main client
+        try {
+            ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
+            Player thePlayer = NetworkCore.getPlayer("ThePlayer");
+            if (thePlayer != null && scn != null && !scn.getPlayerTypes().isEmpty()) {
+                thePlayer.setPlayerCategory(((PlayerType) scn.getPlayerTypes().values().iterator().next()).getPlayerTypeName());
+            }
+        }
+        catch (IOException e) {
+            logger.error("Client connect error", e);
         }
 
         // 5. Start the experiment
@@ -198,6 +207,18 @@ public class BrokerConnector implements IBroker, IExecutableExtension, NetworkLi
             finally {
                 context.ungetService(serviceReference);
             }
+        }
+    }
+
+    public static void startFeedConnector() {
+        BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
+        ServiceReference serviceReference = context.getServiceReference(IFeedConnector.class.getName());
+        if (serviceReference != null) {
+            IFeedConnector service = (IFeedConnector) context.getService(serviceReference);
+            if (service instanceof FeedConnector) {
+                ((FeedConnector) service).doConnect();
+            }
+            context.ungetService(serviceReference);
         }
     }
 

@@ -38,6 +38,10 @@ public class FeedConnector implements IFeedConnector, IExecutableExtension {
 
     @Override
     public void connect() {
+        // The connection is now managed by the BrokerConnector
+    }
+
+    public void doConnect() {
         connector.connect();
     }
 

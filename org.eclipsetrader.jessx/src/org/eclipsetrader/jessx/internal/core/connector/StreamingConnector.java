@@ -244,6 +244,10 @@ public class StreamingConnector implements IFeedConnector2, IExecutableExtension
 
     @Override
     public synchronized void connect() {
+        // The connection is now managed by the BrokerConnector
+    }
+
+    public synchronized void doConnect() {
         stopping = false;
         try {
             ClientCore.connecToServer("localhost", "EclipseTraderFeed", "password");
