@@ -47,6 +47,7 @@ public class Account implements IAccount {
     String id;
     String name;
     File file;
+    Cash balance;
 
     List<Position> positions = new ArrayList<Position>();
     ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
@@ -81,8 +82,11 @@ public class Account implements IAccount {
      */
     @Override
     public Cash getBalance() {
-        // TODO
-        return null;
+        return balance;
+    }
+
+    public void setBalance(double amount) {
+        this.balance = new Cash(amount, "USD"); // Assuming USD for now
     }
 
     /* (non-Javadoc)
