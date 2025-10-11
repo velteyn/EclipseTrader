@@ -113,7 +113,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
     }
 
     public void startServer() {
-        // 1. Start the server
         try {
             Bundle bundle = Platform.getBundle(JessxActivator.PLUGIN_ID);
             URL fileURL = FileLocator.find(bundle, new Path("org/eclipsetrader/jessx/utils/default.xml"), null);
@@ -125,12 +124,9 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
             srv = new Server("", false);
         }
         Server.setServerState(Server.SERVER_STATE_ONLINE);
+        srv.loadBots();
         srv.startServer();
 
-        // 2. Connect the bots
-        srv.loadBots();
-
-        // Assign categories to bots
         Map<String, Player> playerList = NetworkCore.getPlayerList();
         Scenario scn = BusinessCore.getScenario();
         if (scn != null) {
@@ -144,7 +140,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
             }
         }
 
-        // 3. Connect the client
         try {
             ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
             Player thePlayer = NetworkCore.getPlayer("ThePlayer");
@@ -156,7 +151,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
             logger.error("Client connect error", e);
         }
 
-        // 4. Start the simulation / experiment
         if (NetworkCore.getExperimentManager().beginExperiment()) {
             new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
         }
