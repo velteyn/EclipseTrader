@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
@@ -120,6 +119,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, NetworkLi
     }
 
     public void startServer() {
+        // 1. Start the server
         try {
             Bundle bundle = Platform.getBundle(JessxActivator.PLUGIN_ID);
             URL fileURL = FileLocator.find(bundle, new Path("org/eclipsetrader/jessx/utils/default.xml"), null);
@@ -131,33 +131,30 @@ public class BrokerConnector implements IBroker, IExecutableExtension, NetworkLi
             srv = new Server("", false);
         }
         Server.setServerState(Server.SERVER_STATE_ONLINE);
-        srv.loadBots();
         srv.startServer();
 
-        Map<String, Player> playerList = NetworkCore.getPlayerList();
-        Scenario scn = BusinessCore.getScenario();
-        if (scn != null) {
-            List<PlayerType> categories = new ArrayList<PlayerType>(scn.getPlayerTypes().values());
-            Random random = new Random();
-            for (Player player : playerList.values()) {
-                if (!categories.isEmpty()) {
-                    int index = random.nextInt(categories.size());
-                    player.setPlayerCategory(categories.get(index).getPlayerTypeName());
-                }
-            }
-        }
+        // 2. Load and connect the bots
+        srv.loadBots();
 
+        // 3. Connect the main client
         try {
             ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
-            Player thePlayer = NetworkCore.getPlayer("ThePlayer");
-            if (thePlayer != null && scn != null && !scn.getPlayerTypes().isEmpty()) {
-                thePlayer.setPlayerCategory(((PlayerType) scn.getPlayerTypes().values().iterator().next()).getPlayerTypeName());
-            }
         }
         catch (IOException e) {
             logger.error("Client connect error", e);
         }
 
+        // 4. Assign player types to all connected players (bots and main client)
+        Scenario scn = BusinessCore.getScenario();
+        if (scn != null && !scn.getPlayerTypes().isEmpty()) {
+            PlayerType defaultPlayerType = (PlayerType) scn.getPlayerTypes().values().iterator().next();
+            Map<String, Player> playerList = NetworkCore.getPlayerList();
+            for (Player player : playerList.values()) {
+                player.setPlayerCategory(defaultPlayerType.getPlayerTypeName());
+            }
+        }
+
+        // 5. Start the experiment
         if (NetworkCore.getExperimentManager().beginExperiment()) {
             new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
         }
