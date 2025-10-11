@@ -57,16 +57,19 @@ import org.eclipsetrader.core.trading.Order;
 import org.eclipsetrader.core.trading.OrderChangeEvent;
 import org.eclipsetrader.core.trading.OrderDelta;
 import org.eclipsetrader.jessx.client.ClientCore;
+import org.eclipsetrader.jessx.client.event.NetworkListener;
 import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.server.Server;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.server.net.Player;
 import org.eclipsetrader.jessx.utils.gui.MessageTimer;
+import org.jdom.Document;
+import org.jdom.Element;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-public class BrokerConnector implements IBroker, IExecutableExtension {
+public class BrokerConnector implements IBroker, IExecutableExtension, NetworkListener {
 
     public static final IOrderRoute Immediate = new OrderRoute("1", "immed"); //$NON-NLS-1$ //$NON-NLS-2$
     public static final IOrderRoute MTA = new OrderRoute("2", "MTA"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -81,6 +84,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
     private Set<OrderMonitor> orders = new HashSet<OrderMonitor>();
     private ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
     private Log logger = LogFactory.getLog(getClass());
+    private Account account;
 
     public BrokerConnector() {
     }
@@ -89,6 +93,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
     public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
         id = config.getAttribute("id");
         name = config.getAttribute("name");
+        account = new Account("JessX Portfolio", null);
     }
 
     @Override
@@ -105,11 +110,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
     public void connect() {
         startServer();
         registerSecurities();
+        ClientCore.addNetworkListener(this, "Portfolio");
     }
 
     @Override
     public void disconnect() {
         stopServer();
+        ClientCore.removeNetworkListener(this);
     }
 
     public void startServer() {
@@ -314,6 +321,34 @@ public class BrokerConnector implements IBroker, IExecutableExtension {
 
     @Override
     public IAccount[] getAccounts() {
-        return new IAccount[0];
+        return new IAccount[] { account };
+    }
+
+    @Override
+    public void objectReceived(Document doc) {
+        Element root = doc.getRootElement();
+        if ("Portfolio".equals(root.getName())) {
+            try {
+                double cash = Double.parseDouble(root.getAttributeValue("cash"));
+                account.setBalance(cash);
+
+                List<Position> positions = new ArrayList<Position>();
+                List<?> ownings = root.getChildren("Owning");
+                for (Object obj : ownings) {
+                    Element owningElement = (Element) obj;
+                    String assetName = owningElement.getAttributeValue("asset");
+                    long quantity = Long.parseLong(owningElement.getAttributeValue("qtty"));
+
+                    ISecurity security = getSecurityFromSymbol(assetName);
+                    if (security != null) {
+                        positions.add(new Position(security, quantity, null));
+                    }
+                }
+                account.setPositions(positions.toArray(new Position[positions.size()]));
+            }
+            catch(Exception e) {
+                logger.error("Error parsing portfolio XML", e);
+            }
+        }
     }
 }
