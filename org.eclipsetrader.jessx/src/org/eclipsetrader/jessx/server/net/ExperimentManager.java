@@ -90,7 +90,7 @@ public class ExperimentManager extends Thread implements Constants {
       String login = iter.next();
       String pc = NetworkCore.getPlayer(login).getPlayerCategory();
       if (NetworkCore.getPlayer(login).getPlayerStatus() == 1 && (pc == null || !BusinessCore.getScenario().getPlayerTypes().containsKey(pc))) {
-        String warnMessage = "Some players don't have a player type. The experiment won't begin before.";
+        String warnMessage = "Player '" + login + "' does not have a valid player type. The experiment won't begin before.";
         Utils.logger.warn(warnMessage);
    
         return false;
