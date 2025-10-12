@@ -129,12 +129,16 @@ public class BrokerConnector implements IBroker, IExecutableExtension, NetworkLi
         try {
             Bundle bundle = Platform.getBundle(JessxActivator.PLUGIN_ID);
             URL fileURL = FileLocator.find(bundle, new Path("org/eclipsetrader/jessx/utils/default.xml"), null);
+            if (fileURL == null) {
+                throw new IOException("default.xml not found in plugin bundle");
+            }
             String scenarioFilePath = FileLocator.toFileURL(fileURL).getFile();
             srv = new Server(scenarioFilePath, false);
         }
         catch (Exception e) {
-            logger.error("Failed to locate scenario file, falling back to empty server.", e);
-            srv = new Server("", false);
+            logger.fatal("Could not initialize JESSX server due to missing scenario file.", e);
+            // Stop further execution if the server cannot be initialized.
+            return;
         }
         Server.setServerState(Server.SERVER_STATE_ONLINE);
         srv.startServer();
