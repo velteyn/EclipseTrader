@@ -10,6 +10,8 @@ import java.io.DataOutputStream;
 import java.io.Writer;
 
 import org.eclipse.trader.jessx.business.BusinessCore;
+import org.eclipse.trader.jessx.business.PlayerType;
+import org.eclipse.trader.jessx.business.Scenario;
 import org.eclipsetrader.jessx.net.Message;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Document;
@@ -83,6 +85,14 @@ public class PreConnectionClient
             final Player newPlayer = new Player(this, "", login, pw);
             NetworkCore.addPlayer(newPlayer);
             newPlayer.setJavaversion(javaversion);
+
+            // Assign a player type immediately
+            Scenario scn = BusinessCore.getScenario();
+            if (scn != null && !scn.getPlayerTypes().isEmpty()) {
+                PlayerType defaultPlayerType = (PlayerType) scn.getPlayerTypes().values().iterator().next();
+                newPlayer.setPlayerCategory(defaultPlayerType.getPlayerTypeName());
+            }
+
             try {
                 Utils.logger.info("Player " + login + " accepted on server");
                 final StringWriter writer = new StringWriter();

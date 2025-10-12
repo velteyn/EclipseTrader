@@ -159,16 +159,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, NetworkLi
             logger.error("Client connect error", e);
         }
 
-        // 5. Assign player types to all connected players (bots and main client)
-        if (scn != null && !scn.getPlayerTypes().isEmpty()) {
-            PlayerType defaultPlayerType = (PlayerType) scn.getPlayerTypes().values().iterator().next();
-            Map<String, Player> playerList = NetworkCore.getPlayerList();
-            for (Player player : playerList.values()) {
-                player.setPlayerCategory(defaultPlayerType.getPlayerTypeName());
-            }
-        }
-
-        // 6. Start the experiment
+        // 5. Start the experiment
         if (NetworkCore.getExperimentManager().beginExperiment()) {
             new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
         }
