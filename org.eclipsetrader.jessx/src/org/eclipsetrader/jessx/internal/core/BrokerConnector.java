@@ -128,7 +128,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, NetworkLi
         // 1. Start the server
         try {
             Bundle bundle = Platform.getBundle(JessxActivator.PLUGIN_ID);
-            URL fileURL = FileLocator.find(bundle, new Path("org/eclipsetrader/jessx/utils/default.xml"), null);
+            URL fileURL = FileLocator.find(bundle, new Path("default.xml"), null);
             if (fileURL == null) {
                 throw new IOException("default.xml not found in plugin bundle");
             }
