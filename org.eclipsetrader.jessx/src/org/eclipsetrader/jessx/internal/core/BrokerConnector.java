@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -141,22 +142,29 @@ public class BrokerConnector implements IBroker, IExecutableExtension, NetworkLi
         // 2. Load and connect the bots
         srv.loadBots();
 
-        // 3. Assign player types to all connected players (bots and main client)
-        Scenario scn = BusinessCore.getScenario();
-        if (scn != null && !scn.getPlayerTypes().isEmpty()) {
-            PlayerType defaultPlayerType = (PlayerType) scn.getPlayerTypes().values().iterator().next();
-            Map<String, Player> playerList = NetworkCore.getPlayerList();
-            for (Player player : playerList.values()) {
-                player.setPlayerCategory(defaultPlayerType.getPlayerTypeName());
-            }
-        }
-
-        // 4. Connect the main client
+        // 3. Connect the main client
         try {
             ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
         }
         catch (IOException e) {
             logger.error("Client connect error", e);
+        }
+
+        // 4. Assign player types to all connected players (bots and main client)
+        Map<String, Player> playerList = NetworkCore.getPlayerList();
+        Scenario scn = BusinessCore.getScenario();
+        if (scn != null && !scn.getPlayerTypes().isEmpty()) {
+            List<PlayerType> categories = new ArrayList<PlayerType>(scn.getPlayerTypes().values());
+            Random random = new Random();
+            Iterator<Map.Entry<String, Player>> pIter = playerList.entrySet().iterator();
+            while (pIter.hasNext()) {
+                Map.Entry<String, Player> entry = pIter.next();
+                Player player = entry.getValue();
+                if (!categories.isEmpty()) {
+                    int index = random.nextInt(categories.size());
+                    player.setPlayerCategory(categories.get(index).getPlayerTypeName());
+                }
+            }
         }
 
         // 5. Start the experiment
