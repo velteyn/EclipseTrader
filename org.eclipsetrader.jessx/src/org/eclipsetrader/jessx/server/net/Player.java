@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.server.net;
+﻿package org.eclipsetrader.jessx.server.net;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -228,7 +228,7 @@ public class Player extends Thread implements PortfolioListener {
         } 
       } 
       try {
-        Utils.logger.debug("Waiting for some data...");
+        Utils.logger.debug("Player "+this.getLogin()+" of type "+ this.getPlayerCategory()+ " Waiting for some data...");
         dataRemaining = readXmlFromNetwork(String.valueOf(dataRemaining) + this.dataInput.readUTF());
       } catch (IOException iOException) {
         Utils.logger.warn("Client stream has been closed. " + iOException.toString());

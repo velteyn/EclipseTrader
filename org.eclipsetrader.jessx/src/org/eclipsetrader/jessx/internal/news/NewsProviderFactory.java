@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.internal.news;
+﻿package org.eclipsetrader.jessx.internal.news;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;

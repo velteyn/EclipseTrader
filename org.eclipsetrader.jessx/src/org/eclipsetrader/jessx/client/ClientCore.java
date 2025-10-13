@@ -1,4 +1,4 @@
-// 
+﻿// 
 //This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
 // 
 
@@ -53,7 +53,7 @@ public abstract class ClientCore
         Utils.loadModules("org.eclipse.trader.jessx.business.operations.DeleteOrder");
         Utils.loadModules("org.eclipse.trader.jessx.business.operations.MarketOrder");
         Utils.loadModules("org.eclipse.trader.jessx.business.operations.BestLimitOrder");
-        Utils.loadModules("jessx.business.institutions.OrderMarket");
+        Utils.loadModules("org.eclipse.trader.jessx.business.institutions.OrderMarket");
         Utils.logger.info("Loading modules done.");
         ClientCore.networkListener = new HashMap();
         ClientCore.operatorPlayedListeners = new Vector();

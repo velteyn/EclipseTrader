@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.preferences;
+﻿package org.eclipsetrader.jessx.preferences;
 
 import org.eclipse.jface.preference.*;
 import org.eclipse.ui.IWorkbenchPreferencePage;

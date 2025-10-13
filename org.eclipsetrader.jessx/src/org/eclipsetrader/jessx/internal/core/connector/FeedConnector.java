@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.internal.core.connector;
+﻿package org.eclipsetrader.jessx.internal.core.connector;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;

@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.internal.ui.wizards;
+﻿package org.eclipsetrader.jessx.internal.ui.wizards;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.widgets.Composite;

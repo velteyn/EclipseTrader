@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.internal;
+﻿package org.eclipsetrader.jessx.internal;
 
 import java.io.File;
 import java.io.FileWriter;

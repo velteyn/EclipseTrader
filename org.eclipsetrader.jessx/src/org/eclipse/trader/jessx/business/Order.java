@@ -1,4 +1,4 @@
-package org.eclipse.trader.jessx.business;
+﻿package org.eclipse.trader.jessx.business;
 
 
 import org.eclipsetrader.jessx.server.net.NetworkCore;

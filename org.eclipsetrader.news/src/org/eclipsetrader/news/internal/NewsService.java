@@ -102,7 +102,7 @@ public class NewsService implements INewsService, ISchedulingRule {
                 headLines.addAll(Arrays.asList(newsProvider.getHeadLines()));
                 providers.add(newsProvider);
             } catch (Exception e) {
-                // TODO Log
+                System.out.println("WARNING: TODO EDOZ News provier to be implemented !");
             }
         }
 

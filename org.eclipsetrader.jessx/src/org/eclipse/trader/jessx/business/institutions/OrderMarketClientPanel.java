@@ -1,4 +1,4 @@
-package org.eclipse.trader.jessx.business.institutions;
+﻿package org.eclipse.trader.jessx.business.institutions;
 
 import java.awt.Color;
 import java.awt.Dimension;

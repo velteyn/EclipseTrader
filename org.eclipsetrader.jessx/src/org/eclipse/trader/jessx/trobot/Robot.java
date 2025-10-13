@@ -1,4 +1,4 @@
-package org.eclipse.trader.jessx.trobot;
+﻿package org.eclipse.trader.jessx.trobot;
 
 import java.io.IOException;
 import java.util.AbstractList;

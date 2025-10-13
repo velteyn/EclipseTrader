@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.utils;
+﻿package org.eclipsetrader.jessx.utils;
 
 import java.awt.Color;
 import java.awt.Font;

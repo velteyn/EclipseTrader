@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.preferences;
+﻿package org.eclipsetrader.jessx.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
