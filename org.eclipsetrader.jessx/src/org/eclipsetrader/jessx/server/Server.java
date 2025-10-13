@@ -102,6 +102,30 @@ public class Server
         }
     }
     
+    public Server(final java.io.InputStream is, final boolean graphicalMode) {
+	InitLogs();
+        this.packFrame = true;
+
+        //BusinessCore.setGeneralParameters(new GeneralParameterSetupGui(graphicalMode));
+        BusinessCore.setGeneralParameters(new GeneralParametersLocal());
+        Server.experimentState = Server.EXPERIMENT_STATE_SETUP;
+        Server.serverState = Server.SERVER_STATE_OFFLINE;
+        this.loadServerProperties();
+        this.loadJessXModules();
+        if (graphicalMode) {
+            this.buildFrame();
+        }
+        try {
+            System.out.println("Scenary file loading...");
+            final Document xmlDoc = Utils.readXmlFile(is);
+            BusinessCore.loadFromXml(xmlDoc.getRootElement());
+        }
+        catch (Exception ex) {
+		Utils.logger.error("Error loading default scenary");
+		ex.printStackTrace();
+        }
+    }
+
     public void loadBots(){
         final int temp = 10;
         final int tempIT = 10;

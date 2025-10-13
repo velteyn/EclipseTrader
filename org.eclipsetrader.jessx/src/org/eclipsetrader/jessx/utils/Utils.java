@@ -99,7 +99,21 @@ public abstract class Utils implements Constants {
 
 	public static Document readXmlFile(String fileName) throws Exception {
 		//InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(fileName);
-		InputStream inputStream = Utils.class.getResourceAsStream(fileName);
+		InputStream inputStream = new FileInputStream(fileName);
+		String xmlString;
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		StringBuilder sb = new StringBuilder();
+		String line;
+		while ((line = reader.readLine()) != null) {
+			sb.append(line);
+		}
+		xmlString = sb.toString();
+
+		SAXBuilder sxb = new SAXBuilder();
+		return sxb.build(new InputSource(new StringReader(xmlString)));
+	}
+
+	public static Document readXmlFile(InputStream inputStream) throws Exception {
 		String xmlString;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		StringBuilder sb = new StringBuilder();
