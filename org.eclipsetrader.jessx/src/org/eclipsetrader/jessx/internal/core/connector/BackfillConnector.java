@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.internal.core.connector;
+﻿package org.eclipsetrader.jessx.internal.core.connector;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;

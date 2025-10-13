@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.internal.ui;
+﻿package org.eclipsetrader.jessx.internal.ui;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;

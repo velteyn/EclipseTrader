@@ -1,4 +1,4 @@
-package org.eclipse.trader.jessx.trobot;
+﻿package org.eclipse.trader.jessx.trobot;
 
 import java.util.Iterator;
 

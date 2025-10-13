@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.internal.core.connector;
+﻿package org.eclipsetrader.jessx.internal.core.connector;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -50,7 +50,7 @@ public class FeedConnector implements IFeedConnector, IExecutableExtension{
 	}
 
 	protected void onChangeDriver(String className) {
-		// TODO Qua � da capire cosa fare, cosa sono i driver ???
+		// TODO Qua è da capire cosa fare, cosa sono i driver ???
 		
 	}
 

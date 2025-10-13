@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.preferences;
+﻿package org.eclipsetrader.jessx.preferences;
 
 /**
  * Constant definitions for plug-in preferences

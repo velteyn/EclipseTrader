@@ -1,4 +1,4 @@
-package org.eclipsetrader.jessx.server.net;
+﻿package org.eclipsetrader.jessx.server.net;
 
 /***************************************************************/
 /*                     SOFTWARE SECTION                        */

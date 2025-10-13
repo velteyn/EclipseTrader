@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2004-2011 Marco Maccaferri and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
  
 
@@ -164,7 +165,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     public void connect() {
         
     	//EDOZ TODO vedi quello di directa , qua facciamo partire  il server incvece di "collegarci"
-    	//e i read che facciamo partire � il server i JESSX !
+    	//e i read che facciamo partire ï¿½ il server i JESSX !
        Server srv = new Server("default.xml",false);
        Server.setServerState(Server.SERVER_STATE_ONLINE);
        srv.loadBots();
@@ -182,36 +183,43 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
 		Random random = new Random();
 		// setta una categoria randomica di players
-		while (pIter.hasNext()) {
-			Map.Entry<String, Player> entry = pIter.next();
-			Player player = entry.getValue();
-		     
-		    int index = random.nextInt(categories.size());
-			
-			player.setPlayerCategory(categories.get(index).getPlayerTypeName());
-			  
-		}
+	 
+	
 		
 		//Qua dovrebbe collegarsi il client fatto da nuovo del brooker (come in jessx) caricare i propri assets e iniziare a fare trading
 		 try {
 			ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
+			try {
+				//wait for all players to be connected (reduce me !!)
+				TimeUnit.SECONDS.sleep(10);
+			} catch (InterruptedException e) {
+				System.out.println("Eccezione di interrupt");
+			}
+			
 			Player thePlayer = NetworkCore.getPlayer( "ThePlayer");
 			thePlayer.setPlayerCategory(categories.get(0).getPlayerTypeName());
 			
 		} catch (IOException e) {
 			System.out.println("Client connect error "+e.getMessage());
 		}
-		// sul server 
-		
-		
+		 
+			List<Map.Entry<String, Player>> safeEntries = new ArrayList<>(playerList.entrySet());
+
+			for (Map.Entry<String, Player> entry : safeEntries) {
+			    Player player = entry.getValue();
+			    //fixme exclude the player obviously
+			    int index = random.nextInt(categories.size());
+			    
+			    if(!player.getLogin().equals("ThePlayer"))
+			      player.setPlayerCategory(categories.get(index).getPlayerTypeName());
+			}
+		 
 		//faccio partire l'essperimento (credo)
 		System.out.println("-- LAUNCH EXPERIMENT ! --");
         if (NetworkCore.getExperimentManager().beginExperiment()) {
             new MessageTimer((Vector)BusinessCore.getScenario().getListInformation().clone()).start();
             
         }
-		
-		
 
         if (thread == null || !thread.isAlive()) {
             thread = new Thread(this, getName() + " - Orders Monitor"); //$NON-NLS-1$
@@ -226,7 +234,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     @Override
     public void disconnect() {
     	
-    	//TODO qua c'� da spegnere il server di JESSX (un bel kill e tutto si risolve)
+    	//TODO qua c'ï¿½ da spegnere il server di JESSX (un bel kill e tutto si risolve)
         if (thread != null) {
             try {
                 if (socketChannel != null) {
@@ -252,7 +260,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     @Override
     public boolean canTrade(ISecurity security) {
     	
-    	//TODO !! Cazzo � sta rob a ? 
+    	//TODO !! Cazzo ï¿½ sta rob a ? 
         IFeedIdentifier identifier = security.getIdentifier();
         if (identifier == null) {
             return false;

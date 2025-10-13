@@ -1,4 +1,4 @@
-// 
+﻿// 
 //This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
 // 
 
@@ -43,7 +43,7 @@ public class Classement
         String msg = "";
         for (int i = 0; i <= this.nbrPlayer - 1; ++i) {
             final int j = i + 1;
-            msg = String.valueOf(msg) + "\nn°" + j + " " + this.tabname[i] + "\t -> \t" + this.tabcash[i] + " $";
+            msg = String.valueOf(msg) + "\nnÂ°" + j + " " + this.tabname[i] + "\t -> \t" + this.tabcash[i] + " $";
         }
         return msg;
     }
