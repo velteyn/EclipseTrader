@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.hibernate"
+      id="org.hibernate-feature"
       label="Hibernate Relational Persistence"
       version="3.2.6.20080315"
       provider-name="Hibernate.org">
@@ -18,30 +18,30 @@
    </license>
 
    <plugin
-         id="org.hibernate"
+         id="org.hibernate-feature"
          download-size="0"
          install-size="0"
          version="3.2.6.20080315"/>
 
    <plugin
-         id="org.apache.commons.collections"
+         id="org.hibernate-feature"
          download-size="0"
          install-size="0"
-         version="3.2.0.v200906221723"
+         version="3.2.0.qualifier"
          unpack="false"/>
 
    <plugin
-         id="org.apache.commons.logging"
+         id="org.hibernate-feature"
          download-size="0"
          install-size="0"
-         version="1.1.1.v200906221723"
+         version="1.1.1.qualifier"
          unpack="false"/>
 
    <plugin
-         id="org.apache.log4j"
+         id="org.hibernate-feature"
          download-size="0"
          install-size="0"
-         version="1.2.14.v200701080905"
+         version="1.2.14.qualifier"
          unpack="false"/>
 
 </feature>

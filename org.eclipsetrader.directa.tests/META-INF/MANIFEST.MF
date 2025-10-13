@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Directa JUnit Tests
 Bundle-SymbolicName: org.eclipsetrader.directa.tests
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
 Fragment-Host: org.eclipsetrader.directa;bundle-version="1.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.junit;bundle-version="3.8.2"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.junit;bundle-version="1.0.0"
 Import-Package: org.easymock,
  org.easymock.classextension

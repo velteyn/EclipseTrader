@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Document Object Model
+Bundle-SymbolicName: org.jdom
+Bundle-Version: 1.0.0.202510090845
+Bundle-Vendor: EclipseTrader.org
+Bundle-ClassPath: .
+Export-Package: org.jdom;version="1.0.0",org.jdom.adapters;version="1.0.
+ 0",org.jdom.filter;version="1.0.0",org.jdom.input;version="1.0.0",org.j
+ dom.output;version="1.0.0",org.jdom.transform;version="1.0.0",org.jdom.
+ xpath;version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

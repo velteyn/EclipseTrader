@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='com.sun.syndication' version='1.0.0.202510090845' singleton='false' generation='2'>
+    <update id='com.sun.syndication' range='[0.0.0,1.0.0.202510090845)' severity='0'/>
+    <properties size='6'>
+      <property name='org.eclipse.equinox.p2.name' value='ROME: RSS and Atom Utilities'/>
+      <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
+      <property name='maven-groupId' value='org.eclipsetrader'/>
+      <property name='maven-artifactId' value='com.sun.syndication'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+    <provides size='15'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='com.sun.syndication' version='1.0.0.202510090845'/>
+      <provided namespace='osgi.bundle' name='com.sun.syndication' version='1.0.0.202510090845'/>
+      <provided namespace='java.package' name='com.sun.syndication' version='1.0.0'/>
+      <provided namespace='java.package' name='com.sun.syndication.feed' version='1.0.0'/>
+      <provided namespace='java.package' name='com.sun.syndication.feed.atom' version='1.0.0'/>
+      <provided namespace='java.package' name='com.sun.syndication.feed.impl' version='1.0.0'/>
+      <provided namespace='java.package' name='com.sun.syndication.feed.module' version='1.0.0'/>
+      <provided namespace='java.package' name='com.sun.syndication.feed.module.impl' version='1.0.0'/>
+      <provided namespace='java.package' name='com.sun.syndication.feed.rss' version='1.0.0'/>
+      <provided namespace='java.package' name='com.sun.syndication.feed.synd' version='1.0.0'/>
+      <provided namespace='java.package' name='com.sun.syndication.feed.synd.impl' version='1.0.0'/>
+      <provided namespace='java.package' name='com.sun.syndication.io' version='1.0.0'/>
+      <provided namespace='java.package' name='com.sun.syndication.io.impl' version='1.0.0'/>
+      <provided namespace='osgi.identity' name='com.sun.syndication' version='1.0.0.202510090845'>
+        <properties size='1'>
+          <property name='type' value='osgi.bundle'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='9'>
+      <required namespace='java.package' name='org.jdom' range='1.0.0'/>
+      <required namespace='java.package' name='org.jdom.adapters' range='1.0.0'/>
+      <required namespace='java.package' name='org.jdom.filter' range='1.0.0'/>
+      <required namespace='java.package' name='org.jdom.input' range='1.0.0'/>
+      <required namespace='java.package' name='org.jdom.output' range='1.0.0'/>
+      <required namespace='java.package' name='org.jdom.transform' range='1.0.0'/>
+      <required namespace='java.package' name='org.jdom.xpath' range='1.0.0'/>
+      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=1.7))'>
+        <description>
+          com.sun.syndication
+        </description>
+      </requiredProperties>
+      <required namespace='org.eclipse.equinox.p2.iu' name='com.sun.syndication.source' range='[1.0.0.202510090845,1.0.0.202510090845]' optional='true'>
+        <filter>
+          (org.eclipse.update.install.sources=true)
+        </filter>
+      </required>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='com.sun.syndication' version='1.0.0.202510090845'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: com.sun.syndication&#xA;Bundle-Version: 1.0.0.202510090845&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

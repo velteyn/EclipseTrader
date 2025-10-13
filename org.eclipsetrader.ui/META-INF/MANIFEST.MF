@@ -39,5 +39,5 @@ Export-Package: org.eclipsetrader.ui,
  org.eclipsetrader.ui.internal.views;x-internal:=true,
  org.eclipsetrader.ui.navigator
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Eclipse-BuddyPolicy: global

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.mozilla.rhino"
+      id="org.mozilla.rhino-feature"
       label="Mozilla Rhino Feature"
       version="1.7.3.R20110603"
       provider-name="EclipseTrader.org"
@@ -19,7 +19,7 @@
    </license>
 
    <plugin
-         id="org.mozilla.rhino"
+         id="org.mozilla.rhino-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"

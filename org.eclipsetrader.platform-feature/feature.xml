@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipsetrader.platform"
+      id="org.eclipsetrader.platform-feature"
       label="EclipseTrader Platform"
       version="1.0.0.qualifier"
       provider-name="EclipseTrader.org">
@@ -23,11 +23,11 @@
    </url>
 
    <includes
-         id="org.eclipse.rcp"
+         id="org.eclipsetrader.platform-feature"
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.help"
+         id="org.eclipsetrader.platform-feature"
          version="0.0.0"/>
 
    <requires>
@@ -35,69 +35,69 @@
       <import feature="org.eclipse.rcp" version="3.7.0" match="compatible"/>
       <import feature="org.jdom" version="1.0.0" match="compatible"/>
       <import feature="org.htmlparser" version="1.6.0" match="compatible"/>
-      <import feature="com.sun.syndication" version="1.0.0.v200807162045"/>
+      <import feature="com.sun.syndication" version="1.0.0.qualifier"/>
       <import feature="com.tictactec.ta.lib" version="0.4.0.R20070915"/>
       <import feature="org.mozilla.rhino" version="1.7.3" match="compatible"/>
    </requires>
 
    <plugin
-         id="org.eclipse.osgi.services"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.update.configurator"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.ui.forms"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.net"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.ui.net"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.nebula.widgets.cdatetime"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.nebula.widgets.pshelf"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.equinox.security"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.equinox.security.macosx"
+         id="org.eclipsetrader.platform-feature"
          os="macosx"
          download-size="0"
          install-size="0"
@@ -106,7 +106,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.equinox.security.win32.x86"
+         id="org.eclipsetrader.platform-feature"
          os="win32"
          arch="x86"
          download-size="0"
@@ -116,104 +116,104 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.equinox.security.ui"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.nebula.cwt"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.nebula.jface.cdatetime"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="javax.xml.bind"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipsetrader.core"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipsetrader.platform"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipsetrader.ui"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipsetrader.ui.application"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipsetrader.repository.local"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipsetrader.news"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipsetrader.platform.doc.isv"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipsetrader.platform.doc.user"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipsetrader.ui.charts.indicators"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.help.appserver"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.variables"
+         id="org.eclipsetrader.platform-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -9,14 +9,14 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipsetrader.core
 Bundle-ActivationPolicy: lazy
-Import-Package: javax.xml.bind;version="[2.1.0,2.2.0)",
- javax.xml.bind.annotation;version="[2.1.0,2.2.0)",
- javax.xml.bind.annotation.adapters;version="[2.1.0,2.2.0)",
- javax.xml.bind.attachment;version="[2.1.0,2.2.0)",
- javax.xml.bind.helpers;version="[2.1.0,2.2.0)",
- javax.xml.bind.util;version="[2.1.0,2.2.0)"
+Import-Package: javax.xml.bind;version="1.0.0",
+ javax.xml.bind.annotation;version="1.0.0",
+ javax.xml.bind.annotation.adapters;version="1.0.0",
+ javax.xml.bind.attachment;version="1.0.0",
+ javax.xml.bind.helpers;version="1.0.0",
+ javax.xml.bind.util;version="1.0.0"
 Export-Package: org.eclipsetrader.repository.local,
  org.eclipsetrader.repository.local.internal;x-internal:=true,
  org.eclipsetrader.repository.local.internal.stores;x-internal:=true,
  org.eclipsetrader.repository.local.internal.types;x-internal:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

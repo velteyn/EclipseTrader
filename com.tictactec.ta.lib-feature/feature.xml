@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.tictactec.ta.lib"
+      id="com.tictactec.ta.lib-feature"
       label="Technical Analysis Library"
       version="0.4.0.R20070915"
       provider-name="EclipseTrader.org"
@@ -24,7 +24,7 @@
    </url>
 
    <plugin
-         id="com.tictactec.ta.lib"
+         id="com.tictactec.ta.lib-feature"
          download-size="0"
          install-size="0"
          version="0.4.0.R20070915"

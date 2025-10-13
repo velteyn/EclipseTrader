@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipsetrader.repository.hibernate"
+      id="org.eclipsetrader.repository.hibernate-feature"
       label="Hibernate Repository"
       version="1.0.0.qualifier"
       provider-name="EclipseTrader.org">
@@ -23,7 +23,7 @@
    </url>
 
    <includes
-         id="org.hibernate"
+         id="org.eclipsetrader.repository.hibernate-feature"
          version="0.0.0"/>
 
    <requires>
@@ -31,14 +31,14 @@
    </requires>
 
    <plugin
-         id="org.eclipsetrader.repository.hibernate"
+         id="org.eclipsetrader.repository.hibernate-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="javax.xml.bind"
+         id="org.eclipsetrader.repository.hibernate-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"/>

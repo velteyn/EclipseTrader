@@ -4,8 +4,8 @@ Bundle-Name: PostgreSQL Database Connectivity
 Bundle-SymbolicName: org.eclipsetrader.repository.hibernate.postgresql;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
-Fragment-Host: org.eclipsetrader.repository.hibernate;bundle-version="[1.0.0,2.0.0)"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Fragment-Host: org.eclipsetrader.repository.hibernate;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: fragment.jar,
  postgresql-8.3-604.jdbc3.jar
 Export-Package: org.postgresql,

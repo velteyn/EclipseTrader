@@ -1,0 +1,127 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.eclipsetrader</groupId>
+  <artifactId>org.eclipsetrader.parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <tycho.version>4.0.7</tycho.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <modules>
+    <module>com.sun.syndication</module>
+    <module>com.sun.syndication-feature</module>
+    <module>com.sun.syndication.fetcher</module>
+    <module>org.jdom</module>
+    <module>org.jdom-feature</module>
+    <module>org.eclipsetrader.archipelago</module>
+    <module>org.eclipsetrader.borsaitalia</module>
+    <module>org.eclipsetrader.brokers.paper</module>
+    <module>org.eclipsetrader.brokers.paper-feature</module>
+    <module>org.eclipsetrader.brokers.paper.tests</module>
+    <module>org.eclipsetrader.core</module>
+    <module>org.eclipsetrader.core.tests</module>
+    <module>org.eclipsetrader.directa</module>
+    <module>org.eclipsetrader.directa-feature</module>
+    <module>org.eclipsetrader.directa.tests</module>
+    <module>org.eclipsetrader.directaworld</module>
+    <module>org.eclipsetrader.directaworld-feature</module>
+    <module>org.eclipsetrader.jessx</module>
+    <module>org.eclipsetrader.news</module>
+    <module>org.eclipsetrader.news.tests</module>
+    <module>org.eclipsetrader.platform</module>
+    <module>org.eclipsetrader.platform-feature</module>
+    <module>org.eclipsetrader.platform.doc.isv</module>
+    <module>org.eclipsetrader.platform.doc.user</module>
+    <module>org.eclipsetrader.releng</module>
+    <module>org.eclipsetrader.repository.hibernate</module>
+    <module>org.eclipsetrader.repository.hibernate-feature</module>
+    <module>org.eclipsetrader.repository.hibernate.derby</module>
+    <module>org.eclipsetrader.repository.hibernate.derby-feature</module>
+    <module>org.eclipsetrader.repository.hibernate.postgresql</module>
+    <module>org.eclipsetrader.repository.hibernate.postgresql-feature</module>
+    <module>org.eclipsetrader.repository.hibernate.tests</module>
+    <module>org.eclipsetrader.repository.local</module>
+    <module>org.eclipsetrader.repository.local.tests</module>
+    <module>org.eclipsetrader.tests</module>
+    <module>org.eclipsetrader.tests-feature</module>
+    <module>org.eclipsetrader.ui</module>
+    <module>org.eclipsetrader.ui.application</module>
+    <module>org.eclipsetrader.ui.charts.indicators</module>
+    <module>org.eclipsetrader.ui.tests</module>
+    <module>org.eclipsetrader.yahoo</module>
+    <module>org.eclipsetrader.yahoo-feature</module>
+    <module>org.eclipsetrader.yahoo.tests</module>
+  </modules>
+
+  <repositories>
+    <repository>
+      <id>eclipse-oxygen</id>
+      <layout>p2</layout>
+      <url>http://download.eclipse.org/releases/oxygen</url>
+    </repository>
+    <repository>
+      <id>orbit</id>
+      <layout>p2</layout>
+      <url>http://download.eclipse.org/tools/orbit/downloads/drops/R20170516192513/repository</url>
+    </repository>
+  </repositories>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+            <configuration>
+                <source>1.7</source>
+                <target>1.7</target>
+            </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.eclipse.tycho</groupId>
+          <artifactId>tycho-compiler-plugin</artifactId>
+          <version>${tycho.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho.version}</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <version>${tycho.version}</version>
+        <configuration>
+          <executionEnvironment>JavaSE-1.7</executionEnvironment>
+          <target>
+            <unit id="org.eclipse.platform.feature.group" version="4.7.3.v20180330-0640"/>
+            <unit id="com.tictactec.ta.lib"/>
+            <unit id="javax.xml.bind"/>
+            <unit id="org.apache.commons.codec"/>
+            <unit id="org.apache.commons.collections"/>
+            <unit id="org.apache.commons.httpclient"/>
+            <unit id="org.apache.commons.logging"/>
+            <unit id="org.apache.log4j"/>
+            <unit id="org.eclipse.nebula.cwt.feature.group"/>
+            <unit id="org.eclipse.nebula.widgets.cdatetime.feature.group"/>
+            <unit id="org.eclipse.nebula.widgets.pshelf.feature.group"/>
+            <unit id="org.hibernate"/>
+            <unit id="org.htmlparser"/>
+            <unit id="org.mozilla.rhino"/>
+          </target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

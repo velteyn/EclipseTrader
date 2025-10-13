@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipsetrader.tests"
+      id="org.eclipsetrader.tests-feature"
       label="%featureName"
       version="1.0.0.qualifier"
       provider-name="%providerName">
@@ -23,96 +23,96 @@
    </url>
 
    <plugin
-         id="org.junit"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipsetrader.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
 
    <plugin
-         id="org.eclipsetrader.brokers.paper.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.core.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.core.charts.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.core.trading.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.directa.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.news.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.repository.hibernate.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.repository.local.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.ui.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.ui.charts.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.ui.trading.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"
          fragment="true"/>
 
    <plugin
-         id="org.eclipsetrader.yahoo.tests"
+         id="org.eclipsetrader.tests-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"

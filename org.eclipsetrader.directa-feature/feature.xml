@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipsetrader.directa"
+      id="org.eclipsetrader.directa-feature"
       label="%featureName"
       version="1.0.0.qualifier"
       provider-name="%providerName">
@@ -29,7 +29,7 @@
    </requires>
 
    <plugin
-         id="org.eclipsetrader.directa"
+         id="org.eclipsetrader.directa-feature"
          download-size="0"
          install-size="0"
          version="0.0.0"

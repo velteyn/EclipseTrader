@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JAX-XML-BIND
 Bundle-SymbolicName: javax.xml.bind
-Bundle-Version: 2.1.6.20071219
+Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/activation.jar,
@@ -40,13 +40,13 @@ Export-Package: com.sun.activation.registries,
  com.sun.xml.txw2.annotation,
  com.sun.xml.txw2.output,
  javax.activation,
- javax.xml.bind;version="2.1.6",
- javax.xml.bind.annotation;version="2.1.6",
- javax.xml.bind.annotation.adapters;version="2.1.6",
- javax.xml.bind.attachment;version="2.1.6",
- javax.xml.bind.helpers;version="2.1.6",
- javax.xml.bind.util;version="2.1.6",
- javax.xml.stream;version="2.1.6",
- javax.xml.stream.events;version="2.1.6",
- javax.xml.stream.util;version="2.1.6"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ javax.xml.bind;version="1.0.0",
+ javax.xml.bind.annotation;version="1.0.0",
+ javax.xml.bind.annotation.adapters;version="1.0.0",
+ javax.xml.bind.attachment;version="1.0.0",
+ javax.xml.bind.helpers;version="1.0.0",
+ javax.xml.bind.util;version="1.0.0",
+ javax.xml.stream;version="1.0.0",
+ javax.xml.stream.events;version="1.0.0",
+ javax.xml.stream.util;version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

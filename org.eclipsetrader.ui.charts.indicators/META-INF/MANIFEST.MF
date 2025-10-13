@@ -11,11 +11,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipsetrader.ui,
  org.mozilla.rhino
 Bundle-ActivationPolicy: lazy
-Import-Package: com.tictactec.ta.lib;version="0.4.0",
- com.tictactec.ta.lib.meta;version="0.4.0",
- com.tictactec.ta.lib.meta.annotation;version="0.4.0",
- com.tictactec.ta.lib.meta.helpers;version="0.4.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: com.tictactec.ta.lib;version="1.0.0",
+ com.tictactec.ta.lib.meta;version="1.0.0",
+ com.tictactec.ta.lib.meta.annotation;version="1.0.0",
+ com.tictactec.ta.lib.meta.helpers;version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.eclipsetrader.ui.charts,
  org.eclipsetrader.ui.charts.indicators,
  org.eclipsetrader.ui.internal.charts;x-internal:=true,
