@@ -11,9 +11,11 @@
 
 package org.eclipsetrader.jessx.internal.core;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -39,10 +41,12 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IExecutableExtensionFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.widgets.Display;
@@ -184,7 +188,16 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		// EDOZ TODO vedi quello di directa , qua facciamo partire il server
 		// incvece di "collegarci"
 		// e i read che facciamo partire � il server i JESSX !
-		Server srv = new Server("default.xml", false);
+
+        String path = "";
+        try {
+            URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("src/org/eclipsetrader/jessx/utils/default.xml"), null);
+            path = new File(FileLocator.toFileURL(url).getPath()).getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+		Server srv = new Server(path, false);
 		Server.setServerState(Server.SERVER_STATE_ONLINE);
 		srv.loadBots();
 		srv.startServer();
