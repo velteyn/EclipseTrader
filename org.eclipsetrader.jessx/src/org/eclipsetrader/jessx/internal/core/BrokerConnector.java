@@ -68,18 +68,18 @@ import org.eclipsetrader.core.trading.OrderChangeEvent;
 import org.eclipsetrader.core.trading.OrderDelta;
 import org.eclipsetrader.jessx.client.ClientCore;
 import org.eclipsetrader.jessx.client.event.ConnectionListener;
+import org.eclipsetrader.jessx.client.event.NetworkListener;
 import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.internal.ui.StatusLineContributionItem;
 import org.eclipsetrader.jessx.server.Server;
+import org.jdom.Document;
+import org.jdom.Element;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.server.net.Player;
 import org.eclipsetrader.jessx.utils.gui.MessageTimer;
-import org.jdom.Document;
-import org.jdom.Element;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import org.eclipsetrader.jessx.client.event.NetworkListener;
 public class BrokerConnector implements IBroker, IExecutableExtension, IExecutableExtensionFactory, Runnable, ConnectionListener, NetworkListener {
 
 	public static final IOrderRoute Immediate = new OrderRoute("1", "immed"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -235,80 +235,69 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			thread.start();
 		}
 
-		// EDOARDO a Connection listener to get portfilio and create stocks
 		ClientCore.addConnectionListener(this);
+		ClientCore.addNetworkListener(this, "Portfolio");
 		ClientCore.addNetworkListener(this, "OrderBook");
 	}
 
-	private void registerSecurity(String name) {
-
-		logger.info("########## I'm going to register security " + name);
-
-        BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
-        ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
-        if (serviceReference != null) {
-            IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
-
-            ISecurity security = repositoryService.getSecurity(name);
-            if (security == null) {
-                security = repositoryService.createSecurity(name);
-            }
-
-            if (security.getIdentifier("org.eclipsetrader.jessx.feed") == null) {
-                IFeedIdentifier identifier = new org.eclipsetrader.core.feed.FeedIdentifier("org.eclipsetrader.jessx.feed", null);
-                IFeedProperties properties = new org.eclipsetrader.core.feed.FeedProperties();
-                properties.setProperty("org.eclipsetrader.jessx.symbol", name);
-                identifier.setProperties(properties);
-                security.setIdentifier(identifier);
-
-                repositoryService.save(new ISecurity[] { security });
-            }
-            context.ungetService(serviceReference);
-        }
-    }
-
-
 	@Override
 	public void connectionStateChanged(int newState) {
-		if (newState == ClientCore.CONNECTED)
-		{
+		if (newState == ClientCore.CONNECTED) {
 			logger.info("Client connected to server");
-			ClientCore.addNetworkListener(this, "Portfolio");
 		}
-
 	}
 
 	@Override
 	public void objectReceived(Document doc) {
 		logger.info("Broker received " + doc.getRootElement().getName());
-		if (doc.getRootElement().getName().equals("Portfolio"))
-		{
+		if (doc.getRootElement().getName().equals("Portfolio")) {
 			Element portfolio = doc.getRootElement();
 			Element assets = portfolio.getChild("assets");
 			List<Element> secList = assets.getChildren("security");
-			for(Element sec : secList)
-			{
+			for (Element sec : secList) {
 				String secName = sec.getChild("name").getValue();
 				registerSecurity(secName);
 			}
 		}
-
-		if (doc.getRootElement().getName().equals("OrderBook"))
-		{
+		if (doc.getRootElement().getName().equals("OrderBook")) {
 			Element orderBook = doc.getRootElement();
 			String securityName = orderBook.getChild("security").getValue();
-
 			ISecurity security = getSecurityFromSymbol(securityName);
 			if (security != null) {
-				org.eclipsetrader.jessx.internal.core.connector.FeedSubscription sub = (org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) StreamingConnector.getInstance().subscribeLevel2(security.getIdentifier("org.eclipsetrader.jessx.feed"));
-
-				double lastPrice = Double.parseDouble(orderBook.getChild("last_price").getValue());
-				long lastQuantity = Long.parseLong(orderBook.getChild("last_quantity").getValue());
-
-				sub.setTrade(new org.eclipsetrader.core.feed.Trade(new Date(), lastPrice, lastQuantity));
-
-				StreamingConnector.getInstance().wakeupNotifyThread();
+				IFeedIdentifier identifier = security.getIdentifier();
+				if (identifier != null) {
+					org.eclipsetrader.jessx.internal.core.connector.FeedSubscription sub = (org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) org.eclipsetrader.jessx.internal.core.connector.StreamingConnector.getInstance().subscribeLevel2(identifier);
+					double lastPrice = Double.parseDouble(orderBook.getChild("last_price").getValue());
+					long lastQuantity = Long.parseLong(orderBook.getChild("last_quantity").getValue());
+					sub.setTrade(new org.eclipsetrader.core.feed.Trade(new Date(), lastPrice, lastQuantity, null));
+					org.eclipsetrader.jessx.internal.core.connector.StreamingConnector.getInstance().wakeupNotifyThread();
+				}
 			}
+		}
+	}
+
+	private void registerSecurity(String name) {
+		logger.info("########## I'm going to register security " + name);
+		BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
+		ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
+		if (serviceReference != null) {
+			IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
+			ISecurity security = repositoryService.getSecurityFromName(name);
+			if (security == null) {
+				security = new org.eclipsetrader.core.instruments.Security(name, null);
+				repositoryService.saveAdaptable(new IAdaptable[] { security });
+			}
+			if (security.getIdentifier() == null) {
+				IFeedIdentifier identifier = new org.eclipsetrader.core.feed.FeedIdentifier("org.eclipsetrader.jessx.feed", null);
+				IFeedProperties properties = new org.eclipsetrader.core.feed.FeedProperties();
+				properties.setProperty("org.eclipsetrader.jessx.symbol", name);
+				if (identifier instanceof org.eclipsetrader.core.feed.FeedIdentifier)
+					((org.eclipsetrader.core.feed.FeedIdentifier) identifier).setProperties(properties);
+				if (security instanceof org.eclipsetrader.core.instruments.Security)
+					((org.eclipsetrader.core.instruments.Security) security).setIdentifier(identifier);
+				repositoryService.saveAdaptable(new IAdaptable[] { security });
+			}
+			context.ungetService(serviceReference);
 		}
 	}
 
