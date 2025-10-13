@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (calendar) 2004-2011 Marco Maccaferri and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,39 +15,24 @@ package org.eclipsetrader.jessx.internal.core.connector;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.TimeZone;
 
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.net.proxy.IProxyData;
@@ -58,7 +43,6 @@ import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipsetrader.core.feed.Bar;
 import org.eclipsetrader.core.feed.BarOpen;
 import org.eclipsetrader.core.feed.BookEntry;
@@ -78,7 +62,6 @@ import org.eclipsetrader.core.feed.TimeSpan;
 import org.eclipsetrader.core.feed.TodayOHL;
 import org.eclipsetrader.core.feed.Trade;
 import org.eclipsetrader.jessx.internal.JessxActivator;
-import org.eclipsetrader.jessx.internal.core.WebConnector;
 import org.eclipsetrader.jessx.internal.core.messages.AstaApertura;
 import org.eclipsetrader.jessx.internal.core.messages.AstaChiusura;
 import org.eclipsetrader.jessx.internal.core.messages.BidAsk;
@@ -99,22 +82,6 @@ import org.osgi.framework.ServiceReference;
 public class StreamingConnector implements Runnable, IFeedConnector2, IExecutableExtension, PropertyChangeListener {
 
     private static StreamingConnector instance;
-
-    private static final String INFO = "info"; //$NON-NLS-1$
-
-    private static final String PREZZO = "[L=]"; //$NON-NLS-1$
-    private static final String TRADE = "[LC=]"; //$NON-NLS-1$
-    private static final String ORA = "[TLT]"; //$NON-NLS-1$
-    private static final String DATA = "[DATA_ULT]"; //$NON-NLS-1$
-    private static final String VOLUME = "[CV]"; //$NON-NLS-1$
-    private static final String MINIMO = "[LO]"; //$NON-NLS-1$
-    private static final String MASSIMO = "[HI]"; //$NON-NLS-1$
-    private static final String APERTURA = "[OP1]"; //$NON-NLS-1$
-    private static final String PRECEDENTE = "[LIE]"; //$NON-NLS-1$
-    private static final String BID_QUANTITA = "[BS1]"; //$NON-NLS-1$
-    private static final String BID_PREZZO = "[BP1]"; //$NON-NLS-1$
-    private static final String ASK_QUANTITA = "[AS1]"; //$NON-NLS-1$
-    private static final String ASK_PREZZO = "[AP1]"; //$NON-NLS-1$
 
     private String id;
     private String name;
@@ -379,10 +346,6 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
      */
     @Override
     public synchronized void connect() {
-    	
-
-        WebConnector.getInstance().login();
-
         stopping = false;
 
         if (notificationThread == null || !notificationThread.isAlive()) {
@@ -394,7 +357,6 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
             thread = new Thread(this, name + " - Data Reader"); //$NON-NLS-1$
             thread.start();
         }
-
     }
 
     /* (non-Javadoc)
@@ -481,10 +443,6 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
             return;
         }
 
-
-        // Forces the subscriptions update on startup
-        subscriptionsChanged = true;
-
         while (!isStopping()) {
             if (subscriptionsChanged) {
                 try {
@@ -558,20 +516,6 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
         }
 
         try {
-            os.write(CreaMsg.creaStopDataMsg());
-            os.flush();
-        } catch (Exception e) {
-            JessxActivator.log(new Status(IStatus.WARNING, JessxActivator.PLUGIN_ID, 0, "Error stopping data stream", e)); //$NON-NLS-1$
-        }
-
-        try {
-            os.write(CreaMsg.creaLogoutMsg());
-            os.flush();
-        } catch (Exception e) {
-            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error closing connection to streaming server", e)); //$NON-NLS-1$
-        }
-
-        try {
             os.close();
             is.close();
             socket.close();
@@ -626,23 +570,10 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
 
         if (toRemove.size() != 0) {
             logger.info("Removing " + toRemove); //$NON-NLS-1$
-            int flag[] = new int[toRemove.size()];
-            for (int i = 0; i < flag.length; i++) {
-                flag[i] = 0;
-            }
-            os.write(CreaMsg.creaPortMsg(CreaMsg.PORT_DEL, toRemove.toArray(new String[toRemove.size()]), flag));
-            os.flush();
         }
 
         if (toAdd.size() != 0) {
             logger.info("Adding " + toAdd); //$NON-NLS-1$
-            String s[] = toAdd.toArray(new String[toAdd.size()]);
-            int flag[] = new int[s.length];
-            for (int i = 0; i < flag.length; i++) {
-                flag[i] = sTit2.contains(s[i]) || toAdd2.contains(s[i]) ? 105 : 0;
-            }
-            os.write(CreaMsg.creaPortMsg(CreaMsg.PORT_ADD, s, flag));
-            os.flush();
         }
 
         if (toAdd2.size() != 0 || toRemove2.size() != 0) {
@@ -658,14 +589,6 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
 
             if (toMod.size() != 0) {
                 logger.info("Modifying " + toMod); //$NON-NLS-1$
-
-                String s[] = toMod.keySet().toArray(new String[toMod.keySet().size()]);
-                int flag[] = new int[s.length];
-                for (int i = 0; i < flag.length; i++) {
-                    flag[i] = toMod.get(s[i]).intValue();
-                }
-                os.write(CreaMsg.creaPortMsg(CreaMsg.PORT_MOD, s, flag));
-                os.flush();
             }
         }
 
@@ -673,12 +596,6 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
         sTit.addAll(toAdd);
         sTit2.removeAll(toRemove2);
         sTit2.addAll(toAdd2);
-
-        if (toAdd.size() != 0) {
-            final String[] addSymbols = toAdd.toArray(new String[toAdd.size()]);
-            fetchLatestBookSnapshot(addSymbols);
-            fetchLatestSnapshot(addSymbols);
-        }
     }
 
     void processMessage(DataMessage obj) {
@@ -811,184 +728,6 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
         }
     }
 
-    protected IPreferenceStore getPreferenceStore() {
-        return JessxActivator.getDefault().getPreferenceStore();
-    }
-
-    protected void fetchLatestBookSnapshot(String[] sTit) {
-        Hashtable<String, String[]> hashtable = new Hashtable<String, String[]>();
-
-        try {
-            HttpMethod method = createMethod(sTit, "t", streamingServer, WebConnector.getInstance().getUrt(), WebConnector.getInstance().getPrt()); //$NON-NLS-1$
-            method.setFollowRedirects(true);
-
-            HttpClient client = new HttpClient();
-            setupProxy(client, streamingServer);
-            client.executeMethod(method);
-
-            BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
-
-            String s5;
-            while ((s5 = bufferedreader.readLine()) != null) {
-                String[] campo = s5.split("\\;"); //$NON-NLS-1$
-                if (campo.length != 0) {
-                    hashtable.put(campo[0], campo);
-                }
-            }
-        } catch (Exception e) {
-            Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error reading snapshot data", e); //$NON-NLS-1$
-            JessxActivator.log(status);
-        }
-
-        for (String symbol : sTit) {
-            String sVal[] = hashtable.get(symbol);
-            if (sVal == null) {
-                continue;
-            }
-            FeedSubscription subscription = symbolSubscriptions.get(symbol);
-            if (subscription == null) {
-                continue;
-            }
-
-            try {
-                Object oldValue = subscription.getBook();
-                IBookEntry[] bidEntry = new IBookEntry[20];
-                IBookEntry[] askEntry = new IBookEntry[20];
-                for (int x = 0, k = 9; x < 20; x++, k += 6) {
-                    bidEntry[x] = new BookEntry(null, Double.parseDouble(sVal[k + 2]), Long.parseLong(sVal[k + 1]), Long.parseLong(sVal[k]), null);
-                    askEntry[x] = new BookEntry(null, Double.parseDouble(sVal[k + 5]), Long.parseLong(sVal[k + 4]), Long.parseLong(sVal[k + 3]), null);
-                }
-                Object newValue = new org.eclipsetrader.core.feed.Book(bidEntry, askEntry);
-                subscription.setBook((IBook) newValue);
-                subscription.addDelta(new QuoteDelta(subscription.getIdentifier(), oldValue, newValue));
-            } catch (Exception e) {
-                JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error reading snapshot data", e)); //$NON-NLS-1$
-            }
-        }
-
-        wakeupNotifyThread();
-    }
-
-    protected void fetchLatestSnapshot(String[] sTit) {
-        int flag[] = new int[sTit.length];
-        for (int i = 0; i < flag.length; i++) {
-            flag[i] = 1;
-        }
-
-        try {
-            String s = "[!QUOT]"; //$NON-NLS-1$
-            byte byte0 = 43;
-
-            Hashtable<String, Map<String, String>> hashTable = new Hashtable<String, Map<String, String>>();
-            try {
-                HttpMethod method = createSnapshotMethod(sTit, INFO, streamingServer, WebConnector.getInstance().getUrt(), WebConnector.getInstance().getPrt());
-                method.setFollowRedirects(true);
-                logger.debug(method.getURI().toString());
-
-                HttpClient client = new HttpClient();
-                setupProxy(client, streamingServer);
-                client.executeMethod(method);
-
-                BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
-
-                String s5;
-                while ((s5 = bufferedreader.readLine()) != null && !s5.startsWith(s)) {
-                    logger.debug(s5);
-                }
-
-                if (s5 != null) {
-                    do {
-                        logger.debug(s5);
-                        if (s5.startsWith(s)) {
-                            Map<String, String> as = new HashMap<String, String>();
-
-                            StringTokenizer stringtokenizer = new StringTokenizer(s5, ",\t"); //$NON-NLS-1$
-                            String s2 = stringtokenizer.nextToken();
-                            s2 = s2.substring(s2.indexOf(s) + s.length()).trim();
-                            for (int j = 0; j < byte0; j++) {
-                                String s4;
-                                try {
-                                    s4 = stringtokenizer.nextToken().trim();
-                                    int sq = s4.indexOf("]");
-                                    as.put(s4.substring(0, sq + 1), s4.substring(sq + 1));
-                                } catch (NoSuchElementException nosuchelementexception) {
-                                    hashTable.put(s2, as);
-                                    break;
-                                }
-                            }
-
-                            hashTable.put(s2, as);
-                        }
-                    } while ((s5 = bufferedreader.readLine()) != null);
-                }
-            } catch (Exception e) {
-                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error reading snapshot data", e); //$NON-NLS-1$
-                JessxActivator.log(status);
-            }
-
-            processSnapshotData(sTit, hashTable);
-
-            wakeupNotifyThread();
-        } catch (Exception e) {
-            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error reading snapshot data", e)); //$NON-NLS-1$
-        }
-    }
-
-    void processSnapshotData(String[] sTit, Hashtable<String, Map<String, String>> hashTable) {
-        for (int i = 0; i < sTit.length; i++) {
-            Map<String, String> sVal = hashTable.get(sTit[i]);
-            if (sVal == null) {
-                continue;
-            }
-            FeedSubscription subscription = symbolSubscriptions.get(sTit[i]);
-            if (subscription == null) {
-                continue;
-            }
-
-            IdentifierType identifierType = subscription.getIdentifierType();
-            PriceDataType priceData = identifierType.getPriceData();
-
-            try {
-                if ("0".equals(sVal.get(DATA))) {
-                    sVal.put(DATA, new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime())); //$NON-NLS-1$
-                }
-                priceData.setTime(df3.parse(sVal.get(DATA) + " " + sVal.get(ORA))); //$NON-NLS-1$
-            } catch (Exception e) {
-                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing date: " + " (DATE='" + sVal.get(DATA) + "', TIME='" + sVal.get(ORA) + "')", e); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-                JessxActivator.log(status);
-            }
-
-            priceData.setBid(Double.parseDouble(sVal.get(BID_PREZZO)));
-            priceData.setBidSize(Long.parseLong(sVal.get(BID_QUANTITA)));
-            priceData.setAsk(Double.parseDouble(sVal.get(ASK_PREZZO)));
-            priceData.setAskSize(Long.parseLong(sVal.get(ASK_QUANTITA)));
-            priceData.setVolume(Long.parseLong(sVal.get(VOLUME)));
-            priceData.setLastClose(Double.parseDouble(sVal.get(PRECEDENTE)));
-            priceData.setOpen(Double.parseDouble(sVal.get(APERTURA)));
-            priceData.setHigh(Double.parseDouble(sVal.get(MASSIMO)));
-            priceData.setLow(Double.parseDouble(sVal.get(MINIMO)));
-
-            double tradePrice = Double.parseDouble(sVal.get(TRADE));
-            if (tradePrice != 0.0) {
-                priceData.setLast(tradePrice);
-                subscription.setTrade(new Trade(priceData.getTime(), priceData.getLast(), priceData.getLastSize(), priceData.getVolume()));
-            }
-            else {
-                subscription.setPrice(new org.eclipsetrader.core.feed.Price(priceData.getTime(), Double.parseDouble(sVal.get(PREZZO))));
-            }
-
-            if (priceData.getLast() == null || priceData.getLast() == 0.0) {
-                priceData.setLast(priceData.getLastClose());
-            }
-
-            subscription.setQuote(new Quote(priceData.getBid(), priceData.getAsk(), priceData.getBidSize(), priceData.getAskSize()));
-            if (priceData.getOpen() != 0.0 && priceData.getHigh() != 0.0 && priceData.getLow() != 0.0) {
-                subscription.setTodayOHL(new TodayOHL(priceData.getOpen(), priceData.getHigh(), priceData.getLow()));
-            }
-            subscription.setLastClose(new LastClose(priceData.getLastClose(), null));
-        }
-    }
-
     public void wakeupNotifyThread() {
         if (notificationThread != null) {
             synchronized (notificationThread) {
@@ -997,77 +736,14 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
         }
     }
 
-    private HttpMethod createMethod(String as[], String mode, String host, String urt, String prt) throws MalformedURLException {
-        GetMethod method = new GetMethod("http://" + host + "/preqs/getdata.php"); //$NON-NLS-1$ //$NON-NLS-2$
-
-        StringBuffer s = new StringBuffer();
-        for (int i = 0; i < as.length; i++) {
-            s.append(as[i]);
-            s.append("|"); //$NON-NLS-1$
-        }
-
-        method.setQueryString(new NameValuePair[] {
-            new NameValuePair("modo", mode), //$NON-NLS-1$
-            new NameValuePair("u", urt), //$NON-NLS-1$
-            new NameValuePair("p", prt), //$NON-NLS-1$
-            new NameValuePair("out", "p"), //$NON-NLS-1$ //$NON-NLS-2$
-            new NameValuePair("listaid", s.toString()), //$NON-NLS-1$
-            new NameValuePair("lb", "20"), //$NON-NLS-1$ //$NON-NLS-2$
-        });
-
-        return method;
-    }
-
-    private HttpMethod createSnapshotMethod(String as[], String mode, String host, String urt, String prt) throws Exception {
-        StringBuilder s = new StringBuilder();
-        s.append("/mpush.php?"); //$NON-NLS-1$
-        s.append("modo=" + mode); //$NON-NLS-1$
-        s.append("&cod=A"); //$NON-NLS-1$
-        s.append("&stcmd="); //$NON-NLS-1$
-        for (int i = 0; i < as.length; i++) {
-            s.append("+"); //$NON-NLS-1$
-            s.append(as[i]);
-            s.append("|"); //$NON-NLS-1$
-        }
-        s.append("&u=" + urt); //$NON-NLS-1$
-        s.append("&p=" + prt); //$NON-NLS-1$
-
-        GetMethod method = new GetMethod();
-        method.setURI(new org.apache.commons.httpclient.URI("http://" + host + s.toString(), false));
-
-        return method;
-    }
-
-    @SuppressWarnings({
-        "rawtypes", "unchecked"
-    })
-    private void setupProxy(HttpClient client, String host) throws URISyntaxException {
-        if (JessxActivator.getDefault() != null) {
-            BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
-            ServiceReference reference = context.getServiceReference(IProxyService.class.getName());
-            if (reference != null) {
-                IProxyService proxyService = (IProxyService) context.getService(reference);
-                IProxyData[] proxyData = proxyService.select(new URI(null, host, null, null));
-                for (int i = 0; i < proxyData.length; i++) {
-                    if (IProxyData.HTTP_PROXY_TYPE.equals(proxyData[i].getType())) {
-                        IProxyData data = proxyData[i];
-                        if (data.getHost() != null) {
-                            client.getHostConfiguration().setProxy(data.getHost(), data.getPort());
-                        }
-                        if (data.isRequiresAuthentication()) {
-                            client.getState().setProxyCredentials(AuthScope.ANY, new UsernamePasswordCredentials(data.getUserId(), data.getPassword()));
-                        }
-                        break;
-                    }
-                }
-                context.ungetService(reference);
-            }
+    public void setTrade(IFeedIdentifier identifier, Trade trade) {
+        IdentifierType identifierType = IdentifiersList.getInstance().getIdentifierFor(identifier);
+        FeedSubscription subscription = symbolSubscriptions.get(identifierType.getSymbol());
+        if (subscription != null) {
+            subscription.setTrade(trade);
         }
     }
 
-    /* (non-Javadoc)
-     * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getSource() instanceof IFeedIdentifier) {
