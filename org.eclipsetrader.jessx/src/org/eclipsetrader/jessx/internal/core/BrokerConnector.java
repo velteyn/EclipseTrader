@@ -50,6 +50,7 @@ import org.eclipse.trader.jessx.business.BusinessCore;
 import org.eclipse.trader.jessx.business.PlayerType;
 import org.eclipse.trader.jessx.business.Scenario;
 import org.eclipsetrader.core.feed.FeedIdentifier;
+import org.eclipsetrader.core.feed.FeedProperties;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedProperties;
 import org.eclipsetrader.core.instruments.ISecurity;
