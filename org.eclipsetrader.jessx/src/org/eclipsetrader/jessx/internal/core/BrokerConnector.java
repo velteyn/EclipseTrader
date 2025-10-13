@@ -415,13 +415,11 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
 			ISecurity security = repositoryService.getSecurityFromName(name);
 			if (security == null) {
-                IFeedIdentifier identifier = new FeedIdentifier("org.eclipsetrader.jessx.feed", null);
-                IFeedProperties properties = new org.eclipsetrader.core.feed.FeedProperties();
+                FeedIdentifier identifier = new FeedIdentifier("org.eclipsetrader.jessx.feed", null);
+                FeedProperties properties = new org.eclipsetrader.core.feed.FeedProperties();
                 properties.setProperty("org.eclipsetrader.jessx.symbol", name);
 
-                if (identifier instanceof FeedIdentifier) {
-                    ((FeedIdentifier)identifier).setProperties(properties);
-                }
+                identifier.setProperties(properties);
 
 				security = new Stock(name, identifier, null);
 
