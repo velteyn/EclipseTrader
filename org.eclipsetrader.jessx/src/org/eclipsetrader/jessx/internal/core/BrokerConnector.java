@@ -202,8 +202,14 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 		Server srv = new Server(is, false);
 		Server.setServerState(Server.SERVER_STATE_ONLINE);
-		srv.loadBots();
 		srv.startServer();
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+		srv.loadBots();
 
 		Map pList = NetworkCore.getPlayerList();
 
