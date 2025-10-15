@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URL;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -41,15 +40,14 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IExecutableExtensionFactory;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -65,6 +63,7 @@ import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.instruments.Security;
 import org.eclipsetrader.core.instruments.Stock;
 import org.eclipsetrader.core.repositories.IRepository;
+import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
 import org.eclipsetrader.core.trading.BrokerException;
 import org.eclipsetrader.core.trading.IAccount;
@@ -425,31 +424,47 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		}
 	}
 
-    private void registerSecurity(String name) {
-		logger.info("########## I'm going to register security " + name);
-		BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
-		ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
-		if (serviceReference != null) {
-			IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
-			ISecurity security = repositoryService.getSecurityFromName(name);
-			if (security == null) {
-                FeedIdentifier identifier = new FeedIdentifier("org.eclipsetrader.jessx.feed", null);
-                FeedProperties properties = new org.eclipsetrader.core.feed.FeedProperties();
-                properties.setProperty("org.eclipsetrader.jessx.symbol", name);
+    private void registerSecurity(final String name) {
+        logger.info("########## I'm going to register security " + name);
+        BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
+        ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
+        if (serviceReference != null) {
+            final IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
+            try {
+                Display.getDefault().asyncExec(new Runnable() {
+                    @Override
+                    public void run() {
+                        IRepositoryRunnable runnable = new IRepositoryRunnable() {
+                            @Override
+                            public IStatus run(IProgressMonitor monitor) throws Exception {
+                                ISecurity security = repositoryService.getSecurityFromName(name);
+                                if (security == null) {
+                                    FeedIdentifier identifier = new FeedIdentifier("org.eclipsetrader.jessx.feed", null);
+                                    FeedProperties properties = new FeedProperties();
+                                    properties.setProperty("org.eclipsetrader.jessx.symbol", name);
+                                    identifier.setProperties(properties);
 
-                identifier.setProperties(properties);
+                                    security = new Stock(name, identifier, null);
 
-				security = new Stock(name, identifier, null);
+                                    IAdaptable[] adaptables = new IAdaptable[] {
+                                        (IAdaptable) security,
+                                    };
+                                    IRepository repository = repositoryService.getRepository("local");
+                                    repositoryService.moveAdaptable(adaptables, repository);
+                                }
+                                return Status.OK_STATUS;
+                            }
+                        };
 
-                IAdaptable[] adaptables = new IAdaptable[] {
-                    (IAdaptable) security,
-                };
-                IRepository repository = repositoryService.getRepository("local");
-                repositoryService.moveAdaptable(adaptables, repository);
-			}
-			context.ungetService(serviceReference);
-		}
-	}
+                        repositoryService.runInService(runnable, null);
+                    }
+                });
+            }
+            finally {
+                context.ungetService(serviceReference);
+            }
+        }
+    }
 
 	/*
 	 * (non-Javadoc)
