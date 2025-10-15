@@ -189,6 +189,6 @@ public class Server
             }
         }
         Utils.logger.debug("Creating core object.");
-        new Server(xmlfile, graphicalMode);
+        // new Server(xmlfile, graphicalMode);
     }
 }
