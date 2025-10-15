@@ -100,12 +100,12 @@ public abstract class Utils implements Constants {
 	public static Document readXmlFile(String fileName) throws Exception {
 		InputStream inputStream = new FileInputStream(fileName);
 		SAXBuilder sxb = new SAXBuilder();
-		return sxb.build(inputStream);
+		return sxb.build(new InputStreamReader(inputStream, "UTF-8"));
 	}
 
 	public static Document readXmlFile(InputStream inputStream) throws Exception {
 		SAXBuilder sxb = new SAXBuilder();
-		return sxb.build(inputStream);
+		return sxb.build(new InputStreamReader(inputStream, "UTF-8"));
 	}
 
 	public static void saveXmlDocument(String fileName, Document xmlDoc) throws Exception {
