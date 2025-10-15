@@ -18,6 +18,9 @@ import org.eclipse.trader.jessx.trobot.NotDiscreet;
 import org.eclipse.trader.jessx.trobot.Robot;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jdom.Document;
 
 
@@ -33,6 +36,7 @@ public class Server
   //  private GeneralServerFrame frame;
     private static int experimentState;
     private static int serverState;
+    private static List<ServerStateListener> listeners = new ArrayList<ServerStateListener>();
     private static final FileFilter filter;
     public static final String SERVER_LOG_FILE = "./server.log";
     
@@ -74,8 +78,15 @@ public class Server
         else {
             NetworkCore.setServerOffline();
         }
+        for (ServerStateListener listener : listeners) {
+            listener.serverStateChanged(servState);
+        }
     }
     
+    public void addServerStateListener(ServerStateListener listener) {
+        listeners.add(listener);
+    }
+
     public Server(final java.io.InputStream is, final boolean graphicalMode) {
     	InitLogs();
         this.packFrame = true;

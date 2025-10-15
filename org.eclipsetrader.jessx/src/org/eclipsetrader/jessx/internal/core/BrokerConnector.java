@@ -11,7 +11,6 @@
 
 package org.eclipsetrader.jessx.internal.core;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -86,6 +85,7 @@ import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.internal.core.connector.StreamingConnector;
 import org.eclipsetrader.jessx.internal.ui.StatusLineContributionItem;
 import org.eclipsetrader.jessx.server.Server;
+import org.eclipsetrader.jessx.server.ServerStateListener;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.server.net.Player;
 import org.eclipsetrader.jessx.utils.gui.MessageTimer;
@@ -94,7 +94,7 @@ import org.jdom.Element;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-public class BrokerConnector implements IBroker, IExecutableExtension, IExecutableExtensionFactory, Runnable, ConnectionListener, NetworkListener {
+public class BrokerConnector implements IBroker, IExecutableExtension, IExecutableExtensionFactory, Runnable, ConnectionListener, NetworkListener, ServerStateListener {
 
 	public static final IOrderRoute Immediate = new OrderRoute("1", "immed"); //$NON-NLS-1$ //$NON-NLS-2$
 	public static final IOrderRoute MTA = new OrderRoute("2", "MTA"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -192,24 +192,31 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		// incvece di "collegarci"
 		// e i read che facciamo partire � il server i JESSX !
 
-        InputStream is = null;
+        Server srv = null;
         try {
             URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("src/org/eclipsetrader/jessx/utils/default.xml"), null);
-            is = FileLocator.toFileURL(url).openStream();
-        } catch (IOException e) {
-            e.printStackTrace();
+            InputStream is = FileLocator.toFileURL(url).openStream();
+            srv = new Server(is, false);
         }
-
-		Server srv = new Server(is, false);
+        catch (Exception e) {
+            Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading default scenario", e);
+            JessxActivator.log(status);
+        }
 		Server.setServerState(Server.SERVER_STATE_ONLINE);
 		srv.startServer();
-        try {
-            TimeUnit.SECONDS.sleep(2);
+        for (int i = 0; i < 10; i++) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(500);
+                srv.loadBots();
+                break;
+            }
+            catch (Exception e) {
+                if (i == 9) {
+                    Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading bots", e);
+                    JessxActivator.log(status);
+                }
+            }
         }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-		srv.loadBots();
 
 		Map pList = NetworkCore.getPlayerList();
 
