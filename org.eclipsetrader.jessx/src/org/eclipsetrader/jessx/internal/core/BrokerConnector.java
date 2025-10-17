@@ -119,6 +119,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	private Thread thread;
 	private Log logger = LogFactory.getLog(getClass());
 	public static final IOrderValidity Valid30Days = new OrderValidity("30days", Messages.BrokerConnector_30Days); //$NON-NLS-1$
+    private Server srv;
 
 	public BrokerConnector() {
 		amountFormatter.setMinimumFractionDigits(2);
@@ -192,30 +193,17 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		// incvece di "collegarci"
 		// e i read che facciamo partire � il server i JESSX !
 
-        Server srv = null;
         try {
             URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("src/org/eclipsetrader/jessx/utils/default.xml"), null);
             InputStream is = FileLocator.toFileURL(url).openStream();
             srv = new Server(is, false);
+            srv.addServerStateListener(this);
+            Server.setServerState(Server.SERVER_STATE_ONLINE);
+            srv.startServer();
         }
         catch (Exception e) {
             Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading default scenario", e);
             JessxActivator.log(status);
-        }
-		Server.setServerState(Server.SERVER_STATE_ONLINE);
-		srv.startServer();
-        for (int i = 0; i < 10; i++) {
-            try {
-                TimeUnit.MILLISECONDS.sleep(500);
-                srv.loadBots();
-                break;
-            }
-            catch (Exception e) {
-                if (i == 9) {
-                    Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading bots", e);
-                    JessxActivator.log(status);
-                }
-            }
         }
 
 		Map pList = NetworkCore.getPlayerList();
@@ -275,6 +263,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
         ClientCore.addNetworkListener(this, "Portfolio");
         ClientCore.addNetworkListener(this, "OrderBook");
 	}
+
+    @Override
+    public void serverStateChanged(int state) {
+        if (state == Server.SERVER_STATE_ONLINE) {
+            srv.loadBots();
+        }
+    }
 
 	/*
 	 * (non-Javadoc)
