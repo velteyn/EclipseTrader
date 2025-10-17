@@ -198,60 +198,12 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
             InputStream is = FileLocator.toFileURL(url).openStream();
             srv = new Server(is, false);
             srv.addServerStateListener(this);
-            Server.setServerState(Server.SERVER_STATE_ONLINE);
             srv.startServer();
         }
         catch (Exception e) {
             Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading default scenario", e);
             JessxActivator.log(status);
         }
-
-		Map pList = NetworkCore.getPlayerList();
-
-		Map<String, Player> playerList = NetworkCore.getPlayerList();
-
-		// Itera sulla lista per accedere a ciascun giocatore
-		Iterator<Map.Entry<String, Player>> pIter = playerList.entrySet().iterator();
-
-		Scenario scn = BusinessCore.getScenario();
-		Map plTypes = scn.getPlayerTypes();
-		List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
-		Random random = new Random();
-		// Qua dovrebbe collegarsi il client fatto da nuovo del brooker (come in
-		// jessx) caricare i propri assets e iniziare a fare trading
-		try {
-			ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
-			try {
-				// wait for all players to be connected (reduce me !!)
-				TimeUnit.SECONDS.sleep(10);
-			} catch (InterruptedException e) {
-				System.out.println("Eccezione di interrupt");
-			}
-
-			Player thePlayer = NetworkCore.getPlayer("ThePlayer");
-			thePlayer.setPlayerCategory(categories.get(0).getPlayerTypeName());
-
-		} catch (IOException e) {
-			System.out.println("Client connect error " + e.getMessage());
-		}
-
-		List<Map.Entry<String, Player>> safeEntries = new ArrayList<>(playerList.entrySet());
-		// setta una categoria randomica di players
-		for (Map.Entry<String, Player> entry : safeEntries) {
-			Player player = entry.getValue();
-
-			int index = random.nextInt(categories.size());
-
-			if (!player.getLogin().equals("ThePlayer"))
-				player.setPlayerCategory(categories.get(index).getPlayerTypeName());
-		}
-
-		// faccio partire l'essperimento (credo)
-		System.out.println("-- LAUNCH EXPERIMENT ! --");
-		if (NetworkCore.getExperimentManager().beginExperiment()) {
-			new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
-
-		}
 
 		if (thread == null || !thread.isAlive()) {
 			thread = new Thread(this, getName() + " - Orders Monitor"); //$NON-NLS-1$
@@ -263,13 +215,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
         ClientCore.addNetworkListener(this, "Portfolio");
         ClientCore.addNetworkListener(this, "OrderBook");
 	}
-
-    @Override
-    public void serverStateChanged(int state) {
-        if (state == Server.SERVER_STATE_ONLINE) {
-            srv.loadBots();
-        }
-    }
 
 	/*
 	 * (non-Javadoc)
@@ -470,6 +415,60 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
             }
             finally {
                 context.ungetService(serviceReference);
+            }
+        }
+    }
+
+    @Override
+    public void serverStateChanged(int state) {
+        if (state == Server.SERVER_STATE_ONLINE) {
+            srv.loadBots();
+
+            Map pList = NetworkCore.getPlayerList();
+
+            Map<String, Player> playerList = NetworkCore.getPlayerList();
+
+            // Itera sulla lista per accedere a ciascun giocatore
+            Iterator<Map.Entry<String, Player>> pIter = playerList.entrySet().iterator();
+
+            Scenario scn = BusinessCore.getScenario();
+            Map plTypes = scn.getPlayerTypes();
+            List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
+            Random random = new Random();
+            // Qua dovrebbe collegarsi il client fatto da nuovo del brooker (come in
+            // jessx) caricare i propri assets e iniziare a fare trading
+            try {
+                ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
+                try {
+                    // wait for all players to be connected (reduce me !!)
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException e) {
+                    System.out.println("Eccezione di interrupt");
+                }
+
+                Player thePlayer = NetworkCore.getPlayer("ThePlayer");
+                thePlayer.setPlayerCategory(categories.get(0).getPlayerTypeName());
+
+            } catch (IOException e) {
+                System.out.println("Client connect error " + e.getMessage());
+            }
+
+            List<Map.Entry<String, Player>> safeEntries = new ArrayList<>(playerList.entrySet());
+            // setta una categoria randomica di players
+            for (Map.Entry<String, Player> entry : safeEntries) {
+                Player player = entry.getValue();
+
+                int index = random.nextInt(categories.size());
+
+                if (!player.getLogin().equals("ThePlayer"))
+                    player.setPlayerCategory(categories.get(index).getPlayerTypeName());
+            }
+
+            // faccio partire l'essperimento (credo)
+            System.out.println("-- LAUNCH EXPERIMENT ! --");
+            if (NetworkCore.getExperimentManager().beginExperiment()) {
+                new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
+
             }
         }
     }

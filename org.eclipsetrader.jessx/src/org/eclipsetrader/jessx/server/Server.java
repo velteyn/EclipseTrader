@@ -6,6 +6,8 @@ package org.eclipsetrader.jessx.server;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.UIManager;
@@ -18,9 +20,6 @@ import org.eclipse.trader.jessx.trobot.NotDiscreet;
 import org.eclipse.trader.jessx.trobot.Robot;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.utils.Utils;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jdom.Document;
 
 
@@ -36,7 +35,7 @@ public class Server
   //  private GeneralServerFrame frame;
     private static int experimentState;
     private static int serverState;
-    private static List<ServerStateListener> listeners = new ArrayList<ServerStateListener>();
+    private List<ServerStateListener> listeners = new ArrayList<ServerStateListener>();
     private static final FileFilter filter;
     public static final String SERVER_LOG_FILE = "./server.log";
     
@@ -70,7 +69,7 @@ public class Server
         return Server.serverState;
     }
     
-    public static void setServerState(final int servState) {
+    public void setServerState(final int servState) {
         Server.serverState = servState;
         if (servState == Server.SERVER_STATE_ONLINE) {
             NetworkCore.setServerOnline();
@@ -82,7 +81,7 @@ public class Server
             listener.serverStateChanged(servState);
         }
     }
-    
+
     public void addServerStateListener(ServerStateListener listener) {
         listeners.add(listener);
     }
@@ -154,6 +153,7 @@ public class Server
     }
     
     public void startServer() {
+        setServerState(SERVER_STATE_ONLINE);
     }
     
     public static void InitLogs() {
