@@ -194,8 +194,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		// e i read che facciamo partire � il server i JESSX !
 
         try {
-            URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("src/org/eclipsetrader/jessx/utils/default.xml"), null);
-            InputStream is = FileLocator.toFileURL(url).openStream();
+            URL url = JessxActivator.getDefault().getBundle().getEntry("src/org/eclipsetrader/jessx/utils/default.xml");
+            InputStream is = url.openStream();
             srv = new Server(is, false);
             srv.addServerStateListener(this);
             srv.startServer();
