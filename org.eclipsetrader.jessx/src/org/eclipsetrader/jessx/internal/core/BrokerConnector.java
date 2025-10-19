@@ -25,6 +25,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -61,6 +62,7 @@ import org.eclipsetrader.core.feed.IFeedProperties;
 import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.instruments.Security;
 import org.eclipsetrader.core.instruments.Stock;
+import org.eclipsetrader.core.markets.IMarket;
 import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
@@ -395,12 +397,19 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                                     FeedProperties properties = new FeedProperties();
                                     properties.setProperty("org.eclipsetrader.jessx.symbol", name);
                                     FeedIdentifier identifier = new FeedIdentifier("org.eclipsetrader.jessx.feed", properties);
-                                    security = new Stock(name, identifier, null);
+                                    security = new Stock(name, identifier, Currency.getInstance("USD"));
                                     IAdaptable[] adaptables = new IAdaptable[] {
                                         (IAdaptable) security,
                                     };
                                     IRepository repository = repositoryService.getRepository("local");
                                     repositoryService.moveAdaptable(adaptables, repository);
+
+                                    IMarket[] markets = repositoryService.getMarkets();
+                                    if (markets.length > 0) {
+                                        markets[0].addMembers(new ISecurity[] {
+                                            security
+                                        });
+                                    }
                                 }
                                 return Status.OK_STATUS;
                             }
