@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PushbackInputStream;
 import java.io.StringReader;
 import java.util.Iterator;
 import java.util.Map;
@@ -97,8 +98,16 @@ public abstract class Utils implements Constants {
 	}
 
 	public static Document readXmlFile(InputStream inputStream) throws Exception {
+        PushbackInputStream pushbackInputStream = new PushbackInputStream(inputStream, 3);
+        byte[] bom = new byte[3];
+        int read = pushbackInputStream.read(bom, 0, 3);
+        if (read > -1) {
+            if (bom[0] != (byte) 0xEF || bom[1] != (byte) 0xBB || bom[2] != (byte) 0xBF) {
+                pushbackInputStream.unread(bom, 0, read);
+            }
+        }
 		SAXBuilder sxb = new SAXBuilder();
-		return sxb.build(new InputStreamReader(inputStream, "UTF-8"));
+		return sxb.build(new InputStreamReader(pushbackInputStream, "UTF-8"));
 	}
 
 	public static void saveXmlDocument(String fileName, Document xmlDoc) throws Exception {
