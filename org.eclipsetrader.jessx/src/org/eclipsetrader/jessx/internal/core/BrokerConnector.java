@@ -405,12 +405,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                                 return Status.OK_STATUS;
                             }
                         };
-                        try {
-                            repositoryService.runInService(runnable, null);
-                        }
-                        catch (CoreException e) {
-                            e.printStackTrace();
-                        }
+                        repositoryService.runInService(runnable, null);
                     }
                 });
             }
