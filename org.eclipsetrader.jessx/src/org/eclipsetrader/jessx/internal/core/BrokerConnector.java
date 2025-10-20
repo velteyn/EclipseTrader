@@ -435,12 +435,16 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                 @Override
                 public void run() {
                     try {
+                        logger.info("JessX-Player-Setup: Attempting to connect ThePlayer...");
                         ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
+                        logger.info("JessX-Player-Setup: connecToServer called for ThePlayer.");
 
                         Player thePlayer = null;
                         for (int i = 0; i < 100; i++) { // Wait up to 10 seconds
+                            logger.info("JessX-Player-Setup: Waiting for ThePlayer object... Attempt " + (i + 1));
                             thePlayer = NetworkCore.getPlayer("ThePlayer");
                             if (thePlayer != null) {
+                                logger.info("JessX-Player-Setup: ThePlayer object found!");
                                 break;
                             }
                             Thread.sleep(100);
