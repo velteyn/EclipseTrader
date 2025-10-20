@@ -129,3 +129,4 @@ public class ClientConnectionPoint extends Thread {
     this.attenteConnexion();
     Utils.logger.info("ClientConnectionPoint thread finished.");
  }
+}
