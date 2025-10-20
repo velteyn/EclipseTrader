@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -64,7 +65,6 @@ import org.eclipsetrader.core.views.IViewItem;
 import org.eclipsetrader.core.views.IViewItemVisitor;
 import org.eclipsetrader.core.views.IViewVisitor;
 import org.eclipsetrader.core.views.IWatchList;
-import org.eclipsetrader.ui.SelectionProvider;
 import org.eclipsetrader.ui.UIConstants;
 import org.eclipsetrader.ui.internal.UIActivator;
 import org.eclipsetrader.ui.internal.repositories.Messages;
@@ -94,8 +94,6 @@ public class Navigator extends ViewPart {
         this.memento = memento;
 
         ImageRegistry imageRegistry = UIActivator.getDefault().getImageRegistry();
-
-        site.setSelectionProvider(new SelectionProvider());
 
         collapseAllAction = new Action("Collapse All", imageRegistry.getDescriptor(UIConstants.COLLAPSEALL_ICON)) {
 
@@ -249,7 +247,8 @@ public class Navigator extends ViewPart {
             }
         });
         viewer.getControl().setMenu(menuMgr.createContextMenu(viewer.getControl()));
-        getSite().registerContextMenu(menuMgr, getSite().getSelectionProvider());
+        getSite().registerContextMenu(menuMgr, viewer);
+        getSite().setSelectionProvider(viewer);
 
         viewer.addOpenListener(new IOpenListener() {
 
@@ -257,7 +256,7 @@ public class Navigator extends ViewPart {
             public void open(OpenEvent event) {
                 try {
                     IHandlerService service = (IHandlerService) getSite().getService(IHandlerService.class);
-                    service.executeCommand("org.eclipse.ui.file.open", null);
+                    service.executeCommand(IWorkbenchCommandConstants.FILE_OPEN, null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -269,7 +268,6 @@ public class Navigator extends ViewPart {
             public void selectionChanged(SelectionChangedEvent event) {
                 IAdaptable[] objects = getSelectedObject(event.getSelection());
                 deleteAction.setEnabled(objects.length != 0);
-                getViewSite().getSelectionProvider().setSelection(event.getSelection());
             }
         });
 
