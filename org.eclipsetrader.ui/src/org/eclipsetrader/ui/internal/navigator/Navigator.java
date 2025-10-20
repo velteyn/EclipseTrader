@@ -50,7 +50,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -256,7 +255,7 @@ public class Navigator extends ViewPart {
             public void open(OpenEvent event) {
                 try {
                     IHandlerService service = (IHandlerService) getSite().getService(IHandlerService.class);
-                    service.executeCommand(IWorkbenchCommandConstants.FILE_OPEN, null);
+                    service.executeCommand("org.eclipse.ui.file.open", null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
