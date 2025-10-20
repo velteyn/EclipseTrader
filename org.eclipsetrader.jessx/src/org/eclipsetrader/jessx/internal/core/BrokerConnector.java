@@ -350,10 +350,9 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		logger.info("Broker received " + doc.getRootElement().getName());
 		if (doc.getRootElement().getName().equals("Portfolio")) {
 			Element portfolio = doc.getRootElement();
-			Element assets = portfolio.getChild("assets");
-			List<Element> secList = assets.getChildren("security");
+			List<Element> secList = portfolio.getChildren("Owning");
 			for (Element sec : secList) {
-				String secName = sec.getChild("name").getValue();
+				String secName = sec.getAttributeValue("asset");
 				registerSecurity(secName);
 			}
 		}
