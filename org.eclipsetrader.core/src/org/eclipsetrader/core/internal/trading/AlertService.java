@@ -78,13 +78,15 @@ public class AlertService implements IAlertService {
         load(CoreActivator.getDefault().getStateLocation().append("alerts.xml").toFile());
 
         for (ISecurity instrument : map.keySet()) {
-            pricingEnvironment.addSecurity(instrument);
+            if (instrument != null) {
+                pricingEnvironment.addSecurity(instrument);
 
-            ITrade trade = pricingEnvironment.getTrade(instrument);
+                ITrade trade = pricingEnvironment.getTrade(instrument);
             IQuote quote = pricingEnvironment.getQuote(instrument);
 
             for (IAlert alert : map.get(instrument)) {
                 alert.setInitialValues(trade, quote);
+            }
             }
         }
 
