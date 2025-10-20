@@ -249,6 +249,18 @@ public class Navigator extends ViewPart {
         getSite().registerContextMenu(menuMgr, viewer);
         getSite().setSelectionProvider(viewer);
 
+        viewer.addOpenListener(new IOpenListener() {
+
+            @Override
+            public void open(OpenEvent event) {
+                try {
+                    IHandlerService service = (IHandlerService) getSite().getService(IHandlerService.class);
+                    service.executeCommand("org.eclipse.ui.file.open", null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
             @Override

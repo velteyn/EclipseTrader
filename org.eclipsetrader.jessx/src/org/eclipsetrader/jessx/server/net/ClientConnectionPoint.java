@@ -101,10 +101,12 @@ public class ClientConnectionPoint extends Thread {
      Utils.logger.warn("Unabled to get host IP address. [IGNORED]");
    }
 
+   Utils.logger.info("ClientConnectionPoint entering listening loop. Server state is: " + Server.getServerState());
    while (Server.getServerState() == Server.SERVER_STATE_ONLINE) {
-
      try {
+       Utils.logger.info("ClientConnectionPoint waiting for a client...");
        new PreConnectionClient(serverSocket.accept()).initiatePlayer();
+       Utils.logger.info("ClientConnectionPoint accepted a new client connection.");
        // serveur.accept() wait until a client try to connect and return
        // a socket with which we will be able to communicate with the client.
        // Then we create a thread that will be dedicated to the communication
@@ -116,12 +118,14 @@ public class ClientConnectionPoint extends Thread {
 
      // Waiting next client.
    }
+    Utils.logger.warn("ClientConnectionPoint exited listening loop. Server state is: " + Server.getServerState());
  }
 
  /**
   *
   */
  public void run() {
- this.attenteConnexion();
+    Utils.logger.info("ClientConnectionPoint thread started.");
+    this.attenteConnexion();
+    Utils.logger.info("ClientConnectionPoint thread finished.");
  }
-}

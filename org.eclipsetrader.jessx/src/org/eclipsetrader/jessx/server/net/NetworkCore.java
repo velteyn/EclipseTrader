@@ -71,8 +71,13 @@ public abstract class NetworkCore {
 	}
 
 	public static void setServerOnline() {
-		if (!connectionPoint.isAlive())
+		org.eclipsetrader.jessx.utils.Utils.logger.info("NetworkCore.setServerOnline called.");
+		if (!connectionPoint.isAlive()) {
+			org.eclipsetrader.jessx.utils.Utils.logger.info("ClientConnectionPoint is not alive. Starting it now.");
 			connectionPoint.start();
+		} else {
+			org.eclipsetrader.jessx.utils.Utils.logger.warn("ClientConnectionPoint is already alive. Not starting it again.");
+		}
 	}
 
 	public static void setServerOffline() {
