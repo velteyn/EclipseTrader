@@ -63,6 +63,7 @@ import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.instruments.Security;
 import org.eclipsetrader.core.instruments.Stock;
 import org.eclipsetrader.core.markets.IMarket;
+import org.eclipsetrader.core.markets.IMarketService;
 import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
@@ -383,8 +384,10 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
         logger.info("########## I'm going to register security " + name);
         BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
         ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
+        ServiceReference marketServiceReference = context.getServiceReference(IMarketService.class.getName());
         if (serviceReference != null) {
             final IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
+            final IMarketService marketService = (IMarketService) context.getService(marketServiceReference);
             try {
                 Display.getDefault().asyncExec(new Runnable() {
                     @Override
@@ -404,7 +407,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                                     IRepository repository = repositoryService.getRepository("local");
                                     repositoryService.moveAdaptable(adaptables, repository);
 
-                                    IMarket[] markets = repositoryService.getMarkets();
+                                    IMarket[] markets = marketService.getMarkets();
                                     if (markets.length > 0) {
                                         markets[0].addMembers(new ISecurity[] {
                                             security
