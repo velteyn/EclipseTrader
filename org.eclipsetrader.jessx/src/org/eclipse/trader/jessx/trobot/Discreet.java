@@ -9,9 +9,12 @@ import org.eclipse.trader.jessx.business.operations.LimitOrder;
 import org.eclipsetrader.jessx.net.NetworkWritable;
 import org.jdom.Document;
 
+import org.eclipsetrader.jessx.utils.Utils;
+
 public class Discreet extends Animator {
   public Discreet(int name, double InactivityPercentage) {
     super(name, InactivityPercentage);
+    Utils.logger.info(String.format("Discreet bot %d created", name));
   }
   
   protected void MyAct() {
@@ -20,6 +23,7 @@ public class Discreet extends Animator {
       String instit = iterInstit.next();
       if ((new Date()).getTime() - ((Date)getDatesLastOrder().get(instit)).getTime() > NextWakeUp(instit) && (
         (LinkedList)getOrderBooks().get(instit)).size() > 0) {
+        Utils.logger.info(String.format("Discreet bot %s is acting on institution %s", getLogin(), instit));
         OrderBook ob = ((LinkedList<OrderBook>)getOrderBooks().get(instit)).getLast();
         int side = (int)Math.round(Math.random());
         if (ob.getAsk().size() >= 1 && ob.getBid().size() >= 1 && side == 0) {
@@ -71,6 +75,7 @@ public class Discreet extends Animator {
           lo.setPrice(orderPrice);
           lo.setQuantity((int)(Math.random() * 50.0D));
           lo.setSide(0);
+          Utils.logger.info(String.format("Discreet bot %s sending BUY order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), instit, lo.getPrice()));
           getRobotCore().send((NetworkWritable)lo);
           continue;
         } 
@@ -123,6 +128,7 @@ public class Discreet extends Animator {
           lo.setPrice(orderPrice);
           lo.setQuantity(1 + (int)(Math.random() * 49.0D));
           lo.setSide(1);
+          Utils.logger.info(String.format("Discreet bot %s sending SELL order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), instit, lo.getPrice()));
           getRobotCore().send((NetworkWritable)lo);
         } 
       } 

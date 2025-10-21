@@ -429,12 +429,15 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     @Override
     public void serverStateChanged(int state) {
         if (state == Server.SERVER_STATE_ONLINE) {
-            srv.loadBots();
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
+                        // Wait for the server to be fully initialized
+                        Thread.sleep(1000);
+
+                        srv.loadBots();
+
                         logger.info("JessX-Player-Setup: Attempting to connect ThePlayer...");
                         ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
                         logger.info("JessX-Player-Setup: connecToServer called for ThePlayer.");

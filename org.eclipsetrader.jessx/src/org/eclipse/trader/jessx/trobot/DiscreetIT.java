@@ -9,10 +9,12 @@ import org.eclipse.trader.jessx.business.OrderBook;
 import org.eclipse.trader.jessx.business.operations.LimitOrder;
 import org.eclipsetrader.jessx.net.NetworkWritable;
 import org.jdom.Document;
+import org.eclipsetrader.jessx.utils.Utils;
 
 public class DiscreetIT extends Animator {
   public DiscreetIT(int name, double InactivityPercentage) {
     super(name, InactivityPercentage);
+    Utils.logger.info(String.format("DiscreetIT bot %d created", name));
   }
   
   protected void MyAct() {
@@ -22,19 +24,20 @@ public class DiscreetIT extends Animator {
       Institution instit = getRobotCore().getInstitution(institname);
       if ((new Date()).getTime() - ((Date)getDatesLastOrder().get(institname)).getTime() > NextWakeUp(institname) && (
         (LinkedList)getOrderBooks().get(institname)).size() > 0) {
+        Utils.logger.info(String.format("DiscreetIT bot %s is acting on institution %s", getLogin(), institname));
         OrderBook ob = ((LinkedList<OrderBook>)getOrderBooks().get(institname)).getLast();
         float DifferentInstitutions = getRobotCore().getInstitutions().size();
-        System.out.println("(Initialisation Ordre) Nombre d'institutions diff"+ DifferentInstitutions);
+        Utils.logger.info("(Initialisation Ordre) Nombre d'institutions diff"+ DifferentInstitutions);
         String assetname = instit.getAssetName();
-        System.out.println("(Initialisation Ordre) Assetname:" + assetname);
+        Utils.logger.info("(Initialisation Ordre) Assetname:" + assetname);
         int assets = getRobotCore().getPortfolio().getOwnings(assetname);
-        System.out.println("(Initialisation Ordre) Nombre d'Assets:" + assets);
+        Utils.logger.info("(Initialisation Ordre) Nombre d'Assets:" + assets);
         float cash = getRobotCore().getPortfolio().getCash();
-        System.out.println("(Initialisation Ordre) Cash:" + cash);
+        Utils.logger.info("(Initialisation Ordre) Cash:" + cash);
         int side = (int)Math.round(Math.random());
         int i = 0;
         if (ob.getAsk().size() >= 1 && ob.getBid().size() >= 1 && side == 0) {
-          System.out.println("Dde l'itpour le calcul de l'assetValue:");
+          Utils.logger.info("Dde l'itpour le calcul de l'assetValue:");
           Iterator<String> iterAssets = getRobotCore().getInstitutions().keySet().iterator();
           int AssetsValue = 0;
           while (iterAssets.hasNext()) {
@@ -43,8 +46,8 @@ public class DiscreetIT extends Animator {
             String assetnameAV = institAV.getAssetName();
             if (((LinkedList)getOrderBooks().get(assetsnameAV)).size() > 0) {
               OrderBook obAv = ((LinkedList<OrderBook>)getOrderBooks().get(assetsnameAV)).getLast();
-              System.out.println("AV Assetname:" + assetsnameAV);
-              System.out.println("AV Quantitd'assets:" + assets);
+              Utils.logger.info("AV Assetname:" + assetsnameAV);
+              Utils.logger.info("AV Quantitd'assets:" + assets);
               if (obAv.getAsk().size() >= 1 && obAv.getBid().size() >= 1) {
                 int indiceAskAv = 0;
                 int indiceBidAv = 0;
@@ -88,14 +91,14 @@ public class DiscreetIT extends Animator {
                 float orderPriceAV = (int)((((Order)obAv.getBid().elementAt(indiceBidAv - 1)).getOrderPrice(1) + Math.random() * ((
                   (Order)obAv.getAsk().elementAt(indiceAskAv - 1)).getOrderPrice(0) - (
                   (Order)obAv.getBid().elementAt(indiceBidAv - 1)).getOrderPrice(1))) * 100.0D) / 100.0F;
-                System.out.println("AV OrderPrice:" + orderPriceAV);
+                Utils.logger.info("AV OrderPrice:" + orderPriceAV);
                 AssetsValue = (int)(AssetsValue + orderPriceAV * getRobotCore().getPortfolio().getOwnings(assetnameAV));
                 i++;
-                System.out.println("AV Valeur des Assets:" + AssetsValue);
+                Utils.logger.info("AV Valeur des Assets:" + AssetsValue);
               } 
             } 
           } 
-          System.out.println("Fin de l'itde calcul de l'AssetValue");
+          Utils.logger.info("Fin de l'itde calcul de l'AssetValue");
           int indiceAskOb = 0;
           int indiceBidOb = 0;
           int indiceTailleOb = 0;
@@ -137,13 +140,13 @@ public class DiscreetIT extends Animator {
           } 
           float orderPrice = (int)(((Order)ob.getBid().elementAt(indiceBidOb - 1)).getOrderPrice(1) * 100.0F) / 100.0F;
           int QA = 0;
-          System.out.println("(Ordre) (QuantitNombre d'assets:" + assets);
-          System.out.println("(Ordre) (QuantitOrderPrice:" + orderPrice);
-          System.out.println("(Ordre) (QuantitAssetsValue:" + AssetsValue);
-          System.out.println("(Ordre) (QuantitCash:" + cash);
-          System.out.println("(Ordre) (QuantitNombre d'institutions:" + DifferentInstitutions);
-          System.out.println("(Ordre) (QuantitPourcentage : (assets*orderPrice/(AssetsValue+cash):" + (assets * orderPrice / (AssetsValue + cash)));
-          System.out.println("(Ordre) (QuantitPourcentage voulu : 1/(DifferentInstitutions):" + (1.0F / DifferentInstitutions));
+          Utils.logger.info("(Ordre) (QuantitNombre d'assets:" + assets);
+          Utils.logger.info("(Ordre) (QuantitOrderPrice:" + orderPrice);
+          Utils.logger.info("(Ordre) (QuantitAssetsValue:" + AssetsValue);
+          Utils.logger.info("(Ordre) (QuantitCash:" + cash);
+          Utils.logger.info("(Ordre) (QuantitNombre d'institutions:" + DifferentInstitutions);
+          Utils.logger.info("(Ordre) (QuantitPourcentage : (assets*orderPrice/(AssetsValue+cash):" + (assets * orderPrice / (AssetsValue + cash)));
+          Utils.logger.info("(Ordre) (QuantitPourcentage voulu : 1/(DifferentInstitutions):" + (1.0F / DifferentInstitutions));
           if (assets * orderPrice / (AssetsValue + cash) > 1.0F / (DifferentInstitutions + 1.0F) && i == DifferentInstitutions) {
             QA = (int)Math.floor((int)Math.abs(assets - (AssetsValue + cash) / orderPrice * (DifferentInstitutions + 1.0F)));
             if (QA > assets * 25 / 100)
@@ -151,13 +154,14 @@ public class DiscreetIT extends Animator {
           } else {
             QA = 0;
           } 
-          System.out.println("QA:" + QA);
+          Utils.logger.info("QA:" + QA);
           LimitOrder lo = new LimitOrder();
           lo.setEmitter(getLogin());
           lo.setInstitutionName(institname);
           lo.setPrice(orderPrice);
           lo.setQuantity(QA);
           lo.setSide(0);
+          Utils.logger.info(String.format("DiscreetIT bot %s sending BUY order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), institname, lo.getPrice()));
           getRobotCore().send((NetworkWritable)lo);
           continue;
         } 
@@ -170,8 +174,8 @@ public class DiscreetIT extends Animator {
             String assetnameAV = institAV.getAssetName();
             if (((LinkedList)getOrderBooks().get(assetsnameAV)).size() > 0) {
               OrderBook obAv = ((LinkedList<OrderBook>)getOrderBooks().get(assetsnameAV)).getLast();
-              System.out.println("AV AssetName:" + assetsnameAV);
-              System.out.println("AV Quantitd'assets:" + assets);
+              Utils.logger.info("AV AssetName:" + assetsnameAV);
+              Utils.logger.info("AV Quantitd'assets:" + assets);
               if (obAv.getBid().size() >= 1 && obAv.getAsk().size() >= 1) {
                 int indiceBidAv = 0;
                 int indiceAskAv = 0;
@@ -215,10 +219,10 @@ public class DiscreetIT extends Animator {
                 float orderPriceAV = (int)((((Order)obAv.getBid().elementAt(indiceBidAv - 1)).getOrderPrice(1) + Math.random() * ((
                   (Order)obAv.getAsk().elementAt(indiceAskAv - 1)).getOrderPrice(0) - (
                   (Order)obAv.getBid().elementAt(indiceBidAv - 1)).getOrderPrice(1))) * 100.0D) / 100.0F;
-                System.out.println("OrderPrice:" + orderPriceAV);
+                Utils.logger.info("OrderPrice:" + orderPriceAV);
                 AssetsValue = (int)(AssetsValue + orderPriceAV * getRobotCore().getPortfolio().getOwnings(assetnameAV));
                 i++;
-                System.out.println("Valeur des Assets:" + AssetsValue);
+                Utils.logger.info("Valeur des Assets:" + AssetsValue);
               } 
             } 
           } 
@@ -263,13 +267,13 @@ public class DiscreetIT extends Animator {
           } 
           float orderPrice = (int)((Order)ob.getAsk().elementAt(indiceAskOb - 1)).getOrderPrice(0) * 100.0F / 100.0F;
           int QB = 0;
-          System.out.println("Nombre d'Assets:" + assets);
-          System.out.println("OrderPrice:" + orderPrice);
-          System.out.println("AssetsValue:" + AssetsValue);
-          System.out.println("Cash:" + cash);
-          System.out.println("n:" + DifferentInstitutions);
-          System.out.println("(Ordre) (QuantitPourcentage : (assets*orderPrice/(AssetsValue+cash):" + (assets * orderPrice / (AssetsValue + cash)));
-          System.out.println("(Ordre) (QuantitPourcentage voulu : 1/(DifferentInstitutions):" + (1.0F / DifferentInstitutions));
+          Utils.logger.info("Nombre d'Assets:" + assets);
+          Utils.logger.info("OrderPrice:" + orderPrice);
+          Utils.logger.info("AssetsValue:" + AssetsValue);
+          Utils.logger.info("Cash:" + cash);
+          Utils.logger.info("n:" + DifferentInstitutions);
+          Utils.logger.info("(Ordre) (QuantitPourcentage : (assets*orderPrice/(AssetsValue+cash):" + (assets * orderPrice / (AssetsValue + cash)));
+          Utils.logger.info("(Ordre) (QuantitPourcentage voulu : 1/(DifferentInstitutions):" + (1.0F / DifferentInstitutions));
           if (assets == 0) {
             QB = (int)Math.floor((int)Math.abs(cash / orderPrice * (DifferentInstitutions + 1.0F)));
           } else if (assets * orderPrice / (AssetsValue + cash) < 1.0F / (DifferentInstitutions + 1.0F) && i == DifferentInstitutions) {
@@ -279,13 +283,14 @@ public class DiscreetIT extends Animator {
           } else {
             QB = 0;
           } 
-          System.out.println("QB:" + QB);
+          Utils.logger.info("QB:" + QB);
           LimitOrder lo = new LimitOrder();
           lo.setEmitter(getLogin());
           lo.setInstitutionName(institname);
           lo.setPrice(orderPrice);
           lo.setQuantity(QB);
           lo.setSide(1);
+          Utils.logger.info(String.format("DiscreetIT bot %s sending SELL order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), institname, lo.getPrice()));
           getRobotCore().send((NetworkWritable)lo);
         } 
       } 

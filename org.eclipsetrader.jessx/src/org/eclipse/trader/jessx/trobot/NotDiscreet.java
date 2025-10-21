@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.eclipse.trader.jessx.business.operations.LimitOrder;
 import org.jdom.Document;
 import org.eclipsetrader.jessx.net.NetworkWritable;
+import org.eclipsetrader.jessx.utils.Utils;
 
 public class NotDiscreet extends Animator {
   private int lowLimit;
@@ -16,6 +17,7 @@ public class NotDiscreet extends Animator {
     super(i, InactivityPercentage);
     this.lowLimit = lowLimit;
     this.highLimit = highLimit;
+    Utils.logger.info(String.format("NotDiscreet bot %d created with price range [%d, %d]", i, lowLimit, highLimit));
   }
   
   protected void MyAct() {
@@ -23,6 +25,7 @@ public class NotDiscreet extends Animator {
     while (iterInstit.hasNext()) {
       String instit = iterInstit.next();
       if ((new Date()).getTime() - ((Date)getDatesLastOrder().get(instit)).getTime() > NextWakeUp(instit)) {
+        Utils.logger.info(String.format("NotDiscreet bot %s is acting on institution %s", getLogin(), instit));
         int quantity = 1 + (int)(Math.random() * 49.0D);
         int side = (int)Math.round(Math.random());
         float price = ((int)(this.lowLimit + (this.highLimit - this.lowLimit) * Math.random()) * 100 / 100);
@@ -32,6 +35,11 @@ public class NotDiscreet extends Animator {
         lo.setPrice(price);
         lo.setQuantity(quantity);
         lo.setSide(side);
+        if (side == 0) {
+            Utils.logger.info(String.format("NotDiscreet bot %s sending BUY order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), instit, lo.getPrice()));
+        } else {
+            Utils.logger.info(String.format("NotDiscreet bot %s sending SELL order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), instit, lo.getPrice()));
+        }
         getRobotCore().send((NetworkWritable)lo);
       } 
     } 
