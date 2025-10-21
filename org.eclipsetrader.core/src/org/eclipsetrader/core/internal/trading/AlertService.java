@@ -116,6 +116,9 @@ public class AlertService implements IAlertService {
 
         for (InstrumentElement ie : element.getValue()) {
             ISecurity instrument = ie.getInstrument();
+            if (instrument == null) {
+                continue;
+            }
 
             List<IAlert> list = new ArrayList<IAlert>();
 
