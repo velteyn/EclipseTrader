@@ -433,11 +433,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                 @Override
                 public void run() {
                     try {
-                        // Wait for the server to be fully initialized
-                        Thread.sleep(1000);
-
-                        srv.loadBots();
-
                         logger.info("JessX-Player-Setup: Attempting to connect ThePlayer...");
                         ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
                         logger.info("JessX-Player-Setup: connecToServer called for ThePlayer.");
@@ -458,6 +453,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                             return;
                         }
 
+                        srv.loadBots();
+
                         Scenario scn = BusinessCore.getScenario();
                         Map plTypes = scn.getPlayerTypes();
                         List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
@@ -468,9 +465,10 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                         List<Map.Entry<String, Player>> safeEntries = new ArrayList<Map.Entry<String, Player>>(playerList.entrySet());
                         for (Map.Entry<String, Player> entry : safeEntries) {
                             Player player = entry.getValue();
-                            int index = random.nextInt(categories.size());
-                            if (!player.getLogin().equals("ThePlayer")) {
+                            if (player.getPlayerCategory() == null || player.getPlayerCategory().isEmpty()) {
+                                int index = random.nextInt(categories.size());
                                 player.setPlayerCategory(categories.get(index).getPlayerTypeName());
+                                logger.info(String.format("Assigned category %s to player %s", player.getPlayerCategory(), player.getLogin()));
                             }
                         }
 

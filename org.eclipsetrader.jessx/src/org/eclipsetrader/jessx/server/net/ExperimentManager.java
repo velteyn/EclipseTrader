@@ -97,7 +97,7 @@ public class ExperimentManager extends Thread implements Constants {
       } 
     } 
     if (NetworkCore.getPlayerList().size() == 0) {
-    	 Utils.logger.warn("No player connected");
+	 Utils.logger.warn("No player connected, experiment won't begin.");
       
       return false;
     } 
