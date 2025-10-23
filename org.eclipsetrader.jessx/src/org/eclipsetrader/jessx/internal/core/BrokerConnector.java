@@ -89,6 +89,7 @@ import org.eclipsetrader.jessx.internal.core.connector.StreamingConnector;
 import org.eclipsetrader.jessx.internal.ui.StatusLineContributionItem;
 import org.eclipsetrader.jessx.server.Server;
 import org.eclipsetrader.jessx.server.ServerStateListener;
+import org.eclipsetrader.jessx.server.net.ClientConnectionPoint;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.server.net.Player;
 import org.eclipsetrader.jessx.utils.gui.MessageTimer;
