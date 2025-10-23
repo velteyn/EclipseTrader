@@ -433,66 +433,96 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                 @Override
                 public void run() {
                     try {
-                        logger.info("JessX-Player-Setup: Attempting to connect ThePlayer...");
-                        ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
-                        logger.info("JessX-Player-Setup: connecToServer called for ThePlayer.");
+                        logger.info("JessX-Setup: Server is online. Starting setup sequence.");
 
+                        // 1. Load bots
+                        logger.info("JessX-Setup: Loading bots...");
+                        srv.loadBots();
+
+                        // 2. Wait for bots to connect
+                        logger.info("JessX-Setup: Waiting for bots to connect...");
+                        for (int i = 0; i < 50; i++) { // Wait up to 5 seconds for bots
+                            // Note: We expect 3 bots as defined in default.xml
+                            if (NetworkCore.getPlayerList().size() >= 3) {
+                                break;
+                            }
+                            Thread.sleep(100);
+                        }
+                        logger.info("JessX-Setup: " + NetworkCore.getPlayerList().size() + " players (bots) connected.");
+
+                        // 3. Assign categories to bots
+                        Scenario scn = BusinessCore.getScenario();
+                        Map plTypes = scn.getPlayerTypes();
+                        List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
+                        Random random = new Random();
+
+                        Map<String, Player> playerList = NetworkCore.getPlayerList();
+                        List<Map.Entry<String, Player>> safeEntries = new ArrayList<Map.Entry<String, Player>>(playerList.entrySet());
+
+                        logger.info("JessX-Setup: Assigning categories to bots...");
+                        for (Map.Entry<String, Player> entry : safeEntries) {
+                            Player bot = entry.getValue();
+                            if (!bot.getLogin().equals("ThePlayer")) {
+                                if (bot.getPlayerCategory() == null || bot.getPlayerCategory().isEmpty()) {
+                                    int index = random.nextInt(categories.size());
+                                    bot.setPlayerCategory(categories.get(index).getPlayerTypeName());
+                                    logger.info(String.format("Assigned category %s to bot %s", bot.getPlayerCategory(), bot.getLogin()));
+                                }
+                            }
+                        }
+
+                        // 4. Connect ThePlayer
+                        logger.info("JessX-Setup: Attempting to connect ThePlayer...");
+                        ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
+                        logger.info("JessX-Setup: connecToServer called for ThePlayer.");
+
+                        // 5. Wait for ThePlayer object
                         Player thePlayer = null;
                         for (int i = 0; i < 100; i++) { // Wait up to 10 seconds
-                            logger.info("JessX-Player-Setup: Waiting for ThePlayer object... Attempt " + (i + 1));
+                            logger.info("JessX-Setup: Waiting for ThePlayer object... Attempt " + (i + 1));
                             thePlayer = NetworkCore.getPlayer("ThePlayer");
                             if (thePlayer != null) {
-                                logger.info("JessX-Player-Setup: ThePlayer object found!");
+                                logger.info("JessX-Setup: ThePlayer object found!");
                                 break;
                             }
                             Thread.sleep(100);
                         }
 
                         if (thePlayer == null) {
-                            logger.error("Timed out waiting for ThePlayer to connect");
+                            logger.error("Timed out waiting for ThePlayer to connect. Experiment will not start.");
                             return;
                         }
 
-                        try {
-                            // Wait for the server to be fully initialized
-                            Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
+                        // 6. Assign category to ThePlayer
+                        logger.info("JessX-Setup: Assigning category to ThePlayer...");
+                        // Safe assignment of category
+                        if (!categories.isEmpty()) {
+                            thePlayer.setPlayerCategory(categories.get(0).getPlayerTypeName());
+                            logger.info(String.format("Assigned category %s to player %s", thePlayer.getPlayerCategory(), thePlayer.getLogin()));
+                        } else {
+                            logger.warn("No player categories available to assign to ThePlayer.");
                         }
 
-                        srv.loadBots();
-
-                        Scenario scn = BusinessCore.getScenario();
-                        Map plTypes = scn.getPlayerTypes();
-                        List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
-                        thePlayer.setPlayerCategory(categories.get(0).getPlayerTypeName());
-
-                        Random random = new Random();
-                        Map<String, Player> playerList = NetworkCore.getPlayerList();
-                        List<Map.Entry<String, Player>> safeEntries = new ArrayList<Map.Entry<String, Player>>(playerList.entrySet());
-                        for (Map.Entry<String, Player> entry : safeEntries) {
-                            Player player = entry.getValue();
-                            if (player.getPlayerCategory() == null || player.getPlayerCategory().isEmpty()) {
-                                int index = random.nextInt(categories.size());
-                                player.setPlayerCategory(categories.get(index).getPlayerTypeName());
-                                logger.info(String.format("Assigned category %s to player %s", player.getPlayerCategory(), player.getLogin()));
-                            }
-                        }
-
+                        // 7. Start the experiment
+                        logger.info("JessX-Setup: All players connected and configured. Starting experiment...");
                         System.out.println("-- LAUNCH EXPERIMENT ! --");
                         if (NetworkCore.getExperimentManager().beginExperiment()) {
                             new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
+                            logger.info("JessX-Setup: Experiment started successfully.");
+                        }
+                        else {
+                            logger.error("JessX-Setup: Failed to start experiment.");
                         }
                     }
                     catch (IOException e) {
-                        logger.error("Client connect error", e);
+                        logger.error("Client connect error during setup", e);
                     }
                     catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
-                        logger.error("Interrupted during player setup", e);
+                        logger.error("Interrupted during setup", e);
                     }
                 }
-            }, "JessX-Player-Setup").start();
+            }, "JessX-Setup").start();
         }
     }
 
