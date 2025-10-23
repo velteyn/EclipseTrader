@@ -485,8 +485,9 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                         List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
                         Random random = new Random();
 
-                        Map<String, Player> playerList = NetworkCore.getPlayerList();
-                        for (Player player : playerList.values()) {
+                        // Create a snapshot of the values to iterate over, preventing ConcurrentModificationException
+                        List<Player> playerSnapshot = new ArrayList<Player>(NetworkCore.getPlayerList().values());
+                        for (Player player : playerSnapshot) {
                             if (player.getPlayerCategory() == null || player.getPlayerCategory().isEmpty()) {
                                 PlayerType assignedCategory;
                                 if (player.getLogin().equals("ThePlayer")) {
