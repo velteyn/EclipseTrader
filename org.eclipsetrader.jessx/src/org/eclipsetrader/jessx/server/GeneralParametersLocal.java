@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2004-2011 Marco Maccaferri and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,15 @@ import org.eclipse.trader.jessx.business.GeneralParameters;
 import org.jdom.Element;
 
 public class GeneralParametersLocal implements GeneralParameters {
+
+    private String loggingFileName;
+    private String workingDirectory;
+    private boolean afterSetupJoiningAllowed;
+    private String setupFileName;
+    private String xmlVersion;
+    private int periodCount = 5;
+    private int periodDuration;
+    private float[] interestRates;
 
 	@Override
 	public void loadFromXml(Element p0) {
@@ -59,61 +68,52 @@ public class GeneralParametersLocal implements GeneralParameters {
 
 	@Override
 	public boolean getAfterSetupJoiningAllowed() {
-		// TODO Auto-generated method stub
-		return false;
+		return afterSetupJoiningAllowed;
 	}
 
 	@Override
 	public void setAfterSetupJoiningAllowed(boolean p0) {
-		// TODO Auto-generated method stub
-
+        this.afterSetupJoiningAllowed = p0;
 	}
 
 	@Override
 	public String getSetupFileName() {
-		// TODO Auto-generated method stub
-		return null;
+		return setupFileName;
 	}
 
 	@Override
 	public void setSetupFileName(String p0) {
-		// TODO Auto-generated method stub
-
+        this.setupFileName = p0;
 	}
 
 	@Override
 	public String getXMLVersion() {
-		// TODO Auto-generated method stub
-		return null;
+		return xmlVersion;
 	}
 
 	@Override
 	public void setXMLVersion(String p0) {
-		// TODO Auto-generated method stub
-
+        this.xmlVersion = p0;
 	}
 
 	@Override
 	public String getLoggingFileName() {
-		// TODO Auto-generated method stub
-		return null;
+		return loggingFileName;
 	}
 
 	@Override
 	public void setLoggingFileName(String p0) {
-		// TODO Auto-generated method stub
-
+		this.loggingFileName = p0;
 	}
 
 	@Override
 	public int getPeriodCount() {
-		return 5;
+		return periodCount;
 	}
 
 	@Override
 	public void setPeriodCount(int p0) {
-		// TODO Auto-generated method stub
-
+        this.periodCount = p0;
 	}
 
 	@Override
@@ -130,44 +130,54 @@ public class GeneralParametersLocal implements GeneralParameters {
 
 	@Override
 	public String getWorkingDirectory() {
-		// TODO Auto-generated method stub
-		return null;
+		return workingDirectory;
 	}
 
 	@Override
 	public void setWorkingDirectory(String p0) {
-		// TODO Auto-generated method stub
-
+		this.workingDirectory = p0;
 	}
 
 	@Override
 	public float getInterestRate(int p0) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (interestRates == null || p0 < 0 || p0 >= interestRates.length) {
+            return 0;
+        }
+        return interestRates[p0];
 	}
 
 	@Override
 	public void setInterestRate(int p0, float p1) {
-		// TODO Auto-generated method stub
-
+		if (interestRates == null) {
+            interestRates = new float[getPeriodCount()];
+        }
+        if (p0 >= 0 && p0 < interestRates.length) {
+            interestRates[p0] = p1;
+        }
 	}
 
 	@Override
 	public int getPeriodDuration() {
-		// TODO Auto-generated method stub
-		return 0;
+		return periodDuration;
 	}
 
 	@Override
 	public void setPeriodDuration(int p0) {
-		// TODO Auto-generated method stub
-
+        this.periodDuration = p0;
 	}
 
 	@Override
 	public void initializeGeneralParameters() {
-		// TODO Auto-generated method stub
-
+        this.workingDirectory = System.getProperty("java.io.tmpdir");
+        this.loggingFileName = "jessx-experiment.log";
+        this.xmlVersion = "1.0";
+        this.setupFileName = "default.xml";
+        this.afterSetupJoiningAllowed = false;
+        this.periodCount = 5;
+        this.periodDuration = 300;
+        this.interestRates = new float[this.periodCount];
+        for (int i = 0; i < this.periodCount; i++) {
+            this.interestRates[i] = 0.05f;
+        }
 	}
-
 }

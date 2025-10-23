@@ -87,6 +87,7 @@ import org.eclipsetrader.jessx.client.event.NetworkListener;
 import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.internal.core.connector.StreamingConnector;
 import org.eclipsetrader.jessx.internal.ui.StatusLineContributionItem;
+import org.eclipsetrader.jessx.server.GeneralParametersLocal;
 import org.eclipsetrader.jessx.server.Server;
 import org.eclipsetrader.jessx.server.ServerStateListener;
 import org.eclipsetrader.jessx.server.net.ClientConnectionPoint;
@@ -478,7 +479,14 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                         }
                         logger.info("JessX-Setup: All " + NetworkCore.getPlayerList().size() + " players are connected.");
 
-                        // 5. Assign categories and start experiment (with retry logic)
+                        // 5. Initialize General Parameters
+                        logger.info("JessX-Setup: Initializing general parameters...");
+                        GeneralParametersLocal generalParams = new GeneralParametersLocal();
+                        generalParams.initializeGeneralParameters();
+                        BusinessCore.setGeneralParameters(generalParams);
+                        logger.info("JessX-Setup: General parameters initialized and set in BusinessCore.");
+
+                        // 6. Assign categories and start experiment (with retry logic)
                         logger.info("JessX-Setup: All players connected. Assigning categories and attempting to start experiment...");
 
                         Scenario scn = BusinessCore.getScenario();
