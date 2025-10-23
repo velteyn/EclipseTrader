@@ -435,22 +435,18 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                     try {
                         logger.info("JessX-Setup: Server is online. Starting setup sequence.");
 
-                        // 1. Load bots
-                        logger.info("JessX-Setup: Loading bots...");
-                        srv.loadBots();
-
-                        // 2. Wait for bots to connect
-                        logger.info("JessX-Setup: Waiting for bots to connect...");
-                        for (int i = 0; i < 50; i++) { // Wait up to 5 seconds for bots
-                            // Note: We expect 3 bots as defined in default.xml
-                            if (NetworkCore.getPlayerList().size() >= 3) {
+                        // 1. Wait for bots to connect
+                        int expectedBotCount = 41; // As determined from default.xml
+                        logger.info("JessX-Setup: Waiting for " + expectedBotCount + " bots to connect...");
+                        for (int i = 0; i < 200; i++) { // Wait up to 20 seconds for bots
+                            if (NetworkCore.getPlayerList().size() >= expectedBotCount) {
                                 break;
                             }
                             Thread.sleep(100);
                         }
                         logger.info("JessX-Setup: " + NetworkCore.getPlayerList().size() + " players (bots) connected.");
 
-                        // 3. Assign categories to bots
+                        // 2. Assign categories to bots
                         Scenario scn = BusinessCore.getScenario();
                         Map plTypes = scn.getPlayerTypes();
                         List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
@@ -471,12 +467,12 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                             }
                         }
 
-                        // 4. Connect ThePlayer
+                        // 3. Connect ThePlayer
                         logger.info("JessX-Setup: Attempting to connect ThePlayer...");
                         ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
                         logger.info("JessX-Setup: connecToServer called for ThePlayer.");
 
-                        // 5. Wait for ThePlayer object
+                        // 4. Wait for ThePlayer object
                         Player thePlayer = null;
                         for (int i = 0; i < 100; i++) { // Wait up to 10 seconds
                             logger.info("JessX-Setup: Waiting for ThePlayer object... Attempt " + (i + 1));
@@ -493,9 +489,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                             return;
                         }
 
-                        // 6. Assign category to ThePlayer
+                        // 5. Assign category to ThePlayer
                         logger.info("JessX-Setup: Assigning category to ThePlayer...");
-                        // Safe assignment of category
                         if (!categories.isEmpty()) {
                             thePlayer.setPlayerCategory(categories.get(0).getPlayerTypeName());
                             logger.info(String.format("Assigned category %s to player %s", thePlayer.getPlayerCategory(), thePlayer.getLogin()));
@@ -503,7 +498,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                             logger.warn("No player categories available to assign to ThePlayer.");
                         }
 
-                        // 7. Start the experiment
+                        // 6. Start the experiment
                         logger.info("JessX-Setup: All players connected and configured. Starting experiment...");
                         System.out.println("-- LAUNCH EXPERIMENT ! --");
                         if (NetworkCore.getExperimentManager().beginExperiment()) {
