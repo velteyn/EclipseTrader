@@ -109,12 +109,9 @@ public class ClientConnectionPoint extends Thread {
    while (Server.getServerState() == Server.SERVER_STATE_ONLINE) {
      try {
        Utils.logger.info("ClientConnectionPoint waiting for a client...");
-       new PreConnectionClient(serverSocket.accept()).initiatePlayer();
-       Utils.logger.info("ClientConnectionPoint accepted a new client connection.");
-       // serveur.accept() wait until a client try to connect and return
-       // a socket with which we will be able to communicate with the client.
-       // Then we create a thread that will be dedicated to the communication
-       // with this client.
+       Socket clientSocket = serverSocket.accept();
+       Utils.logger.info("ClientConnectionPoint accepted a new client connection. Starting handler thread.");
+       new Thread(new PreConnectionClient(clientSocket)).start();
      }
      catch (Exception ex1) {
        System.out.println(ex1.toString());

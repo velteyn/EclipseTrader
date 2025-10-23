@@ -24,7 +24,7 @@ import java.io.OutputStream;
 import java.io.InputStream;
 import java.net.Socket;
 
-public class PreConnectionClient
+public class PreConnectionClient implements Runnable
 {
     private Socket socket;
     private InputStream input;
@@ -54,7 +54,8 @@ public class PreConnectionClient
         }
     }
     
-    public void initiatePlayer() {
+    @Override
+    public void run() {
         Document doc = null;
         try {
             Utils.logger.debug("Waiting for the client to send his identification.");
