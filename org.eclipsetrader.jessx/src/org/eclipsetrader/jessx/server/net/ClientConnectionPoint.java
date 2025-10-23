@@ -104,6 +104,7 @@ public class ClientConnectionPoint extends Thread {
    }
 
    Utils.logger.info("ClientConnectionPoint entering listening loop. Server state is: " + Server.getServerState());
+   serverReadyLatch.countDown();
    while (Server.getServerState() == Server.SERVER_STATE_ONLINE) {
      try {
        Utils.logger.info("ClientConnectionPoint waiting for a client...");
@@ -128,7 +129,6 @@ public class ClientConnectionPoint extends Thread {
   */
  public void run() {
     Utils.logger.info("ClientConnectionPoint thread started.");
-    serverReadyLatch.countDown();
     this.attenteConnexion();
     Utils.logger.info("ClientConnectionPoint thread finished.");
  }
