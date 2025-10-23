@@ -39,6 +39,7 @@
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.CountDownLatch;
 
 import org.eclipsetrader.jessx.server.Server;
 import org.eclipsetrader.jessx.utils.Utils;
@@ -56,8 +57,9 @@ import org.eclipsetrader.jessx.utils.Utils;
 
 public class ClientConnectionPoint extends Thread {
 
-  private ServerSocket serverSocket;
-  private String AddressIP ;
+    public static final CountDownLatch serverReadyLatch = new CountDownLatch(1);
+    private ServerSocket serverSocket;
+    private String AddressIP;
 
   public ClientConnectionPoint() {
   super("ClientConnectionPoint");
@@ -126,6 +128,7 @@ public class ClientConnectionPoint extends Thread {
   */
  public void run() {
     Utils.logger.info("ClientConnectionPoint thread started.");
+    serverReadyLatch.countDown();
     this.attenteConnexion();
     Utils.logger.info("ClientConnectionPoint thread finished.");
  }
