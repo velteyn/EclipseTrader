@@ -478,18 +478,18 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                         }
                         logger.info("JessX-Setup: All " + NetworkCore.getPlayerList().size() + " players are connected.");
 
-                        // 5. Assign categories
-                        logger.info("JessX-Setup: Assigning categories to all players...");
+                        // 5. Assign categories and start experiment (with retry logic)
+                        logger.info("JessX-Setup: All players connected. Assigning categories and attempting to start experiment...");
+
                         Scenario scn = BusinessCore.getScenario();
                         Map plTypes = scn.getPlayerTypes();
                         List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
                         Random random = new Random();
 
-                        // 6. Start experiment (with retry logic)
-                        logger.info("JessX-Setup: All players configured. Attempting to start experiment...");
                         boolean experimentStarted = false;
                         for (int i = 0; i < 100; i++) { // Poll for up to 10 seconds
-                            // Re-assign categories on each attempt for any players that might have been missed
+                            // On each attempt, snapshot the current player list and assign categories to any player that is missing one.
+                            // This ensures that even if a player's state update was delayed, it will be retried.
                             List<Player> playerSnapshot = new ArrayList<Player>(NetworkCore.getPlayerList().values());
                             for (Player player : playerSnapshot) {
                                 if (player.getPlayerCategory() == null || player.getPlayerCategory().isEmpty()) {
@@ -504,17 +504,20 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                                 }
                             }
 
+                            // Try to start the experiment.
                             if (NetworkCore.getExperimentManager().beginExperiment()) {
                                 new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
                                 logger.info("JessX-Setup: Experiment started successfully.");
                                 experimentStarted = true;
-                                break;
+                                break; // Exit the retry loop on success
                             }
+
+                            // If it failed, wait a moment before the next retry.
                             Thread.sleep(100);
                         }
 
                         if (!experimentStarted) {
-                            logger.error("JessX-Setup: Failed to start experiment after multiple retries. Check server logs for details.");
+                            logger.error("JessX-Setup: Failed to start experiment after multiple retries. Preconditions not met. Check server logs.");
                         }
                     } catch (Exception e) {
                         logger.error("Error in JessX setup thread", e);
