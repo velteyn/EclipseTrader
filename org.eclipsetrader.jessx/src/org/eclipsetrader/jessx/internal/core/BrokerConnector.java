@@ -453,6 +453,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                             return;
                         }
 
+                        try {
+                            // Wait for the server to be fully initialized
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+
                         srv.loadBots();
 
                         Scenario scn = BusinessCore.getScenario();
