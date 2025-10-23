@@ -114,17 +114,31 @@ public class ExperimentManager extends Thread implements Constants {
     if (fileName.length() < 5 || 
       !fileName.substring(fileName.length() - 4).equalsIgnoreCase(".xml"))
       fileName = String.valueOf(fileName) + ".xml"; 
-    File file = new File(String.valueOf(pwd) + fileName);
+    File file = new File(pwd + fileName);
     int j = 0;
     while (file.exists()) {
-      String name = String.valueOf(pwd) + fileName;
-      name.endsWith("");
-      name = name.substring(0, name.lastIndexOf(" ") + 1);
-      j++;
-      BusinessCore.getGeneralParameters().setLoggingFileName((String.valueOf(name) + j).substring(pwd.length(), (String.valueOf(name) + j).length()));
-      name = String.valueOf(name) + j + ".xml";
-      file = new File(name);
-    } 
+        j++;
+        String baseName;
+        String extension;
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex != -1) {
+            baseName = fileName.substring(0, dotIndex);
+            extension = fileName.substring(dotIndex);
+        } else {
+            baseName = fileName;
+            extension = "";
+        }
+
+        // Remove previous numbering if it exists
+        int parenIndex = baseName.lastIndexOf('(');
+        if (parenIndex != -1) {
+            baseName = baseName.substring(0, parenIndex);
+        }
+
+        String newFileName = baseName + "(" + j + ")" + extension;
+        BusinessCore.getGeneralParameters().setLoggingFileName(newFileName);
+        file = new File(pwd + newFileName);
+    }
     try {
       file.createNewFile();
     } catch (IOException ex) {
