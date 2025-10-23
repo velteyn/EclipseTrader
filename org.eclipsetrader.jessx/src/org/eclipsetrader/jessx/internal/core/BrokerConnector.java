@@ -485,28 +485,36 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                         List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
                         Random random = new Random();
 
-                        // Create a snapshot of the values to iterate over, preventing ConcurrentModificationException
-                        List<Player> playerSnapshot = new ArrayList<Player>(NetworkCore.getPlayerList().values());
-                        for (Player player : playerSnapshot) {
-                            if (player.getPlayerCategory() == null || player.getPlayerCategory().isEmpty()) {
-                                PlayerType assignedCategory;
-                                if (player.getLogin().equals("ThePlayer")) {
-                                    assignedCategory = categories.get(0);
-                                } else {
-                                    assignedCategory = categories.get(random.nextInt(categories.size()));
+                        // 6. Start experiment (with retry logic)
+                        logger.info("JessX-Setup: All players configured. Attempting to start experiment...");
+                        boolean experimentStarted = false;
+                        for (int i = 0; i < 100; i++) { // Poll for up to 10 seconds
+                            // Re-assign categories on each attempt for any players that might have been missed
+                            List<Player> playerSnapshot = new ArrayList<Player>(NetworkCore.getPlayerList().values());
+                            for (Player player : playerSnapshot) {
+                                if (player.getPlayerCategory() == null || player.getPlayerCategory().isEmpty()) {
+                                    PlayerType assignedCategory;
+                                    if (player.getLogin().equals("ThePlayer")) {
+                                        assignedCategory = categories.get(0);
+                                    } else {
+                                        assignedCategory = categories.get(random.nextInt(categories.size()));
+                                    }
+                                    player.setPlayerCategory(assignedCategory.getPlayerTypeName());
+                                    logger.info(String.format("Assigned category '%s' to player '%s'", player.getPlayerCategory(), player.getLogin()));
                                 }
-                                player.setPlayerCategory(assignedCategory.getPlayerTypeName());
-                                logger.info(String.format("Assigned category '%s' to player '%s'", player.getPlayerCategory(), player.getLogin()));
                             }
+
+                            if (NetworkCore.getExperimentManager().beginExperiment()) {
+                                new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
+                                logger.info("JessX-Setup: Experiment started successfully.");
+                                experimentStarted = true;
+                                break;
+                            }
+                            Thread.sleep(100);
                         }
 
-                        // 6. Start experiment
-                        logger.info("JessX-Setup: All players configured. Starting experiment...");
-                        if (NetworkCore.getExperimentManager().beginExperiment()) {
-                            new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
-                            logger.info("JessX-Setup: Experiment started successfully.");
-                        } else {
-                            logger.error("JessX-Setup: Failed to start experiment. Check server logs for details.");
+                        if (!experimentStarted) {
+                            logger.error("JessX-Setup: Failed to start experiment after multiple retries. Check server logs for details.");
                         }
                     } catch (Exception e) {
                         logger.error("Error in JessX setup thread", e);
