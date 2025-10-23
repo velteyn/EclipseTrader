@@ -433,46 +433,14 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                 @Override
                 public void run() {
                     try {
-                        logger.info("JessX-Setup: Server is online. Starting setup sequence.");
+                        logger.info("JessX-Setup: Server is online. Prioritizing ThePlayer connection.");
 
-                        // 1. Wait for bots to connect
-                        int expectedBotCount = 41; // As determined from default.xml
-                        logger.info("JessX-Setup: Waiting for " + expectedBotCount + " bots to connect...");
-                        for (int i = 0; i < 200; i++) { // Wait up to 20 seconds for bots
-                            if (NetworkCore.getPlayerList().size() >= expectedBotCount) {
-                                break;
-                            }
-                            Thread.sleep(100);
-                        }
-                        logger.info("JessX-Setup: " + NetworkCore.getPlayerList().size() + " players (bots) connected.");
-
-                        // 2. Assign categories to bots
-                        Scenario scn = BusinessCore.getScenario();
-                        Map plTypes = scn.getPlayerTypes();
-                        List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
-                        Random random = new Random();
-
-                        Map<String, Player> playerList = NetworkCore.getPlayerList();
-                        List<Map.Entry<String, Player>> safeEntries = new ArrayList<Map.Entry<String, Player>>(playerList.entrySet());
-
-                        logger.info("JessX-Setup: Assigning categories to bots...");
-                        for (Map.Entry<String, Player> entry : safeEntries) {
-                            Player bot = entry.getValue();
-                            if (!bot.getLogin().equals("ThePlayer")) {
-                                if (bot.getPlayerCategory() == null || bot.getPlayerCategory().isEmpty()) {
-                                    int index = random.nextInt(categories.size());
-                                    bot.setPlayerCategory(categories.get(index).getPlayerTypeName());
-                                    logger.info(String.format("Assigned category %s to bot %s", bot.getPlayerCategory(), bot.getLogin()));
-                                }
-                            }
-                        }
-
-                        // 3. Connect ThePlayer
+                        // 1. Connect ThePlayer first
                         logger.info("JessX-Setup: Attempting to connect ThePlayer...");
                         ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
                         logger.info("JessX-Setup: connecToServer called for ThePlayer.");
 
-                        // 4. Wait for ThePlayer object
+                        // 2. Wait for ThePlayer object to be available
                         Player thePlayer = null;
                         for (int i = 0; i < 100; i++) { // Wait up to 10 seconds
                             logger.info("JessX-Setup: Waiting for ThePlayer object... Attempt " + (i + 1));
@@ -485,17 +453,47 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                         }
 
                         if (thePlayer == null) {
-                            logger.error("Timed out waiting for ThePlayer to connect. Experiment will not start.");
+                            logger.error("Timed out waiting for ThePlayer to connect. Setup aborted.");
                             return;
                         }
 
-                        // 5. Assign category to ThePlayer
-                        logger.info("JessX-Setup: Assigning category to ThePlayer...");
-                        if (!categories.isEmpty()) {
-                            thePlayer.setPlayerCategory(categories.get(0).getPlayerTypeName());
-                            logger.info(String.format("Assigned category %s to player %s", thePlayer.getPlayerCategory(), thePlayer.getLogin()));
-                        } else {
-                            logger.warn("No player categories available to assign to ThePlayer.");
+                        // 3. Introduce a delay before loading bots
+                        logger.info("JessX-Setup: ThePlayer connected. Waiting 5 seconds before loading bots...");
+                        try {
+                            Thread.sleep(5000);
+                        }
+                        catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+
+                        // 4. Load bots
+                        logger.info("JessX-Setup: Loading bots...");
+                        srv.loadBots();
+
+                        // 5. Assign categories to all players (bots and ThePlayer)
+                        logger.info("JessX-Setup: Assigning categories...");
+                        Scenario scn = BusinessCore.getScenario();
+                        Map plTypes = scn.getPlayerTypes();
+                        List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
+                        Random random = new Random();
+
+                        Map<String, Player> playerList = NetworkCore.getPlayerList();
+                        List<Map.Entry<String, Player>> safeEntries = new ArrayList<Map.Entry<String, Player>>(playerList.entrySet());
+
+                        for (Map.Entry<String, Player> entry : safeEntries) {
+                            Player player = entry.getValue();
+                            if (player.getPlayerCategory() == null || player.getPlayerCategory().isEmpty()) {
+                                if (player.getLogin().equals("ThePlayer")) {
+                                    if (!categories.isEmpty()) {
+                                        player.setPlayerCategory(categories.get(0).getPlayerTypeName());
+                                    }
+                                }
+                                else {
+                                    int index = random.nextInt(categories.size());
+                                    player.setPlayerCategory(categories.get(index).getPlayerTypeName());
+                                }
+                                logger.info(String.format("Assigned category %s to player %s", player.getPlayerCategory(), player.getLogin()));
+                            }
                         }
 
                         // 6. Start the experiment
