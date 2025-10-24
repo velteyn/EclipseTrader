@@ -59,6 +59,10 @@ public class RobotCore
         return this.portfolio;
     }
     
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
+
     public String getLogin() {
         return null;
     }
