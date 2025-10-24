@@ -366,7 +366,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		    if (institutionName != null) {
 		        org.eclipse.trader.jessx.business.Institution institution = BusinessCore.getInstitution(institutionName);
 		        if (institution != null) {
-		            String securityName = institution.getQuotedAsset();
+		            String securityName = institution.getAssetName();
 		            ISecurity security = getSecurityFromSymbol(securityName);
 		            if (security != null) {
 		                IFeedIdentifier identifier = security.getIdentifier();
@@ -397,7 +397,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                                     }
                                 }
 
-                                subscription.setBook(new org.eclipsetrader.core.feed.Book(bids.toArray(new IBookEntry[bids.size()]), asks.toArray(new IBookEntry[asks.size()])));
+                                ((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription)subscription).setBook(new org.eclipsetrader.core.feed.Book(bids.toArray(new IBookEntry[bids.size()]), asks.toArray(new IBookEntry[asks.size()])));
                                 StreamingConnector.getInstance().wakeupNotifyThread();
                             }
 		                }
