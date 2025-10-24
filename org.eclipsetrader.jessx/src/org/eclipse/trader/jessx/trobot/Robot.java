@@ -133,12 +133,17 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
         } 
       } 
     } else if (xmlDoc.getRootElement().getName().equals("OrderBook")) {
-      OrderBook ob = new OrderBook();
-      ob.initFromNetworkInput(xmlDoc.getRootElement());
-      this.datesLastOrder.put(ob.getInstitution(), new Date());
-      if(this.orderBooks.size()>0)
-    	  ((LinkedList<OrderBook>)this.orderBooks.get(ob.getInstitution())).add(ob);
-    } 
+        OrderBook ob = new OrderBook();
+        ob.initFromNetworkInput(xmlDoc.getRootElement());
+        this.datesLastOrder.put(ob.getInstitution(), new Date());
+
+        LinkedList<OrderBook> list = this.orderBooks.get(ob.getInstitution());
+        if (list == null) {
+            list = new LinkedList<OrderBook>();
+            this.orderBooks.put(ob.getInstitution(), list);
+        }
+        list.add(ob);
+    }
   }
   
   public void initializeForNewExperiment() {}
