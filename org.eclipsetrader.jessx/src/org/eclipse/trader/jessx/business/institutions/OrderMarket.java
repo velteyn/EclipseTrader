@@ -14,7 +14,7 @@ import org.eclipse.trader.jessx.business.Operation;
 import org.eclipse.trader.jessx.business.Operator;
 import org.eclipse.trader.jessx.business.Order;
 import org.eclipse.trader.jessx.business.operations.DeleteOrder;
-import org.eclipsetrader.jessx.net.NetworkCore;
+import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.net.WarnForClient;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Element;
