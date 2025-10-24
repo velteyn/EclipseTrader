@@ -15,6 +15,16 @@
     <modules>
         <module>org.eclipsetrader.core</module>
         <module>org.mozilla.rhino</module>
+        <module>org.eclipsetrader.yahoo</module>
+        <module>org.eclipsetrader.news</module>
+        <module>org.eclipsetrader.ui</module>
+        <module>org.eclipse.nebula.widgets.cdatetime</module>
+        <module>org.eclipse.nebula.cwt</module>
+        <module>org.eclipse.nebula.widgets.pshelf</module>
+        <module>org.eclipse.nebula.jface.cdatetime</module>
+        <module>com.sun.syndication.fetcher</module>
+        <module>org.htmlparser</module>
+        <module>org.eclipsetrader.directa</module>
     </modules>
 
     <repositories>
@@ -45,6 +55,14 @@
                 <artifactId>tycho-maven-plugin</artifactId>
                 <version>${tycho.version}</version>
                 <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-compiler-plugin</artifactId>
+                <version>${tycho.version}</version>
+                <configuration>
+                    <compilerArgument>-err:-forbidden</compilerArgument>
+                </configuration>
             </plugin>
         </plugins>
     </build>
