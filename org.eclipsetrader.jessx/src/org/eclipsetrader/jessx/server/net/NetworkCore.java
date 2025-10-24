@@ -81,8 +81,11 @@ public abstract class NetworkCore {
 	}
 
 	public static void setServerOffline() {
-		if (!connectionPoint.isAlive())
-			connectionPoint.destroy();
+		try {
+			getConnectionPoint().serverSocket.close();
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void sendToAllPlayers(NetworkWritable message) {

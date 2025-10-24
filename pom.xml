@@ -25,6 +25,12 @@
         <module>com.sun.syndication.fetcher</module>
         <module>org.htmlparser</module>
         <module>org.eclipsetrader.directa</module>
+        <module>org.eclipsetrader.jessx</module>
+        <module>org.eclipsetrader.platform</module>
+        <module>org.eclipsetrader.ui.application</module>
+        <module>org.eclipsetrader.repository.local</module>
+        <module>org.eclipsetrader.ui.charts.indicators</module>
+        <module>com.tictactec.ta.lib</module>
     </modules>
 
     <repositories>
