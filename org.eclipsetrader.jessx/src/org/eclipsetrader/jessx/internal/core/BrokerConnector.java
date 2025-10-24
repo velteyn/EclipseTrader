@@ -57,8 +57,10 @@ import org.eclipse.trader.jessx.business.PlayerType;
 import org.eclipse.trader.jessx.business.Scenario;
 import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.feed.FeedProperties;
+import org.eclipsetrader.core.feed.IBookEntry;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedProperties;
+import org.eclipsetrader.core.feed.IFeedSubscription2;
 import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.instruments.Security;
 import org.eclipsetrader.core.instruments.Stock;
@@ -359,25 +361,49 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			}
 		}
 		if (doc.getRootElement().getName().equals("OrderBook")) {
-			Element orderBook = doc.getRootElement();
-			String securityName = orderBook.getChild("security").getValue();
-			ISecurity security = getSecurityFromSymbol(securityName);
-			if (security != null) {
-				IFeedIdentifier identifier = security.getIdentifier();
-				if (identifier != null) {
-					StreamingConnector.getInstance().subscribeLevel2(identifier);
-					double lastPrice = Double.parseDouble(orderBook.getChild("last_price").getValue());
-					long lastQuantity = Long.parseLong(orderBook.getChild("last_quantity").getValue());
-                    long volume = 0L;
-                    try {
-                        volume = Long.parseLong(orderBook.getChild("volume").getValue());
-                    } catch (Exception e) {
-                        // Volume may not be present, default to 0
-                    }
-					StreamingConnector.getInstance().setTrade(identifier, new org.eclipsetrader.core.feed.Trade(new Date(), lastPrice, lastQuantity, volume));
-					StreamingConnector.getInstance().wakeupNotifyThread();
-				}
-			}
+		    Element orderBook = doc.getRootElement();
+		    String institutionName = orderBook.getAttributeValue("institution");
+		    if (institutionName != null) {
+		        org.eclipse.trader.jessx.business.Institution institution = BusinessCore.getInstitution(institutionName);
+		        if (institution != null) {
+		            String securityName = institution.getQuotedAsset();
+		            ISecurity security = getSecurityFromSymbol(securityName);
+		            if (security != null) {
+		                IFeedIdentifier identifier = security.getIdentifier();
+		                if (identifier != null) {
+		                    IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
+                            if (subscription != null) {
+                                List<IBookEntry> bids = new ArrayList<IBookEntry>();
+                                Element bidElement = orderBook.getChild("Bid");
+                                if (bidElement != null) {
+                                    for (Object o : bidElement.getChildren("Operation")) {
+                                        Element op = (Element) o;
+                                        Element limitOrder = op.getChild("LimitOrder");
+                                        double price = Double.parseDouble(limitOrder.getAttributeValue("price"));
+                                        long quantity = Long.parseLong(limitOrder.getAttributeValue("quantity"));
+                                        bids.add(new org.eclipsetrader.core.feed.BookEntry(null, price, quantity, 1L, null));
+                                    }
+                                }
+
+                                List<IBookEntry> asks = new ArrayList<IBookEntry>();
+                                Element askElement = orderBook.getChild("Ask");
+                                if (askElement != null) {
+                                    for (Object o : askElement.getChildren("Operation")) {
+                                        Element op = (Element) o;
+                                        Element limitOrder = op.getChild("LimitOrder");
+                                        double price = Double.parseDouble(limitOrder.getAttributeValue("price"));
+                                        long quantity = Long.parseLong(limitOrder.getAttributeValue("quantity"));
+                                        asks.add(new org.eclipsetrader.core.feed.BookEntry(null, price, quantity, 1L, null));
+                                    }
+                                }
+
+                                subscription.setBook(new org.eclipsetrader.core.feed.Book(bids.toArray(new IBookEntry[bids.size()]), asks.toArray(new IBookEntry[asks.size()])));
+                                StreamingConnector.getInstance().wakeupNotifyThread();
+                            }
+		                }
+		            }
+		        }
+		    }
 		}
 	}
 
