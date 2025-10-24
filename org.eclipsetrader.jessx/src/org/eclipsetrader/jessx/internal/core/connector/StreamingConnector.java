@@ -570,14 +570,27 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
 
         if (toRemove.size() != 0) {
             logger.info("Removing " + toRemove); //$NON-NLS-1$
+            String[] symbols = toRemove.toArray(new String[toRemove.size()]);
+            int[] flags = new int[symbols.length];
+            byte[] msg = CreaMsg.creaPortMsg(CreaMsg.PORT_DEL, symbols, flags);
+            os.write(msg);
+            os.flush();
         }
 
         if (toAdd.size() != 0) {
             logger.info("Adding " + toAdd); //$NON-NLS-1$
+            String[] symbols = toAdd.toArray(new String[toAdd.size()]);
+            int[] flags = new int[symbols.length];
+            for (int i = 0; i < symbols.length; i++) {
+                flags[i] = toAdd2.contains(symbols[i]) ? 105 : 0;
+            }
+            byte[] msg = CreaMsg.creaPortMsg(CreaMsg.PORT_ADD, symbols, flags);
+            os.write(msg);
+            os.flush();
         }
 
+        Map<String, Integer> toMod = new HashMap<String, Integer>();
         if (toAdd2.size() != 0 || toRemove2.size() != 0) {
-            Map<String, Integer> toMod = new HashMap<String, Integer>();
             for (String s : toAdd2) {
                 if (!toAdd.contains(s)) {
                     toMod.put(s, new Integer(105));
@@ -589,6 +602,14 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
 
             if (toMod.size() != 0) {
                 logger.info("Modifying " + toMod); //$NON-NLS-1$
+                String[] symbols = toMod.keySet().toArray(new String[toMod.keySet().size()]);
+                int[] flags = new int[symbols.length];
+                for (int i = 0; i < symbols.length; i++) {
+                    flags[i] = toMod.get(symbols[i]);
+                }
+                byte[] msg = CreaMsg.creaPortMsg(CreaMsg.PORT_MOD, symbols, flags);
+                os.write(msg);
+                os.flush();
             }
         }
 
