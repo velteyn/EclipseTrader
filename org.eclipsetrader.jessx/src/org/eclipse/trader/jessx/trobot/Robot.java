@@ -117,6 +117,9 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
       divInfo.initFromNetworkInput(xmlDoc.getRootElement());
       this.dividendInfos.add(divInfo);
     } else if (xmlDoc.getRootElement().getName().equals("Portfolio")) {
+        if (this.robotCore.getPortfolio() == null) {
+            this.robotCore.setPortfolio(new org.eclipsetrader.jessx.client.Portfolio());
+        }
       this.robotCore.getPortfolio().initFromNetworkInput(xmlDoc.getRootElement());
     } else if (xmlDoc.getRootElement().getName().equals("OperatorPlayed")) {
       OperatorPlayed opPlayed = new OperatorPlayed("");
