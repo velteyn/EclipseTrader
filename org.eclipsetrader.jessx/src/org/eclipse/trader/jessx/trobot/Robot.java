@@ -13,6 +13,7 @@ import org.eclipse.trader.jessx.business.Institution;
 import org.eclipse.trader.jessx.business.Operator;
 import org.eclipse.trader.jessx.business.OrderBook;
 import org.eclipsetrader.jessx.client.ClientCore;
+import org.eclipsetrader.jessx.client.Portfolio;
 import org.eclipsetrader.jessx.client.event.ExperimentDeveloppmentListener;
 import org.eclipsetrader.jessx.client.event.NetworkListener;
 import org.eclipsetrader.jessx.net.DividendInfo;
@@ -118,7 +119,7 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
       this.dividendInfos.add(divInfo);
     } else if (xmlDoc.getRootElement().getName().equals("Portfolio")) {
         if (this.robotCore.getPortfolio() == null) {
-            this.robotCore.setPortfolio(new org.eclipsetrader.jessx.client.Portfolio());
+            this.robotCore.setPortfolio(new Portfolio());
         }
       this.robotCore.getPortfolio().initFromNetworkInput(xmlDoc.getRootElement());
     } else if (xmlDoc.getRootElement().getName().equals("OperatorPlayed")) {
