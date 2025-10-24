@@ -1,43 +1,39 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>org.eclipsetrader</groupId>
+    <groupId>eclipsetrader</groupId>
     <artifactId>eclipsetrader-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
         <tycho.version>4.0.8</tycho.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <eclipse-repo.url>https://download.eclipse.org/releases/juno</eclipse-repo.url>
     </properties>
 
     <modules>
-        <module>org.eclipsetrader.core</module>
         <module>org.mozilla.rhino</module>
-        <module>org.eclipsetrader.yahoo</module>
-        <module>org.eclipsetrader.news</module>
-        <module>org.eclipsetrader.ui</module>
-        <module>org.eclipse.nebula.widgets.cdatetime</module>
+        <module>org.eclipsetrader.core</module>
+        <module>com.sun.syndication.fetcher</module>
         <module>org.eclipse.nebula.cwt</module>
+        <module>org.eclipse.nebula.widgets.cdatetime</module>
         <module>org.eclipse.nebula.widgets.pshelf</module>
         <module>org.eclipse.nebula.jface.cdatetime</module>
-        <module>com.sun.syndication.fetcher</module>
+        <module>org.eclipsetrader.ui</module>
+        <module>org.eclipsetrader.news</module>
         <module>org.htmlparser</module>
+        <module>org.eclipsetrader.yahoo</module>
         <module>org.eclipsetrader.directa</module>
         <module>org.eclipsetrader.jessx</module>
-        <module>org.eclipsetrader.platform</module>
         <module>org.eclipsetrader.ui.application</module>
-        <module>org.eclipsetrader.repository.local</module>
-        <module>org.eclipsetrader.ui.charts.indicators</module>
-        <module>com.tictactec.ta.lib</module>
     </modules>
 
     <repositories>
         <repository>
-            <id>juno</id>
+            <id>eclipse-juno</id>
+            <url>${eclipse-repo.url}</url>
             <layout>p2</layout>
-            <url>https://download.eclipse.org/releases/juno</url>
         </repository>
     </repositories>
 
@@ -45,31 +41,21 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-maven-plugin</artifactId>
+                    <version>${tycho.version}</version>
+                    <extensions>true</extensions>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-compiler-plugin</artifactId>
+                    <version>${tycho.version}</version>
                     <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
+                        <source>1.6</source>
+                        <target>1.6</target>
                     </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-maven-plugin</artifactId>
-                <version>${tycho.version}</version>
-                <extensions>true</extensions>
-            </plugin>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-compiler-plugin</artifactId>
-                <version>${tycho.version}</version>
-                <configuration>
-                    <compilerArgument>-err:-forbidden</compilerArgument>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>

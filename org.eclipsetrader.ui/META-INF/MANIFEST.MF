@@ -41,4 +41,3 @@ Export-Package: org.eclipsetrader.ui,
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-BuddyPolicy: global
-Eclipse-RegisterBuddy: org.eclipsetrader.ui.application
