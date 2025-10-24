@@ -109,8 +109,7 @@ public class Player extends Thread implements PortfolioListener {
     this.portfolio.addListener(this);
     if (NetworkCore.getExperimentManager().getExperimentState() != 0)
       initClient(); 
-    if(!"ThePlayer".equals(this.login))
-	this.state=CLIENT_READY;
+    this.state = CLIENT_READY;
   }
   
   public String getJavaversion() {
