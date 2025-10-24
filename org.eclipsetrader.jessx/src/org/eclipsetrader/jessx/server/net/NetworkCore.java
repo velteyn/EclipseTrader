@@ -108,9 +108,28 @@ public abstract class NetworkCore {
 	}
 
 	public static void arePlayersReady(String explanation) {
-		Iterator<String> iter = playersList.keySet().iterator();
-		while (iter.hasNext())
-			getPlayer(iter.next()).isClientReady(explanation);
+	    (new Thread() {
+	        public void run() {
+
+	          boolean allPlayersReady = false;
+	          while (!allPlayersReady) {
+	            Iterator<String> iter = NetworkCore.getPlayerList().keySet().iterator();
+	            allPlayersReady = true;
+	            while (iter.hasNext()) {
+	              Player p = NetworkCore.getPlayer(iter.next());
+	              if (p.getPlayerState() != 0)
+	                allPlayersReady = false;
+	            }
+	            try {
+	              sleep(200L);
+	            } catch (InterruptedException e) {
+
+	              e.printStackTrace();
+	            }
+	          }
+	          NetworkCore.getExperimentManager().beginNewPeriod();
+	        }
+	      }).start();
 	}
 
 	private static void firePlayerAdded(String playerName) {
