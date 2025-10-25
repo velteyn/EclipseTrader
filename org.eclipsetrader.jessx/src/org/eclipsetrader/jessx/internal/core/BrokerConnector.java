@@ -61,6 +61,9 @@ import org.eclipsetrader.core.feed.IBookEntry;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedProperties;
 import org.eclipsetrader.core.feed.IFeedSubscription2;
+import org.eclipsetrader.core.feed.Quote;
+import org.eclipsetrader.core.feed.TodayOHL;
+import org.eclipsetrader.core.feed.Trade;
 import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.instruments.Security;
 import org.eclipsetrader.core.instruments.Stock;
@@ -221,6 +224,9 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
         ClientCore.addConnectionListener(this);
         ClientCore.addNetworkListener(this, "Portfolio");
         ClientCore.addNetworkListener(this, "OrderBook");
+        ClientCore.addNetworkListener(this, "Trade");
+        ClientCore.addNetworkListener(this, "Quote");
+        ClientCore.addNetworkListener(this, "TodayOHL");
 	}
 
 	/*
@@ -405,6 +411,61 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		        }
 		    }
 		}
+        if (doc.getRootElement().getName().equals("Trade")) {
+            Element trade = doc.getRootElement();
+            String securityName = trade.getAttributeValue("security");
+            ISecurity security = getSecurityFromSymbol(securityName);
+            if (security != null) {
+                IFeedIdentifier identifier = security.getIdentifier();
+                if (identifier != null) {
+                    IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
+                    if (subscription != null) {
+                        double price = Double.parseDouble(trade.getAttributeValue("price"));
+                        long quantity = Long.parseLong(trade.getAttributeValue("quantity"));
+                        long volume = Long.parseLong(trade.getAttributeValue("volume"));
+                        ((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription)subscription).setTrade(new Trade(new Date(), price, quantity, volume));
+                        StreamingConnector.getInstance().wakeupNotifyThread();
+                    }
+                }
+            }
+        }
+        if (doc.getRootElement().getName().equals("Quote")) {
+            Element quote = doc.getRootElement();
+            String securityName = quote.getAttributeValue("security");
+            ISecurity security = getSecurityFromSymbol(securityName);
+            if (security != null) {
+                IFeedIdentifier identifier = security.getIdentifier();
+                if (identifier != null) {
+                    IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
+                    if (subscription != null) {
+                        double bid = Double.parseDouble(quote.getAttributeValue("bid"));
+                        double ask = Double.parseDouble(quote.getAttributeValue("ask"));
+                        long bidSize = Long.parseLong(quote.getAttributeValue("bidSize"));
+                        long askSize = Long.parseLong(quote.getAttributeValue("askSize"));
+                        ((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription)subscription).setQuote(new Quote(bid, ask, bidSize, askSize));
+                        StreamingConnector.getInstance().wakeupNotifyThread();
+                    }
+                }
+            }
+        }
+        if (doc.getRootElement().getName().equals("TodayOHL")) {
+            Element todayOHL = doc.getRootElement();
+            String securityName = todayOHL.getAttributeValue("security");
+            ISecurity security = getSecurityFromSymbol(securityName);
+            if (security != null) {
+                IFeedIdentifier identifier = security.getIdentifier();
+                if (identifier != null) {
+                    IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
+                    if (subscription != null) {
+                        double open = Double.parseDouble(todayOHL.getAttributeValue("open"));
+                        double high = Double.parseDouble(todayOHL.getAttributeValue("high"));
+                        double low = Double.parseDouble(todayOHL.getAttributeValue("low"));
+                        ((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription)subscription).setTodayOHL(new TodayOHL(open, high, low));
+                        StreamingConnector.getInstance().wakeupNotifyThread();
+                    }
+                }
+            }
+        }
 	}
 
     private void registerSecurity(final String name) {
