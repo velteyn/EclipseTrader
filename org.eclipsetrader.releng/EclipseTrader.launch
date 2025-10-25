@@ -75,7 +75,7 @@
 <setEntry value="org.eclipse.wb.core.ui.feature:default"/>
 <setEntry value="org.eclipse.wb.layout.group.feature:default"/>
 <setEntry value="org.eclipse.wb.swing.feature:default"/>
-<setEntry value="org.eclipsetrader.brokers.paper:default"/>
+<setEntry value="org.eclipsetrader.brokers.jessx:default"/>
 <setEntry value="org.eclipsetrader.directa:default"/>
 <setEntry value="org.eclipsetrader.directaworld:default"/>
 <setEntry value="org.eclipsetrader.platform:default"/>

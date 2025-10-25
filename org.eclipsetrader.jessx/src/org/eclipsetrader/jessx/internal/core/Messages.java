@@ -15,7 +15,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 
-    private static final String BUNDLE_NAME = "org.eclipsetrader.directa.internal.core.messages"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = "org.eclipsetrader.jessx.internal.core.messages"; //$NON-NLS-1$
     public static String BrokerConnector_30Days;
     public static String BrokerConnector_InvalidOrderSide;
     public static String BrokerConnector_InvalidOrderType;
