@@ -138,6 +138,7 @@ public abstract class ClientCore
     }
     
     public static void executeOperation(final Operation op) {
+        send(op);
     }
     
     public static void send(final NetworkWritable message) {

@@ -35,12 +35,10 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
     private IOrderStatus status = IOrderStatus.New;
     private String message;
 
-    private WebConnector connector;
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
     private ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
 
-    public OrderMonitor(WebConnector connector, BrokerConnector brokerConnector, IOrder order) {
-        this.connector = connector;
+    public OrderMonitor(BrokerConnector brokerConnector, IOrder order) {
         this.brokerConnector = brokerConnector;
         this.order = order;
     }
@@ -78,16 +76,8 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
      */
     @Override
     public void submit() throws BrokerException {
-        if (!connector.isLoggedIn()) {
-            connector.login();
-            if (!connector.isLoggedIn()) {
-                throw new BrokerException(Messages.OrderMonitor_UnableToLogin);
-            }
-        }
-
-        if (connector.sendOrder(this)) {
-            brokerConnector.addWithNotification(this);
-        }
+        brokerConnector.sendOrder(order);
+        brokerConnector.addWithNotification(this);
     }
 
     /* (non-Javadoc)
@@ -95,18 +85,9 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
      */
     @Override
     public void cancel() throws BrokerException {
-        if (!connector.isLoggedIn()) {
-            connector.login();
-            if (!connector.isLoggedIn()) {
-                throw new BrokerException(Messages.OrderMonitor_UnableToLogin);
-            }
-        }
-
         if (getId() == null) {
             throw new BrokerException(Messages.OrderMonitor_InvalidOrder);
         }
-
-        connector.cancelOrder(this);
     }
 
     /* (non-Javadoc)

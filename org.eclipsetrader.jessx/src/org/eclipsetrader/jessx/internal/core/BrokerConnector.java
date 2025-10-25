@@ -670,7 +670,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			throw new BrokerException(Messages.BrokerConnector_InvalidOrderValidity);
 		}
 
-		return new OrderMonitor(WebConnector.getInstance(), this, order);
+		return new OrderMonitor(this, order);
 	}
 
 	/*
@@ -1102,6 +1102,26 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		}
 		fireUpdateNotifications(new OrderDelta[] { new OrderDelta(OrderDelta.KIND_ADDED, orderMonitor), });
 	}
+
+    public void sendOrder(IOrder order) {
+        org.eclipsetrader.jessx.business.Operation op = null;
+        if (order.getType() == IOrderType.Limit) {
+            op = BusinessCore.getOperation("LimitOrder");
+            op.setSecurity(BusinessCore.getInstitution(getSymbolFromSecurity(order.getSecurity())));
+            op.setParam("price", String.valueOf(order.getPrice()));
+            op.setParam("quantity", String.valueOf(order.getQuantity()));
+            op.setParam("side", order.getSide() == IOrderSide.Buy ? "BUY" : "SELL");
+        }
+        else if (order.getType() == IOrderType.Market) {
+            op = BusinessCore.getOperation("MarketOrder");
+            op.setSecurity(BusinessCore.getInstitution(getSymbolFromSecurity(order.getSecurity())));
+            op.setParam("quantity", String.valueOf(order.getQuantity()));
+            op.setParam("side", order.getSide() == IOrderSide.Buy ? "BUY" : "SELL");
+        }
+        if (op != null) {
+            ClientCore.executeOperation(op);
+        }
+    }
 
 	/*
 	 * (non-Javadoc)
