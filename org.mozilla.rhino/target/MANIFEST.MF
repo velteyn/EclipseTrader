@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Rhino JavaScript for Java
+Bundle-SymbolicName: org.mozilla.rhino
+Bundle-Version: 1.7.3.202510251517
+Bundle-Vendor: Mozilla.org
+Export-Package: org.mozilla.classfile,org.mozilla.javascript,org.mozilla
+ .javascript.annotations,org.mozilla.javascript.ast,org.mozilla.javascri
+ pt.commonjs.module,org.mozilla.javascript.commonjs.module.provider,org.
+ mozilla.javascript.debug,org.mozilla.javascript.jdk13,org.mozilla.javas
+ cript.jdk15,org.mozilla.javascript.json,org.mozilla.javascript.optimize
+ r,org.mozilla.javascript.regexp,org.mozilla.javascript.resources,org.mo
+ zilla.javascript.serialize,org.mozilla.javascript.tools,org.mozilla.jav
+ ascript.tools.debugger,org.mozilla.javascript.tools.debugger.treetable,
+ org.mozilla.javascript.tools.idswitch,org.mozilla.javascript.tools.jsc,
+ org.mozilla.javascript.tools.resources,org.mozilla.javascript.tools.she
+ ll,org.mozilla.javascript.xml,org.mozilla.javascript.xml.impl.xmlbeans,
+ org.mozilla.javascript.xmlimpl
+Eclipse-BuddyPolicy: global
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

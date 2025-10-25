@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='javax.xml.bind' version='2.1.6.202510251517' singleton='false' generation='2'>
+    <update id='javax.xml.bind' range='[0.0.0,2.1.6.202510251517)' severity='0'/>
+    <properties size='6'>
+      <property name='org.eclipse.equinox.p2.name' value='JAX-XML-BIND'/>
+      <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
+      <property name='maven-groupId' value='org.eclipsetrader'/>
+      <property name='maven-artifactId' value='javax.xml.bind'/>
+      <property name='maven-version' value='2.1.6-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+    <provides size='44'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='javax.xml.bind' version='2.1.6.202510251517'/>
+      <provided namespace='osgi.bundle' name='javax.xml.bind' version='2.1.6.202510251517'/>
+      <provided namespace='java.package' name='com.sun.activation.registries' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.activation.viewers' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.istack' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.annotation' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.api' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.api.impl' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.marshaller' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.unmarshaller' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.util' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.bytecode' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.model.annotation' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.model.core' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.model.impl' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.model.nav' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.model.runtime' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.runtime' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.runtime.output' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.runtime.property' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.runtime.reflect' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.runtime.reflect.opt' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.runtime.unmarshaller' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.schemagen' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.schemagen.episode' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.schemagen.xmlschema' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.bind.v2.util' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.txw2' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.txw2.annotation' version='0.0.0'/>
+      <provided namespace='java.package' name='com.sun.xml.txw2.output' version='0.0.0'/>
+      <provided namespace='java.package' name='javax.activation' version='0.0.0'/>
+      <provided namespace='java.package' name='javax.xml.bind' version='2.1.6'/>
+      <provided namespace='java.package' name='javax.xml.bind.annotation' version='2.1.6'/>
+      <provided namespace='java.package' name='javax.xml.bind.annotation.adapters' version='2.1.6'/>
+      <provided namespace='java.package' name='javax.xml.bind.attachment' version='2.1.6'/>
+      <provided namespace='java.package' name='javax.xml.bind.helpers' version='2.1.6'/>
+      <provided namespace='java.package' name='javax.xml.bind.util' version='2.1.6'/>
+      <provided namespace='java.package' name='javax.xml.stream' version='2.1.6'/>
+      <provided namespace='java.package' name='javax.xml.stream.events' version='2.1.6'/>
+      <provided namespace='java.package' name='javax.xml.stream.util' version='2.1.6'/>
+      <provided namespace='osgi.identity' name='javax.xml.bind' version='2.1.6.202510251517'>
+        <properties size='1'>
+          <property name='type' value='osgi.bundle'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='2'>
+      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=1.5))'>
+        <description>
+          javax.xml.bind
+        </description>
+      </requiredProperties>
+      <required namespace='org.eclipse.equinox.p2.iu' name='javax.xml.bind.source' range='[2.1.6.202510251517,2.1.6.202510251517]' optional='true'>
+        <filter>
+          (org.eclipse.update.install.sources=true)
+        </filter>
+      </required>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='javax.xml.bind' version='2.1.6.202510251517'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: javax.xml.bind&#xA;Bundle-Version: 2.1.6.202510251517&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

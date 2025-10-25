@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='osgi.bundle' id='org.eclipsetrader.repository.hibernate.postgresql' version='1.0.0.202510251517'>
+    <properties size='9'>
+      <property name='artifact.size' value='427012'/>
+      <property name='download.size' value='427012'/>
+      <property name='download.checksum.sha-512' value='80d2c36e3b4fae755774231e09b8b45ebde72e1997d7f95222da53c047577fcfc6fd0cf55cb972d0ab71ea3e5b64d8d91c90459ece7bc04a1eb067d186cac598'/>
+      <property name='download.checksum.sha-1' value='f2f0353efcd71461600fd3a1e8c1c9ef00511611'/>
+      <property name='download.checksum.sha-256' value='7c0c9b0dc9df18231ea10001fbe66e93f2a459a543b104bd17451cec509895d6'/>
+      <property name='maven-groupId' value='org.eclipsetrader'/>
+      <property name='maven-artifactId' value='org.eclipsetrader.repository.hibernate.postgresql'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+  </artifact>
+</artifacts>

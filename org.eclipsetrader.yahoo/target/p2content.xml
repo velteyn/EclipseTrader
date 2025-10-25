@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='org.eclipsetrader.yahoo' version='1.0.0.202510251517' generation='2'>
+    <update id='org.eclipsetrader.yahoo' range='[0.0.0,1.0.0.202510251517)' severity='0'/>
+    <properties size='6'>
+      <property name='org.eclipse.equinox.p2.name' value='Yahoo! Finance Connector'/>
+      <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
+      <property name='maven-groupId' value='org.eclipsetrader'/>
+      <property name='maven-artifactId' value='org.eclipsetrader.yahoo'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+    <provides size='8'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.yahoo' version='1.0.0.202510251517'/>
+      <provided namespace='osgi.bundle' name='org.eclipsetrader.yahoo' version='1.0.0.202510251517'/>
+      <provided namespace='java.package' name='org.eclipsetrader.yahoo.internal' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipsetrader.yahoo.internal.core' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipsetrader.yahoo.internal.core.connector' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipsetrader.yahoo.internal.core.repository' version='0.0.0'/>
+      <provided namespace='osgi.identity' name='org.eclipsetrader.yahoo' version='1.0.0.202510251517'>
+        <properties size='1'>
+          <property name='type' value='osgi.bundle'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='55'>
+      <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.core.net' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipsetrader.core' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipsetrader.news' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.nebula.widgets.cdatetime' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipsetrader.ui' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.feed' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.feed.atom' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.feed.impl' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.feed.module' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.feed.module.impl' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.feed.rss' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.feed.synd' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.feed.synd.impl' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.fetcher' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.fetcher.impl' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.fetcher.samples' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.io' range='0.0.0'/>
+      <required namespace='java.package' name='com.sun.syndication.io.impl' range='0.0.0'/>
+      <required namespace='java.package' name='javax.xml.bind' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='javax.xml.bind.annotation' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='javax.xml.bind.annotation.adapters' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='javax.xml.bind.attachment' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='javax.xml.bind.helpers' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='javax.xml.bind.util' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='org.apache.commons.httpclient' range='[3.0.0,4.0.0)'/>
+      <required namespace='java.package' name='org.apache.commons.httpclient.auth' range='[3.0.0,4.0.0)'/>
+      <required namespace='java.package' name='org.apache.commons.httpclient.cookie' range='[3.0.0,4.0.0)'/>
+      <required namespace='java.package' name='org.apache.commons.httpclient.methods' range='[3.0.0,4.0.0)'/>
+      <required namespace='java.package' name='org.apache.commons.httpclient.methods.multipart' range='[3.0.0,4.0.0)'/>
+      <required namespace='java.package' name='org.apache.commons.httpclient.params' range='[3.0.0,4.0.0)'/>
+      <required namespace='java.package' name='org.apache.commons.httpclient.protocol' range='[3.0.0,4.0.0)'/>
+      <required namespace='java.package' name='org.apache.commons.httpclient.util' range='[3.0.0,4.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.beans' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.filters' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.http' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.lexer' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.lexerapplications.tabby' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.lexerapplications.thumbelina' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.nodeDecorators' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.nodes' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.parserapplications' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.parserapplications.filterbuilder' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.parserapplications.filterbuilder.layouts' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.parserapplications.filterbuilder.wrappers' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.sax' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.scanners' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.tags' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.util' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.util.sort' range='[1.0.0,2.0.0)'/>
+      <required namespace='java.package' name='org.htmlparser.visitors' range='[1.0.0,2.0.0)'/>
+      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=1.6))'>
+        <description>
+          org.eclipsetrader.yahoo
+        </description>
+      </requiredProperties>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.yahoo.source' range='[1.0.0.202510251517,1.0.0.202510251517]' optional='true'>
+        <filter>
+          (org.eclipse.update.install.sources=true)
+        </filter>
+      </required>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='org.eclipsetrader.yahoo' version='1.0.0.202510251517'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: org.eclipsetrader.yahoo;singleton:=true&#xA;Bundle-Version: 1.0.0.202510251517&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

@@ -27,6 +27,13 @@
         <module>org.eclipsetrader.directa</module>
         <module>org.eclipsetrader.jessx</module>
         <module>org.eclipsetrader.ui.application</module>
+        <module>org.eclipsetrader.repository.hibernate</module>
+        <module>org.eclipsetrader.repository.hibernate.derby</module>
+        <module>org.eclipsetrader.repository.hibernate.postgresql</module>
+        <module>org.eclipsetrader.repository.local</module>
+        <module>org.eclipsetrader.brokers.paper</module>
+        <module>javax.xml.bind</module>
+        <module>org.hibernate</module>
     </modules>
 
     <repositories>
@@ -35,17 +42,23 @@
             <url>${eclipse-repo.url}</url>
             <layout>p2</layout>
         </repository>
+        <repository>
+            <id>dai-labor-open</id>
+            <url>https://repositories.dai-labor.de/extern/content/repositories/dai-open/</url>
+        </repository>
     </repositories>
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-maven-plugin</artifactId>
+                <version>${tycho.version}</version>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.eclipse.tycho</groupId>
-                    <artifactId>tycho-maven-plugin</artifactId>
-                    <version>${tycho.version}</version>
-                    <extensions>true</extensions>
-                </plugin>
                 <plugin>
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>tycho-compiler-plugin</artifactId>

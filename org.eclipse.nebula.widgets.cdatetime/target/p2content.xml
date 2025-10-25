@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='org.eclipse.nebula.widgets.cdatetime' version='0.14.0.202510251517' singleton='false' generation='2'>
+    <update id='org.eclipse.nebula.widgets.cdatetime' range='[0.0.0,0.14.0.202510251517)' severity='0'/>
+    <properties size='9'>
+      <property name='df_LT.pluginName' value='Nebula CDatetime widget (Incubation)'/>
+      <property name='df_LT.providerName' value='Eclipse.org'/>
+      <property name='org.eclipse.equinox.p2.name' value='%pluginName'/>
+      <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
+      <property name='org.eclipse.equinox.p2.bundle.localization' value='plugin'/>
+      <property name='maven-groupId' value='org.eclipsetrader'/>
+      <property name='maven-artifactId' value='org.eclipse.nebula.widgets.cdatetime'/>
+      <property name='maven-version' value='0.14.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+    <provides size='6'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.nebula.widgets.cdatetime' version='0.14.0.202510251517'/>
+      <provided namespace='osgi.bundle' name='org.eclipse.nebula.widgets.cdatetime' version='0.14.0.202510251517'/>
+      <provided namespace='java.package' name='org.eclipse.nebula.widgets.cdatetime' version='0.0.0'/>
+      <provided namespace='osgi.identity' name='org.eclipse.nebula.widgets.cdatetime' version='0.14.0.202510251517'>
+        <properties size='1'>
+          <property name='type' value='osgi.bundle'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+    </provides>
+    <requires size='5'>
+      <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.swt' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.nebula.cwt' range='0.9.0'/>
+      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=1.5))'>
+        <description>
+          org.eclipse.nebula.widgets.cdatetime
+        </description>
+      </requiredProperties>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.nebula.widgets.cdatetime.source' range='[0.14.0.202510251517,0.14.0.202510251517]' optional='true'>
+        <filter>
+          (org.eclipse.update.install.sources=true)
+        </filter>
+      </required>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='org.eclipse.nebula.widgets.cdatetime' version='0.14.0.202510251517'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: org.eclipse.nebula.widgets.cdatetime&#xA;Bundle-Version: 0.14.0.202510251517&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

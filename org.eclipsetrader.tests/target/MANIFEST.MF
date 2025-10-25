@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests Plug-in
+Bundle-SymbolicName: org.eclipsetrader.tests
+Bundle-Version: 1.0.0.202510241657
+Bundle-Vendor: EclipseTrader.org
+Require-Bundle: org.eclipse.core.runtime,org.junit
+Export-Package: org.easymock,org.easymock.classextension,org.easymock.cl
+ assextension.internal,org.easymock.classextension.internal.objenesis,or
+ g.easymock.classextension.internal.objenesis.instantiator,org.easymock.
+ classextension.internal.objenesis.instantiator.basic,org.easymock.class
+ extension.internal.objenesis.instantiator.gcj,org.easymock.classextensi
+ on.internal.objenesis.instantiator.jrockit,org.easymock.classextension.
+ internal.objenesis.instantiator.perc,org.easymock.classextension.intern
+ al.objenesis.instantiator.sun,org.easymock.classextension.internal.obje
+ nesis.strategy,org.easymock.internal,org.easymock.internal.matchers,org
+ .eclipsetrader.tests,org.eclipsetrader.tests.core
+Bundle-ClassPath: plugin.jar,easymock.jar,easymockclassextension.jar,cgl
+ ib-2.1.3.jar,asm.jar
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"

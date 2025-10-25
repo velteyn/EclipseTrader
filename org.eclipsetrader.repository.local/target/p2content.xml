@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='org.eclipsetrader.repository.local' version='1.0.0.202510251517' generation='2'>
+    <update id='org.eclipsetrader.repository.local' range='[0.0.0,1.0.0.202510251517)' severity='0'/>
+    <properties size='6'>
+      <property name='org.eclipse.equinox.p2.name' value='Local Repository Plug-in'/>
+      <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
+      <property name='maven-groupId' value='org.eclipsetrader'/>
+      <property name='maven-artifactId' value='org.eclipsetrader.repository.local'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+    <provides size='8'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.local' version='1.0.0.202510251517'/>
+      <provided namespace='osgi.bundle' name='org.eclipsetrader.repository.local' version='1.0.0.202510251517'/>
+      <provided namespace='java.package' name='org.eclipsetrader.repository.local' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipsetrader.repository.local.internal' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipsetrader.repository.local.internal.stores' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipsetrader.repository.local.internal.types' version='0.0.0'/>
+      <provided namespace='osgi.identity' name='org.eclipsetrader.repository.local' version='1.0.0.202510251517'>
+        <properties size='1'>
+          <property name='type' value='osgi.bundle'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='11'>
+      <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipsetrader.core' range='0.0.0'/>
+      <required namespace='java.package' name='javax.xml.bind' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='javax.xml.bind.annotation' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='javax.xml.bind.annotation.adapters' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='javax.xml.bind.attachment' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='javax.xml.bind.helpers' range='[2.1.0,2.2.0)'/>
+      <required namespace='java.package' name='javax.xml.bind.util' range='[2.1.0,2.2.0)'/>
+      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=1.6))'>
+        <description>
+          org.eclipsetrader.repository.local
+        </description>
+      </requiredProperties>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.local.source' range='[1.0.0.202510251517,1.0.0.202510251517]' optional='true'>
+        <filter>
+          (org.eclipse.update.install.sources=true)
+        </filter>
+      </required>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='org.eclipsetrader.repository.local' version='1.0.0.202510251517'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: org.eclipsetrader.repository.local;singleton:=true&#xA;Bundle-Version: 1.0.0.202510251517&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

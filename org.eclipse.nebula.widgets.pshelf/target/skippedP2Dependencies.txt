@@ -1,0 +1,1 @@
+p2.eclipse.plugin:org.eclipse.swt:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.eclipse.swt/3.100.1.v4236b/org.eclipse.swt-3.100.1.v4236b.jar

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='osgi.bundle' id='org.eclipsetrader.jessx' version='1.0.0.202510251517'>
+    <properties size='9'>
+      <property name='artifact.size' value='359664'/>
+      <property name='download.size' value='359664'/>
+      <property name='download.checksum.sha-512' value='33ac22c58e3f5adae6602c329b52c42d42dc70a47959dbc8b66d14897756644fb8d718fe25fd531bad17df378aa3058520c14970e8cc6b2b4e02c52466a0ce84'/>
+      <property name='download.checksum.sha-1' value='7650f938aac20f4ac35e4a5833eedc17cf3ee483'/>
+      <property name='download.checksum.sha-256' value='a2be4da952e503b8946e90c8c1852b2e43d3425b6d62de597b28eb075f96c2f3'/>
+      <property name='maven-groupId' value='org.eclipsetrader'/>
+      <property name='maven-artifactId' value='org.eclipsetrader.jessx'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+  </artifact>
+</artifacts>

@@ -1,0 +1,4 @@
+org.eclipsetrader:javax.xml.bind:eclipse-plugin:lib/activation.jar @ /app/javax.xml.bind
+org.eclipsetrader:javax.xml.bind:eclipse-plugin:lib/jaxb-api.jar @ /app/javax.xml.bind
+org.eclipsetrader:javax.xml.bind:eclipse-plugin:lib/jaxb-impl.jar @ /app/javax.xml.bind
+org.eclipsetrader:javax.xml.bind:eclipse-plugin:lib/jsr173_1.0_api.jar @ /app/javax.xml.bind
