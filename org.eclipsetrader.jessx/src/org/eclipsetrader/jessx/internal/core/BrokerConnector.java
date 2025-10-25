@@ -438,14 +438,14 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                                 IOHLC[] bars = history.getOHLC();
                                 IOHLC last = bars.length > 0 ? bars[bars.length - 1] : null;
 
-                                if (last != null && last.getDate().equals(tradeData.getDate())) {
+                                if (last != null && last.getDate().equals(tradeData.getTime())) {
                                     last = new OHLC(last.getDate(), last.getOpen(), Math.max(last.getHigh(), tradeData.getPrice()), Math.min(last.getLow(), tradeData.getPrice()), tradeData.getPrice(), last.getVolume() + tradeData.getSize());
                                     bars[bars.length - 1] = last;
                                 }
                                 else {
                                     IOHLC[] newBars = new IOHLC[bars.length + 1];
                                     System.arraycopy(bars, 0, newBars, 0, bars.length);
-                                    newBars[bars.length] = new OHLC(tradeData.getDate(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getSize());
+                                    newBars[bars.length] = new OHLC(tradeData.getTime(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getSize());
                                     bars = newBars;
                                 }
                                 ((org.eclipsetrader.core.feed.History) history).setOHLC(bars);
