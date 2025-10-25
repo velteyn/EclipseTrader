@@ -40,6 +40,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         node.putBoolean(UIActivator.PREFS_WATCHLIST_ENABLE_TICK_DECORATORS, true);
         node.putBoolean(UIActivator.PREFS_WATCHLIST_DRAW_TICK_OUTLINE, true);
         node.putBoolean(UIActivator.PREFS_WATCHLIST_FADE_TO_BACKGROUND, false);
+        node.put(UIActivator.PREFS_DEFAULT_BROKER, "org.eclipsetrader.brokers.jessx");
 
         IPreferenceStore preferences = UIActivator.getDefault().getPreferenceStore();
 

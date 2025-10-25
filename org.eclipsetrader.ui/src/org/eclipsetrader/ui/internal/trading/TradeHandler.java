@@ -87,7 +87,13 @@ public class TradeHandler extends AbstractHandler {
         else {
             IBroker broker = (IBroker) target.getAdapter(IBroker.class);
             if (broker == null) {
-                broker = tradingService.getBrokerForSecurity(security);
+                brokerId = UIActivator.getDefault().getPreferenceStore().getString(UIActivator.PREFS_DEFAULT_BROKER);
+                if (brokerId != null && !brokerId.isEmpty()) {
+                    broker = tradingService.getBroker(brokerId);
+                }
+                if (broker == null) {
+                    broker = tradingService.getBrokerForSecurity(security);
+                }
             }
             dlg.setBroker(broker);
 

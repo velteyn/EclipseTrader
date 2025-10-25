@@ -357,7 +357,10 @@ public class OrderDialog extends TitleAreaDialog {
 
     void setInitialParameters() {
         if (security != null) {
-            symbol.setText(getSecuritySymbol(security));
+            IBroker defaultBroker = broker != null ? broker : tradingService.getBrokerForSecurity(security);
+            if (defaultBroker != null) {
+                symbol.setText(defaultBroker.getSymbolFromSecurity(security));
+            }
             symbolDescription.setText(security.getName());
         }
 
@@ -388,6 +391,8 @@ public class OrderDialog extends TitleAreaDialog {
         if (orderSide != null) {
             sideCombo.setSelection(new StructuredSelection(orderSide));
         }
+
+        handleBrokerSelection((IStructuredSelection) brokerCombo.getSelection());
     }
 
     protected void handleBrokerSelection(IStructuredSelection selection) {
