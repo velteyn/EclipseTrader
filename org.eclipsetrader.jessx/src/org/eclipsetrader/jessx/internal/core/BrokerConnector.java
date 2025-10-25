@@ -58,6 +58,7 @@ import org.eclipse.trader.jessx.business.Scenario;
 import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.feed.FeedProperties;
 import org.eclipsetrader.core.feed.IBookEntry;
+import org.eclipsetrader.core.feed.IHistory;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedProperties;
 import org.eclipsetrader.core.feed.IFeedSubscription2;
@@ -423,7 +424,20 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                         double price = Double.parseDouble(trade.getAttributeValue("price"));
                         long quantity = Long.parseLong(trade.getAttributeValue("quantity"));
                         long volume = Long.parseLong(trade.getAttributeValue("volume"));
-                        ((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription)subscription).setTrade(new Trade(new Date(), price, quantity, volume));
+                        Trade tradeData = new Trade(new Date(), price, quantity, volume);
+                        ((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription)subscription).setTrade(tradeData);
+
+                        BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
+                        ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
+                        if (serviceReference != null) {
+                            IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
+                            IHistory history = repositoryService.getHistoryFor(security);
+                            if (history != null) {
+                                history.append(tradeData);
+                            }
+                            context.ungetService(serviceReference);
+                        }
+
                         StreamingConnector.getInstance().wakeupNotifyThread();
                     }
                 }
