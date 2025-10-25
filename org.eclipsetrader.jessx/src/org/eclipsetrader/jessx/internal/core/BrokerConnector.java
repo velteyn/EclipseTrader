@@ -932,7 +932,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			Order order = new Order(
 					null,
 					!item[IDX_PRICE].equals("") ? IOrderType.Limit : IOrderType.Market, item[IDX_SIDE].equalsIgnoreCase("V") ? IOrderSide.Sell : IOrderSide.Buy, getSecurityFromSymbol(item[IDX_SYMBOL]), quantity, !item[IDX_PRICE].equals("") ? numberFormatter.parse(item[IDX_PRICE]).doubleValue() : null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			tracker = new OrderMonitor(WebConnector.getInstance(), BrokerConnector.getInstance(), order);
+			tracker = new OrderMonitor(BrokerConnector.getInstance(), order);
 			tracker.setId(item[IDX_ID]);
 		}
 
@@ -1104,22 +1104,47 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	}
 
     public void sendOrder(IOrder order) {
-        org.eclipsetrader.jessx.business.Operation op = null;
-        if (order.getType() == IOrderType.Limit) {
-            op = BusinessCore.getOperation("LimitOrder");
-            op.setSecurity(BusinessCore.getInstitution(getSymbolFromSecurity(order.getSecurity())));
-            op.setParam("price", String.valueOf(order.getPrice()));
-            op.setParam("quantity", String.valueOf(order.getQuantity()));
-            op.setParam("side", order.getSide() == IOrderSide.Buy ? "BUY" : "SELL");
+        try {
+            org.eclipsetrader.jessx.business.Operation op = null;
+
+            Element element = new Element("Operation");
+            element.setAttribute("emitter", ClientCore.getLogin());
+            element.setAttribute("institution", getSymbolFromSecurity(order.getSecurity()));
+
+            if (order.getType() == IOrderType.Limit) {
+                element.setAttribute("type", "LimitOrder");
+                element.setAttribute("price", String.valueOf(order.getPrice()));
+                element.setAttribute("quantity", String.valueOf(order.getQuantity()));
+                element.setAttribute("side", order.getSide() == IOrderSide.Buy ? "BUY" : "SELL");
+            }
+            else if (order.getType() == IOrderType.Market) {
+                element.setAttribute("type", "MarketOrder");
+                element.setAttribute("quantity", String.valueOf(order.getQuantity()));
+                element.setAttribute("side", order.getSide() == IOrderSide.Buy ? "BUY" : "SELL");
+            }
+
+            if (element.getAttribute("type") != null) {
+                op = org.eclipsetrader.jessx.business.Operation.initOperationFromXml(element);
+                ClientCore.executeOperation(op);
+            }
+        } catch (Exception e) {
+            logger.error("Error sending order", e);
         }
-        else if (order.getType() == IOrderType.Market) {
-            op = BusinessCore.getOperation("MarketOrder");
-            op.setSecurity(BusinessCore.getInstitution(getSymbolFromSecurity(order.getSecurity())));
-            op.setParam("quantity", String.valueOf(order.getQuantity()));
-            op.setParam("side", order.getSide() == IOrderSide.Buy ? "BUY" : "SELL");
-        }
-        if (op != null) {
+    }
+
+    public void cancelOrder(IOrderMonitor monitor) {
+        try {
+            Element element = new Element("Operation");
+            element.setAttribute("type", "DeleteOrder");
+            element.setAttribute("emitter", ClientCore.getLogin());
+            element.setAttribute("institution", getSymbolFromSecurity(monitor.getOrder().getSecurity()));
+            element.setAttribute("orderId", monitor.getId());
+
+            org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation.initOperationFromXml(element);
             ClientCore.executeOperation(op);
+        }
+        catch (Exception e) {
+            logger.error("Error sending order cancellation", e);
         }
     }
 

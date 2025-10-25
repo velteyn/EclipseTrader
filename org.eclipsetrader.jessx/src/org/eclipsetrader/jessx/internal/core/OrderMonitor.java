@@ -88,6 +88,7 @@ public class OrderMonitor implements IOrderMonitor, IAdaptable {
         if (getId() == null) {
             throw new BrokerException(Messages.OrderMonitor_InvalidOrder);
         }
+        brokerConnector.cancelOrder(this);
     }
 
     /* (non-Javadoc)
