@@ -7,8 +7,8 @@ package org.eclipsetrader.jessx.server;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 
-import org.eclipse.trader.jessx.business.BusinessCore;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
+import org.eclipsetrader.jessx.business.BusinessCore;
 import org.eclipsetrader.jessx.net.event.ExperimentStateListener;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Content;

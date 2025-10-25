@@ -9,7 +9,7 @@ import java.util.Vector;
 import java.io.DataOutputStream;
 import java.io.Writer;
 
-import org.eclipse.trader.jessx.business.BusinessCore;
+import org.eclipsetrader.jessx.business.BusinessCore;
 import org.eclipsetrader.jessx.net.Message;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Document;

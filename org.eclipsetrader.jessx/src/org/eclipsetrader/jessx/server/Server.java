@@ -13,12 +13,12 @@ import java.util.Properties;
 import javax.swing.UIManager;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.trader.jessx.business.BusinessCore;
-import org.eclipse.trader.jessx.trobot.Discreet;
-import org.eclipse.trader.jessx.trobot.DiscreetIT;
-import org.eclipse.trader.jessx.trobot.NotDiscreet;
-import org.eclipse.trader.jessx.trobot.Robot;
+import org.eclipsetrader.jessx.business.BusinessCore;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
+import org.eclipsetrader.jessx.trobot.Discreet;
+import org.eclipsetrader.jessx.trobot.DiscreetIT;
+import org.eclipsetrader.jessx.trobot.NotDiscreet;
+import org.eclipsetrader.jessx.trobot.Robot;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Document;
 
@@ -134,12 +134,12 @@ public class Server
     
     private void loadJessXModules() {
         Utils.logger.debug("Loading all available modules.");
-        Utils.loadModules("org.eclipse.trader.jessx.business.operations.LimitOrder");
-        Utils.loadModules("org.eclipse.trader.jessx.business.operations.DeleteOrder");
-        Utils.loadModules("org.eclipse.trader.jessx.business.operations.MarketOrder");
-        Utils.loadModules("org.eclipse.trader.jessx.business.operations.BestLimitOrder");
-        Utils.loadModules("org.eclipse.trader.jessx.business.institutions.OrderMarket");
-        Utils.loadModules("org.eclipse.trader.jessx.business.assets.Stock");
+        Utils.loadModules("org.eclipsetrader.jessx.business.operations.LimitOrder");
+        Utils.loadModules("org.eclipsetrader.jessx.business.operations.DeleteOrder");
+        Utils.loadModules("org.eclipsetrader.jessx.business.operations.MarketOrder");
+        Utils.loadModules("org.eclipsetrader.jessx.business.operations.BestLimitOrder");
+        Utils.loadModules("org.eclipsetrader.jessx.business.institutions.OrderMarket");
+        Utils.loadModules("org.eclipsetrader.jessx.business.assets.Stock");
         Utils.logger.debug("All available modules loaded.");
     }
     

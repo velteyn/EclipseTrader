@@ -52,9 +52,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.trader.jessx.business.BusinessCore;
-import org.eclipse.trader.jessx.business.PlayerType;
-import org.eclipse.trader.jessx.business.Scenario;
 import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.feed.FeedProperties;
 import org.eclipsetrader.core.feed.IBookEntry;
@@ -89,6 +86,9 @@ import org.eclipsetrader.core.trading.IOrderValidity;
 import org.eclipsetrader.core.trading.Order;
 import org.eclipsetrader.core.trading.OrderChangeEvent;
 import org.eclipsetrader.core.trading.OrderDelta;
+import org.eclipsetrader.jessx.business.BusinessCore;
+import org.eclipsetrader.jessx.business.PlayerType;
+import org.eclipsetrader.jessx.business.Scenario;
 import org.eclipsetrader.jessx.client.ClientCore;
 import org.eclipsetrader.jessx.client.event.ConnectionListener;
 import org.eclipsetrader.jessx.client.event.NetworkListener;
@@ -373,7 +373,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		    Element orderBook = doc.getRootElement();
 		    String institutionName = orderBook.getAttributeValue("institution");
 		    if (institutionName != null) {
-		        org.eclipse.trader.jessx.business.Institution institution = BusinessCore.getInstitution(institutionName);
+		        org.eclipsetrader.jessx.business.Institution institution = BusinessCore.getInstitution(institutionName);
 		        if (institution != null) {
 		            String securityName = institution.getAssetName();
 		            ISecurity security = getSecurityFromSymbol(securityName);

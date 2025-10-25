@@ -11,12 +11,12 @@ import java.net.Socket;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.eclipse.trader.jessx.business.BusinessCore;
-import org.eclipse.trader.jessx.business.Operation;
-import org.eclipse.trader.jessx.business.OperationNotCreatedException;
-import org.eclipse.trader.jessx.business.Portfolio;
-import org.eclipse.trader.jessx.business.event.PortfolioEvent;
-import org.eclipse.trader.jessx.business.event.PortfolioListener;
+import org.eclipsetrader.jessx.business.BusinessCore;
+import org.eclipsetrader.jessx.business.Operation;
+import org.eclipsetrader.jessx.business.OperationNotCreatedException;
+import org.eclipsetrader.jessx.business.Portfolio;
+import org.eclipsetrader.jessx.business.event.PortfolioEvent;
+import org.eclipsetrader.jessx.business.event.PortfolioListener;
 import org.eclipsetrader.jessx.net.ExpUpdate;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.net.NetworkWritable;

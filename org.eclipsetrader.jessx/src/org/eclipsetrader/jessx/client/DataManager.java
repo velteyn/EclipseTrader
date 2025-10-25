@@ -5,8 +5,8 @@
 package org.eclipsetrader.jessx.client;
 
 
-import org.eclipse.trader.jessx.business.Institution;
-import org.eclipse.trader.jessx.business.Operator;
+import org.eclipsetrader.jessx.business.Institution;
+import org.eclipsetrader.jessx.business.Operator;
 import org.eclipsetrader.jessx.client.event.NetworkListener;
 import org.eclipsetrader.jessx.net.OperatorPlayed;
 import org.eclipsetrader.jessx.utils.Utils;

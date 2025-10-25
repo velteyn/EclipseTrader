@@ -16,7 +16,7 @@ package org.eclipsetrader.jessx.server;
 import javax.swing.JSpinner;
 import javax.swing.event.ChangeListener;
 
-import org.eclipse.trader.jessx.business.GeneralParameters;
+import org.eclipsetrader.jessx.business.GeneralParameters;
 import org.jdom.Element;
 
 public class GeneralParametersLocal implements GeneralParameters {

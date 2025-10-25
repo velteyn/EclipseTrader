@@ -7,8 +7,8 @@ package org.eclipsetrader.jessx.utils.gui;
   
 import java.util.Vector;
 
-import org.eclipse.trader.jessx.business.BusinessCore;
 import org.eclipsetrader.jessx.utils.Utils;
+import org.eclipsetrader.jessx.business.BusinessCore;
 import org.eclipsetrader.jessx.net.Information;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 

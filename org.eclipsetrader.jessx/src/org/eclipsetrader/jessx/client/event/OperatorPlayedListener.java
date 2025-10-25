@@ -4,7 +4,7 @@
 
 package org.eclipsetrader.jessx.client.event;
 
-import org.eclipse.trader.jessx.business.Operator;
+import org.eclipsetrader.jessx.business.Operator;
 
 public interface OperatorPlayedListener
 {

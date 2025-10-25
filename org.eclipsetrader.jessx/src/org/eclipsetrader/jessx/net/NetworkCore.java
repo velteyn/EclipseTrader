@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.eclipse.trader.jessx.business.BusinessCore;
-import org.eclipse.trader.jessx.business.event.PlayerListener;
+import org.eclipsetrader.jessx.business.BusinessCore;
+import org.eclipsetrader.jessx.business.event.PlayerListener;
 import org.eclipsetrader.jessx.client.PlayerEvent;
 import org.eclipsetrader.jessx.server.LogManager;
 import org.eclipsetrader.jessx.server.net.ClientConnectionPoint;

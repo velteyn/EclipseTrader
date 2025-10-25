@@ -5,8 +5,8 @@
 package org.eclipsetrader.jessx.net;
 
 
-import org.eclipse.trader.jessx.business.BusinessCore;
-import org.eclipse.trader.jessx.business.DividendLimitation;
+import org.eclipsetrader.jessx.business.BusinessCore;
+import org.eclipsetrader.jessx.business.DividendLimitation;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.jdom.Content;
 

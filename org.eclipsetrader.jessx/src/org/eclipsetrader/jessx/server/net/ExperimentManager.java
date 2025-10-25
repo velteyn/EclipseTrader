@@ -9,11 +9,11 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import org.eclipse.trader.jessx.business.BusinessCore;
-import org.eclipse.trader.jessx.business.Institution;
-import org.eclipse.trader.jessx.business.OrderBook;
-import org.eclipse.trader.jessx.business.PlayerType;
-import org.eclipse.trader.jessx.business.Portfolio;
+import org.eclipsetrader.jessx.business.BusinessCore;
+import org.eclipsetrader.jessx.business.Institution;
+import org.eclipsetrader.jessx.business.OrderBook;
+import org.eclipsetrader.jessx.business.PlayerType;
+import org.eclipsetrader.jessx.business.Portfolio;
 import org.eclipsetrader.jessx.net.DividendInfo;
 import org.eclipsetrader.jessx.net.ExpUpdate;
 import org.eclipsetrader.jessx.net.Message;
