@@ -59,6 +59,8 @@ import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.feed.FeedProperties;
 import org.eclipsetrader.core.feed.IBookEntry;
 import org.eclipsetrader.core.feed.IHistory;
+import org.eclipsetrader.core.feed.IOHLC;
+import org.eclipsetrader.core.feed.OHLC;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedProperties;
 import org.eclipsetrader.core.feed.IFeedSubscription2;
@@ -432,8 +434,21 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                         if (serviceReference != null) {
                             IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
                             IHistory history = repositoryService.getHistoryFor(security);
-                            if (history != null) {
-                                history.append(tradeData);
+                            if (history instanceof org.eclipsetrader.core.feed.History) {
+                                IOHLC[] bars = history.getOHLC();
+                                IOHLC last = bars.length > 0 ? bars[bars.length - 1] : null;
+
+                                if (last != null && last.getDate().equals(tradeData.getDate())) {
+                                    last = new OHLC(last.getDate(), last.getOpen(), Math.max(last.getHigh(), tradeData.getPrice()), Math.min(last.getLow(), tradeData.getPrice()), tradeData.getPrice(), last.getVolume() + tradeData.getSize());
+                                    bars[bars.length - 1] = last;
+                                }
+                                else {
+                                    IOHLC[] newBars = new IOHLC[bars.length + 1];
+                                    System.arraycopy(bars, 0, newBars, 0, bars.length);
+                                    newBars[bars.length] = new OHLC(tradeData.getDate(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getSize());
+                                    bars = newBars;
+                                }
+                                ((org.eclipsetrader.core.feed.History) history).setOHLC(bars);
                             }
                             context.ungetService(serviceReference);
                         }
