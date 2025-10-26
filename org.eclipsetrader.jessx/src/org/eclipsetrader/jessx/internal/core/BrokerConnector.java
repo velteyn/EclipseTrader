@@ -715,8 +715,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	    }
 
 		List<IOrderRoute> routes = new ArrayList<IOrderRoute>();
-		for(org.eclipsetrader.jessx.business.Institution institution : BusinessCore.getInstitutions().values()) {
-		    routes.add(new OrderRoute(institution.getName(), institution.getName()));
+		for(Object institution : BusinessCore.getInstitutions().values()) {
+		    routes.add(new OrderRoute(((org.eclipsetrader.jessx.business.Institution)institution).getName(), ((org.eclipsetrader.jessx.business.Institution)institution).getName()));
 		}
 
 		return routes.toArray(new IOrderRoute[routes.size()]);
