@@ -195,6 +195,10 @@ public class OrderDialog extends TitleAreaDialog {
             }
         }
 
+        if (routeCombo.getSelection().isEmpty()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -387,7 +391,8 @@ public class OrderDialog extends TitleAreaDialog {
         if (security != null) {
             IBroker defaultBroker = broker != null ? broker : tradingService.getBrokerForSecurity(security);
             if (defaultBroker != null) {
-                symbol.setText(defaultBroker.getSymbolFromSecurity(security));
+                String symbolText = defaultBroker.getSymbolFromSecurity(security);
+                symbol.setText(symbolText != null ? symbolText : "");
             }
         }
     }
@@ -396,7 +401,8 @@ public class OrderDialog extends TitleAreaDialog {
         IBroker connector = (IBroker) selection.getFirstElement();
 
         if (security != null) {
-            symbol.setText(connector.getSymbolFromSecurity(security));
+            String symbolText = connector.getSymbolFromSecurity(security);
+            symbol.setText(symbolText != null ? symbolText : "");
             symbolDescription.setText(security.getName().replaceAll("&", "&&")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
@@ -501,6 +507,14 @@ public class OrderDialog extends TitleAreaDialog {
                 IOrderValidity validity = selection.isEmpty() ? null : (IOrderValidity) selection.getFirstElement();
                 expireDate.setEnabled(validity == IOrderValidity.GoodTillDate);
 
+                getButton(OK).setEnabled(isValid());
+            }
+        });
+
+        routeCombo.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            @Override
+            public void selectionChanged(SelectionChangedEvent event) {
                 getButton(OK).setEnabled(isValid());
             }
         });

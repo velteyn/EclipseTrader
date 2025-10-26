@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <JessXSetup>
   <GeneralParameters>
     <WorkingDirectory>R:\tmp</WorkingDirectory>
@@ -71,6 +71,23 @@
     </Operators>
   </Institution>
   <Institution type="OrderMarket" name="Mank America" quotedAsset="MSFT">
+    <KeepOrderBook allow="true" />
+    <OperationsCost>
+      <Operation name="Market Order" percentageCost="2.0" minimalCost="2.0" />
+      <Operation name="Delete Order" percentageCost="2.0" minimalCost="2.0" />
+      <Operation name="Limit Order" percentageCost="2.0" minimalCost="2.0" />
+      <Operation name="Best Limit Order" percentageCost="3.0" minimalCost="2.0" />
+    </OperationsCost>
+    <Operators>
+      <Operator name="culon 1" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+    </Operators>
+  </Institution>
+  <Institution type="OrderMarket" name="GPLRF Exchange" quotedAsset="GPLRF">
     <KeepOrderBook allow="true" />
     <OperationsCost>
       <Operation name="Market Order" percentageCost="2.0" minimalCost="2.0" />
@@ -251,4 +268,3 @@
     </ItDiscreet>
   </Robots>
 </JessXSetup>
-

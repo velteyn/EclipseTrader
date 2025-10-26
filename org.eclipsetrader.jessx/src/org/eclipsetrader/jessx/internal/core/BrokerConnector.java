@@ -295,7 +295,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	    }
 	    IFeedIdentifier identifier = security.getIdentifier();
 	    if (identifier == null) {
-	        return security.getName(); // Fallback to the security name if no feed is assigned.
+	        return null;
 	    }
 
 	    IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
@@ -306,8 +306,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	        }
 	    }
 
-	    // Final fallback to the security's display name.
-	    return security.getName();
+	    return null;
 	}
 
 	/*
@@ -1100,12 +1099,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
         try {
             Element root = new Element("Operation");
             root.setAttribute("emitter", ClientCore.getLogin());
-
-            if (order.getRoute() != null) {
-                root.setAttribute("institution", order.getRoute().getId());
-            } else {
-                root.setAttribute("institution", getSymbolFromSecurity(order.getSecurity()));
-            }
+            root.setAttribute("institution", order.getRoute().getId());
 
             Element orderElement = new Element("Order");
             orderElement.setAttribute("id", String.valueOf(new Random().nextInt()));
@@ -1141,11 +1135,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
             Element root = new Element("Operation");
             root.setAttribute("type", "DeleteOrder");
             root.setAttribute("emitter", ClientCore.getLogin());
-            if (monitor.getOrder().getRoute() != null) {
-                root.setAttribute("institution", monitor.getOrder().getRoute().getId());
-            } else {
-                root.setAttribute("institution", getSymbolFromSecurity(monitor.getOrder().getSecurity()));
-            }
+            root.setAttribute("institution", monitor.getOrder().getRoute().getId());
 
             Element deleteOrder = new Element("DeleteOrder");
             deleteOrder.setAttribute("orderId", monitor.getId());
