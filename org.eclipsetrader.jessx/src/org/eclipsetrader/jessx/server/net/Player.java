@@ -278,7 +278,13 @@ public class Player extends Thread implements PortfolioListener {
     } else if (xmlDoc.getRootElement().getName().equals("Operation")) {
       try {
         Operation op = Operation.initOperationFromXml(xmlDoc.getRootElement());
-        BusinessCore.getInstitution(op.getInstitutionName()).treatOperation(op);
+        org.eclipsetrader.jessx.business.Institution institution = BusinessCore.getInstitution(op.getInstitutionName());
+        if (institution != null) {
+            institution.treatOperation(op);
+        }
+        else {
+            Utils.logger.error("Received operation for unknown institution: " + op.getInstitutionName());
+        }
       } catch (OperationNotCreatedException ex) {
         Utils.logger.error(
             "Could not create operation received from client. [IGNORED]");
