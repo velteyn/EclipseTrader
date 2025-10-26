@@ -1105,26 +1105,32 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
     public void sendOrder(IOrder order) {
         try {
-            org.eclipsetrader.jessx.business.Operation op = null;
+            Element root = new Element("Operation");
+            root.setAttribute("emitter", ClientCore.getLogin());
+            root.setAttribute("institution", getSymbolFromSecurity(order.getSecurity()));
 
-            Element element = new Element("Operation");
-            element.setAttribute("emitter", ClientCore.getLogin());
-            element.setAttribute("institution", getSymbolFromSecurity(order.getSecurity()));
+            Element orderElement = new Element("Order");
+            orderElement.setAttribute("id", String.valueOf(new Random().nextInt()));
+            orderElement.setAttribute("side", order.getSide() == IOrderSide.Buy ? "1" : "0");
+            orderElement.setAttribute("timestamp", String.valueOf(System.currentTimeMillis()));
+            root.addContent(orderElement);
 
             if (order.getType() == IOrderType.Limit) {
-                element.setAttribute("type", "LimitOrder");
-                element.setAttribute("price", String.valueOf(order.getPrice()));
-                element.setAttribute("quantity", String.valueOf(order.getQuantity()));
-                element.setAttribute("side", order.getSide() == IOrderSide.Buy ? "BUY" : "SELL");
+                root.setAttribute("type", "LimitOrder");
+                Element limitOrder = new Element("LimitOrder");
+                limitOrder.setAttribute("price", String.valueOf(order.getPrice()));
+                limitOrder.setAttribute("quantity", String.valueOf(order.getQuantity()));
+                root.addContent(limitOrder);
             }
             else if (order.getType() == IOrderType.Market) {
-                element.setAttribute("type", "MarketOrder");
-                element.setAttribute("quantity", String.valueOf(order.getQuantity()));
-                element.setAttribute("side", order.getSide() == IOrderSide.Buy ? "BUY" : "SELL");
+                root.setAttribute("type", "MarketOrder");
+                Element marketOrder = new Element("MarketOrder");
+                marketOrder.setAttribute("quantity", String.valueOf(order.getQuantity()));
+                root.addContent(marketOrder);
             }
 
-            if (element.getAttribute("type") != null) {
-                op = org.eclipsetrader.jessx.business.Operation.initOperationFromXml(element);
+            if (root.getAttribute("type") != null) {
+                org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation.initOperationFromXml(root);
                 ClientCore.executeOperation(op);
             }
         } catch (Exception e) {
@@ -1134,13 +1140,16 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
     public void cancelOrder(IOrderMonitor monitor) {
         try {
-            Element element = new Element("Operation");
-            element.setAttribute("type", "DeleteOrder");
-            element.setAttribute("emitter", ClientCore.getLogin());
-            element.setAttribute("institution", getSymbolFromSecurity(monitor.getOrder().getSecurity()));
-            element.setAttribute("orderId", monitor.getId());
+            Element root = new Element("Operation");
+            root.setAttribute("type", "DeleteOrder");
+            root.setAttribute("emitter", ClientCore.getLogin());
+            root.setAttribute("institution", getSymbolFromSecurity(monitor.getOrder().getSecurity()));
 
-            org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation.initOperationFromXml(element);
+            Element deleteOrder = new Element("DeleteOrder");
+            deleteOrder.setAttribute("orderId", monitor.getId());
+            root.addContent(deleteOrder);
+
+            org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation.initOperationFromXml(root);
             ClientCore.executeOperation(op);
         }
         catch (Exception e) {
