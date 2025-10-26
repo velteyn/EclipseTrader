@@ -231,7 +231,7 @@ public class OrderDialog extends TitleAreaDialog {
 
         Label label = new Label(composite, SWT.NONE);
         label.setText(Messages.OrderDialog_SymbolLabel);
-        symbol = new Text(composite, SWT.BORDER);
+        symbol = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
         symbol.setLayoutData(new GridData(convertWidthInCharsToPixels(18), SWT.DEFAULT));
         symbolDescription = new Label(composite, SWT.NONE);
         symbolDescription.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -356,10 +356,6 @@ public class OrderDialog extends TitleAreaDialog {
     }
 
     void setInitialParameters() {
-        if (security != null) {
-            symbolDescription.setText(security.getName());
-        }
-
         if (position != null) {
             quantity.setText(numberFormat.format(position));
         }
@@ -455,19 +451,6 @@ public class OrderDialog extends TitleAreaDialog {
     }
 
     void addListeners() {
-        symbol.addModifyListener(new ModifyListener() {
-
-            @Override
-            public void modifyText(ModifyEvent e) {
-                if (!brokerCombo.getSelection().isEmpty()) {
-                    IBroker connector = (IBroker) ((IStructuredSelection) brokerCombo.getSelection()).getFirstElement();
-                    security = connector.getSecurityFromSymbol(symbol.getText());
-                    symbolDescription.setText(security != null ? security.getName() : "");
-                }
-                getButton(OK).setEnabled(isValid());
-            }
-        });
-
         quantity.addModifyListener(new ModifyListener() {
 
             @Override
