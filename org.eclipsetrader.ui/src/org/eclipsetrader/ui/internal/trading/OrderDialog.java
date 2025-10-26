@@ -388,7 +388,12 @@ public class OrderDialog extends TitleAreaDialog {
             sideCombo.setSelection(new StructuredSelection(orderSide));
         }
 
-        handleBrokerSelection((IStructuredSelection) brokerCombo.getSelection());
+        if (security != null) {
+            IBroker defaultBroker = broker != null ? broker : tradingService.getBrokerForSecurity(security);
+            if (defaultBroker != null) {
+                symbol.setText(defaultBroker.getSymbolFromSecurity(security));
+            }
+        }
     }
 
     protected void handleBrokerSelection(IStructuredSelection selection) {
