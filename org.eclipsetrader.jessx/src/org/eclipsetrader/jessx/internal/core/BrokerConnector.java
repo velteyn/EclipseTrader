@@ -270,23 +270,16 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 */
 	@Override
 	public boolean canTrade(ISecurity security) {
-
-		// TODO !! Cazzo � sta rob a ?
-		IFeedIdentifier identifier = security.getIdentifier();
-		if (identifier == null) {
-			return false;
-		}
-
-		IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
-		if (properties != null) {
-			for (int p = 0; p < WebConnector.PROPERTIES.length; p++) {
-				if (properties.getProperty(WebConnector.PROPERTIES[p]) != null) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+        if (security == null) {
+            return false;
+        }
+        IFeedIdentifier identifier = security.getIdentifier();
+        if (identifier == null) {
+            return false;
+        }
+        // A security is tradable by JESSX if it was assigned a JESSX feed symbol.
+        IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
+        return properties != null && properties.getProperty("org.eclipsetrader.jessx.symbol") != null;
 	}
 
 	/*
@@ -297,25 +290,24 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 */
 	@Override
 	public String getSymbolFromSecurity(ISecurity security) {
-		IFeedIdentifier identifier = security.getIdentifier();
-		if (identifier == null) {
-			return null;
-		}
+	    if (security == null) {
+	        return null;
+	    }
+	    IFeedIdentifier identifier = security.getIdentifier();
+	    if (identifier == null) {
+	        return security.getName(); // Fallback to the security name if no feed is assigned.
+	    }
 
-		IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
-		if (properties != null) {
-            String symbol = properties.getProperty("org.eclipsetrader.jessx.symbol");
-            if (symbol != null) {
-                return symbol;
-            }
-			for (int p = 0; p < WebConnector.PROPERTIES.length; p++) {
-				if (properties.getProperty(WebConnector.PROPERTIES[p]) != null) {
-					return properties.getProperty(WebConnector.PROPERTIES[p]);
-				}
-			}
-		}
+	    IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
+	    if (properties != null) {
+	        String symbol = properties.getProperty("org.eclipsetrader.jessx.symbol");
+	        if (symbol != null && !symbol.isEmpty()) {
+	            return symbol;
+	        }
+	    }
 
-		return null;
+	    // Final fallback to the security's display name.
+	    return security.getName();
 	}
 
 	/*

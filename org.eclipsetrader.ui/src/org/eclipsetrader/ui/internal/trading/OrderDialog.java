@@ -357,10 +357,6 @@ public class OrderDialog extends TitleAreaDialog {
 
     void setInitialParameters() {
         if (security != null) {
-            IBroker defaultBroker = broker != null ? broker : tradingService.getBrokerForSecurity(security);
-            if (defaultBroker != null) {
-                symbol.setText(defaultBroker.getSymbolFromSecurity(security));
-            }
             symbolDescription.setText(security.getName());
         }
 
