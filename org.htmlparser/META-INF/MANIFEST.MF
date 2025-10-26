@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: HTML Parser Library
 Bundle-SymbolicName: org.htmlparser
-Bundle-Version: 1.6.0.R20060319
+Bundle-Version: 1.6.0.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Eclipsetrader.org
 Bundle-ActivationPolicy: lazy

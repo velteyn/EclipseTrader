@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: PostgreSQL Database Connectivity
+Bundle-SymbolicName: org.eclipsetrader.repository.hibernate.postgresql;s
+ ingleton:=true
+Bundle-Version: 1.0.0.202510251517
+Bundle-Vendor: EclipseTrader.org
+Fragment-Host: org.eclipsetrader.repository.hibernate;bundle-version="[1
+ .0.0,2.0.0)"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: fragment.jar,postgresql-8.3-604.jdbc3.jar
+Export-Package: org.postgresql,org.postgresql.core,org.postgresql.core.t
+ ypes,org.postgresql.core.v2,org.postgresql.core.v3,org.postgresql.ds,or
+ g.postgresql.ds.common,org.postgresql.ds.jdbc23,org.postgresql.fastpath
+ ,org.postgresql.geometric,org.postgresql.jdbc2,org.postgresql.jdbc2.opt
+ ional,org.postgresql.jdbc3,org.postgresql.largeobject,org.postgresql.ss
+ l,org.postgresql.translation,org.postgresql.util,org.postgresql.xa
+Eclipse-BuddyPolicy: global

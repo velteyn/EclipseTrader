@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Hibernate Relational Persistence
 Bundle-SymbolicName: org.hibernate
-Bundle-Version: 3.2.6.20080315
+Bundle-Version: 3.2.6.qualifier
 Export-Package: javax.persistence;version="1.0.0",
  javax.persistence.spi;version="1.0.0",
  org.hibernate;version="3.2.6",

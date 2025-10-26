@@ -29,7 +29,7 @@ import org.eclipsetrader.news.internal.repository.HeadLine;
 public class NewsProvider implements INewsProvider {
 
     private boolean isRunning = false;
-    private List<IHeadLine> headlines = new ArrayList<>();
+    private List<IHeadLine> headlines = new ArrayList<IHeadLine>();
 
     public NewsProvider() {
         // Inizializza alcuni dati mock all'avvio

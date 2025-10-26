@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='osgi.bundle' id='org.eclipse.nebula.widgets.pshelf' version='1.0.0.202510251517'>
+    <properties size='9'>
+      <property name='artifact.size' value='21879'/>
+      <property name='download.size' value='21879'/>
+      <property name='download.checksum.sha-512' value='95c2629e6bbd54959d4b0c6b7e8808b1447812f94603c7ddeb31116b8f1c21779c6b3509819f9fcb1787032086af1fc7c2714c2c4c77857e02b19e9d9b6ea7de'/>
+      <property name='download.checksum.sha-1' value='ce188177a564a8008120f3e205e23815a7ec8f48'/>
+      <property name='download.checksum.sha-256' value='f8706a3109ec8058579f6408f5f774a3ce8d2132ee7d7f3c605b25b8957043cc'/>
+      <property name='maven-groupId' value='org.eclipsetrader'/>
+      <property name='maven-artifactId' value='org.eclipse.nebula.widgets.pshelf'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+  </artifact>
+</artifacts>

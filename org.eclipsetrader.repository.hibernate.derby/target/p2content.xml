@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510251517' generation='2'>
+    <update id='org.eclipsetrader.repository.hibernate.derby' range='[0.0.0,1.0.0.202510251517)' severity='0'/>
+    <properties size='6'>
+      <property name='org.eclipse.equinox.p2.name' value='Apache Derby Database Connectivity'/>
+      <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
+      <property name='maven-groupId' value='org.eclipsetrader'/>
+      <property name='maven-artifactId' value='org.eclipsetrader.repository.hibernate.derby'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+    <provides size='99'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510251517'/>
+      <provided namespace='osgi.bundle' name='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510251517'/>
+      <provided namespace='java.package' name='org.apache.derby.authentication' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.catalog' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.catalog.types' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.database' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.diag' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.db' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.error' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.jdbc' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.security' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.cache' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.classfile' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.compiler' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.context' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.crypto' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.daemon' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.diag' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.i18n' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.info' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.io' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.jmx' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.loader' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.locks' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.memory' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.monitor' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.property' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.stream' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.timer' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.services.uuid' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.sql' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.sql.compile' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.sql.conn' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.sql.depend' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.sql.dictionary' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.sql.execute' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.store.access' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.store.access.conglomerate' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.store.access.xa' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.store.raw' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.store.raw.data' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.store.raw.log' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.store.raw.xact' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.store.replication.master' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.store.replication.slave' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.tools.i18n' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.types' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.iapi.util' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.db' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.io' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.jdbc' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.jdbc.authentication' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.load' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.bytecode' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.cache' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.daemon' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.jce' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.jmx' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.jmxnone' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.locks' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.monitor' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.reflect' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.stream' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.timer' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.services.uuid' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.sql' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.sql.catalog' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.sql.compile' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.sql.conn' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.sql.depend' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.sql.execute' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.sql.execute.rts' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.access' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.access.btree' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.access.btree.index' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.access.conglomerate' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.access.heap' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.access.sort' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.raw' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.raw.data' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.raw.log' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.raw.xact' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.replication' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.replication.buffer' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.replication.master' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.replication.net' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.store.replication.slave' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.impl.tools.sysinfo' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.io' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.jdbc' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.mbeans' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.osgi' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.security' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.shared.common.error' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.tools' version='0.0.0'/>
+      <provided namespace='java.package' name='org.apache.derby.vti' version='0.0.0'/>
+      <provided namespace='osgi.identity' name='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510251517'>
+        <properties size='1'>
+          <property name='type' value='osgi.fragment'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      <provided namespace='osgi.fragment' name='org.eclipsetrader.repository.hibernate' version='1.0.0.202510251517'/>
+    </provides>
+    <requires size='3'>
+      <required namespace='osgi.bundle' name='org.eclipsetrader.repository.hibernate' range='[1.0.0,1.1.0)'/>
+      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=1.6))'>
+        <description>
+          org.eclipsetrader.repository.hibernate.derby
+        </description>
+      </requiredProperties>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.hibernate.derby.source' range='[1.0.0.202510251517,1.0.0.202510251517]' optional='true'>
+        <filter>
+          (org.eclipse.update.install.sources=true)
+        </filter>
+      </required>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510251517'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: org.eclipsetrader.repository.hibernate.derby;singleton:=true&#xA;Bundle-Version: 1.0.0.202510251517&#xA;Fragment-Host: org.eclipsetrader.repository.hibernate;bundle-version=&quot;[1.0.0,1.1.0)&quot;&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

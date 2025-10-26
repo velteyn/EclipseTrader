@@ -58,7 +58,7 @@ import org.eclipsetrader.jessx.utils.Utils;
 public class ClientConnectionPoint extends Thread {
 
     public static final CountDownLatch serverReadyLatch = new CountDownLatch(1);
-    private ServerSocket serverSocket;
+    public ServerSocket serverSocket;
     private String AddressIP;
 
   public ClientConnectionPoint() {

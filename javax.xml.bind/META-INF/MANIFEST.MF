@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JAX-XML-BIND
 Bundle-SymbolicName: javax.xml.bind
-Bundle-Version: 2.1.6.20071219
+Bundle-Version: 2.1.6.qualifier
 Bundle-Vendor: EclipseTrader.org
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/activation.jar,
@@ -50,3 +50,5 @@ Export-Package: com.sun.activation.registries,
  javax.xml.stream.events;version="2.1.6",
  javax.xml.stream.util;version="2.1.6"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Eclipse-RegisterBuddy: org.eclipsetrader.ui
+Eclipse-RegisterBuddy: org.eclipsetrader.ui
