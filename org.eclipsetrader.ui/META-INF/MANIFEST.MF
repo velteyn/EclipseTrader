@@ -17,7 +17,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.nebula.widgets.cdatetime,
  org.eclipse.nebula.widgets.pshelf,
  org.eclipse.nebula.jface.cdatetime,
- org.eclipsetrader.core
+ org.eclipsetrader.core,
+ javax.xml.bind
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipsetrader.ui,
  org.eclipsetrader.ui.charts,

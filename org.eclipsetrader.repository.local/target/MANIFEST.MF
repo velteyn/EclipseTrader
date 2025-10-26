@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Local Repository Plug-in
 Bundle-SymbolicName: org.eclipsetrader.repository.local;singleton:=true
-Bundle-Version: 1.0.0.202510251517
+Bundle-Version: 1.0.0.202510252103
 Bundle-Activator: org.eclipsetrader.repository.local.internal.Activator
 Bundle-Vendor: EclipseTrader.org
 Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipsetrade
@@ -17,4 +17,4 @@ Export-Package: org.eclipsetrader.repository.local,org.eclipsetrader.rep
  ository.local.internal;x-internal:=true,org.eclipsetrader.repository.lo
  cal.internal.stores;x-internal:=true,org.eclipsetrader.repository.local
  .internal.types;x-internal:=true
-Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='org.eclipsetrader.jessx' version='1.0.0.202510251517' generation='2'>
-    <update id='org.eclipsetrader.jessx' range='[0.0.0,1.0.0.202510251517)' severity='0'/>
+  <unit id='org.eclipsetrader.jessx' version='1.0.0.202510251912' generation='2'>
+    <update id='org.eclipsetrader.jessx' range='[0.0.0,1.0.0.202510251912)' severity='0'/>
     <properties size='6'>
       <property name='org.eclipse.equinox.p2.name' value='Jessx'/>
       <property name='org.eclipse.equinox.p2.provider' value='https://github.com/velteyn/jessx'/>
@@ -11,12 +11,12 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='7'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.jessx' version='1.0.0.202510251517'/>
-      <provided namespace='osgi.bundle' name='org.eclipsetrader.jessx' version='1.0.0.202510251517'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.jessx' version='1.0.0.202510251912'/>
+      <provided namespace='osgi.bundle' name='org.eclipsetrader.jessx' version='1.0.0.202510251912'/>
       <provided namespace='java.package' name='org.eclipsetrader.jessx.internal' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.jessx.internal.core.connector' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.jessx.internal.core.repository' version='0.0.0'/>
-      <provided namespace='osgi.identity' name='org.eclipsetrader.jessx' version='1.0.0.202510251517'>
+      <provided namespace='osgi.identity' name='org.eclipsetrader.jessx' version='1.0.0.202510251912'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -51,25 +51,25 @@
       <required namespace='java.package' name='org.jdom' range='1.0.0'/>
       <required namespace='java.package' name='org.jdom.input' range='1.0.0'/>
       <required namespace='java.package' name='org.jdom.output' range='1.0.0'/>
-      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=1.7))'>
+      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=1.6))'>
         <description>
           org.eclipsetrader.jessx
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.jessx.source' range='[1.0.0.202510251517,1.0.0.202510251517]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.jessx.source' range='[1.0.0.202510251912,1.0.0.202510251912]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='org.eclipsetrader.jessx' version='1.0.0.202510251517'/>
+      <artifact classifier='osgi.bundle' id='org.eclipsetrader.jessx' version='1.0.0.202510251912'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: org.eclipsetrader.jessx; singleton:=true&#xA;Bundle-Version: 1.0.0.202510251517&#xA;
+          Bundle-SymbolicName: org.eclipsetrader.jessx; singleton:=true&#xA;Bundle-Version: 1.0.0.202510251912&#xA;
         </instruction>
       </instructions>
     </touchpointData>

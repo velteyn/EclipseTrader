@@ -54,7 +54,7 @@ public class JessXTableModel extends DefaultTableModel
     
     @Override
     public boolean isCellEditable(final int row, final int col) {
-        return (boolean) this.columnEditionAllowed.elementAt(col);
+        return ((Boolean) this.columnEditionAllowed.elementAt(col)).booleanValue();
     }
     
     @Override

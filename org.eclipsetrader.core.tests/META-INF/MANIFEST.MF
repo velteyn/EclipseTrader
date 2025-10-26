@@ -5,5 +5,5 @@ Bundle-SymbolicName: org.eclipsetrader.core.tests
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
 Fragment-Host: org.eclipsetrader.core;bundle-version="1.0.0"
-Require-Bundle: org.eclipsetrader.tests
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipsetrader.tests,
+ org.junit

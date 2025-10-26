@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jessx
 Bundle-SymbolicName: org.eclipsetrader.jessx; singleton:=true
-Bundle-Version: 1.0.0.202510251517
+Bundle-Version: 1.0.0.202510251912
 Bundle-Activator: org.eclipsetrader.jessx.internal.JessxActivator
 Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.net;bundle-ver
  sion="1.2.200",org.eclipse.ui,org.eclipsetrader.core;bundle-version="1.
@@ -28,4 +28,4 @@ Export-Package: org.eclipsetrader.jessx.internal;x-internal:=true,org.ec
  clipse.core.runtime,org.eclipsetrader.core.feed",org.eclipsetrader.jess
  x.internal.core.repository;x-internal:=true
 Bundle-ClassPath: src/,.
-Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='osgi.bundle' id='com.sun.syndication' version='0.9.0.202510252103'>
+    <properties size='9'>
+      <property name='artifact.size' value='219041'/>
+      <property name='download.size' value='219041'/>
+      <property name='download.checksum.sha-512' value='aa8cf44a7595c27b87bca76cf89b7e9be2ce4135a5b3d428b79b94f489be9e9d4f33dcb2b97394c96ef2aa44c95499ec9d5b5976395c1f8dd49fd8d1c3c0499c'/>
+      <property name='download.checksum.sha-1' value='a27346b470a25ec7125d3e61f83cc365ca5351e1'/>
+      <property name='download.checksum.sha-256' value='511568a6573422591b6833845942eafc6d8e2a90005081ef9fa44dc0dfbe03e6'/>
+      <property name='maven-groupId' value='org.eclipsetrader'/>
+      <property name='maven-artifactId' value='com.sun.syndication'/>
+      <property name='maven-version' value='0.9.0-SNAPSHOT'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+  </artifact>
+</artifacts>

@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository version='1.1.0'?>
 <artifacts size='1'>
-  <artifact classifier='osgi.bundle' id='org.mozilla.rhino' version='1.7.3.202510251517'>
+  <artifact classifier='osgi.bundle' id='org.mozilla.rhino' version='1.7.3.202510252046'>
     <properties size='9'>
-      <property name='artifact.size' value='1133376'/>
-      <property name='download.size' value='1133376'/>
-      <property name='download.checksum.sha-512' value='4bda0b397fdbbd66eeec746c0837bb0d4443aa015e7b59fd80fef561bd2015460e0c0aa692038752548de518c301ed54c04d19df82e96ec1a29d6808ee760751'/>
-      <property name='download.checksum.sha-1' value='35b37e0428c4e22af555b1a93c6165bdef84e661'/>
-      <property name='download.checksum.sha-256' value='82af90cb059a3327f0fc4b6610eb0460dea724d7bddfb361885e3e481cd9cbd5'/>
+      <property name='artifact.size' value='1133377'/>
+      <property name='download.size' value='1133377'/>
+      <property name='download.checksum.sha-512' value='dd88d3b9fb9e3845ee099406ea066957e1bb731a47e965bd07f8f54452fc9f26c419c517a90d0331d24ff423ff52fa237f812663086ed82766e2a3e45e61579c'/>
+      <property name='download.checksum.sha-1' value='09f5ebc9f37387e4047439291f6ff01569a17031'/>
+      <property name='download.checksum.sha-256' value='466dded1c47caa01c2dd6b2d22327403f861215b129de519101a4c47c9665298'/>
       <property name='maven-groupId' value='org.eclipsetrader'/>
       <property name='maven-artifactId' value='org.mozilla.rhino'/>
       <property name='maven-version' value='1.7.3-SNAPSHOT'/>

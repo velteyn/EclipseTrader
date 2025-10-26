@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Hibernate Repository
 Bundle-SymbolicName: org.eclipsetrader.repository.hibernate;singleton:=t
  rue
-Bundle-Version: 1.0.0.202510251517
+Bundle-Version: 1.0.0.202510252103
 Bundle-Activator: org.eclipsetrader.repository.hibernate.internal.Activa
  tor
 Bundle-Vendor: EclipseTrader.org
@@ -82,4 +82,4 @@ Export-Package: org.eclipsetrader.repository.hibernate,org.eclipsetrader
  .repository.hibernate.internal,org.eclipsetrader.repository.hibernate.i
  nternal.stores,org.eclipsetrader.repository.hibernate.internal.types,or
  g.eclipsetrader.repository.hibernate.internal.ui;x-internal:=true
-Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"

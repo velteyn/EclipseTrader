@@ -1,0 +1,1 @@
+p2.eclipse.plugin:org.jdom:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.jdom/1.1.1.v201101151400/org.jdom-1.1.1.v201101151400.jar

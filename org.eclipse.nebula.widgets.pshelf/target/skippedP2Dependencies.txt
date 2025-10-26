@@ -1,1 +1,2 @@
-p2.eclipse.plugin:org.eclipse.swt:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.eclipse.swt/3.100.1.v4236b/org.eclipse.swt-3.100.1.v4236b.jar
+p2.eclipse.plugin:org.eclipse.swt.gtk.linux.x86_64:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.eclipse.swt.gtk.linux.x86_64/3.106.3.v20180329-0507/org.eclipse.swt.gtk.linux.x86_64-3.106.3.v20180329-0507.jar
+p2.eclipse.plugin:org.eclipse.swt:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.eclipse.swt/3.106.3.v20180329-0507/org.eclipse.swt-3.106.3.v20180329-0507.jar
