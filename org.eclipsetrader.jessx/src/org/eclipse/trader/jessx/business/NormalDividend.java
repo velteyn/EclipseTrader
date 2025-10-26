@@ -58,10 +58,10 @@ public class NormalDividend extends Dividend
     public void setParameter(final int i, final Object value) {
         Utils.logger.debug("Setting parameter " + i + ". Value class: " + value.getClass().toString() + ", Value=" + value.toString());
         if (i == 0) {
-            this.mean = (float)value;
+            this.mean = ((Float)value).floatValue();
         }
         else {
-            this.variance = (float)value;
+            this.variance = ((Float)value).floatValue();
         }
     }
     
