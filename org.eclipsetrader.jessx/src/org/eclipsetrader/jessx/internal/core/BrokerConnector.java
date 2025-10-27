@@ -73,6 +73,7 @@ import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
 import org.eclipsetrader.core.trading.BrokerException;
+import org.eclipsetrader.core.Cash;
 import org.eclipsetrader.core.trading.IAccount;
 import org.eclipsetrader.core.trading.IBroker;
 import org.eclipsetrader.core.trading.IOrder;
@@ -122,6 +123,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	private String server = "213.92.13.4"; //$NON-NLS-1$
 	private int port = 1080;
 
+	private Account account;
 	Set<OrderMonitor> orders = new HashSet<OrderMonitor>();
 	private ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
 
@@ -138,6 +140,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		amountFormatter.setMinimumFractionDigits(2);
 		amountFormatter.setMaximumFractionDigits(2);
 		amountFormatter.setGroupingUsed(true);
+
+		account = new Account(getId(), getName(), new Cash(100000.0, Currency.getInstance("USD")));
 	}
 
 	public static BrokerConnector getInstance() {
@@ -353,12 +357,29 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	public void objectReceived(Document doc) {
 		logger.info("Broker received " + doc.getRootElement().getName());
 		if (doc.getRootElement().getName().equals("Portfolio")) {
+			List<Position> list = new ArrayList<Position>();
 			Element portfolio = doc.getRootElement();
+
+			if (portfolio.getAttributeValue("cash") != null) {
+				double cash = Double.parseDouble(portfolio.getAttributeValue("cash"));
+				account.setBalance(new Cash(cash, Currency.getInstance("USD")));
+			}
+
 			List<Element> secList = portfolio.getChildren("Owning");
 			for (Element sec : secList) {
 				String secName = sec.getAttributeValue("asset");
-				registerSecurity(secName);
+				ISecurity security = getSecurityFromSymbol(secName);
+				if (security == null) {
+					registerSecurity(secName);
+					security = getSecurityFromSymbol(secName);
+				}
+				if (security != null) {
+					long quantity = Long.parseLong(sec.getAttributeValue("amount"));
+					double price = Double.parseDouble(sec.getAttributeValue("price"));
+					list.add(new Position(security, quantity, price));
+				}
 			}
+			account.setPositions(list.toArray(new Position[list.size()]));
 		}
 		if (doc.getRootElement().getName().equals("OrderBook")) {
 		    Element orderBook = doc.getRootElement();
@@ -1156,6 +1177,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 */
 	@Override
 	public IAccount[] getAccounts() {
-		return new IAccount[] { WebConnector.getInstance().getAccount(), };
+		return new IAccount[] { account, };
 	}
 }

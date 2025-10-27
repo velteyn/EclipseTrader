@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2004-2011 Marco Maccaferri and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,49 +11,29 @@
 
 package org.eclipsetrader.jessx.internal.core;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
-import javax.xml.namespace.QName;
-import javax.xml.transform.stream.StreamSource;
-
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.core.runtime.Status;
 import org.eclipsetrader.core.Cash;
-import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.trading.IAccount;
-import org.eclipsetrader.core.trading.IOrderSide;
 import org.eclipsetrader.core.trading.IPosition;
 import org.eclipsetrader.core.trading.IPositionListener;
 import org.eclipsetrader.core.trading.ITransaction;
 import org.eclipsetrader.core.trading.PositionEvent;
-import org.eclipsetrader.jessx.internal.JessxActivator;
-
 
 public class Account implements IAccount {
 
-    String id;
-    String name;
-    File file;
+    private String id;
+    private String description;
+    private Cash balance;
+    private List<ITransaction> transactions = new ArrayList<ITransaction>();
+    private List<IPosition> positions = new ArrayList<IPosition>();
+    private ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
 
-    List<Position> positions = new ArrayList<Position>();
-    ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
-
-    public Account(String id, File file) {
+    public Account(String id, String description, Cash balance) {
         this.id = id;
-        this.file = file;
+        this.description = description;
+        this.balance = balance;
     }
 
     /* (non-Javadoc)
@@ -64,16 +44,12 @@ public class Account implements IAccount {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     /* (non-Javadoc)
      * @see org.eclipsetrader.core.trading.IAccount#getDescription()
      */
     @Override
     public String getDescription() {
-        return name != null ? name : id;
+        return description;
     }
 
     /* (non-Javadoc)
@@ -81,9 +57,66 @@ public class Account implements IAccount {
      */
     @Override
     public Cash getBalance() {
-        // TODO
-        return null;
+        return balance;
     }
+
+    public void setBalance(Cash balance) {
+        this.balance = balance;
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipsetrader.core.trading.IAccount#getTransactions()
+     */
+    @Override
+    public ITransaction[] getTransactions() {
+        return transactions.toArray(new ITransaction[transactions.size()]);
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipsetrader.core.trading.IAccount#getPositions()
+     */
+    @Override
+    public IPosition[] getPositions() {
+        return positions.toArray(new IPosition[positions.size()]);
+    }
+
+    public void setPositions(IPosition[] newPositions) {
+        List<IPosition> added = new ArrayList<IPosition>();
+        List<IPosition> removed = new ArrayList<IPosition>();
+        List<IPosition> currentPositions = new ArrayList<IPosition>(this.positions);
+
+        for (IPosition position : newPositions) {
+            if (!currentPositions.contains(position)) {
+                added.add(position);
+            }
+        }
+
+        for (IPosition position : currentPositions) {
+            boolean found = false;
+            for (IPosition newPosition : newPositions) {
+                if (newPosition.equals(position)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                removed.add(position);
+            }
+        }
+
+        this.positions = new ArrayList<IPosition>();
+        for (IPosition position : newPositions) {
+            this.positions.add(position);
+        }
+
+        for (IPosition position : added) {
+            firePositionOpened(new PositionEvent(this, position));
+        }
+        for (IPosition position : removed) {
+            firePositionClosed(new PositionEvent(this, position));
+        }
+    }
+
 
     /* (non-Javadoc)
      * @see org.eclipsetrader.core.trading.IAccount#addPositionListener(org.eclipsetrader.core.trading.IPositionListener)
@@ -101,217 +134,30 @@ public class Account implements IAccount {
         listeners.remove(listener);
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IAccount#getPositions()
-     */
-    @Override
-    public IPosition[] getPositions() {
-        synchronized (positions) {
-            return positions.toArray(new IPosition[positions.size()]);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.trading.IAccount#getTransactions()
-     */
-    @Override
-    public ITransaction[] getTransactions() {
-        return new ITransaction[0];
-    }
-
-    public Position getPositionFor(ISecurity security) {
-        synchronized (positions) {
-            for (Position p : positions) {
-                if (p.getSecurity().equals(security)) {
-                    return p;
-                }
-            }
-        }
-        return null;
-    }
-
-    public void updatePosition(OrderMonitor monitor) {
-        Position newPosition;
-        if (monitor.getOrder().getSide() == IOrderSide.Sell || monitor.getOrder().getSide() == IOrderSide.SellShort) {
-            newPosition = new Position(monitor.getOrder().getSecurity(), -monitor.getFilledQuantity(), monitor.getAveragePrice());
-        }
-        else {
-            newPosition = new Position(monitor.getOrder().getSecurity(), monitor.getFilledQuantity(), monitor.getAveragePrice());
-        }
-
-        Position existingPosition = getPositionFor(monitor.getOrder().getSecurity());
-        if (existingPosition == null) {
-            synchronized (positions) {
-                positions.add(newPosition);
-            }
-            firePositionOpenedEvent(newPosition);
-        }
-        else {
-            existingPosition.setQuantity(existingPosition.getQuantity() + newPosition.getQuantity());
-            if (existingPosition.getQuantity() == 0) {
-                synchronized (positions) {
-                    positions.remove(existingPosition);
-                }
-                firePositionClosedEvent(existingPosition);
-            }
-            else {
-                firePositionUpdateEvent(existingPosition);
-            }
-        }
-    }
-
-    public void updatePosition(Position newPosition) {
-        Position existingPosition = getPositionFor(newPosition.getSecurity());
-        if (existingPosition == null) {
-            synchronized (positions) {
-                positions.add(newPosition);
-            }
-            firePositionOpenedEvent(newPosition);
-        }
-        else {
-            synchronized (positions) {
-                positions.remove(existingPosition);
-                positions.add(newPosition);
-            }
-            firePositionUpdateEvent(newPosition);
-        }
-    }
-
-    public void setPositions(Position[] newPositions) {
-        for (int i = 0; i < newPositions.length; i++) {
-            updatePosition(newPositions[i]);
-        }
-
-        Position[] currentPositions;
-        synchronized (positions) {
-            currentPositions = positions.toArray(new Position[positions.size()]);
-        }
-        for (int i = 0; i < currentPositions.length; i++) {
-            boolean doRemove = true;
-            for (int j = 0; j < newPositions.length; j++) {
-                if (newPositions[j].getSecurity().equals(currentPositions[i].getSecurity())) {
-                    doRemove = false;
-                    break;
-                }
-            }
-            if (doRemove) {
-                synchronized (positions) {
-                    positions.remove(currentPositions[i]);
-                }
-                firePositionClosedEvent(currentPositions[i]);
-            }
-        }
-    }
-
-    public void firePositionOpenedEvent(Position p) {
-        PositionEvent event = new PositionEvent(this, p);
-
+    protected void firePositionOpened(PositionEvent e) {
         Object[] l = listeners.getListeners();
         for (int i = 0; i < l.length; i++) {
-            try {
-                ((IPositionListener) l[i]).positionOpened(event);
-            } catch (Throwable t) {
-                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error running listener", t); //$NON-NLS-1$
-                JessxActivator.log(status);
-            }
+            ((IPositionListener) l[i]).positionOpened(e);
         }
     }
 
-    public void firePositionUpdateEvent(Position p) {
-        PositionEvent event = new PositionEvent(this, p);
-
+    protected void firePositionClosed(PositionEvent e) {
         Object[] l = listeners.getListeners();
         for (int i = 0; i < l.length; i++) {
-            try {
-                ((IPositionListener) l[i]).positionChanged(event);
-            } catch (Throwable t) {
-                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error running listener", t); //$NON-NLS-1$
-                JessxActivator.log(status);
-            }
+            ((IPositionListener) l[i]).positionClosed(e);
         }
     }
 
-    public void firePositionClosedEvent(Position p) {
-        PositionEvent event = new PositionEvent(this, p);
-
-        Object[] l = listeners.getListeners();
-        for (int i = 0; i < l.length; i++) {
-            try {
-                ((IPositionListener) l[i]).positionClosed(event);
-            } catch (Throwable t) {
-                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error running listener", t); //$NON-NLS-1$
-                JessxActivator.log(status);
-            }
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return 11 * id.hashCode();
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Account)) {
-            return false;
+        if (obj instanceof IAccount) {
+            return id.equals(((IAccount) obj).getId());
         }
-        return id.equals(((Account) obj).id);
+        return false;
     }
 
-    public void load() {
-        if (file == null || !file.exists()) {
-            return;
-        }
-
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(Position[].class);
-            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            unmarshaller.setEventHandler(new ValidationEventHandler() {
-
-                @Override
-                public boolean handleEvent(ValidationEvent event) {
-                    Status status = new Status(IStatus.WARNING, JessxActivator.PLUGIN_ID, 0, "Error validating XML: " + event.getMessage(), null); //$NON-NLS-1$
-                    JessxActivator.log(status);
-                    return true;
-                }
-            });
-            JAXBElement<Position[]> element = unmarshaller.unmarshal(new StreamSource(file), Position[].class);
-            if (element != null) {
-                positions.addAll(Arrays.asList(element.getValue()));
-            }
-        } catch (JAXBException e) {
-            Status status = new Status(IStatus.WARNING, JessxActivator.PLUGIN_ID, 0, "Error loading positions", e); //$NON-NLS-1$
-            JessxActivator.log(status);
-        }
-    }
-
-    public void save() throws JAXBException, IOException {
-        if (file.exists()) {
-            file.delete();
-        }
-
-        JAXBContext jaxbContext = JAXBContext.newInstance(Position[].class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setEventHandler(new ValidationEventHandler() {
-
-            @Override
-            public boolean handleEvent(ValidationEvent event) {
-                Status status = new Status(IStatus.WARNING, JessxActivator.PLUGIN_ID, 0, "Error validating XML: " + event.getMessage(), null); //$NON-NLS-1$
-                JessxActivator.log(status);
-                return true;
-            }
-        });
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, System.getProperty("file.encoding")); //$NON-NLS-1$
-
-        Position[] elements = positions.toArray(new Position[positions.size()]);
-        JAXBElement<Position[]> element = new JAXBElement<Position[]>(new QName("list"), Position[].class, elements); //$NON-NLS-1$
-        marshaller.marshal(element, new FileWriter(file));
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
