@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %bundleName
 Bundle-SymbolicName: org.eclipsetrader.ui;singleton:=true
-Bundle-Version: 1.0.0.202510251517
+Bundle-Version: 1.0.0.202510271423
 Bundle-Activator: org.eclipsetrader.ui.internal.UIActivator
 Bundle-Vendor: %bundleVendor
 Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.expressions,or
@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.expressions,or
  se.core.databinding.observable,org.eclipse.core.databinding.property,or
  g.eclipse.ui,org.eclipse.ui.forms,org.eclipse.jface.databinding,org.ecl
  ipse.nebula.widgets.cdatetime,org.eclipse.nebula.widgets.pshelf,org.ecl
- ipse.nebula.jface.cdatetime,org.eclipsetrader.core
+ ipse.nebula.jface.cdatetime,org.eclipsetrader.core,javax.xml.bind
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipsetrader.ui,org.eclipsetrader.ui.charts,org.ecl
  ipsetrader.ui.internal;x-internal:=true,org.eclipsetrader.ui.internal.a

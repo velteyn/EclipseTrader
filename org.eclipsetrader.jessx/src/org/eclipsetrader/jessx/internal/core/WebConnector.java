@@ -84,8 +84,6 @@ public class WebConnector {
     private String userName;
     private String password;
 
-    private Account account;
-
     private String prt = ""; //$NON-NLS-1$
     private String urt = ""; //$NON-NLS-1$
     private String user = ""; //$NON-NLS-1$
@@ -96,13 +94,6 @@ public class WebConnector {
 
     WebConnector() {
         instance = this;
-
-        File file = null;
-        if (JessxActivator.getDefault() != null) {
-            file = JessxActivator.getDefault().getStateLocation().append("positions.xml").toFile(); //$NON-NLS-1$
-        }
-        account = new Account(Messages.WebConnector_DefaultAccount, file);
-        account.load();
     }
 
     public synchronized static WebConnector getInstance() {
@@ -120,10 +111,6 @@ public class WebConnector {
         final IPreferenceStore preferenceStore = JessxActivator.getDefault().getPreferenceStore();
 
    //TODO EDOZ Qui potrebbe essere inizializzato il client di JESSX con la sua login
-    }
-
-    public Account getAccount() {
-        return account;
     }
 
     private void setupProxy(HttpClient client, String host) throws URISyntaxException {

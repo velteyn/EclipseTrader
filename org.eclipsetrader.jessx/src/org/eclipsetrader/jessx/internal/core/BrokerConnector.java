@@ -861,11 +861,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 											}
 										}
 										fireUpdateNotifications(delta);
-
-										if (monitor.getFilledQuantity() != null && monitor.getAveragePrice() != null) {
-											Account account = WebConnector.getInstance().getAccount();
-											account.updatePosition(monitor);
-										}
 									} catch (ParseException e) {
 										Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing line: " + s[i], e); //$NON-NLS-1$
 										JessxActivator.log(status);
@@ -876,14 +871,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 								}
 								if (s[i].indexOf(";7;0;") != -1) { //$NON-NLS-1$
 									try {
-										positions.add(new Position(s[i]));
+										positions.add(parsePositionLine(s[i]));
 									} catch (Exception e) {
 										Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing line: " + s[i], e); //$NON-NLS-1$
 										JessxActivator.log(status);
 									}
 								}
 								if (s[i].indexOf(";7;9;") != -1) { //$NON-NLS-1$
-									Account account = WebConnector.getInstance().getAccount();
 									account.setPositions(positions.toArray(new Position[positions.size()]));
 									positions.clear();
 								}

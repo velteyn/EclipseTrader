@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.nebula.jface.cdatetime
-Bundle-Version: 0.14.0.202510251517
+Bundle-Version: 0.14.0.202510271423
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -10,4 +10,4 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.4.0",org.ecli
  bundle-version="3.4.0",org.eclipse.core.databinding;bundle-version="1.1
  .0"
 Export-Package: org.eclipse.nebula.jface.cdatetime
-Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.5))"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"

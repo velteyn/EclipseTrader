@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Core Plug-in
 Bundle-SymbolicName: org.eclipsetrader.core;singleton:=true
-Bundle-Version: 1.0.0.202510251517
+Bundle-Version: 1.0.0.202510271423
 Bundle-Activator: org.eclipsetrader.core.internal.CoreActivator
 Bundle-Vendor: Eclipsetrader.org
 Require-Bundle: org.eclipse.core.runtime,javax.xml.bind,org.apache.commo
@@ -24,4 +24,4 @@ Export-Package: org.eclipsetrader.core,org.eclipsetrader.core.ats,org.ec
  .eclipsetrader.ui",org.eclipsetrader.core.markets,org.eclipsetrader.cor
  e.repositories,org.eclipsetrader.core.trading,org.eclipsetrader.core.vi
  ews
-Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"

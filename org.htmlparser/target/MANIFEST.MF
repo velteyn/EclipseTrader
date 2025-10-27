@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: HTML Parser Library
 Bundle-SymbolicName: org.htmlparser
-Bundle-Version: 1.6.0.202510251517
+Bundle-Version: 1.6.0.202510271423
 Bundle-Vendor: Eclipsetrader.org
 Bundle-ActivationPolicy: lazy
 Export-Package: org.htmlparser;version="1.6.0",org.htmlparser.beans;vers
@@ -18,4 +18,4 @@ Export-Package: org.htmlparser;version="1.6.0",org.htmlparser.beans;vers
  ;version="1.6.0",org.htmlparser.tags;version="1.6.0",org.htmlparser.uti
  l;version="1.6.0",org.htmlparser.util.sort;version="1.6.0",org.htmlpars
  er.visitors;version="1.6.0"
-Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.5))"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.6))"
