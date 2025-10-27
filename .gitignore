@@ -27,5 +27,17 @@ hs_err_pid*
 
 target/
 **/target/
+bin/
+**/bin/
 
 # End of https://www.gitignore.io/api/java
+/org.eclipsetrader.ui/bin/.gitignore
+/com.sun.syndication/bin/.gitignore
+/org.apache.commons.collections/bin/.gitignore
+/org.eclipse.nebula.jface.cdatetime/bin/.gitignore
+/org.eclipsetrader.brokers.paper/bin/.gitignore
+/org.eclipsetrader.core/bin/.gitignore
+/org.eclipsetrader.platform/bin/.gitignore
+/org.eclipsetrader.repository.hibernate.tests/bin/.gitignore
+/org.eclipsetrader.tests/bin/.gitignore
+/com.sun.syndication/bin/.gitignore
