@@ -35,22 +35,13 @@ public class PressureBarFactory extends AbstractProviderFactory {
     private static final int IMAGE_HEIGHT = 16;
     private static final int IMAGE_HALF_WIDTH = IMAGE_WIDTH / 2;
 
-    private Color bidColor        = null;
-    private Color bidFillColor    = null;
-    private Color askColor        = null;
-    private Color askFillColor    = null;
-    private Color backgroundColor = null;
+    private Color bidColor;
+    private Color bidFillColor;
+    private Color askColor;
+    private Color askFillColor;
+    private Color backgroundColor;
 
-    
-    
-    public PressureBarFactory(){
-    	
-    	 bidColor = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-         bidFillColor = new Color(Display.getDefault(), blend(bidColor.getRGB(), new RGB(0, 0, 0), 75));
-         askColor = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
-         askFillColor = new Color(Display.getDefault(), blend(askColor.getRGB(), new RGB(0, 0, 0), 75));
-         backgroundColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-    	
+    public PressureBarFactory() {
     }
     
     
@@ -80,6 +71,14 @@ public class PressureBarFactory extends AbstractProviderFactory {
          */
         @Override
         public void init(IAdaptable adaptable) {
+            if (bidColor == null) {
+                bidColor = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+                bidFillColor = new Color(Display.getDefault(), blend(bidColor.getRGB(), new RGB(0, 0, 0), 75));
+                askColor = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
+                askFillColor = new Color(Display.getDefault(), blend(askColor.getRGB(), new RGB(0, 0, 0), 75));
+                backgroundColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
+            }
+
             ISecurity security = (ISecurity) adaptable.getAdapter(ISecurity.class);
             if (!map.containsKey(security)) {
                 pricingEnvironment = (MarketPricingEnvironment) adaptable.getAdapter(MarketPricingEnvironment.class);
@@ -97,6 +96,10 @@ public class PressureBarFactory extends AbstractProviderFactory {
          */
         @Override
         public void dispose() {
+            if (bidFillColor != null) {
+                bidFillColor.dispose();
+                askFillColor.dispose();
+            }
             for (Data data : map.values()) {
                 data.image.dispose();
             }
