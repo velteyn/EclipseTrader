@@ -17,16 +17,20 @@ import org.eclipsetrader.jessx.client.ClientCore;
 import org.eclipsetrader.jessx.client.event.ExperimentDeveloppmentListener;
 import org.eclipsetrader.jessx.client.event.NetworkListener;
 import org.eclipsetrader.jessx.net.DividendInfo;
+import org.eclipsetrader.jessx.business.NewsItem;
 import org.eclipsetrader.jessx.net.ExpUpdate;
 import org.eclipsetrader.jessx.net.NetworkWritable;
 import org.eclipsetrader.jessx.net.OperatorPlayed;
 import org.jdom.Document;
+import org.jdom.Element;
 
 public abstract class Robot extends Thread implements ExperimentDeveloppmentListener, NetworkListener {
   private String login;
   
   private RobotCore robotCore;
   
+  private LinkedList<NewsItem> news;
+
   private LinkedList<Deal> deals;
   
   private LinkedList<DividendInfo> dividendInfos;
@@ -43,6 +47,7 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
   
   public Robot(int name) {
     this.deals = new LinkedList<Deal>();
+    this.news = new LinkedList<NewsItem>();
     this.dividendInfos = new LinkedList<DividendInfo>();
     this.orderBooks = new HashMap<String, LinkedList<OrderBook>>();
     this.datesLastOrder = new HashMap<String, Date>();
@@ -64,6 +69,7 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
     this.robotCore.addNetworkListener(this, "Portfolio");
     this.robotCore.addNetworkListener(this, "OperatorPlayed");
     this.robotCore.addNetworkListener(this, "OrderBook");
+    this.robotCore.addNetworkListener(this, "News");
   }
   
   public String getLogin() {
@@ -143,6 +149,15 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
             this.orderBooks.put(ob.getInstitution(), list);
         }
         list.add(ob);
+    } else if (xmlDoc.getRootElement().getName().equals("News")) {
+        Iterator<Element> newsIter = xmlDoc.getRootElement().getChildren("Item").iterator();
+        while (newsIter.hasNext()) {
+            Element newsElem = newsIter.next();
+            String priority = newsElem.getAttributeValue("priority");
+            String asset = newsElem.getAttributeValue("asset");
+            String text = newsElem.getText();
+            news.add(new NewsItem(priority, asset, text));
+        }
     }
   }
   
@@ -190,9 +205,50 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
   }
   
   protected abstract void MyAct();
+
+  protected void reactToNews(String institution) {
+      LinkedList<NewsItem> news = getNews();
+      for (NewsItem item : news) {
+          if (item.getAsset().equals(institution)) {
+                if (item.getPriority().equals("HIGH")) {
+                    if (item.getText().contains("rise")) {
+                        buy(institution, 100);
+                    } else if (item.getText().contains("fall")) {
+                        sell(institution, 100);
+                    }
+                } else if (item.getPriority().equals("MEDIUM")) {
+                    if (item.getText().contains("rise")) {
+                        buy(institution, 50);
+                    } else if (item.getText().contains("fall")) {
+                        sell(institution, 50);
+                    }
+                }
+          }
+      }
+  }
   
   protected abstract String chooseName(int paramInt);
   
+  protected void buy(String institution, int quantity) {
+      LimitOrder lo = new LimitOrder();
+      lo.setEmitter(getLogin());
+      lo.setInstitutionName(institution);
+      lo.setPrice(100);
+      lo.setQuantity(quantity);
+      lo.setSide(0);
+      getRobotCore().send((NetworkWritable)lo);
+  }
+
+  protected void sell(String institution, int quantity) {
+      LimitOrder lo = new LimitOrder();
+      lo.setEmitter(getLogin());
+      lo.setInstitutionName(institution);
+      lo.setPrice(100);
+      lo.setQuantity(quantity);
+      lo.setSide(1);
+      getRobotCore().send((NetworkWritable)lo);
+  }
+
   public AbstractList<Deal> getDeals() {
     return this.deals;
   }
@@ -227,5 +283,9 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
   
   public boolean isOrdersAllowed() {
     return this.ordersAllowed;
+  }
+
+  public LinkedList<NewsItem> getNews() {
+    return this.news;
   }
 }

@@ -1,7 +1,9 @@
 ﻿package org.eclipsetrader.jessx.business;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import org.eclipsetrader.jessx.business.event.PlayerTypeEvent;
@@ -22,6 +24,8 @@ public class Scenario implements XmlExportable, XmlLoadable {
 	private Vector vectorInformation = new Vector();
 
 	private Vector infoListners = new Vector();
+
+    private List<NewsItem> newsItems = new ArrayList<NewsItem>();
 
 	private String password = "";
 
@@ -186,7 +190,23 @@ public class Scenario implements XmlExportable, XmlLoadable {
 			Utils.logger.debug(this.vectorInformation);
 		}
 		fireProgammedInfoLoad();
+
+        Element newsElement = node.getChild("News");
+        if (newsElement != null) {
+            Iterator<Element> newsIter = newsElement.getChildren("Item").iterator();
+            while (newsIter.hasNext()) {
+                Element newsElem = newsIter.next();
+                String priority = newsElem.getAttributeValue("priority");
+                String asset = newsElem.getAttributeValue("asset");
+                String text = newsElem.getText();
+                newsItems.add(new NewsItem(priority, asset, text));
+            }
+        }
 	}
+
+    public List<NewsItem> getNewsItems() {
+        return newsItems;
+    }
 
 	public void setPasswordUsed(boolean b) {
 		this.passwordUsed = b;
