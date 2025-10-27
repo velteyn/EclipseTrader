@@ -18,7 +18,9 @@ public class Discreet extends Animator {
   }
   
   protected void MyAct() {
-    reactToNews(getRobotCore().getInstitutions().keySet().iterator().next());
+    for (Object institution : getRobotCore().getInstitutions().keySet()) {
+        reactToNews((String)institution);
+    }
     Iterator<String> iterInstit = getRobotCore().getInstitutions().keySet().iterator();
     while (iterInstit.hasNext()) {
       String instit = iterInstit.next();

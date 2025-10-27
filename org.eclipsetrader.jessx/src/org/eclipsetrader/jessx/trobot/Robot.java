@@ -13,6 +13,7 @@ import org.eclipsetrader.jessx.business.Institution;
 import org.eclipsetrader.jessx.business.Operator;
 import org.eclipsetrader.jessx.business.OrderBook;
 import org.eclipsetrader.jessx.business.Portfolio;
+import org.eclipsetrader.jessx.business.operations.LimitOrder;
 import org.eclipsetrader.jessx.client.ClientCore;
 import org.eclipsetrader.jessx.client.event.ExperimentDeveloppmentListener;
 import org.eclipsetrader.jessx.client.event.NetworkListener;
