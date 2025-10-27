@@ -26,6 +26,7 @@
         <module>org.eclipsetrader.yahoo</module>
         <module>org.eclipsetrader.directa</module>
         <module>org.eclipsetrader.jessx</module>
+        <module>org.eclipsetrader.jessx-feature</module>
         <module>org.eclipsetrader.ui.application</module>
         <module>org.eclipsetrader.repository.hibernate</module>
         <module>org.eclipsetrader.repository.hibernate.derby</module>
