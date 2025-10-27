@@ -60,7 +60,6 @@ import org.eclipsetrader.ui.internal.UIActivator;
 public class OrderDialog extends TitleAreaDialog {
 
     Text symbol;
-    Label symbolDescription;
 
     ComboViewer sideCombo;
     Text quantity;
@@ -170,7 +169,7 @@ public class OrderDialog extends TitleAreaDialog {
     }
 
     protected boolean isValid() {
-        if (symbol.getText().equals("")) {
+        if (security == null || symbol.getText().equals("")) {
             return false;
         }
 
@@ -228,17 +227,15 @@ public class OrderDialog extends TitleAreaDialog {
 
     protected void createContractDescriptionGroup(Composite parent) {
         Composite composite = new Composite(parent, SWT.NONE);
-        GridLayout gridLayout = new GridLayout(3, false);
+        GridLayout gridLayout = new GridLayout(2, false);
         gridLayout.marginHeight = 0;
         composite.setLayout(gridLayout);
         composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
 
         Label label = new Label(composite, SWT.NONE);
         label.setText(Messages.OrderDialog_SymbolLabel);
-        symbol = new Text(composite, SWT.BORDER | SWT.READ_ONLY);
+        symbol = new Text(composite, SWT.BORDER);
         symbol.setLayoutData(new GridData(convertWidthInCharsToPixels(18), SWT.DEFAULT));
-        symbolDescription = new Label(composite, SWT.NONE);
-        symbolDescription.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     }
 
     protected void createOrderDescriptionGroup(Composite parent) {
@@ -403,7 +400,6 @@ public class OrderDialog extends TitleAreaDialog {
         if (security != null) {
             String symbolText = connector.getSymbolFromSecurity(security);
             symbol.setText(symbolText != null ? symbolText : "");
-            symbolDescription.setText(security.getName().replaceAll("&", "&&")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         IOrderSide[] sides = connector.getAllowedSides();
@@ -457,6 +453,20 @@ public class OrderDialog extends TitleAreaDialog {
     }
 
     void addListeners() {
+        symbol.addModifyListener(new ModifyListener() {
+            @Override
+            public void modifyText(ModifyEvent e) {
+                IBroker broker = (IBroker) ((IStructuredSelection) brokerCombo.getSelection()).getFirstElement();
+                if (broker != null) {
+                    ISecurity newSecurity = broker.getSecurityFromSymbol(symbol.getText());
+                    if (newSecurity != null) {
+                        security = newSecurity;
+                    }
+                }
+                getButton(OK).setEnabled(isValid());
+            }
+        });
+
         quantity.addModifyListener(new ModifyListener() {
 
             @Override
