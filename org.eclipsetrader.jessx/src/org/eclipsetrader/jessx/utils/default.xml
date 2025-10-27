@@ -70,6 +70,23 @@
       </Operator>
     </Operators>
   </Institution>
+  <Institution type="OrderMarket" name="PLS Exchange" quotedAsset="PLS">
+    <KeepOrderBook allow="true" />
+    <OperationsCost>
+      <Operation name="Market Order" percentageCost="2.0" minimalCost="2.0" />
+      <Operation name="Delete Order" percentageCost="2.0" minimalCost="2.0" />
+      <Operation name="Limit Order" percentageCost="2.0" minimalCost="2.0" />
+      <Operation name="Best Limit Order" percentageCost="3.0" minimalCost="2.0" />
+    </OperationsCost>
+    <Operators>
+      <Operator name="culon 1" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+    </Operators>
+  </Institution>
   <Institution type="OrderMarket" name="Mank America" quotedAsset="MSFT">
     <KeepOrderBook allow="true" />
     <OperationsCost>
