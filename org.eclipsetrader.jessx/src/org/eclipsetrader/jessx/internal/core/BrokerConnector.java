@@ -140,8 +140,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		amountFormatter.setMinimumFractionDigits(2);
 		amountFormatter.setMaximumFractionDigits(2);
 		amountFormatter.setGroupingUsed(true);
-
-		account = new Account(getId(), getName(), new Cash(100000.0, Currency.getInstance("USD")));
 	}
 
 	public static BrokerConnector getInstance() {
@@ -163,6 +161,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 		id = config.getAttribute("id"); //$NON-NLS-1$
 		name = config.getAttribute("name"); //$NON-NLS-1$
+		account = new Account(getId(), getName(), new Cash(100000.0, Currency.getInstance("USD")));
 	}
 
 	/*
@@ -374,9 +373,12 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 					security = getSecurityFromSymbol(secName);
 				}
 				if (security != null) {
-					long quantity = Long.parseLong(sec.getAttributeValue("amount"));
-					double price = Double.parseDouble(sec.getAttributeValue("price"));
-					list.add(new Position(security, quantity, price));
+					String amount = sec.getAttributeValue("amount");
+					if (amount != null) {
+						long quantity = Long.parseLong(amount);
+						double price = Double.parseDouble(sec.getAttributeValue("price"));
+						list.add(new Position(security, quantity, price));
+					}
 				}
 			}
 			account.setPositions(list.toArray(new Position[list.size()]));
