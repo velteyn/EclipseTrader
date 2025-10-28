@@ -153,14 +153,15 @@ public abstract class BusinessCore {
         ISecurity[] securities = repositoryService.getSecurities();
         Map<String, ISecurity> securitiesMap = new HashMap<String, ISecurity>();
         for (ISecurity security : securities) {
-            securitiesMap.put(security.getName(), security);
+            securitiesMap.put(security.getName().trim(), security);
         }
 
 		final IRepositoryService finalRepositoryService = repositoryService;
 		Iterator<Element> assetNodes = root.getChildren("Asset").iterator();
 		while (assetNodes.hasNext()) {
 			final Asset asset = Asset.loadAssetFromXml(assetNodes.next());
-            ISecurity security = securitiesMap.get(asset.getAssetName());
+            final String assetName = asset.getAssetName().trim();
+            ISecurity security = securitiesMap.get(assetName);
             if (security == null) {
                 final CountDownLatch latch = new CountDownLatch(1);
                 repositoryService.runInService(new IRepositoryRunnable() {
@@ -170,7 +171,7 @@ public abstract class BusinessCore {
                             IStore store = finalRepositoryService.getRepository("hibernate").createObject();
                             IStoreProperties properties = store.fetchProperties(monitor);
                             properties.setProperty(IPropertyConstants.OBJECT_TYPE, Stock.class.getName());
-                            properties.setProperty(IPropertyConstants.NAME, asset.getAssetName());
+                            properties.setProperty(IPropertyConstants.NAME, assetName);
                             properties.setProperty(IPropertyConstants.CURRENCY, Currency.getInstance("USD"));
 
                             store.putProperties(properties, monitor);
@@ -194,9 +195,9 @@ public abstract class BusinessCore {
 
                 securities = repositoryService.getSecurities();
                 for (ISecurity s : securities) {
-                    securitiesMap.put(s.getName(), s);
+                    securitiesMap.put(s.getName().trim(), s);
                 }
-                security = securitiesMap.get(asset.getAssetName());
+                security = securitiesMap.get(assetName);
             }
             asset.setSecurity(security);
 			addAsset(asset);

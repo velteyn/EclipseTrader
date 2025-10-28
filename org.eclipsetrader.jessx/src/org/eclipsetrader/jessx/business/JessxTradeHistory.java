@@ -25,7 +25,7 @@ public class JessxTradeHistory {
 
             repositoryService.runInService(new IRepositoryRunnable() {
                 public IStatus run(org.eclipse.core.runtime.IProgressMonitor monitor) {
-                    IStore store = repositoryService.getRepository("hibernate").createObject();
+                    IStore store = repositoryService.getRepositories()[0].createObject();
                     IStoreProperties properties = store.fetchProperties(monitor);
                     properties.setProperty(IPropertyConstants.PURCHASE_DATE, new Date(finalDeal.getTimestamp()));
                     properties.setProperty(IPropertyConstants.SECURITY, finalDeal.getSecurity());

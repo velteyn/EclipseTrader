@@ -1,6 +1,7 @@
 
 package org.eclipsetrader.ui.internal.charts.views;
 
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.swt.graphics.RGB;
@@ -28,7 +29,7 @@ public class TradeObject implements IChartObject {
         }
 
         for (IStore trade : trades) {
-            long time = (Long) trade.fetchProperties(null).getProperty(IPropertyConstants.PURCHASE_DATE);
+            long time = ((Date) trade.fetchProperties(null).getProperty(IPropertyConstants.PURCHASE_DATE)).getTime();
             double price = (Double) trade.fetchProperties(null).getProperty(IPropertyConstants.PURCHASE_PRICE);
 
             int x = graphics.mapToHorizontalAxis(time);

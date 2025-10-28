@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='org.htmlparser' version='1.6.0.202510281200' singleton='false' generation='2'>
-    <update id='org.htmlparser' range='[0.0.0,1.6.0.202510281200)' severity='0'/>
+  <unit id='org.htmlparser' version='1.6.0.202510281328' singleton='false' generation='2'>
+    <update id='org.htmlparser' range='[0.0.0,1.6.0.202510281328)' severity='0'/>
     <properties size='6'>
       <property name='org.eclipse.equinox.p2.name' value='HTML Parser Library'/>
       <property name='org.eclipse.equinox.p2.provider' value='Eclipsetrader.org'/>
@@ -11,8 +11,8 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='23'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='org.htmlparser' version='1.6.0.202510281200'/>
-      <provided namespace='osgi.bundle' name='org.htmlparser' version='1.6.0.202510281200'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.htmlparser' version='1.6.0.202510281328'/>
+      <provided namespace='osgi.bundle' name='org.htmlparser' version='1.6.0.202510281328'/>
       <provided namespace='java.package' name='org.htmlparser' version='1.6.0'/>
       <provided namespace='java.package' name='org.htmlparser.beans' version='1.6.0'/>
       <provided namespace='java.package' name='org.htmlparser.filters' version='1.6.0'/>
@@ -32,7 +32,7 @@
       <provided namespace='java.package' name='org.htmlparser.util' version='1.6.0'/>
       <provided namespace='java.package' name='org.htmlparser.util.sort' version='1.6.0'/>
       <provided namespace='java.package' name='org.htmlparser.visitors' version='1.6.0'/>
-      <provided namespace='osgi.identity' name='org.htmlparser' version='1.6.0.202510281200'>
+      <provided namespace='osgi.identity' name='org.htmlparser' version='1.6.0.202510281328'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -45,20 +45,20 @@
           org.htmlparser
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='org.htmlparser.source' range='[1.6.0.202510281200,1.6.0.202510281200]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.htmlparser.source' range='[1.6.0.202510281328,1.6.0.202510281328]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='org.htmlparser' version='1.6.0.202510281200'/>
+      <artifact classifier='osgi.bundle' id='org.htmlparser' version='1.6.0.202510281328'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: org.htmlparser&#xA;Bundle-Version: 1.6.0.202510281200&#xA;
+          Bundle-SymbolicName: org.htmlparser&#xA;Bundle-Version: 1.6.0.202510281328&#xA;
         </instruction>
       </instructions>
     </touchpointData>
