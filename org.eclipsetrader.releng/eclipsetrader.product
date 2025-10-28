@@ -43,10 +43,7 @@
       <feature id="org.eclipse.help" version="0.0.0"/>
       <feature id="org.eclipse.equinox.p2.user.ui" version="0.0.0"/>
       <feature id="org.eclipsetrader.platform" version="0.0.0"/>
-      <feature id="org.eclipsetrader.directaworld" version="0.0.0"/>
-      <feature id="org.eclipsetrader.yahoo" version="0.0.0"/>
       <feature id="org.eclipsetrader.brokers.paper" version="0.0.0"/>
-      <feature id="org.eclipsetrader.directa" version="0.0.0"/>
       <feature id="org.eclipsetrader.jessx" version="0.0.0"/>
    </features>
 

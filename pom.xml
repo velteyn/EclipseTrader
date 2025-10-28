@@ -23,8 +23,6 @@
         <module>org.eclipsetrader.ui</module>
         <module>org.eclipsetrader.news</module>
         <module>org.htmlparser</module>
-        <module>org.eclipsetrader.yahoo</module>
-        <module>org.eclipsetrader.directa</module>
         <module>org.eclipsetrader.jessx</module>
         <module>org.eclipsetrader.jessx-feature</module>
         <module>org.eclipsetrader.ui.application</module>

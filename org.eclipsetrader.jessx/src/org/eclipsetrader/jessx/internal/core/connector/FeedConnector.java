@@ -22,36 +22,11 @@ public class FeedConnector implements IFeedConnector, IExecutableExtension{
 	private String id;
 	private String name;
 	
-    private IPropertyChangeListener propertyChangeListener = new IPropertyChangeListener() {
-
-        @Override
-        public void propertyChange(PropertyChangeEvent event) {
-            if (JessxActivator.PREFS_DRIVER.equals(event.getProperty())) {
-                onChangeDriver((String) event.getNewValue());
-            }
-        }
-    };
-
 	@Override
 	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 		 id = config.getAttribute("id");
 	     name = config.getAttribute("name");
-	     
-	     String className = JessxActivator.getDefault().getPreferenceStore().getString(JessxActivator.PREFS_DRIVER);
-	        try {
-	            connector = (StreamingConnector) Class.forName(className).newInstance();
-	        } catch (Exception e) {
-	        	JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error loding driver " + className, e));
-	            connector = new StreamingConnector();
-	        }
-	        JessxActivator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
-	     
-		
-	}
-
-	protected void onChangeDriver(String className) {
-		// TODO Qua è da capire cosa fare, cosa sono i driver ???
-		
+	     connector = new StreamingConnector();
 	}
 
 	@Override
