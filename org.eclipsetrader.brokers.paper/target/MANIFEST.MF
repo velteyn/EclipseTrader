@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Paper Trading
 Bundle-SymbolicName: org.eclipsetrader.brokers.paper;singleton:=true
-Bundle-Version: 1.0.0.202510281111
+Bundle-Version: 1.0.0.202510281200
 Bundle-Activator: org.eclipsetrader.internal.brokers.paper.Activator
 Bundle-Vendor: EclipseTrader.org
 Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipsetrade

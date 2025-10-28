@@ -8,8 +8,21 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import java.util.Currency;
+import java.util.concurrent.CountDownLatch;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipsetrader.core.instruments.ISecurity;
+import org.eclipsetrader.core.instruments.Stock;
+import org.eclipsetrader.core.markets.IMarket;
+import org.eclipsetrader.core.markets.IMarketService;
+import org.eclipsetrader.core.repositories.IPropertyConstants;
+import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
+import org.eclipsetrader.core.repositories.IStore;
+import org.eclipsetrader.core.repositories.IStoreProperties;
 import org.eclipsetrader.jessx.business.event.AssetEvent;
 import org.eclipsetrader.jessx.business.event.AssetListener;
 import org.eclipsetrader.jessx.business.event.InstitutionEvent;
@@ -143,10 +156,49 @@ public abstract class BusinessCore {
             securitiesMap.put(security.getName(), security);
         }
 
+		final IRepositoryService finalRepositoryService = repositoryService;
 		Iterator<Element> assetNodes = root.getChildren("Asset").iterator();
 		while (assetNodes.hasNext()) {
-			Asset asset = Asset.loadAssetFromXml(assetNodes.next());
-            asset.setSecurity(securitiesMap.get(asset.getAssetName()));
+			final Asset asset = Asset.loadAssetFromXml(assetNodes.next());
+            ISecurity security = securitiesMap.get(asset.getAssetName());
+            if (security == null) {
+                final CountDownLatch latch = new CountDownLatch(1);
+                repositoryService.runInService(new IRepositoryRunnable() {
+                    @Override
+                    public IStatus run(IProgressMonitor monitor) {
+                        try {
+                            IStore store = finalRepositoryService.getRepository("hibernate").createObject();
+                            IStoreProperties properties = store.fetchProperties(monitor);
+                            properties.setProperty(IPropertyConstants.OBJECT_TYPE, Stock.class.getName());
+                            properties.setProperty(IPropertyConstants.NAME, asset.getAssetName());
+                            properties.setProperty(IPropertyConstants.CURRENCY, Currency.getInstance("USD"));
+
+                            store.putProperties(properties, monitor);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        finally {
+                            latch.countDown();
+                        }
+                        return Status.OK_STATUS;
+                    }
+                }, null);
+
+                try {
+                    latch.await();
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                securities = repositoryService.getSecurities();
+                for (ISecurity s : securities) {
+                    securitiesMap.put(s.getName(), s);
+                }
+                security = securitiesMap.get(asset.getAssetName());
+            }
+            asset.setSecurity(security);
 			addAsset(asset);
 		}
 

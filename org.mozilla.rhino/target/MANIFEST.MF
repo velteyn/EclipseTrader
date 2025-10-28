@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Rhino JavaScript for Java
 Bundle-SymbolicName: org.mozilla.rhino
-Bundle-Version: 1.7.3.202510281111
+Bundle-Version: 1.7.3.202510281200
 Bundle-Vendor: Mozilla.org
 Export-Package: org.mozilla.classfile,org.mozilla.javascript,org.mozilla
  .javascript.annotations,org.mozilla.javascript.ast,org.mozilla.javascri
