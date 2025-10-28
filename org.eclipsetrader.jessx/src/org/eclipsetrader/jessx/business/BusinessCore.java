@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import java.util.Currency;
 import java.util.concurrent.CountDownLatch;
@@ -70,7 +71,7 @@ public abstract class BusinessCore {
 	}
 
 	public static Asset getAsset(String assetName) {
-		return (Asset) assets.get(assetName);
+		return (Asset) assets.get(assetName.trim());
 	}
 
 	public static HashMap getAssets() {
@@ -210,6 +211,70 @@ public abstract class BusinessCore {
 			Institution institution = Institution.loadInstitutionFromXml(institutionNodes.next());
 			addInstitution(institution);
 		}
+
+        for (Object obj : institutions.values()) {
+            Institution institution = (Institution) obj;
+            final String assetName = institution.getAssetName().trim();
+            if (assets.get(assetName) == null) {
+                Asset asset = new Asset() {
+                    @Override
+                    public String getAssetName() {
+                        return assetName;
+                    }
+                    @Override
+                    public void saveToXml(Element root) {
+                    }
+                    @Override
+                    public void loadFromXml(Element root) {
+                    }
+                    @Override
+                    public JPanel getAssetSetupGui() {
+                        return null;
+                    }
+                };
+
+                ISecurity security = securitiesMap.get(assetName);
+                if (security == null) {
+                    final CountDownLatch latch = new CountDownLatch(1);
+                    repositoryService.runInService(new IRepositoryRunnable() {
+                        @Override
+                        public IStatus run(IProgressMonitor monitor) {
+                            try {
+                                IStore store = finalRepositoryService.getRepository("hibernate").createObject();
+                                IStoreProperties properties = store.fetchProperties(monitor);
+                                properties.setProperty(IPropertyConstants.OBJECT_TYPE, Stock.class.getName());
+                                properties.setProperty(IPropertyConstants.NAME, assetName);
+                                properties.setProperty(IPropertyConstants.CURRENCY, Currency.getInstance("USD"));
+
+                                store.putProperties(properties, monitor);
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            finally {
+                                latch.countDown();
+                            }
+                            return Status.OK_STATUS;
+                        }
+                    }, null);
+
+                    try {
+                        latch.await();
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    securities = repositoryService.getSecurities();
+                    for (ISecurity s : securities) {
+                        securitiesMap.put(s.getName().trim(), s);
+                    }
+                    security = securitiesMap.get(assetName);
+                }
+                asset.setSecurity(security);
+                addAsset(asset);
+            }
+        }
 		Element scenario = root.getChild("Scenario");
 		if (scenario == null) {
 			Utils.logger.error("Invalid xml files: scenario node not found.");

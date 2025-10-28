@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository version='1.1.0'?>
 <artifacts size='1'>
-  <artifact classifier='osgi.bundle' id='org.eclipse.nebula.jface.cdatetime' version='0.14.0.202510281328'>
+  <artifact classifier='osgi.bundle' id='org.eclipse.nebula.jface.cdatetime' version='0.14.0.202510281452'>
     <properties size='9'>
-      <property name='artifact.size' value='9907'/>
-      <property name='download.size' value='9907'/>
-      <property name='download.checksum.sha-512' value='7d947c19ca46a46bd3ece66ba5497e79ff391628256229bbfc1bacb63aad89e43836a99496bfb0cf6878ce0d487c09663d5495b80aebaaf9f48556be124a7d83'/>
-      <property name='download.checksum.sha-1' value='b3ed684351c13e8c9e35a671341c0a68d46fb58c'/>
-      <property name='download.checksum.sha-256' value='e1d157df04e02e35ca29decde617e0bf29c4e1e161d7aec592ea535da7f5198f'/>
+      <property name='artifact.size' value='9909'/>
+      <property name='download.size' value='9909'/>
+      <property name='download.checksum.sha-512' value='a71e4591676cf94c94c8e81b8cdd17ed83b86a9d29b65a8df11eb54456b1f5d0965fe2550ec367929d8046da909f57701cdf0acaf7bea7bee2060fef53a89291'/>
+      <property name='download.checksum.sha-1' value='6d641fcaee8112e2ab07823d830cbc33e731436f'/>
+      <property name='download.checksum.sha-256' value='934c450978ee9710e428b829ec91dbb784c696f93bc2c8c895e216dd3cd43a00'/>
       <property name='maven-groupId' value='org.eclipsetrader'/>
       <property name='maven-artifactId' value='org.eclipse.nebula.jface.cdatetime'/>
       <property name='maven-version' value='0.14.0-SNAPSHOT'/>

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JAX-XML-BIND
 Bundle-SymbolicName: javax.xml.bind
-Bundle-Version: 2.1.6.202510281328
+Bundle-Version: 2.1.6.202510281452
 Bundle-Vendor: EclipseTrader.org
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/activation.jar,lib/jaxb-api.jar,lib/jaxb-impl.jar,
