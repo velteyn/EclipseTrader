@@ -266,6 +266,11 @@
       </DividendInfo>
     </PlayerType>
     <Information />
+    <News>
+      <Item priority="HIGH" asset="AAT">"AAT stock is expected to rise."</Item>
+      <Item priority="LOW" asset="GPLRF">"GPLRF stock is expected to fall."</Item>
+      <Item priority="MEDIUM" asset="MSFT">"MSFT stock is stable."</Item>
+    </News>
   </Scenario>
   <Chat />
   <Robots>

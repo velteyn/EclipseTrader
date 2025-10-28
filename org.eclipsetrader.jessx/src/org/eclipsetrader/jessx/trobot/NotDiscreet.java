@@ -21,6 +21,9 @@ public class NotDiscreet extends Animator {
   }
   
   protected void MyAct() {
+    for (Object institution : getRobotCore().getInstitutions().keySet()) {
+        reactToNews((String)institution);
+    }
     Iterator<String> iterInstit = getRobotCore().getInstitutions().keySet().iterator();
     while (iterInstit.hasNext()) {
       String instit = iterInstit.next();
