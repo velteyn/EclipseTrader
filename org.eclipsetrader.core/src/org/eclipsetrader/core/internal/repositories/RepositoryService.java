@@ -227,6 +227,14 @@ public class RepositoryService implements IRepositoryService {
      * @see org.eclipsetrader.core.repositories.IRepositoryService#getTrades()
      */
     @Override
+    public List<IStore> getTradesFor(ISecurity security) {
+        List<IStore> list = new ArrayList<IStore>();
+        for (IRepository repository : repositoryMap.values()) {
+            list.addAll(repository.getTradesFor(security));
+        }
+        return list;
+    }
+
     public IHolding[] getTrades() {
         return trades.toArray(new IHolding[trades.size()]);
     }

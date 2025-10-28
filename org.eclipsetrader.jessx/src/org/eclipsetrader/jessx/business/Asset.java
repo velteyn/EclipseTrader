@@ -5,6 +5,7 @@
 package org.eclipsetrader.jessx.business;
 
 
+import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.eclipsetrader.jessx.utils.XmlExportable;
 import org.eclipsetrader.jessx.utils.XmlLoadable;
@@ -20,7 +21,17 @@ public abstract class Asset implements XmlExportable, XmlLoadable
     private DividendModel dividendModel;
     private String activity;
     
-    public Asset() {
+    transient ISecurity security;
+
+    public ISecurity getSecurity() {
+		return security;
+	}
+
+	public void setSecurity(ISecurity security) {
+		this.security = security;
+	}
+
+	public Asset() {
         this.dividendModel = new DividendModel();
     }
     

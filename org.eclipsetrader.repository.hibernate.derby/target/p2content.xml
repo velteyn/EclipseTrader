@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510271423' generation='2'>
-    <update id='org.eclipsetrader.repository.hibernate.derby' range='[0.0.0,1.0.0.202510271423)' severity='0'/>
+  <unit id='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510281111' generation='2'>
+    <update id='org.eclipsetrader.repository.hibernate.derby' range='[0.0.0,1.0.0.202510281111)' severity='0'/>
     <properties size='6'>
       <property name='org.eclipse.equinox.p2.name' value='Apache Derby Database Connectivity'/>
       <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
@@ -11,8 +11,8 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='99'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510271423'/>
-      <provided namespace='osgi.bundle' name='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510271423'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510281111'/>
+      <provided namespace='osgi.bundle' name='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510281111'/>
       <provided namespace='java.package' name='org.apache.derby.authentication' version='0.0.0'/>
       <provided namespace='java.package' name='org.apache.derby.catalog' version='0.0.0'/>
       <provided namespace='java.package' name='org.apache.derby.catalog.types' version='0.0.0'/>
@@ -107,13 +107,13 @@
       <provided namespace='java.package' name='org.apache.derby.shared.common.error' version='0.0.0'/>
       <provided namespace='java.package' name='org.apache.derby.tools' version='0.0.0'/>
       <provided namespace='java.package' name='org.apache.derby.vti' version='0.0.0'/>
-      <provided namespace='osgi.identity' name='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510271423'>
+      <provided namespace='osgi.identity' name='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510281111'>
         <properties size='1'>
           <property name='type' value='osgi.fragment'/>
         </properties>
       </provided>
       <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
-      <provided namespace='osgi.fragment' name='org.eclipsetrader.repository.hibernate' version='1.0.0.202510271423'/>
+      <provided namespace='osgi.fragment' name='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281111'/>
     </provides>
     <requires size='3'>
       <required namespace='osgi.bundle' name='org.eclipsetrader.repository.hibernate' range='[1.0.0,1.1.0)'/>
@@ -122,20 +122,20 @@
           org.eclipsetrader.repository.hibernate.derby
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.hibernate.derby.source' range='[1.0.0.202510271423,1.0.0.202510271423]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.hibernate.derby.source' range='[1.0.0.202510281111,1.0.0.202510281111]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510271423'/>
+      <artifact classifier='osgi.bundle' id='org.eclipsetrader.repository.hibernate.derby' version='1.0.0.202510281111'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: org.eclipsetrader.repository.hibernate.derby;singleton:=true&#xA;Bundle-Version: 1.0.0.202510271423&#xA;Fragment-Host: org.eclipsetrader.repository.hibernate;bundle-version=&quot;[1.0.0,1.1.0)&quot;&#xA;
+          Bundle-SymbolicName: org.eclipsetrader.repository.hibernate.derby;singleton:=true&#xA;Bundle-Version: 1.0.0.202510281111&#xA;Fragment-Host: org.eclipsetrader.repository.hibernate;bundle-version=&quot;[1.0.0,1.1.0)&quot;&#xA;
         </instruction>
       </instructions>
     </touchpointData>

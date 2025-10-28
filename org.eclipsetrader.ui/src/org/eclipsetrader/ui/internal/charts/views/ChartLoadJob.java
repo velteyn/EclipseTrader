@@ -16,9 +16,11 @@ import java.util.Date;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import java.util.List;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipsetrader.core.feed.IHistory;
+import org.eclipsetrader.core.repositories.IStore;
 import org.eclipsetrader.core.feed.TimeSpan;
 import org.eclipsetrader.core.feed.TimeSpan.Units;
 import org.eclipsetrader.core.instruments.ISecurity;
@@ -33,6 +35,7 @@ public class ChartLoadJob extends Job {
 
     IHistory history;
     IHistory subsetHistory;
+    List<IStore> trades;
 
     public ChartLoadJob(ISecurity security) {
         super(""); //$NON-NLS-1$
@@ -56,6 +59,7 @@ public class ChartLoadJob extends Job {
         monitor.beginTask(getName(), IProgressMonitor.UNKNOWN);
         try {
             buildHistory();
+            trades = getTradesFor(security);
         } catch (Exception e) {
             Status status = new Status(IStatus.ERROR, UIActivator.PLUGIN_ID, 0, Messages.ChartLoadJob_ExceptionMessage + security.getName(), e);
             UIActivator.log(status);
@@ -118,12 +122,21 @@ public class ChartLoadJob extends Job {
         return repository.getHistoryFor(security);
     }
 
+    List<IStore> getTradesFor(ISecurity security) {
+        IRepositoryService repository = UIActivator.getDefault().getRepositoryService();
+        return repository.getTradesFor(security);
+    }
+
     public IHistory getHistory() {
         return history;
     }
 
     public IHistory getSubsetHistory() {
         return subsetHistory;
+    }
+
+    public List<IStore> getTrades() {
+        return trades;
     }
 
     public TimeSpan getResolutionTimeSpan() {

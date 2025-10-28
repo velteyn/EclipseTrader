@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.nebula.widgets.cdatetime
-Bundle-Version: 0.14.0.202510271423
+Bundle-Version: 0.14.0.202510281111
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

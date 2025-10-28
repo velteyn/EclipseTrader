@@ -1,18 +1,25 @@
-﻿package org.eclipsetrader.jessx.business;
+
+package org.eclipsetrader.jessx.business;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.eclipsetrader.core.instruments.ISecurity;
+import org.eclipsetrader.core.repositories.IRepositoryService;
 import org.eclipsetrader.jessx.business.event.AssetEvent;
 import org.eclipsetrader.jessx.business.event.AssetListener;
 import org.eclipsetrader.jessx.business.event.InstitutionEvent;
 import org.eclipsetrader.jessx.business.event.InstitutionListener;
+import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Content;
 import org.jdom.Element;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 public abstract class BusinessCore {
 	private static HashMap institutions = new HashMap<Object, Object>();
@@ -121,11 +128,30 @@ public abstract class BusinessCore {
 			return;
 		}
 		getGeneralParameters().loadFromXml(genParam);
+
+        BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
+        ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
+        if (serviceReference == null) {
+            Utils.logger.error("IRepositoryService not found.");
+            return;
+        }
+        IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
+
+        ISecurity[] securities = repositoryService.getSecurities();
+        Map<String, ISecurity> securitiesMap = new HashMap<String, ISecurity>();
+        for (ISecurity security : securities) {
+            securitiesMap.put(security.getName(), security);
+        }
+
 		Iterator<Element> assetNodes = root.getChildren("Asset").iterator();
 		while (assetNodes.hasNext()) {
 			Asset asset = Asset.loadAssetFromXml(assetNodes.next());
+            asset.setSecurity(securitiesMap.get(asset.getAssetName()));
 			addAsset(asset);
 		}
+
+        context.ungetService(serviceReference);
+
 		Iterator<Element> institutionNodes = root.getChildren("Institution").iterator();
 		while (institutionNodes.hasNext()) {
 			Institution institution = Institution.loadInstitutionFromXml(institutionNodes.next());

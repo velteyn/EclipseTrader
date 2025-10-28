@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipsetrader.jessx"
+      id="org.eclipsetrader.jessx-feature"
       label="JessX"
       version="1.0.0.qualifier">
 

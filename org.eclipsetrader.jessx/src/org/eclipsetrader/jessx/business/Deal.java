@@ -4,6 +4,7 @@
 
 package org.eclipsetrader.jessx.business;
 
+import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.jessx.net.NetworkReadable;
 import org.eclipsetrader.jessx.net.NetworkWritable;
 import org.eclipsetrader.jessx.utils.Utils;
@@ -25,7 +26,17 @@ public class Deal implements NetworkWritable, NetworkReadable, XmlExportable
     private String sellerOperation;
     private float maxBidPrice;
     
-    public float getDealPrice() {
+    transient ISecurity security;
+
+    public ISecurity getSecurity() {
+		return security;
+	}
+
+	public void setSecurity(ISecurity security) {
+		this.security = security;
+	}
+
+	public float getDealPrice() {
         return this.price;
     }
     

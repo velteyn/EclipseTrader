@@ -36,6 +36,7 @@ import org.eclipse.core.variables.IValueVariable;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.osgi.util.NLS;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
+import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IStore;
@@ -60,9 +61,11 @@ import org.eclipsetrader.repository.hibernate.internal.types.SplitData;
 import org.eclipsetrader.repository.hibernate.internal.types.WatchListColumn;
 import org.eclipsetrader.repository.hibernate.internal.types.WatchListHolding;
 import org.hibernate.Session;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.event.PostDeleteEvent;
 import org.hibernate.event.PostDeleteEventListener;
 import org.hibernate.event.PostInsertEvent;
@@ -546,5 +549,16 @@ public class HibernateRepository implements IRepository, ISchedulingRule, IExecu
     @Override
     public String toString() {
         return name;
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipsetrader.core.repositories.IRepository#getTradesFor(org.eclipsetrader.core.instruments.ISecurity)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<IStore> getTradesFor(ISecurity security) {
+        Criteria criteria = session.createCriteria(TradeStore.class);
+        criteria.add(Restrictions.eq("security", security));
+        return criteria.list();
     }
 }

@@ -15,8 +15,10 @@ import java.net.URI;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipsetrader.core.instruments.ISecurity;
 
 /**
  * This is the main interface to an object repository.
@@ -90,4 +92,6 @@ public interface IRepository extends IAdaptable {
      * @param monitor - a progress monitor, or null if progress reporting and cancellation are not desired
      */
     public IStatus runInRepository(IRepositoryRunnable runnable, ISchedulingRule rule, IProgressMonitor monitor);
+
+    public List<IStore> getTradesFor(ISecurity security);
 }

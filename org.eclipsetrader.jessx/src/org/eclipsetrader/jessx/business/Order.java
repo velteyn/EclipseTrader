@@ -262,6 +262,10 @@ public abstract class Order extends Operation implements NetworkWritable, Networ
           exchangeableQty, 
           newOrder.getTimestamp(), 
           buyer, seller, maxBidPrice, buyerOperation, sellerOperation);
+
+      deal.setSecurity(BusinessCore.getAsset(assetName).getSecurity());
+      JessxTradeHistory.saveDeal(deal);
+
       NetworkCore.sendToAllPlayers(deal);
       Element dealNode = new Element("Deal");
       deal.saveToXml(dealNode);

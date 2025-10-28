@@ -15,6 +15,7 @@ import java.net.URI;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
@@ -182,6 +183,8 @@ public interface IRepositoryService {
      * @param listener the listener to remove
      */
     public void removeRepositoryResourceListener(IRepositoryChangeListener listener);
+
+    public List<IStore> getTradesFor(ISecurity security);
 
     public IHolding[] getTrades();
 

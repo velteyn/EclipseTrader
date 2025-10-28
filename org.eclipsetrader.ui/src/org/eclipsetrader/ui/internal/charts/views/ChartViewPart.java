@@ -20,6 +20,7 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -83,6 +84,7 @@ import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.internal.charts.repository.ChartTemplate;
 import org.eclipsetrader.core.repositories.IPropertyConstants;
 import org.eclipsetrader.core.repositories.IRepositoryService;
+import org.eclipsetrader.core.repositories.IStore;
 import org.eclipsetrader.core.views.IViewChangeListener;
 import org.eclipsetrader.core.views.IViewItem;
 import org.eclipsetrader.core.views.ViewEvent;
@@ -124,6 +126,7 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
     private ChartView view;
     private IHistory history;
     private IHistory subsetHistory;
+    private List<IStore> trades;
     private ChartViewDropTarget dropListener;
     private boolean dirty;
 
@@ -144,6 +147,7 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
     private CurrentPriceLineFactory currentPriceLineFactory;
     private Action currentBookAction;
     private CurrentBookFactory currentBookFactory;
+    private TradeFactory tradeFactory;
 
     IMemento memento;
     IPreferenceStore preferenceStore;
@@ -595,6 +599,8 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
         currentBookFactory.setEnable(dialogSettings.getBoolean(K_SHOW_CURRENT_BOOK));
         currentBookAction.setChecked(dialogSettings.getBoolean(K_SHOW_CURRENT_BOOK));
 
+        tradeFactory = new TradeFactory();
+
         if (security != null && template != null) {
             setPartName(NLS.bind("{0} - {1}", new Object[] { //$NON-NLS-1$
                 security.getName(), template.getName(),
@@ -608,6 +614,9 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
             rowItem.addChildItem(0, viewItem);
 
             viewItem = new ChartViewItem(rowItem, currentBookFactory);
+            rowItem.addChildItem(0, viewItem);
+
+            viewItem = new ChartViewItem(rowItem, tradeFactory);
             rowItem.addChildItem(0, viewItem);
 
             view.addViewChangeListener(viewChangeListener);
@@ -656,6 +665,8 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
 
                 history = job.getHistory();
                 subsetHistory = job.getSubsetHistory();
+                trades = job.getTrades();
+                tradeFactory.setTrades(trades);
                 view.setRootDataSeries(new OHLCDataSeries(security.getName(), subsetHistory.getAdjustedOHLC(), job.getResolutionTimeSpan()));
 
                 display.asyncExec(new Runnable() {

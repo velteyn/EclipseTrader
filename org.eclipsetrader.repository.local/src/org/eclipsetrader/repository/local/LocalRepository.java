@@ -28,10 +28,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobManager;
+import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipse.core.runtime.jobs.ILock;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.MultiRule;
+import org.eclipsetrader.core.repositories.IPropertyConstants;
 import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IStore;
@@ -425,5 +427,19 @@ public class LocalRepository implements IRepository, ISchedulingRule {
     @Override
     public String toString() {
         return "Local";
+    }
+
+    @Override
+    public List<IStore> getTradesFor(ISecurity security) {
+        if (trades == null) {
+            initializeTradesCollections();
+        }
+        List<IStore> result = new ArrayList<IStore>();
+        for (IStore store : trades.getList()) {
+            if (security.equals(store.fetchProperties(null).getProperty(IPropertyConstants.SECURITY))) {
+                result.add(store);
+            }
+        }
+        return result;
     }
 }
