@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository version='1.1.0'?>
 <artifacts size='1'>
-  <artifact classifier='osgi.bundle' id='org.eclipsetrader.repository.hibernate.postgresql' version='1.0.0.202510291304'>
+  <artifact classifier='osgi.bundle' id='org.eclipsetrader.repository.hibernate.postgresql' version='1.0.0.202510291524'>
     <properties size='9'>
       <property name='artifact.size' value='427014'/>
       <property name='download.size' value='427014'/>
-      <property name='download.checksum.sha-512' value='2f4ba4fbab550d2402df35fbad9f93486a045ca3d622d362bac08aabd7ed13b9ec775dc7fdbf2d635b5f929206eca6b4c2d2d6fd6a4e5f92c13dd6494fc50588'/>
-      <property name='download.checksum.sha-1' value='0d1f87eb7299a20f1b33b941155ca26f6fdc7b0c'/>
-      <property name='download.checksum.sha-256' value='ce1c86616638aad74981aebc671c440c7bb24d4b41e85dbbaa4e91788c1fed7e'/>
+      <property name='download.checksum.sha-512' value='0e496d6138679d507dfa98f5e977f930129f36639f4252f30dcbfb31f77bb04416f25a87f59a89de24539b62081d8eeb51efed59d6d3c33cc69cf8361197a95b'/>
+      <property name='download.checksum.sha-1' value='6b993bb11344d0709e6f7f1b7a470998709be4f5'/>
+      <property name='download.checksum.sha-256' value='1044a98766b7fe1d53b0a57caa0fc8c3ab3ab6025dee56071f952f48d2b9a7b4'/>
       <property name='maven-groupId' value='org.eclipsetrader'/>
       <property name='maven-artifactId' value='org.eclipsetrader.repository.hibernate.postgresql'/>
       <property name='maven-version' value='1.0.0-SNAPSHOT'/>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='org.eclipse.nebula.cwt' version='0.9.0.202510291304' singleton='false' generation='2'>
-    <update id='org.eclipse.nebula.cwt' range='[0.0.0,0.9.0.202510291304)' severity='0'/>
+  <unit id='org.eclipse.nebula.cwt' version='0.9.0.202510291524' singleton='false' generation='2'>
+    <update id='org.eclipse.nebula.cwt' range='[0.0.0,0.9.0.202510291524)' severity='0'/>
     <properties size='9'>
       <property name='df_LT.pluginName' value='Nebula CWT Plugin (Incubation)'/>
       <property name='df_LT.providerName' value='Eclipse.org'/>
@@ -14,15 +14,15 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='11'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.nebula.cwt' version='0.9.0.202510291304'/>
-      <provided namespace='osgi.bundle' name='org.eclipse.nebula.cwt' version='0.9.0.202510291304'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.nebula.cwt' version='0.9.0.202510291524'/>
+      <provided namespace='osgi.bundle' name='org.eclipse.nebula.cwt' version='0.9.0.202510291524'/>
       <provided namespace='java.package' name='org.eclipse.nebula.cwt.animation' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipse.nebula.cwt.animation.effects' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipse.nebula.cwt.animation.movement' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipse.nebula.cwt.base' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipse.nebula.cwt.svg' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipse.nebula.cwt.v' version='0.0.0'/>
-      <provided namespace='osgi.identity' name='org.eclipse.nebula.cwt' version='0.9.0.202510291304'>
+      <provided namespace='osgi.identity' name='org.eclipse.nebula.cwt' version='0.9.0.202510291524'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -42,20 +42,20 @@
           org.eclipse.nebula.cwt
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.nebula.cwt.source' range='[0.9.0.202510291304,0.9.0.202510291304]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.nebula.cwt.source' range='[0.9.0.202510291524,0.9.0.202510291524]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='org.eclipse.nebula.cwt' version='0.9.0.202510291304'/>
+      <artifact classifier='osgi.bundle' id='org.eclipse.nebula.cwt' version='0.9.0.202510291524'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: org.eclipse.nebula.cwt&#xA;Bundle-Version: 0.9.0.202510291304&#xA;
+          Bundle-SymbolicName: org.eclipse.nebula.cwt&#xA;Bundle-Version: 0.9.0.202510291524&#xA;
         </instruction>
       </instructions>
     </touchpointData>

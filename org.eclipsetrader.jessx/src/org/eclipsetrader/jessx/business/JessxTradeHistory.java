@@ -52,13 +52,13 @@ public class JessxTradeHistory {
                     return Status.CANCEL_STATUS;
                 }
 
-                org.eclipsetrader.core.repositories.IRepository hibernateRepository = repositoryService.getRepository("hibernate");
-                if (hibernateRepository == null) {
-                    JessxActivator.log("JessxTradeHistory: Could not find 'hibernate' repository.");
+                org.eclipsetrader.core.repositories.IRepository[] repositories = repositoryService.getRepositories();
+                if (repositories.length == 0) {
+                    JessxActivator.log("JessxTradeHistory: No repositories found.");
                     return Status.CANCEL_STATUS;
                 }
 
-                IStore store = hibernateRepository.createObject();
+                IStore store = repositories[0].createObject();
                 if (store == null) {
                     JessxActivator.log("JessxTradeHistory: Failed to create a new store object.");
                     return Status.CANCEL_STATUS;

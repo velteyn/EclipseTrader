@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: News Plug-in
 Bundle-SymbolicName: org.eclipsetrader.news;singleton:=true
-Bundle-Version: 1.0.0.202510291304
+Bundle-Version: 1.0.0.202510291524
 Bundle-Activator: org.eclipsetrader.news.internal.Activator
 Bundle-Vendor: EclipseTrader.org
 Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.net,org.eclips
