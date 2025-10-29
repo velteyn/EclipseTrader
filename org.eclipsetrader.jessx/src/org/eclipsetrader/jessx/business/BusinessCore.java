@@ -216,25 +216,13 @@ public abstract class BusinessCore {
             Institution institution = (Institution) obj;
             final String assetName = institution.getAssetName().trim();
             if (assets.get(assetName) == null) {
-                Asset asset = new Asset() {
-                    @Override
-                    public String getAssetName() {
-                        return assetName;
-                    }
-                    @Override
-                    public void saveToXml(Element root) {
-                    }
-                    @Override
-                    public void loadFromXml(Element root) {
-                    }
-                    @Override
-                    public JPanel getAssetSetupGui() {
-                        return null;
-                    }
-                };
+                Utils.logger.info("Implicit asset '" + assetName + "' detected. Processing...");
+                Asset asset = new org.eclipsetrader.jessx.business.assets.Stock();
+                asset.setAssetName(assetName);
 
                 ISecurity security = securitiesMap.get(assetName);
                 if (security == null) {
+                    Utils.logger.info("No existing ISecurity found for '" + assetName + "'. Creating new one.");
                     final CountDownLatch latch = new CountDownLatch(1);
                     repositoryService.runInService(new IRepositoryRunnable() {
                         @Override
@@ -270,6 +258,7 @@ public abstract class BusinessCore {
                         securitiesMap.put(s.getName().trim(), s);
                     }
                     security = securitiesMap.get(assetName);
+                    Utils.logger.info("ISecurity for '" + assetName + "' after creation/lookup: " + security);
                 }
                 asset.setSecurity(security);
                 addAsset(asset);

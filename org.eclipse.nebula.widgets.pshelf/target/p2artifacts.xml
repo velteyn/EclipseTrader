@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository version='1.1.0'?>
 <artifacts size='1'>
-  <artifact classifier='osgi.bundle' id='org.eclipse.nebula.widgets.pshelf' version='1.0.0.202510281452'>
+  <artifact classifier='osgi.bundle' id='org.eclipse.nebula.widgets.pshelf' version='1.0.0.202510281758'>
     <properties size='9'>
       <property name='artifact.size' value='22717'/>
       <property name='download.size' value='22717'/>
-      <property name='download.checksum.sha-512' value='b42dad55093452bb2b5c249dd0bf58b8085645786d4697b985a1ed7cfecb6def4c0e4bec7e685c7ccb9e79a9a6e5e54e7a6c880036b1cac9b2b6e6af65c19d86'/>
-      <property name='download.checksum.sha-1' value='1dafe0f4d2f72e2bfe01569e2a5dd79de5e08cf5'/>
-      <property name='download.checksum.sha-256' value='4834a84a5406ec256c9053bfa8d013ac1478eae67ae13405e125a04eb5693743'/>
+      <property name='download.checksum.sha-512' value='ec74ca320d04dda2413edcbcfb5b8f9281e6769ba75f8563d6705d2e6c701d5b156fe4e75c91c682303a9c8e16ad74794995b77a44c346349c5e54806b6ddd24'/>
+      <property name='download.checksum.sha-1' value='fdb2e6e3d5534f4d04a84342de1d56972fbb4096'/>
+      <property name='download.checksum.sha-256' value='d612e0af9c4a6d0bb708d489456f9e06cb7fd92baec4c9c5ff3d7e84ba47dbac'/>
       <property name='maven-groupId' value='org.eclipsetrader'/>
       <property name='maven-artifactId' value='org.eclipse.nebula.widgets.pshelf'/>
       <property name='maven-version' value='1.0.0-SNAPSHOT'/>

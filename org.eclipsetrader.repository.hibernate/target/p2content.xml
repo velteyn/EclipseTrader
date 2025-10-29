@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281452' generation='2'>
-    <update id='org.eclipsetrader.repository.hibernate' range='[0.0.0,1.0.0.202510281452)' severity='0'/>
+  <unit id='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281758' generation='2'>
+    <update id='org.eclipsetrader.repository.hibernate' range='[0.0.0,1.0.0.202510281758)' severity='0'/>
     <properties size='6'>
       <property name='org.eclipse.equinox.p2.name' value='Hibernate Repository'/>
       <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
@@ -11,14 +11,14 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='9'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281452'/>
-      <provided namespace='osgi.bundle' name='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281452'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281758'/>
+      <provided namespace='osgi.bundle' name='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281758'/>
       <provided namespace='java.package' name='org.eclipsetrader.repository.hibernate' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.repository.hibernate.internal' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.repository.hibernate.internal.stores' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.repository.hibernate.internal.types' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.repository.hibernate.internal.ui' version='0.0.0'/>
-      <provided namespace='osgi.identity' name='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281452'>
+      <provided namespace='osgi.identity' name='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281758'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -133,20 +133,20 @@
           org.eclipsetrader.repository.hibernate
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.hibernate.source' range='[1.0.0.202510281452,1.0.0.202510281452]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.repository.hibernate.source' range='[1.0.0.202510281758,1.0.0.202510281758]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281452'/>
+      <artifact classifier='osgi.bundle' id='org.eclipsetrader.repository.hibernate' version='1.0.0.202510281758'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: org.eclipsetrader.repository.hibernate;singleton:=true&#xA;Bundle-Version: 1.0.0.202510281452&#xA;
+          Bundle-SymbolicName: org.eclipsetrader.repository.hibernate;singleton:=true&#xA;Bundle-Version: 1.0.0.202510281758&#xA;
         </instruction>
       </instructions>
     </touchpointData>

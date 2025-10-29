@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository version='1.1.0'?>
 <artifacts size='1'>
-  <artifact classifier='osgi.bundle' id='org.hibernate' version='3.2.6.202510281452'>
+  <artifact classifier='osgi.bundle' id='org.hibernate' version='3.2.6.202510281758'>
     <properties size='9'>
-      <property name='artifact.size' value='4374859'/>
-      <property name='download.size' value='4374859'/>
-      <property name='download.checksum.sha-512' value='2992f1390b81c784e8bf3a90a20780d3649206fa792993fef46bcf3c90f8b75d538cf574c90b7216b862a253a3261f807acebe7173a307c5628b0c9602694d04'/>
-      <property name='download.checksum.sha-1' value='2d844b6a7c7f4f2addb8a361d0a744567b509d76'/>
-      <property name='download.checksum.sha-256' value='3ddfd4982b3b3cffe7ca64fe04e1b447146cc4f9dc7b497dde362845c5ff0706'/>
+      <property name='artifact.size' value='4374860'/>
+      <property name='download.size' value='4374860'/>
+      <property name='download.checksum.sha-512' value='f0d515ffce9775949a8497e7f3adb2373c202732ede304db86b821ddc269074a2fe9e7f6fc26fabffeea6262f60970b69c60667efc1f46fa5000441c58b5e9ca'/>
+      <property name='download.checksum.sha-1' value='15ddf15652d1643d125e6c66a80f5e0d35db1a01'/>
+      <property name='download.checksum.sha-256' value='9a20df3e7edfa9b48d6f2fe9ab8cb3e52a557f62dcb2f28291b1586d740fd3e0'/>
       <property name='maven-groupId' value='org.eclipsetrader'/>
       <property name='maven-artifactId' value='org.hibernate'/>
       <property name='maven-version' value='3.2.6-SNAPSHOT'/>

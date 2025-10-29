@@ -18,25 +18,60 @@ public class JessxTradeHistory {
     public static void saveDeal(Deal deal) {
         BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
         ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
-        if (serviceReference != null) {
-            final IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
-
-            final Deal finalDeal = deal;
-
-            repositoryService.runInService(new IRepositoryRunnable() {
-                public IStatus run(org.eclipse.core.runtime.IProgressMonitor monitor) {
-                    IStore store = repositoryService.getRepositories()[0].createObject();
-                    IStoreProperties properties = store.fetchProperties(monitor);
-                    properties.setProperty(IPropertyConstants.PURCHASE_DATE, new Date(finalDeal.getTimestamp()));
-                    properties.setProperty(IPropertyConstants.SECURITY, finalDeal.getSecurity());
-                    properties.setProperty(IPropertyConstants.PURCHASE_QUANTITY, (long) finalDeal.getQuantity());
-                    properties.setProperty(IPropertyConstants.PURCHASE_PRICE, (double) finalDeal.getDealPrice());
-                    store.putProperties(properties, monitor);
-                    return Status.OK_STATUS;
-                };
-            }, null);
-
-            context.ungetService(serviceReference);
+        if (serviceReference == null) {
+            JessxActivator.log("JessxTradeHistory: Could not get IRepositoryService.");
+            return;
         }
+
+        final IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
+        if (repositoryService == null) {
+            JessxActivator.log("JessxTradeHistory: IRepositoryService is null.");
+            context.ungetService(serviceReference);
+            return;
+        }
+
+        final Deal finalDeal = deal;
+
+        repositoryService.runInService(new IRepositoryRunnable() {
+            public IStatus run(org.eclipse.core.runtime.IProgressMonitor monitor) {
+                org.eclipsetrader.core.instruments.ISecurity security = finalDeal.getSecurity();
+                String assetName = "Unknown";
+                if (security == null) {
+                    JessxActivator.log("JessxTradeHistory: ISecurity is null, attempting fallback.");
+                    Institution institution = BusinessCore.getInstitution(finalDeal.getDealInstitution());
+                    if (institution != null) {
+                        assetName = institution.getAssetName();
+                        security = repositoryService.getSecurityFromName(assetName);
+                    }
+                }
+
+                if (security == null) {
+                    JessxActivator.log("JessxTradeHistory: Fallback failed. Could not find ISecurity for asset: " + assetName);
+                    return Status.CANCEL_STATUS;
+                }
+
+                org.eclipsetrader.core.repositories.IRepository hibernateRepository = repositoryService.getRepository("hibernate");
+                if (hibernateRepository == null) {
+                    JessxActivator.log("JessxTradeHistory: Could not find 'hibernate' repository.");
+                    return Status.CANCEL_STATUS;
+                }
+
+                IStore store = hibernateRepository.createObject();
+                if (store == null) {
+                    JessxActivator.log("JessxTradeHistory: Failed to create a new store object.");
+                    return Status.CANCEL_STATUS;
+                }
+
+                IStoreProperties properties = store.fetchProperties(monitor);
+                properties.setProperty(IPropertyConstants.PURCHASE_DATE, new Date(finalDeal.getTimestamp()));
+                properties.setProperty(IPropertyConstants.SECURITY, security);
+                properties.setProperty(IPropertyConstants.PURCHASE_QUANTITY, (long) finalDeal.getQuantity());
+                properties.setProperty(IPropertyConstants.PURCHASE_PRICE, (double) finalDeal.getDealPrice());
+                store.putProperties(properties, monitor);
+                return Status.OK_STATUS;
+            };
+        }, null);
+
+        context.ungetService(serviceReference);
     }
 }

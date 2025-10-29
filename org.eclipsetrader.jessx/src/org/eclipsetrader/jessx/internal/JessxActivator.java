@@ -123,6 +123,10 @@ public class JessxActivator extends AbstractUIPlugin {
         }
     }
     
+    public static void log(String message) {
+        log(new Status(IStatus.INFO, PLUGIN_ID, message));
+    }
+
     public static void log(IStatus status) {
         if (plugin == null) {
             if (status.getException() != null) {
