@@ -16,6 +16,8 @@ import org.osgi.framework.ServiceReference;
 public class JessxTradeHistory {
 
     public static void saveDeal(Deal deal) {
+        JessxActivator.log(String.format("[TRADE LIFECYCLE - 2] Persistence service invoked for deal: %d @ %f", deal.getQuantity(), deal.getDealPrice()));
+
         BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
         ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
         if (serviceReference == null) {
@@ -68,6 +70,9 @@ public class JessxTradeHistory {
                 properties.setProperty(IPropertyConstants.PURCHASE_QUANTITY, (long) finalDeal.getQuantity());
                 properties.setProperty(IPropertyConstants.PURCHASE_PRICE, (double) finalDeal.getDealPrice());
                 store.putProperties(properties, monitor);
+
+                JessxActivator.log(String.format("[TRADE LIFECYCLE - 3] Deal successfully saved to repository for asset: %s", assetName));
+
                 return Status.OK_STATUS;
             };
         }, null);

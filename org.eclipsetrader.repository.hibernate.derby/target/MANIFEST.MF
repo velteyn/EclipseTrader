@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Apache Derby Database Connectivity
 Bundle-SymbolicName: org.eclipsetrader.repository.hibernate.derby;single
  ton:=true
-Bundle-Version: 1.0.0.202510281758
+Bundle-Version: 1.0.0.202510291304
 Bundle-Vendor: EclipseTrader.org
 Fragment-Host: org.eclipsetrader.repository.hibernate;bundle-version="[1
  .0.0,1.1.0)"

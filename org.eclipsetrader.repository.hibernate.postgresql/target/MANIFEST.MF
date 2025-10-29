@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PostgreSQL Database Connectivity
 Bundle-SymbolicName: org.eclipsetrader.repository.hibernate.postgresql;s
  ingleton:=true
-Bundle-Version: 1.0.0.202510281758
+Bundle-Version: 1.0.0.202510291304
 Bundle-Vendor: EclipseTrader.org
 Fragment-Host: org.eclipsetrader.repository.hibernate;bundle-version="[1
  .0.0,2.0.0)"

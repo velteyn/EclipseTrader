@@ -264,6 +264,10 @@ public abstract class Order extends Operation implements NetworkWritable, Networ
           newOrder.getTimestamp(), 
           buyer, seller, maxBidPrice, buyerOperation, sellerOperation);
 
+      org.eclipsetrader.jessx.internal.JessxActivator.log(
+          String.format("[TRADE LIFECYCLE - 1] Deal created: %d @ %f", deal.getQuantity(), deal.getDealPrice())
+      );
+
       deal.setSecurity(asset.getSecurity());
       JessxTradeHistory.saveDeal(deal);
 

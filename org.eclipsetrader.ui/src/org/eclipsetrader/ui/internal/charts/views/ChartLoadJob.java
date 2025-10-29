@@ -56,10 +56,13 @@ public class ChartLoadJob extends Job {
      */
     @Override
     protected IStatus run(IProgressMonitor monitor) {
+        UIActivator.log(String.format("[TRADE LIFECYCLE - 4] Chart load job started for %s", security.getName()));
+
         monitor.beginTask(getName(), IProgressMonitor.UNKNOWN);
         try {
             buildHistory();
             trades = getTradesFor(security);
+            UIActivator.log(String.format("[TRADE LIFECYCLE - 5] Found %d trades in repository for %s", trades.size(), security.getName()));
         } catch (Exception e) {
             Status status = new Status(IStatus.ERROR, UIActivator.PLUGIN_ID, 0, Messages.ChartLoadJob_ExceptionMessage + security.getName(), e);
             UIActivator.log(status);

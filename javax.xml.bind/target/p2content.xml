@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='javax.xml.bind' version='2.1.6.202510281758' singleton='false' generation='2'>
-    <update id='javax.xml.bind' range='[0.0.0,2.1.6.202510281758)' severity='0'/>
+  <unit id='javax.xml.bind' version='2.1.6.202510291304' singleton='false' generation='2'>
+    <update id='javax.xml.bind' range='[0.0.0,2.1.6.202510291304)' severity='0'/>
     <properties size='6'>
       <property name='org.eclipse.equinox.p2.name' value='JAX-XML-BIND'/>
       <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
@@ -11,8 +11,8 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='44'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='javax.xml.bind' version='2.1.6.202510281758'/>
-      <provided namespace='osgi.bundle' name='javax.xml.bind' version='2.1.6.202510281758'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='javax.xml.bind' version='2.1.6.202510291304'/>
+      <provided namespace='osgi.bundle' name='javax.xml.bind' version='2.1.6.202510291304'/>
       <provided namespace='java.package' name='com.sun.activation.registries' version='0.0.0'/>
       <provided namespace='java.package' name='com.sun.activation.viewers' version='0.0.0'/>
       <provided namespace='java.package' name='com.sun.istack' version='0.0.0'/>
@@ -53,7 +53,7 @@
       <provided namespace='java.package' name='javax.xml.stream' version='2.1.6'/>
       <provided namespace='java.package' name='javax.xml.stream.events' version='2.1.6'/>
       <provided namespace='java.package' name='javax.xml.stream.util' version='2.1.6'/>
-      <provided namespace='osgi.identity' name='javax.xml.bind' version='2.1.6.202510281758'>
+      <provided namespace='osgi.identity' name='javax.xml.bind' version='2.1.6.202510291304'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -66,20 +66,20 @@
           javax.xml.bind
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='javax.xml.bind.source' range='[2.1.6.202510281758,2.1.6.202510281758]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='javax.xml.bind.source' range='[2.1.6.202510291304,2.1.6.202510291304]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='javax.xml.bind' version='2.1.6.202510281758'/>
+      <artifact classifier='osgi.bundle' id='javax.xml.bind' version='2.1.6.202510291304'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: javax.xml.bind&#xA;Bundle-Version: 2.1.6.202510281758&#xA;
+          Bundle-SymbolicName: javax.xml.bind&#xA;Bundle-Version: 2.1.6.202510291304&#xA;
         </instruction>
       </instructions>
     </touchpointData>
