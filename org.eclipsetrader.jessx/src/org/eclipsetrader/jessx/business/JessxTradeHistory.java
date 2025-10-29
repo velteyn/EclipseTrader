@@ -1,4 +1,3 @@
-
 package org.eclipsetrader.jessx.business;
 
 import java.util.Date;
@@ -71,7 +70,7 @@ public class JessxTradeHistory {
                 properties.setProperty(IPropertyConstants.PURCHASE_PRICE, (double) finalDeal.getDealPrice());
                 store.putProperties(properties, monitor);
 
-                JessxActivator.log(String.format("[TRADE LIFECYCLE - 3] Deal successfully saved to repository for asset: %s", assetName));
+                JessxActivator.log(String.format("[TRADE LIFECYCLE - 3] Deal successfully saved to repository for asset: %s", security.getName()));
 
                 return Status.OK_STATUS;
             };
