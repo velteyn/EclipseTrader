@@ -2,11 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: News Plug-in
 Bundle-SymbolicName: org.eclipsetrader.news;singleton:=true
-Bundle-Version: 1.0.0.202510281758
+Bundle-Version: 1.0.0.202510300637
 Bundle-Activator: org.eclipsetrader.news.internal.Activator
 Bundle-Vendor: EclipseTrader.org
 Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.net,org.eclips
- e.ui,org.eclipsetrader.core,org.eclipsetrader.ui
+ e.ui,org.eclipsetrader.core,org.eclipsetrader.ui,com.sun.syndication.fe
+ tcher
 Bundle-ActivationPolicy: lazy
 Import-Package: com.sun.syndication.feed,com.sun.syndication.feed.atom,c
  om.sun.syndication.feed.impl,com.sun.syndication.feed.module,com.sun.sy

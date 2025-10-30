@@ -10,29 +10,65 @@
         <tycho.version>4.0.8</tycho.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <eclipse-repo.url>https://download.eclipse.org/releases/juno</eclipse-repo.url>
+        <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
 
     <modules>
-        <module>org.mozilla.rhino</module>
-        <module>org.eclipsetrader.core</module>
+        <module>org.apache.commons.logging</module>
+        <module>org.apache.commons.codec</module>
+        <module>org.apache.commons.httpclient</module>
+        <module>org.apache.commons</module>
+        <module>org.apache.commons-feature</module>
+        <module>com.sun.syndication</module>
+        <module>com.sun.syndication-feature</module>
         <module>com.sun.syndication.fetcher</module>
+        <module>com.tictactec.ta.lib</module>
+        <module>com.tictactec.ta.lib-feature</module>
+        <module>javax.xml.bind</module>
+        <module>org.apache.commons.collections</module>
+        <module>org.apache.log4j</module>
+        <module>org.apache.log4j-feature</module>
         <module>org.eclipse.nebula.cwt</module>
+        <module>org.eclipse.nebula.jface.cdatetime</module>
         <module>org.eclipse.nebula.widgets.cdatetime</module>
         <module>org.eclipse.nebula.widgets.pshelf</module>
-        <module>org.eclipse.nebula.jface.cdatetime</module>
-        <module>org.eclipsetrader.ui</module>
-        <module>org.eclipsetrader.news</module>
-        <module>org.htmlparser</module>
+        <module>org.eclipsetrader.archipelago</module>
+        <module>org.eclipsetrader.borsaitalia</module>
+        <module>org.eclipsetrader.brokers.paper</module>
+        <module>org.eclipsetrader.brokers.paper-feature</module>
+        <module>org.eclipsetrader.core</module>
+        <module>org.eclipsetrader.directa</module>
+        <module>org.eclipsetrader.directa-feature</module>
+        <module>org.eclipsetrader.directaworld</module>
+        <module>org.eclipsetrader.directaworld-feature</module>
         <module>org.eclipsetrader.jessx</module>
         <module>org.eclipsetrader.jessx-feature</module>
-        <module>org.eclipsetrader.ui.application</module>
+        <module>org.eclipsetrader.news</module>
+        <module>org.eclipsetrader.platform</module>
+        <module>org.eclipsetrader.platform-feature</module>
+        <module>org.eclipsetrader.platform.doc.isv</module>
+        <module>org.eclipsetrader.platform.doc.user</module>
+        <module>org.eclipsetrader.releng</module>
         <module>org.eclipsetrader.repository.hibernate</module>
+        <module>org.eclipsetrader.repository.hibernate-feature</module>
         <module>org.eclipsetrader.repository.hibernate.derby</module>
+        <module>org.eclipsetrader.repository.hibernate.derby-feature</module>
         <module>org.eclipsetrader.repository.hibernate.postgresql</module>
+        <module>org.eclipsetrader.repository.hibernate.postgresql-feature</module>
         <module>org.eclipsetrader.repository.local</module>
-        <module>org.eclipsetrader.brokers.paper</module>
-        <module>javax.xml.bind</module>
+        <module>org.eclipsetrader.ui</module>
+        <module>org.eclipsetrader.ui.application</module>
+        <module>org.eclipsetrader.ui.charts.indicators</module>
+        <module>org.eclipsetrader.yahoo</module>
+        <module>org.eclipsetrader.yahoo-feature</module>
         <module>org.hibernate</module>
+        <module>org.hibernate-feature</module>
+        <module>org.jdom</module>
+        <module>org.htmlparser</module>
+        <module>org.htmlparser-feature</module>
+        <module>org.jdom-feature</module>
+        <module>org.mozilla.rhino</module>
+        <module>org.mozilla.rhino-feature</module>
     </modules>
 
     <repositories>
@@ -58,6 +94,14 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-packaging-plugin</artifactId>
+                    <version>${tycho.version}</version>
+                    <configuration>
+                        <qualifier>${maven.build.timestamp}</qualifier>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>tycho-compiler-plugin</artifactId>

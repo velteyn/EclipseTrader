@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Chart Indicators Plug-in
 Bundle-SymbolicName: org.eclipsetrader.ui.charts.indicators;singleton:=t
  rue
-Bundle-Version: 1.0.0.202510241755
+Bundle-Version: 1.0.0.202510300637
 Bundle-Activator: org.eclipsetrader.ui.internal.charts.indicators.Activa
  tor
 Bundle-Vendor: EclipseTrader.org

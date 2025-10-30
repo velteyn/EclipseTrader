@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.tictactec.ta.lib"
+      id="com.tictactec.ta.lib-feature"
       label="Technical Analysis Library"
-      version="0.4.0.R20070915"
+      version="1.0.0.qualifier"
       provider-name="EclipseTrader.org"
       plugin="com.tictactec.ta.lib">
 
@@ -27,7 +27,7 @@
          id="com.tictactec.ta.lib"
          download-size="0"
          install-size="0"
-         version="0.4.0.R20070915"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>

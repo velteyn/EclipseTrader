@@ -7,7 +7,6 @@ Bundle-Vendor: EclipseTrader.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.apache.lucene,
  org.eclipse.core.runtime,
- org.eclipse.help.appserver,
  org.eclipse.help,
  org.eclipse.help.base,
  org.eclipse.help.ui,

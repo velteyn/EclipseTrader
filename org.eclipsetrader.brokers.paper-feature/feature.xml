@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipsetrader.brokers.paper"
+      id="org.eclipsetrader.brokers.paper-feature"
       label="%featureName"
       version="1.0.0.qualifier"
       provider-name="%providerName">
@@ -23,7 +23,7 @@
    </url>
 
    <requires>
-      <import feature="org.eclipsetrader.platform" version="1.0.0" match="compatible"/>
+      <import feature="org.eclipsetrader.platform-feature" version="0.0.0" match="compatible"/>
    </requires>
 
    <plugin

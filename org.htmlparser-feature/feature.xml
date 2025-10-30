@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.htmlparser"
+      id="org.htmlparser-feature"
       label="HTML Parser Library"
-      version="1.6.0.R20060319"
+      version="1.0.0.qualifier"
       provider-name="EclipseTrader.org">
 
    <description>
@@ -26,7 +26,7 @@
          id="org.htmlparser"
          download-size="0"
          install-size="0"
-         version="1.6.0.R20060319"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>

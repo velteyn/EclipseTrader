@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Hibernate Repository
 Bundle-SymbolicName: org.eclipsetrader.repository.hibernate;singleton:=t
  rue
-Bundle-Version: 1.0.0.202510281758
+Bundle-Version: 1.0.0.202510300637
 Bundle-Activator: org.eclipsetrader.repository.hibernate.internal.Activa
  tor
 Bundle-Vendor: EclipseTrader.org

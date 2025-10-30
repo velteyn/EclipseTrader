@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='org.eclipsetrader.ui.charts.indicators' version='1.0.0.202510241755' generation='2'>
-    <update id='org.eclipsetrader.ui.charts.indicators' range='[0.0.0,1.0.0.202510241755)' severity='0'/>
+  <unit id='org.eclipsetrader.ui.charts.indicators' version='1.0.0.202510300637' generation='2'>
+    <update id='org.eclipsetrader.ui.charts.indicators' range='[0.0.0,1.0.0.202510300637)' severity='0'/>
     <properties size='6'>
       <property name='org.eclipse.equinox.p2.name' value='Chart Indicators Plug-in'/>
       <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
@@ -11,13 +11,13 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='8'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.ui.charts.indicators' version='1.0.0.202510241755'/>
-      <provided namespace='osgi.bundle' name='org.eclipsetrader.ui.charts.indicators' version='1.0.0.202510241755'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.ui.charts.indicators' version='1.0.0.202510300637'/>
+      <provided namespace='osgi.bundle' name='org.eclipsetrader.ui.charts.indicators' version='1.0.0.202510300637'/>
       <provided namespace='java.package' name='org.eclipsetrader.ui.charts' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.ui.charts.indicators' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.ui.internal.charts' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.ui.internal.charts.indicators' version='0.0.0'/>
-      <provided namespace='osgi.identity' name='org.eclipsetrader.ui.charts.indicators' version='1.0.0.202510241755'>
+      <provided namespace='osgi.identity' name='org.eclipsetrader.ui.charts.indicators' version='1.0.0.202510300637'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -39,20 +39,20 @@
           org.eclipsetrader.ui.charts.indicators
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.ui.charts.indicators.source' range='[1.0.0.202510241755,1.0.0.202510241755]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.ui.charts.indicators.source' range='[1.0.0.202510300637,1.0.0.202510300637]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='org.eclipsetrader.ui.charts.indicators' version='1.0.0.202510241755'/>
+      <artifact classifier='osgi.bundle' id='org.eclipsetrader.ui.charts.indicators' version='1.0.0.202510300637'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: org.eclipsetrader.ui.charts.indicators;singleton:=true&#xA;Bundle-Version: 1.0.0.202510241755&#xA;
+          Bundle-SymbolicName: org.eclipsetrader.ui.charts.indicators;singleton:=true&#xA;Bundle-Version: 1.0.0.202510300637&#xA;
         </instruction>
       </instructions>
     </touchpointData>

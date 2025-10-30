@@ -17,7 +17,11 @@
 package com.sun.syndication.feed.synd;
 
 import com.sun.syndication.feed.impl.ObjectBean;
-import com.sun.syndication.feed.module.*;
+import com.sun.syndication.feed.module.DCModule;
+import com.sun.syndication.feed.module.DCModuleImpl;
+import com.sun.syndication.feed.module.Module;
+import com.sun.syndication.feed.module.SyModule;
+import com.sun.syndication.feed.module.SyModuleImpl;
 import com.sun.syndication.feed.module.impl.ModuleUtils;
 import com.sun.syndication.feed.synd.impl.URINormalizer;
 import com.sun.syndication.feed.impl.CopyFromHelper;

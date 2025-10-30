@@ -1,22 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='com.sun.syndication.fetcher' version='0.9.0.202510281758' singleton='false' generation='2'>
-    <update id='com.sun.syndication.fetcher' range='[0.0.0,0.9.0.202510281758)' severity='0'/>
+  <unit id='com.sun.syndication.fetcher' version='1.0.0.202510300637' singleton='false' generation='2'>
+    <update id='com.sun.syndication.fetcher' range='[0.0.0,1.0.0.202510300637)' severity='0'/>
     <properties size='6'>
       <property name='org.eclipse.equinox.p2.name' value='ROME: Fetcher Plugin'/>
       <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
       <property name='maven-groupId' value='org.eclipsetrader'/>
       <property name='maven-artifactId' value='com.sun.syndication.fetcher'/>
-      <property name='maven-version' value='0.9.0-SNAPSHOT'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='7'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='com.sun.syndication.fetcher' version='0.9.0.202510281758'/>
-      <provided namespace='osgi.bundle' name='com.sun.syndication.fetcher' version='0.9.0.202510281758'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='com.sun.syndication.fetcher' version='1.0.0.202510300637'/>
+      <provided namespace='osgi.bundle' name='com.sun.syndication.fetcher' version='1.0.0.202510300637'/>
       <provided namespace='java.package' name='com.sun.syndication.fetcher' version='0.9.0'/>
       <provided namespace='java.package' name='com.sun.syndication.fetcher.impl' version='0.9.0'/>
       <provided namespace='java.package' name='com.sun.syndication.fetcher.samples' version='0.9.0'/>
-      <provided namespace='osgi.identity' name='com.sun.syndication.fetcher' version='0.9.0.202510281758'>
+      <provided namespace='osgi.identity' name='com.sun.syndication.fetcher' version='1.0.0.202510300637'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -38,20 +38,20 @@
           com.sun.syndication.fetcher
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='com.sun.syndication.fetcher.source' range='[0.9.0.202510281758,0.9.0.202510281758]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='com.sun.syndication.fetcher.source' range='[1.0.0.202510300637,1.0.0.202510300637]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='com.sun.syndication.fetcher' version='0.9.0.202510281758'/>
+      <artifact classifier='osgi.bundle' id='com.sun.syndication.fetcher' version='1.0.0.202510300637'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: com.sun.syndication.fetcher&#xA;Bundle-Version: 0.9.0.202510281758&#xA;
+          Bundle-SymbolicName: com.sun.syndication.fetcher&#xA;Bundle-Version: 1.0.0.202510300637&#xA;
         </instruction>
       </instructions>
     </touchpointData>

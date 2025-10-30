@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='org.eclipsetrader.directa' version='1.0.0.202510271423' generation='2'>
-    <update id='org.eclipsetrader.directa' range='[0.0.0,1.0.0.202510271423)' severity='0'/>
+  <unit id='org.eclipsetrader.directa' version='1.0.0.202510300637' generation='2'>
+    <update id='org.eclipsetrader.directa' range='[0.0.0,1.0.0.202510300637)' severity='0'/>
     <properties size='6'>
       <property name='org.eclipse.equinox.p2.name' value='Directa Connector'/>
       <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
@@ -11,8 +11,8 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='11'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.directa' version='1.0.0.202510271423'/>
-      <provided namespace='osgi.bundle' name='org.eclipsetrader.directa' version='1.0.0.202510271423'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.directa' version='1.0.0.202510300637'/>
+      <provided namespace='osgi.bundle' name='org.eclipsetrader.directa' version='1.0.0.202510300637'/>
       <provided namespace='java.package' name='org.eclipsetrader.directa.internal' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.directa.internal.core' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.directa.internal.core.connector' version='0.0.0'/>
@@ -20,7 +20,7 @@
       <provided namespace='java.package' name='org.eclipsetrader.directa.internal.core.repository' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.directa.internal.ui' version='0.0.0'/>
       <provided namespace='java.package' name='org.eclipsetrader.directa.internal.ui.preferences' version='0.0.0'/>
-      <provided namespace='osgi.identity' name='org.eclipsetrader.directa' version='1.0.0.202510271423'>
+      <provided namespace='osgi.identity' name='org.eclipsetrader.directa' version='1.0.0.202510300637'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -78,20 +78,20 @@
           org.eclipsetrader.directa
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.directa.source' range='[1.0.0.202510271423,1.0.0.202510271423]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipsetrader.directa.source' range='[1.0.0.202510300637,1.0.0.202510300637]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='org.eclipsetrader.directa' version='1.0.0.202510271423'/>
+      <artifact classifier='osgi.bundle' id='org.eclipsetrader.directa' version='1.0.0.202510300637'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: org.eclipsetrader.directa;singleton:=true&#xA;Bundle-Version: 1.0.0.202510271423&#xA;
+          Bundle-SymbolicName: org.eclipsetrader.directa;singleton:=true&#xA;Bundle-Version: 1.0.0.202510300637&#xA;
         </instruction>
       </instructions>
     </touchpointData>

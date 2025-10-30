@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF8"?>
 <feature
-      id="org.eclipsetrader.repository.hibernate.postgresql"
+      id="org.eclipsetrader.repository.hibernate.postgresql-feature"
       label="%featureName"
       version="1.0.0.qualifier"
       provider-name="%providerName">
@@ -23,7 +23,7 @@
    </url>
 
    <requires>
-      <import feature="org.eclipsetrader.repository.hibernate" version="1.0.0" match="compatible"/>
+      <import feature="org.eclipsetrader.repository.hibernate-feature" version="0.0.0" match="compatible"/>
    </requires>
 
    <plugin

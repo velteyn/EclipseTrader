@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository version='1.1.0'?>
 <artifacts size='1'>
-  <artifact classifier='osgi.bundle' id='com.sun.syndication.fetcher' version='0.9.0.202510281758'>
+  <artifact classifier='osgi.bundle' id='com.sun.syndication.fetcher' version='1.0.0.202510300637'>
     <properties size='9'>
-      <property name='artifact.size' value='25112'/>
-      <property name='download.size' value='25112'/>
-      <property name='download.checksum.sha-512' value='74130a293e069117c8fe46da57e71ed103f7d58b94a5396c458456b90642f9396b108497ae039e647bc8d25e49504559e716f10d04497d43df9b32870b0cb8cb'/>
-      <property name='download.checksum.sha-1' value='ea0e91892017c71526d8b67abe484f9e1ad36dca'/>
-      <property name='download.checksum.sha-256' value='76ce90d7a28366e52b058ca281ac4011206f6525482f23f1240c54fbe57046d4'/>
+      <property name='artifact.size' value='25225'/>
+      <property name='download.size' value='25225'/>
+      <property name='download.checksum.sha-512' value='f541d662d206eb6c3b7ebb3bf59c039e5180fe1ea8b5ce5c5c25f26441fc68077b5f07a219ee0433ac39c6c1a956a43fc8073702400852d8c890a9dde4b97e28'/>
+      <property name='download.checksum.sha-1' value='99b76dcb652ae115d31086896bdf657a3f958b49'/>
+      <property name='download.checksum.sha-256' value='195021233c53aae15eac38d6207ff645940b2dc86af01e2c2399286b317fbe9b'/>
       <property name='maven-groupId' value='org.eclipsetrader'/>
       <property name='maven-artifactId' value='com.sun.syndication.fetcher'/>
-      <property name='maven-version' value='0.9.0-SNAPSHOT'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
   </artifact>

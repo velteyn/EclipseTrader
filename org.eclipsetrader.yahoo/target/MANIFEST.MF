@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Yahoo! Finance Connector
 Bundle-SymbolicName: org.eclipsetrader.yahoo;singleton:=true
-Bundle-Version: 1.0.0.202510271423
+Bundle-Version: 1.0.0.202510300637
 Bundle-Activator: org.eclipsetrader.yahoo.internal.YahooActivator
 Require-Bundle: org.eclipse.core.runtime,org.eclipse.core.net,org.eclips
  e.ui,org.eclipsetrader.core,org.eclipsetrader.news,org.eclipse.nebula.w

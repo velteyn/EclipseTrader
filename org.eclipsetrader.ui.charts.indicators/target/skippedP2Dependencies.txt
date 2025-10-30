@@ -9,7 +9,6 @@ p2.eclipse.plugin:javax.xml:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/
 p2.eclipse.plugin:org.apache.batik.css:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.apache.batik.css/1.6.0.v201011041432/org.apache.batik.css-1.6.0.v201011041432.jar
 p2.eclipse.plugin:org.apache.batik.util.gui:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.apache.batik.util.gui/1.6.0.v201011041432/org.apache.batik.util.gui-1.6.0.v201011041432.jar
 p2.eclipse.plugin:org.apache.batik.util:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.apache.batik.util/1.6.0.v201011041432/org.apache.batik.util-1.6.0.v201011041432.jar
-p2.eclipse.plugin:org.apache.commons.logging:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.apache.commons.logging/1.1.1.v201101211721/org.apache.commons.logging-1.1.1.v201101211721.jar
 p2.eclipse.plugin:org.eclipse.core.commands:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.eclipse.core.commands/3.6.2.v20130123-162658/org.eclipse.core.commands-3.6.2.v20130123-162658.jar
 p2.eclipse.plugin:org.eclipse.core.contenttype:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.eclipse.core.contenttype/3.4.200.v20120523-2004/org.eclipse.core.contenttype-3.4.200.v20120523-2004.jar
 p2.eclipse.plugin:org.eclipse.core.databinding.beans:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.eclipse.core.databinding.beans/1.2.200.v20120523-1955/org.eclipse.core.databinding.beans-1.2.200.v20120523-1955.jar

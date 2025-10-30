@@ -172,9 +172,8 @@ public class CursorableLinkedList implements List, Serializable {
      * @param o element to be prepended to this list.
      * @return <tt>true</tt>
      */
-    public boolean addFirst(Object o) {
+    public void addFirst(Object o) {
         insertListable(null,_head.next(),o);
-        return true;
     }
 
     /**
@@ -184,9 +183,8 @@ public class CursorableLinkedList implements List, Serializable {
      * @param o element to be appended to this list.
      * @return <tt>true</tt>
      */
-    public boolean addLast(Object o) {
+    public void addLast(Object o) {
         insertListable(_head.prev(),null,o);
-        return true;
     }
 
     /**
@@ -1297,14 +1295,14 @@ class CursorableSubList extends CursorableLinkedList implements List {
         return super.add(o);
     }
 
-    public boolean addFirst(Object o) {
+    public void addFirst(Object o) {
         checkForComod();
-        return super.addFirst(o);
+        super.addFirst(o);
     }
 
-    public boolean addLast(Object o) {
+    public void addLast(Object o) {
         checkForComod();
-        return super.addLast(o);
+        super.addLast(o);
     }
 
     public boolean removeAll(Collection c) {

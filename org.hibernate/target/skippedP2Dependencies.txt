@@ -12,5 +12,3 @@ org.eclipsetrader:org.hibernate:eclipse-plugin:jaxen-1.1-beta-7.jar @ /app/org.h
 org.eclipsetrader:org.hibernate:eclipse-plugin:jdbc2_0-stdext.jar @ /app/org.hibernate
 org.eclipsetrader:org.hibernate:eclipse-plugin:jta.jar @ /app/org.hibernate
 org.eclipsetrader:org.hibernate:eclipse-plugin:xml-apis.jar @ /app/org.hibernate
-p2.eclipse.plugin:org.apache.commons.collections:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.apache.commons.collections/3.2.0.v201005080500/org.apache.commons.collections-3.2.0.v201005080500.jar
-p2.eclipse.plugin:org.apache.commons.logging:eclipse-plugin @ /home/jules/.m2/repository/p2/osgi/bundle/org.apache.commons.logging/1.1.1.v201101211721/org.apache.commons.logging-1.1.1.v201101211721.jar

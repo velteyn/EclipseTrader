@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipsetrader.platform"
+      id="org.eclipsetrader.platform-feature"
       label="EclipseTrader Platform"
       version="1.0.0.qualifier"
       provider-name="EclipseTrader.org">
@@ -31,13 +31,13 @@
          version="0.0.0"/>
 
    <requires>
-      <import feature="org.apache.commons" version="1.0.0" match="compatible"/>
-      <import feature="org.eclipse.rcp" version="3.7.0" match="compatible"/>
-      <import feature="org.jdom" version="1.0.0" match="compatible"/>
-      <import feature="org.htmlparser" version="1.6.0" match="compatible"/>
-      <import feature="com.sun.syndication" version="1.0.0.v200807162045"/>
-      <import feature="com.tictactec.ta.lib" version="0.4.0.R20070915"/>
-      <import feature="org.mozilla.rhino" version="1.7.3" match="compatible"/>
+      <import feature="org.apache.commons-feature" version="0.0.0" match="compatible"/>
+      <import feature="org.eclipse.rcp" version="0.0.0" match="compatible"/>
+      <import feature="org.jdom-feature" version="0.0.0" match="compatible"/>
+      <import feature="org.htmlparser-feature" version="0.0.0" match="compatible"/>
+      <import feature="com.sun.syndication-feature" version="0.0.0"/>
+      <import feature="com.tictactec.ta.lib-feature" version="0.0.0"/>
+      <import feature="org.mozilla.rhino-feature" version="0.0.0" match="compatible"/>
    </requires>
 
    <plugin
@@ -200,13 +200,6 @@
 
    <plugin
          id="org.eclipsetrader.ui.charts.indicators"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.help.appserver"
          download-size="0"
          install-size="0"
          version="0.0.0"

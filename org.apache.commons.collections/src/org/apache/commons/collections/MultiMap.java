@@ -60,12 +60,12 @@ public interface MultiMap extends Map {
      * 
      * @param key  the key to remove from
      * @param item  the item to remove
-     * @return the value removed (which was passed in), null if nothing removed
+     * @return <code>true</code> if the map changed as a result of this call
      * @throws UnsupportedOperationException if the map is unmodifiable
      * @throws ClassCastException if the key or value is of an invalid type
      * @throws NullPointerException if the key or value is null and null is invalid
      */
-    public Object remove(Object key, Object item);
+    public boolean remove(Object key, Object item);
 
     //-----------------------------------------------------------------------
     /**

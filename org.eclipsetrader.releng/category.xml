@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.eclipsetrader.platform_1.0.0.qualifier.jar" id="org.eclipsetrader.platform" version="1.0.0.qualifier">
+   <feature id="org.eclipsetrader.platform-feature" version="0.0.0">
       <category name="platform"/>
    </feature>
-   <feature url="features/org.eclipsetrader.brokers.paper_1.0.0.qualifier.jar" id="org.eclipsetrader.brokers.paper" version="1.0.0.qualifier">
+   <feature id="org.eclipsetrader.brokers.paper-feature" version="0.0.0">
       <category name="platform"/>
    </feature>
-   <feature url="features/org.eclipsetrader.directa_1.0.0.qualifier.jar" id="org.eclipsetrader.directa" version="1.0.0.qualifier">
+   <feature id="org.eclipsetrader.directa-feature" version="0.0.0">
       <category name="platform"/>
    </feature>
-   <feature url="features/org.eclipsetrader.directaworld_1.0.0.qualifier.jar" id="org.eclipsetrader.directaworld" version="1.0.0.qualifier">
+   <feature id="org.eclipsetrader.directaworld-feature" version="0.0.0">
       <category name="platform"/>
    </feature>
-   <feature url="features/org.eclipsetrader.yahoo_1.0.0.qualifier.jar" id="org.eclipsetrader.yahoo" version="1.0.0.qualifier">
+   <feature id="org.eclipsetrader.yahoo-feature" version="0.0.0">
       <category name="platform"/>
    </feature>
-   <feature url="features/org.eclipsetrader.repository.hibernate_1.0.0.qualifier.jar" id="org.eclipsetrader.repository.hibernate" version="1.0.0.qualifier">
+   <feature id="org.eclipsetrader.repository.hibernate-feature" version="0.0.0">
       <category name="platform"/>
    </feature>
-   <feature url="features/org.eclipsetrader.repository.hibernate.derby_1.0.0.qualifier.jar" id="org.eclipsetrader.repository.hibernate.derby" version="1.0.0.qualifier">
+   <feature id="org.eclipsetrader.repository.hibernate.derby-feature" version="0.0.0">
       <category name="platform"/>
    </feature>
-   <feature url="features/org.eclipsetrader.repository.hibernate.postgresql_1.0.0.qualifier.jar" id="org.eclipsetrader.repository.hibernate.postgresql" version="1.0.0.qualifier">
+   <feature id="org.eclipsetrader.repository.hibernate.postgresql-feature" version="0.0.0">
       <category name="platform"/>
    </feature>
-   <feature url="features/org.eclipsetrader.jessx_1.0.0.qualifier.jar" id="org.eclipsetrader.jessx" version="1.0.0.qualifier">
+   <feature id="org.eclipsetrader.jessx-feature" version="0.0.0">
       <category name="platform"/>
    </feature>
    <category-def name="platform" label="EclipseTrader"/>

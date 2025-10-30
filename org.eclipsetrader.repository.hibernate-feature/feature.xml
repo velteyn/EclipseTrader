@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipsetrader.repository.hibernate"
+      id="org.eclipsetrader.repository.hibernate-feature"
       label="Hibernate Repository"
       version="1.0.0.qualifier"
       provider-name="EclipseTrader.org">
@@ -22,12 +22,9 @@
       <discovery label="Sourceforge.net" url="http://eclipsetrader.sourceforge.net/updates"/>
    </url>
 
-   <includes
-         id="org.hibernate"
-         version="0.0.0"/>
-
    <requires>
-      <import feature="org.eclipsetrader.platform" version="1.0.0.qualifier"/>
+      <import feature="org.eclipsetrader.platform-feature" version="0.0.0"/>
+      <import feature="org.hibernate-feature" version="0.0.0"/>
    </requires>
 
    <plugin

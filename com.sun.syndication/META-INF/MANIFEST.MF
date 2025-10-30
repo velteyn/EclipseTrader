@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ROME: RSS and Atom Utilities
 Bundle-SymbolicName: com.sun.syndication
-Bundle-Version: 1.0.0.v200807162045
+Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
 Export-Package: com.sun.syndication;version="1.0.0",
  com.sun.syndication.feed;version="1.0.0",

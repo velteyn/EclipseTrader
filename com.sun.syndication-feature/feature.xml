@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.sun.syndication"
+      id="com.sun.syndication-feature"
       label="%featureName"
-      version="1.0.0.v200807162045"
+      version="1.0.0.qualifier"
       provider-name="%providerName">
 
    <description>
@@ -18,25 +18,25 @@
    </license>
 
    <includes
-         id="org.jdom"
+         id="org.jdom-feature"
          version="0.0.0"/>
 
    <requires>
-      <import feature="org.apache.commons" version="1.0.0" match="compatible"/>
+      <import feature="org.apache.commons-feature" version="1.0.0" match="compatible"/>
    </requires>
 
    <plugin
          id="com.sun.syndication"
          download-size="0"
          install-size="0"
-         version="1.0.0.v200807162045"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="com.sun.syndication.fetcher"
          download-size="0"
          install-size="0"
-         version="0.9.0.v200703071050"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>

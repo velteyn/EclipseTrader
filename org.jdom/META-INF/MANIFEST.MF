@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Document Object Model
 Bundle-SymbolicName: org.jdom
-Bundle-Version: 1.0.0.v200805261200
+Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
 Bundle-ClassPath: .
 Export-Package: org.jdom;version="1.0.0",
