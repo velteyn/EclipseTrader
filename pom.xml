@@ -84,6 +84,7 @@
     </repositories>
 
     <build>
+	    <directory>c:/tmp/eclipsetrader-build/${project.artifactId}</directory>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
@@ -107,8 +108,8 @@
                     <artifactId>tycho-compiler-plugin</artifactId>
                     <version>${tycho.version}</version>
                     <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
+                        <source>1.7</source>
+                        <target>1.7</target>
                     </configuration>
                 </plugin>
             </plugins>
