@@ -667,6 +667,9 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
                 subsetHistory = job.getSubsetHistory();
                 trades = job.getTrades();
                 tradeFactory.setTrades(trades);
+
+                UIActivator.log(String.format("[TRADE LIFECYCLE - 6] Rendering %d trades on chart for %s", trades.size(), security.getName()));
+
                 view.setRootDataSeries(new OHLCDataSeries(security.getName(), subsetHistory.getAdjustedOHLC(), job.getResolutionTimeSpan()));
 
                 display.asyncExec(new Runnable() {

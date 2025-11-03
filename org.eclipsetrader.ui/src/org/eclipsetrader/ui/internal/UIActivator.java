@@ -287,6 +287,10 @@ public class UIActivator extends AbstractUIPlugin {
         }
     }
 
+    public static void log(String message) {
+        log(new Status(IStatus.INFO, PLUGIN_ID, message));
+    }
+
     public static void log(String message, Throwable throwable) {
         Status status = new Status(IStatus.ERROR, PLUGIN_ID, message, throwable);
         if (plugin != null) {

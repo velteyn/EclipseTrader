@@ -1,4 +1,3 @@
-
 package org.eclipsetrader.jessx.business;
 
 import java.util.Date;
@@ -16,6 +15,8 @@ import org.osgi.framework.ServiceReference;
 public class JessxTradeHistory {
 
     public static void saveDeal(Deal deal) {
+        JessxActivator.log(String.format("[TRADE LIFECYCLE - 2] Persistence service invoked for deal: %d @ %f", deal.getQuantity(), deal.getDealPrice()));
+
         BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
         ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
         if (serviceReference == null) {
@@ -50,13 +51,13 @@ public class JessxTradeHistory {
                     return Status.CANCEL_STATUS;
                 }
 
-                org.eclipsetrader.core.repositories.IRepository hibernateRepository = repositoryService.getRepository("hibernate");
-                if (hibernateRepository == null) {
-                    JessxActivator.log("JessxTradeHistory: Could not find 'hibernate' repository.");
+                org.eclipsetrader.core.repositories.IRepository[] repositories = repositoryService.getRepositories();
+                if (repositories.length == 0) {
+                    JessxActivator.log("JessxTradeHistory: No repositories found.");
                     return Status.CANCEL_STATUS;
                 }
 
-                IStore store = hibernateRepository.createObject();
+                IStore store = repositories[0].createObject();
                 if (store == null) {
                     JessxActivator.log("JessxTradeHistory: Failed to create a new store object.");
                     return Status.CANCEL_STATUS;
@@ -68,6 +69,9 @@ public class JessxTradeHistory {
                 properties.setProperty(IPropertyConstants.PURCHASE_QUANTITY, (long) finalDeal.getQuantity());
                 properties.setProperty(IPropertyConstants.PURCHASE_PRICE, (double) finalDeal.getDealPrice());
                 store.putProperties(properties, monitor);
+
+                JessxActivator.log(String.format("[TRADE LIFECYCLE - 3] Deal successfully saved to repository for asset: %s", security.getName()));
+
                 return Status.OK_STATUS;
             };
         }, null);

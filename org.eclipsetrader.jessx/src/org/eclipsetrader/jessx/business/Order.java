@@ -227,8 +227,7 @@ public abstract class Order extends Operation implements NetworkWritable, Networ
       String client = newOrder.getEmitter();
       String clientInBook = orderInBook.getEmitter();
       String institutionName = newOrder.getInstitutionName();
-      Institution institution = BusinessCore.getInstitution(institutionName);
-      Asset asset = BusinessCore.getAsset(institution.getAssetName());
+      String assetName = BusinessCore.getInstitution(institutionName).getAssetName();
       if (newOrder.getSide() == 1) {
         buyer = client;
         seller = clientInBook;
@@ -236,7 +235,7 @@ public abstract class Order extends Operation implements NetworkWritable, Networ
         sellerOperation = orderInBook.getOperationName();
         float sellerPercentageCost = BusinessCore.getInstitution(institutionName).getPercentageCost(sellerOperation);
         float sellerMinimalCost = BusinessCore.getInstitution(institutionName).getMinimalCost(sellerOperation);
-        NetworkCore.getPlayer(seller).getPortfolio().soldAssetsInOrderBook(asset.getAssetName(),
+        NetworkCore.getPlayer(seller).getPortfolio().soldAssetsInOrderBook(assetName,
             dealPrice, 
             exchangeableQty, 
             institutionName, 
@@ -250,7 +249,7 @@ public abstract class Order extends Operation implements NetworkWritable, Networ
         sellerOperation = newOrder.getOperationName();
         float buyerPercentageCost = BusinessCore.getInstitution(institutionName).getPercentageCost(buyerOperation);
         float buyerMinimalCost = BusinessCore.getInstitution(institutionName).getMinimalCost(buyerOperation);
-        NetworkCore.getPlayer(buyer).getPortfolio().boughtAssetsInOrderBook(asset.getAssetName(),
+        NetworkCore.getPlayer(buyer).getPortfolio().boughtAssetsInOrderBook(assetName,
             dealPrice, 
             exchangeableQty, 
             institutionName, 
@@ -263,10 +262,6 @@ public abstract class Order extends Operation implements NetworkWritable, Networ
           exchangeableQty, 
           newOrder.getTimestamp(), 
           buyer, seller, maxBidPrice, buyerOperation, sellerOperation);
-
-      deal.setSecurity(asset.getSecurity());
-      JessxTradeHistory.saveDeal(deal);
-
       NetworkCore.sendToAllPlayers(deal);
       Element dealNode = new Element("Deal");
       deal.saveToXml(dealNode);
