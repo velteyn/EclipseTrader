@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Platform User Guide
+Bundle-SymbolicName: org.eclipsetrader.platform.doc.user; singleton:=tru
+ e
+Bundle-Version: 1.0.0.202511051334
+Bundle-Vendor: EclipseTrader.org
+Require-Bundle: org.apache.lucene,org.eclipse.core.runtime,org.eclipse.h
+ elp,org.eclipse.help.base,org.eclipse.help.ui,org.eclipse.help.webapp,o
+ rg.eclipse.ui
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+

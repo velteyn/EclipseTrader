@@ -17,4 +17,4 @@ Import-Package: org.apache.commons.httpclient,
  org.apache.commons.httpclient.params,
  org.apache.commons.httpclient.protocol,
  org.apache.commons.httpclient.util
-Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

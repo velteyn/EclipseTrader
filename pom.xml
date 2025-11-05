@@ -9,7 +9,7 @@
     <properties>
         <tycho.version>4.0.8</tycho.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <eclipse-repo.url>https://download.eclipse.org/releases/juno</eclipse-repo.url>
+        <eclipse-repo.url>https://archive.eclipse.org/releases/juno/</eclipse-repo.url>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
 
@@ -84,7 +84,7 @@
     </repositories>
 
     <build>
-	    <directory>c:/tmp/eclipsetrader-build/${project.artifactId}</directory>
+	    <directory>eclipsetrader-build/${project.artifactId}</directory>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>

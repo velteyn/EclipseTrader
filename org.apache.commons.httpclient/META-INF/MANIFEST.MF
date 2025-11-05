@@ -10,7 +10,7 @@ Import-Package: org.apache.commons.codec,
  org.apache.commons.codec.language,
  org.apache.commons.codec.net,
  org.apache.commons.logging
-Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.apache.commons.httpclient;version="3.1.0",
  org.apache.commons.httpclient.auth;version="3.1.0",
  org.apache.commons.httpclient.cookie;version="3.1.0",

@@ -21,9 +21,6 @@
          <property
                name="appName"
                value="EclipseTrader"/>
-         <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini"/>
       </product>
    </extension>
 

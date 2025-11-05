@@ -156,7 +156,7 @@ diff -N build.xml
 -	</target>
 -
 -	<target name="refresh" depends="init" if="eclipse.running" description="Refresh this folder.">
--		<eclipse.convertPath fileSystemPath="C:/Documents and Settings/Administrator/workspace/org.eclipse.nebula.widgets.pshelf" property="resourcePath"/>
+-		<eclipse.convertPath fileSystemPath="C:/tmp/org.eclipse.nebula.widgets.pshelf" property="resourcePath"/>
 -		<eclipse.refreshLocal resource="${resourcePath}" depth="infinite"/>
 -	</target>
 -
