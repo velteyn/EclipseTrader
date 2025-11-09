@@ -16,7 +16,7 @@ Export-Package: com.sun.syndication;version="1.0.0",
  com.sun.syndication.io;version="1.0.0",
  com.sun.syndication.io.impl;version="1.0.0"
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.jdom;version="[1.0.0,2.0.0)",
  org.jdom.adapters;version="[1.0.0,2.0.0)",
  org.jdom.filter;version="[1.0.0,2.0.0)",

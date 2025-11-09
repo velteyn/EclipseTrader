@@ -10,5 +10,12 @@
 
     <artifactId>org.apache.log4j</artifactId>
     <packaging>eclipse-plugin</packaging>
-
+ 
+    <dependencies>
+    	<dependency>
+    <groupId>com.sun.jdmk</groupId>
+    <artifactId>core</artifactId>
+    <version>1.0-b02</version>
+</dependency>
+    </dependencies>
 </project>
