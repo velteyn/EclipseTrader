@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Commons Logging
+Bundle-SymbolicName: org.apache.commons.logging
+Bundle-Version: 1.0.0.202511091922
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.apache.commons.logging;version="1.1.1",org.apache.co
+ mmons.logging.impl;version="1.1.1"
+Bundle-Vendor: Apache Software Foundation
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: lib/commons-logging-1.1.1.jar
+Import-Package: org.apache.log4j;resolution:=optional,org.apache.log4j.c
+ hainsaw;resolution:=optional,org.apache.log4j.config;resolution:=option
+ al,org.apache.log4j.helpers;resolution:=optional,org.apache.log4j.jdbc;
+ resolution:=optional,org.apache.log4j.jmx;resolution:=optional,org.apac
+ he.log4j.lf5;resolution:=optional,org.apache.log4j.lf5.config;resolutio
+ n:=optional,org.apache.log4j.lf5.util;resolution:=optional,org.apache.l
+ og4j.lf5.viewer;resolution:=optional,org.apache.log4j.lf5.viewer.catego
+ ryexplorer;resolution:=optional,org.apache.log4j.lf5.viewer.configure;r
+ esolution:=optional,org.apache.log4j.lf5.viewer.images;resolution:=opti
+ onal,org.apache.log4j.net;resolution:=optional,org.apache.log4j.nt;reso
+ lution:=optional,org.apache.log4j.or;resolution:=optional,org.apache.lo
+ g4j.or.jms;resolution:=optional,org.apache.log4j.or.sax;resolution:=opt
+ ional,org.apache.log4j.spi;resolution:=optional,org.apache.log4j.varia;
+ resolution:=optional,org.apache.log4j.xml;resolution:=optional
+

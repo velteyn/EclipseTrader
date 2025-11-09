@@ -73,19 +73,23 @@
     </modules>
 
     <repositories>
+     <repository>
+        <id>central</id>
+        <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
         <repository>
             <id>eclipse-juno</id>
             <url>${eclipse-repo.url}</url>
             <layout>p2</layout>
         </repository>
-        <repository>
-            <id>dai-labor-open</id>
-            <url>https://repositories.dai-labor.de/extern/content/repositories/dai-open/</url>
-        </repository>
+        
+        <!-- 
+			
          <repository>
             <id>nexus</id>
             <url>http://nexus.emergya.es/nexus/content/repositories/public/</url>
         </repository>
+		-->
         
     </repositories>
 
