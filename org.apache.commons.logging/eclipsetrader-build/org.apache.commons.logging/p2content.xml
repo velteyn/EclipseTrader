@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='org.apache.commons.logging' version='1.0.0.202511091922' singleton='false' generation='2'>
-    <update id='org.apache.commons.logging' range='[0.0.0,1.0.0.202511091922)' severity='0'/>
+  <unit id='org.apache.commons.logging' version='1.0.0.202511092312' singleton='false' generation='2'>
+    <update id='org.apache.commons.logging' range='[0.0.0,1.0.0.202511092312)' severity='0'/>
     <properties size='6'>
       <property name='org.eclipse.equinox.p2.name' value='Commons Logging'/>
       <property name='org.eclipse.equinox.p2.provider' value='Apache Software Foundation'/>
@@ -11,11 +11,11 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='6'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.logging' version='1.0.0.202511091922'/>
-      <provided namespace='osgi.bundle' name='org.apache.commons.logging' version='1.0.0.202511091922'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.logging' version='1.0.0.202511092312'/>
+      <provided namespace='osgi.bundle' name='org.apache.commons.logging' version='1.0.0.202511092312'/>
       <provided namespace='java.package' name='org.apache.commons.logging' version='1.1.1'/>
       <provided namespace='java.package' name='org.apache.commons.logging.impl' version='1.1.1'/>
-      <provided namespace='osgi.identity' name='org.apache.commons.logging' version='1.0.0.202511091922'>
+      <provided namespace='osgi.identity' name='org.apache.commons.logging' version='1.0.0.202511092312'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -49,20 +49,20 @@
           org.apache.commons.logging
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.logging.source' range='[1.0.0.202511091922,1.0.0.202511091922]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.logging.source' range='[1.0.0.202511092312,1.0.0.202511092312]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='org.apache.commons.logging' version='1.0.0.202511091922'/>
+      <artifact classifier='osgi.bundle' id='org.apache.commons.logging' version='1.0.0.202511092312'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: org.apache.commons.logging&#xA;Bundle-Version: 1.0.0.202511091922&#xA;
+          Bundle-SymbolicName: org.apache.commons.logging&#xA;Bundle-Version: 1.0.0.202511092312&#xA;
         </instruction>
       </instructions>
     </touchpointData>

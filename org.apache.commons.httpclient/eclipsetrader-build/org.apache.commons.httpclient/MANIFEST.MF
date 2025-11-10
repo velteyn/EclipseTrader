@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: HTTP Client
 Bundle-SymbolicName: org.apache.commons.httpclient
-Bundle-Version: 1.0.0.202511091922
+Bundle-Version: 1.0.0.202511092312
 Bundle-Vendor: Apache Software Foundation
 Import-Package: org.apache.commons.codec,org.apache.commons.codec.binary
  ,org.apache.commons.codec.digest,org.apache.commons.codec.language,org.
@@ -17,4 +17,3 @@ Export-Package: org.apache.commons.httpclient;version="3.1.0",org.apache
  version="3.1.0"
 Bundle-ActivationPolicy: lazy
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
-

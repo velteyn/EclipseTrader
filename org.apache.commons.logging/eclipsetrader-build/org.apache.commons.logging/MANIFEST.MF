@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Commons Logging
 Bundle-SymbolicName: org.apache.commons.logging
-Bundle-Version: 1.0.0.202511091922
+Bundle-Version: 1.0.0.202511092312
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.apache.commons.logging;version="1.1.1",org.apache.co
  mmons.logging.impl;version="1.1.1"
@@ -23,4 +23,3 @@ Import-Package: org.apache.log4j;resolution:=optional,org.apache.log4j.c
  g4j.or.jms;resolution:=optional,org.apache.log4j.or.sax;resolution:=opt
  ional,org.apache.log4j.spi;resolution:=optional,org.apache.log4j.varia;
  resolution:=optional,org.apache.log4j.xml;resolution:=optional
-

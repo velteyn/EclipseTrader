@@ -10,7 +10,7 @@
         <tycho.version>4.0.8</tycho.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <!--  <eclipse-repo.url>https://archive.eclipse.org/releases/juno/</eclipse-repo.url>-->
-        <eclipse-repo.url>https://download.eclipse.org/eclipse/updates/4.24/</eclipse-repo.url>
+        <eclipse-repo.url>https://download.eclipse.org/releases/2024-03</eclipse-repo.url>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
 
@@ -29,10 +29,10 @@
         <module>org.apache.commons.collections</module>
         <module>org.apache.log4j</module>
         <module>org.apache.log4j-feature</module>
-        <module>org.eclipse.nebula.cwt</module>
-        <module>org.eclipse.nebula.jface.cdatetime</module>
-        <module>org.eclipse.nebula.widgets.cdatetime</module>
-        <module>org.eclipse.nebula.widgets.pshelf</module>
+        <!-- <module>org.eclipse.nebula.cwt</module> -->
+        <!-- <module>org.eclipse.nebula.jface.cdatetime</module> -->
+        <!-- <module>org.eclipse.nebula.widgets.cdatetime</module> -->
+        <!-- <module>org.eclipse.nebula.widgets.pshelf</module> -->
         <module>org.eclipsetrader.archipelago</module>
         <module>org.eclipsetrader.borsaitalia</module>
         <module>org.eclipsetrader.brokers.paper</module>
@@ -80,6 +80,11 @@
         <repository>
             <id>eclipse-juno</id>
             <url>${eclipse-repo.url}</url>
+            <layout>p2</layout>
+        </repository>
+        <repository>
+            <id>nebula</id>
+            <url>https://download.eclipse.org/nebula/updates/release/latest/</url>
             <layout>p2</layout>
         </repository>
         

@@ -49,6 +49,6 @@ Export-Package: com.sun.activation.registries,
  javax.xml.stream;version="2.1.6",
  javax.xml.stream.events;version="2.1.6",
  javax.xml.stream.util;version="2.1.6"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Eclipse-RegisterBuddy: org.eclipsetrader.ui
 Eclipse-RegisterBuddy: org.eclipsetrader.ui

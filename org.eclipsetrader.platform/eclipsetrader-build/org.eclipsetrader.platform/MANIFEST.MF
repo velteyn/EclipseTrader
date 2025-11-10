@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EclipseTrader Platform
+Bundle-SymbolicName: org.eclipsetrader.platform; singleton:=true
+Bundle-Version: 1.0.0.202511092312
+Bundle-Activator: org.eclipsetrader.ui.internal.Activator
+Bundle-Vendor: EclipseTrader.org
+Require-Bundle: org.eclipse.core.runtime,org.eclipse.ui,org.eclipsetrade
+ r.ui.application
+Bundle-Localization: plugin
+Bundle-ActivationPolicy: lazy
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"

@@ -2,9 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.apache.commons
-Bundle-Version: 1.0.0.202511091922
+Bundle-Version: 1.0.0.202511092312
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Eclipse-BuddyPolicy: global
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-
