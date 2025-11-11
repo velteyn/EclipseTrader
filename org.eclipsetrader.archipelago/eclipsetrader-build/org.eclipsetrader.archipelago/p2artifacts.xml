@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository version='1.1.0'?>
 <artifacts size='1'>
-  <artifact classifier='osgi.bundle' id='org.eclipsetrader.archipelago' version='1.0.0.202511092312'>
+  <artifact classifier='osgi.bundle' id='org.eclipsetrader.archipelago' version='1.0.0.202511111543'>
     <properties size='9'>
-      <property name='artifact.size' value='17918'/>
-      <property name='download.size' value='17918'/>
-      <property name='download.checksum.sha-512' value='328c2af0c563c04c6fc48ec1ddef04a5883215d41a4d34947d7d16a5e8028f8862f15e015f2c22850e3600ba5a83703c232b63bafb2a6d4c849a138e9c012fd8'/>
-      <property name='download.checksum.sha-1' value='cb8308bc3e10095d279dff5259c86fc2bd8697a6'/>
-      <property name='download.checksum.sha-256' value='1ceb6658a0ca21ff13556120c813c6237938fa01f0ec04810193596d96c351ad'/>
+      <property name='artifact.size' value='17917'/>
+      <property name='download.size' value='17917'/>
+      <property name='download.checksum.sha-512' value='8ca65cb7063ca2f48b3bc2aa02aa6a9f8a34bd8058be5ca7dddbd424a22b623186222f4df05e026876a7214e4bef897dc36204689f93b6c3248ef6d9f49af900'/>
+      <property name='download.checksum.sha-1' value='88d08833f3f6265904684a13a15107ce1aca6f68'/>
+      <property name='download.checksum.sha-256' value='f0b9825f5cceb7e3ca1e5381f05ff05b128efd6f7be374a604257b6d3c8d6990'/>
       <property name='maven-groupId' value='org.eclipsetrader'/>
       <property name='maven-artifactId' value='org.eclipsetrader.archipelago'/>
       <property name='maven-version' value='1.0.0-SNAPSHOT'/>

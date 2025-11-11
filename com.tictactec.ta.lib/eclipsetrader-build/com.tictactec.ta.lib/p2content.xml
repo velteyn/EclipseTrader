@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <units size='1'>
-  <unit id='com.tictactec.ta.lib' version='0.4.0.202511092312' singleton='false' generation='2'>
-    <update id='com.tictactec.ta.lib' range='[0.0.0,0.4.0.202511092312)' severity='0'/>
+  <unit id='com.tictactec.ta.lib' version='0.4.0.202511111543' singleton='false' generation='2'>
+    <update id='com.tictactec.ta.lib' range='[0.0.0,0.4.0.202511111543)' severity='0'/>
     <properties size='6'>
       <property name='org.eclipse.equinox.p2.name' value='Technical Analysis Library'/>
       <property name='org.eclipse.equinox.p2.provider' value='EclipseTrader.org'/>
@@ -11,13 +11,13 @@
       <property name='maven-type' value='eclipse-plugin'/>
     </properties>
     <provides size='8'>
-      <provided namespace='org.eclipse.equinox.p2.iu' name='com.tictactec.ta.lib' version='0.4.0.202511092312'/>
-      <provided namespace='osgi.bundle' name='com.tictactec.ta.lib' version='0.4.0.202511092312'/>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='com.tictactec.ta.lib' version='0.4.0.202511111543'/>
+      <provided namespace='osgi.bundle' name='com.tictactec.ta.lib' version='0.4.0.202511111543'/>
       <provided namespace='java.package' name='com.tictactec.ta.lib' version='0.4.0'/>
       <provided namespace='java.package' name='com.tictactec.ta.lib.meta' version='0.4.0'/>
       <provided namespace='java.package' name='com.tictactec.ta.lib.meta.annotation' version='0.4.0'/>
       <provided namespace='java.package' name='com.tictactec.ta.lib.meta.helpers' version='0.4.0'/>
-      <provided namespace='osgi.identity' name='com.tictactec.ta.lib' version='0.4.0.202511092312'>
+      <provided namespace='osgi.identity' name='com.tictactec.ta.lib' version='0.4.0.202511111543'>
         <properties size='1'>
           <property name='type' value='osgi.bundle'/>
         </properties>
@@ -30,20 +30,20 @@
           com.tictactec.ta.lib
         </description>
       </requiredProperties>
-      <required namespace='org.eclipse.equinox.p2.iu' name='com.tictactec.ta.lib.source' range='[0.4.0.202511092312,0.4.0.202511092312]' optional='true'>
+      <required namespace='org.eclipse.equinox.p2.iu' name='com.tictactec.ta.lib.source' range='[0.4.0.202511111543,0.4.0.202511111543]' optional='true'>
         <filter>
           (org.eclipse.update.install.sources=true)
         </filter>
       </required>
     </requires>
     <artifacts size='1'>
-      <artifact classifier='osgi.bundle' id='com.tictactec.ta.lib' version='0.4.0.202511092312'/>
+      <artifact classifier='osgi.bundle' id='com.tictactec.ta.lib' version='0.4.0.202511111543'/>
     </artifacts>
     <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
     <touchpointData size='1'>
       <instructions size='1'>
         <instruction key='manifest'>
-          Bundle-SymbolicName: com.tictactec.ta.lib&#xA;Bundle-Version: 0.4.0.202511092312&#xA;
+          Bundle-SymbolicName: com.tictactec.ta.lib&#xA;Bundle-Version: 0.4.0.202511111543&#xA;
         </instruction>
       </instructions>
     </touchpointData>

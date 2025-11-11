@@ -28,11 +28,6 @@ import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.eclipse.core.net.proxy.IProxyData;
-import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
@@ -266,28 +261,7 @@ public class RSSNewsProvider implements INewsProvider, IExecutableExtension {
         Set<HeadLine> headLines = new HashSet<HeadLine>();
 
         try {
-            HttpClient client = new HttpClient();
-            client.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
-
-            if (Activator.getDefault() != null) {
-                BundleContext context = Activator.getDefault().getBundle().getBundleContext();
-                ServiceReference reference = context.getServiceReference(IProxyService.class.getName());
-                if (reference != null) {
-                    IProxyService proxy = (IProxyService) context.getService(reference);
-                    IProxyData data = proxy.getProxyDataForHost(feedUrl.getHost(), IProxyData.HTTP_PROXY_TYPE);
-                    if (data != null) {
-                        if (data.getHost() != null) {
-                            client.getHostConfiguration().setProxy(data.getHost(), data.getPort());
-                        }
-                        if (data.isRequiresAuthentication()) {
-                            client.getState().setProxyCredentials(AuthScope.ANY, new UsernamePasswordCredentials(data.getUserId(), data.getPassword()));
-                        }
-                    }
-                    context.ungetService(reference);
-                }
-            }
-
-            SyndFeed feed = fetcher.retrieveFeed(feedUrl, client);
+            SyndFeed feed = fetcher.retrieveFeed(feedUrl);
             for (Iterator<?> iter = feed.getEntries().iterator(); iter.hasNext();) {
                 SyndEntry entry = (SyndEntry) iter.next();
 

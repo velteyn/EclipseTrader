@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository version='1.1.0'?>
 <artifacts size='1'>
-  <artifact classifier='osgi.bundle' id='com.tictactec.ta.lib' version='0.4.0.202511092312'>
+  <artifact classifier='osgi.bundle' id='com.tictactec.ta.lib' version='0.4.0.202511111543'>
     <properties size='9'>
-      <property name='artifact.size' value='260150'/>
-      <property name='download.size' value='260150'/>
-      <property name='download.checksum.sha-512' value='1f62f2a955e4c13f3d92aafe9327e850c4073b8cd4663687b1a4ed0037527bdd573880c385cab1b9634d9159389438986594a810ae7066aa8bd3ca2651913604'/>
-      <property name='download.checksum.sha-1' value='dc18a617f0baaad33d52443ce14407a9da108bc9'/>
-      <property name='download.checksum.sha-256' value='aacffc5429353c71afba14cb2d0947a7f5b5b12add761d5e49ca1a8e2627638b'/>
+      <property name='artifact.size' value='260149'/>
+      <property name='download.size' value='260149'/>
+      <property name='download.checksum.sha-512' value='0714bced099a233cd02c7ec35d23fd0cd916218fb5ff3314b9d0f1b593e0542e65eca45bd1b6e35f97ca6ca0d36b089383cb5fb027a190cb263b5c4d62cfc84e'/>
+      <property name='download.checksum.sha-1' value='fc54f7b07edd8424121894f4ca4a8e3a1e3342f8'/>
+      <property name='download.checksum.sha-256' value='00c3aee69da71e5c05a7a5f2dbde89c1e426a4ebce8d2e616b05344872f0cb50'/>
       <property name='maven-groupId' value='org.eclipsetrader'/>
       <property name='maven-artifactId' value='com.tictactec.ta.lib'/>
       <property name='maven-version' value='0.4.0-SNAPSHOT'/>

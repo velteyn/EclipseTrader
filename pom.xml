@@ -47,8 +47,8 @@
         <module>org.eclipsetrader.news</module>
         <module>org.eclipsetrader.platform</module>
         <module>org.eclipsetrader.platform-feature</module>
-        <module>org.eclipsetrader.platform.doc.isv</module>
-        <module>org.eclipsetrader.platform.doc.user</module>
+        <!-- <module>org.eclipsetrader.platform.doc.isv</module> -->
+        <!-- <module>org.eclipsetrader.platform.doc.user</module> -->
         <module>org.eclipsetrader.releng</module>
         <module>org.eclipsetrader.repository.hibernate</module>
         <module>org.eclipsetrader.repository.hibernate-feature</module>
@@ -99,7 +99,7 @@
     </repositories>
 
     <build>
-	    <directory>eclipsetrader-build/${project.artifactId}</directory>
+	    <directory>target/${project.artifactId}</directory>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
