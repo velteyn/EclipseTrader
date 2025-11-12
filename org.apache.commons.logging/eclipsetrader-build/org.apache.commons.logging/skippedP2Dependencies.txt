@@ -1,2 +1,0 @@
-org.eclipsetrader:org.apache.commons.logging:eclipse-plugin:lib/commons-logging-1.1.1.jar @ /app/org.apache.commons.logging
-org.eclipsetrader:org.apache.log4j:eclipse-plugin:libs/log4j-1.2.17.jar @ /app/org.apache.log4j/eclipsetrader-build/org.apache.log4j/org.apache.log4j-1.0.0-SNAPSHOT.jar
