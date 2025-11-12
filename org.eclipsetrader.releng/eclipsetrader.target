@@ -15,16 +15,6 @@
             
         <location type="InstallableUnit">
                     
-            <unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="0.0.0"/>
-                    
-            <unit id="org.eclipse.nebula.widgets.pshelf.feature.feature.group" version="0.0.0"/>
-                    
-            <unit id="org.eclipse.nebula.cwt.feature.feature.group" version="0.0.0"/>
-                    
-            <unit id="org.eclipse.nebula.widgets.cdatetime.feature.feature.group" version="0.0.0"/>
-                    
-            <unit id="org.eclipse.nebula.jface.cdatetime.feature.feature.group" version="0.0.0"/>
-                    
             <repository location="https://download.eclipse.org/nebula/updates/release/latest/"/>
 
 		</location>
