@@ -4,12 +4,12 @@ Bundle-Name: Platform User Guide
 Bundle-SymbolicName: org.eclipsetrader.platform.doc.user; singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
-Require-Bundle: org.apache.lucene,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.help,
  org.eclipse.help.base,
  org.eclipse.help.ui,
  org.eclipse.help.webapp,
- org.eclipse.ui
+ org.eclipse.ui,
+ org.apache.lucene.core
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

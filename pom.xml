@@ -99,7 +99,7 @@
     </repositories>
 
     <build>
-	    <directory>eclipsetrader-build/${project.artifactId}</directory>
+	    <directory>${project.basedir}/target</directory>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>

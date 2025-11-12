@@ -1,19 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <target name="EclipseTrader Target" sequenceNumber="1">
-  <locations>
-    <location type="InstallableUnit">
-      <unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.rcp.feature.group" version="0.0.0"/>
-      <repository location="https://download.eclipse.org/releases/2024-03"/>
-    </location>
-    <location type="InstallableUnit">
-        <unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="0.0.0"/>
-        <unit id="org.eclipse.nebula.widgets.pshelf.feature.feature.group" version="0.0.0"/>
-        <unit id="org.eclipse.nebula.cwt.feature.feature.group" version="0.0.0"/>
-        <unit id="org.eclipse.nebula.widgets.cdatetime.feature.feature.group" version="0.0.0"/>
-        <unit id="org.eclipse.nebula.jface.cdatetime.feature.feature.group" version="0.0.0"/>
-        <repository location="https://download.eclipse.org/nebula/updates/release/latest/"/>
-    </location>
-    <location path="${workspace_loc}" type="Directory"/>
-  </locations>
+      
+    <locations>
+            
+        <location type="InstallableUnit">
+                  
+            <unit id="org.eclipse.platform.feature.group" version="0.0.0"/>
+                  
+            <unit id="org.eclipse.rcp.feature.group" version="0.0.0"/>
+                  
+            <repository location="https://download.eclipse.org/releases/2024-03"/>
+                
+        </location>
+            
+        <location type="InstallableUnit">
+                    
+            <unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="0.0.0"/>
+                    
+            <unit id="org.eclipse.nebula.widgets.pshelf.feature.feature.group" version="0.0.0"/>
+                    
+            <unit id="org.eclipse.nebula.cwt.feature.feature.group" version="0.0.0"/>
+                    
+            <unit id="org.eclipse.nebula.widgets.cdatetime.feature.feature.group" version="0.0.0"/>
+                    
+            <unit id="org.eclipse.nebula.jface.cdatetime.feature.feature.group" version="0.0.0"/>
+                    
+            <repository location="https://download.eclipse.org/nebula/updates/release/latest/"/>
+
+		</location>
+ 
+
+        <location path="${workspace_loc}" type="Directory"/>
+          
+    </locations>
+    
 </target>

@@ -4,8 +4,8 @@ Bundle-Name: Platform Developer Guide
 Bundle-SymbolicName: org.eclipsetrader.platform.doc.isv;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.apache.lucene,
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.apache.lucene.core,
  org.eclipse.core.runtime,
  org.eclipse.help,
  org.eclipse.help.base,
