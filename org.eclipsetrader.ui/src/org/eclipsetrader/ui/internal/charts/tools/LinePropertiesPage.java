@@ -13,11 +13,12 @@ package org.eclipsetrader.ui.internal.charts.tools;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.eclipse.jface.preference.ColorSelector;
-import org.eclipse.nebula.widgets.cdatetime.CDT;
-import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.graphics.RGB;
@@ -37,11 +38,11 @@ public class LinePropertiesPage extends PropertyPage {
     private ColorSelector color;
 
     private Text value1;
-    private CDateTime date1;
+    private DateTime date1;
     private Button extend1;
 
     private Text value2;
-    private CDateTime date2;
+    private DateTime date2;
     private Button extend2;
 
     private NumberFormat numberFormat = NumberFormat.getInstance();
@@ -100,8 +101,7 @@ public class LinePropertiesPage extends PropertyPage {
 
         label = new Label(content, SWT.NONE);
         label.setText(Messages.LinePropertiesPage_FirstPointLabel);
-        date1 = new CDateTime(content, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        date1.setPattern(Util.getDateFormatPattern());
+        date1 = new DateTime(content, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
         value1 = new Text(content, SWT.BORDER);
         value1.setLayoutData(new GridData(convertHorizontalDLUsToPixels(65), SWT.DEFAULT));
         value1.addFocusListener(numberFocusListener);
@@ -113,8 +113,7 @@ public class LinePropertiesPage extends PropertyPage {
 
         label = new Label(content, SWT.NONE);
         label.setText(Messages.LinePropertiesPage_SecondPointLabel);
-        date2 = new CDateTime(content, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        date2.setPattern(Util.getDateFormatPattern());
+        date2 = new DateTime(content, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
         value2 = new Text(content, SWT.BORDER);
         value2.setLayoutData(new GridData(convertHorizontalDLUsToPixels(65), SWT.DEFAULT));
         value2.addFocusListener(numberFocusListener);
@@ -139,11 +138,14 @@ public class LinePropertiesPage extends PropertyPage {
         text.setText(object.getName());
 
         value1.setText(numberFormat.format(object.getValue1().getValue()));
-        date1.setSelection(object.getValue1().getDate());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(object.getValue1().getDate());
+        date1.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         extend1.setSelection(object.isExtend1());
 
         value2.setText(numberFormat.format(object.getValue2().getValue()));
-        date2.setSelection(object.getValue2().getDate());
+        calendar.setTime(object.getValue2().getDate());
+        date2.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         extend2.setSelection(object.isExtend2());
 
         color.setColorValue(object.getColor() != null ? object.getColor() : new RGB(0, 0, 0));
@@ -161,8 +163,16 @@ public class LinePropertiesPage extends PropertyPage {
         object.setName(text.getText());
 
         try {
-            object.setValue1(new LineToolFactory.Value(date1.getSelection(), numberFormat.parse(value1.getText())));
-            object.setValue2(new LineToolFactory.Value(date2.getSelection(), numberFormat.parse(value2.getText())));
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, date1.getYear());
+            calendar.set(Calendar.MONTH, date1.getMonth());
+            calendar.set(Calendar.DAY_OF_MONTH, date1.getDay());
+            object.setValue1(new LineToolFactory.Value(calendar.getTime(), numberFormat.parse(value1.getText())));
+
+            calendar.set(Calendar.YEAR, date2.getYear());
+            calendar.set(Calendar.MONTH, date2.getMonth());
+            calendar.set(Calendar.DAY_OF_MONTH, date2.getDay());
+            object.setValue2(new LineToolFactory.Value(calendar.getTime(), numberFormat.parse(value2.getText())));
         } catch (ParseException e) {
             e.printStackTrace();
         }

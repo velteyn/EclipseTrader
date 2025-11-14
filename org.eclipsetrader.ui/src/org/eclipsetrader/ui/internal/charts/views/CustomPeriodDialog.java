@@ -11,6 +11,7 @@
 
 package org.eclipsetrader.ui.internal.charts.views;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -20,9 +21,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerSorter;
-import org.eclipse.nebula.widgets.cdatetime.CDT;
-import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -34,8 +34,8 @@ import org.eclipsetrader.ui.Util;
 
 public class CustomPeriodDialog extends Dialog {
 
-    private CDateTime from;
-    private CDateTime to;
+    private DateTime from;
+    private DateTime to;
     private ComboViewer resolution;
 
     private Date firstDate;
@@ -72,13 +72,11 @@ public class CustomPeriodDialog extends Dialog {
 
         Label label = new Label(content, SWT.NONE);
         label.setText(Messages.CustomPeriodDialog_BeginDateLabel);
-        from = new CDateTime(content, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        from.setPattern(Util.getDateFormatPattern());
+        from = new DateTime(content, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
 
         label = new Label(content, SWT.NONE);
         label.setText(Messages.CustomPeriodDialog_EndDateLabel);
-        to = new CDateTime(content, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        to.setPattern(Util.getDateFormatPattern());
+        to = new DateTime(content, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
 
         label = new Label(content, SWT.NONE);
         label.setText(Messages.CustomPeriodDialog_ResolutionLabel);
@@ -96,8 +94,11 @@ public class CustomPeriodDialog extends Dialog {
                 TimeSpan.minutes(60),
         });
 
-        from.setSelection(firstDate);
-        to.setSelection(lastDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(firstDate);
+        from.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        calendar.setTime(lastDate);
+        to.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         resolution.setSelection(new StructuredSelection(resolutionTimeSpan));
 
         return content;
@@ -108,8 +109,17 @@ public class CustomPeriodDialog extends Dialog {
      */
     @Override
     protected void okPressed() {
-        firstDate = from.getSelection();
-        lastDate = to.getSelection();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, from.getYear());
+        calendar.set(Calendar.MONTH, from.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, from.getDay());
+        firstDate = calendar.getTime();
+
+        calendar.set(Calendar.YEAR, to.getYear());
+        calendar.set(Calendar.MONTH, to.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, to.getDay());
+        lastDate = calendar.getTime();
+
         resolutionTimeSpan = (TimeSpan) ((IStructuredSelection) resolution.getSelection()).getFirstElement();
         super.okPressed();
     }

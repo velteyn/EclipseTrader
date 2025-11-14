@@ -12,6 +12,7 @@
 package org.eclipsetrader.ui.internal.trading;
 
 import java.text.NumberFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.eclipse.core.runtime.IStatus;
@@ -27,10 +28,9 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerSorter;
-import org.eclipse.nebula.widgets.cdatetime.CDT;
-import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -71,7 +71,7 @@ public class OrderDialog extends TitleAreaDialog {
     ComboViewer routeCombo;
 
     ComboViewer validityCombo;
-    CDateTime expireDate;
+    DateTime expireDate;
     Text orderReference;
 
     Label summaryLabel;
@@ -338,9 +338,7 @@ public class OrderDialog extends TitleAreaDialog {
 
         label = new Label(content, SWT.NONE);
         label.setText(Messages.OrderDialog_ExpireLabel);
-        expireDate = new CDateTime(content, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        expireDate.setPattern(Util.getDateFormatPattern());
-        expireDate.setSelection(new Date());
+        expireDate = new DateTime(content, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
         expireDate.setEnabled(false);
 
         label = new Label(content, SWT.NONE);
@@ -566,7 +564,11 @@ public class OrderDialog extends TitleAreaDialog {
                 IOrderValidity validity = (IOrderValidity) ((IStructuredSelection) validityCombo.getSelection()).getFirstElement();
                 order.setValidity(validity);
                 if (expireDate.getEnabled()) {
-                    order.setExpire(expireDate.getSelection());
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.YEAR, expireDate.getYear());
+                    calendar.set(Calendar.MONTH, expireDate.getMonth());
+                    calendar.set(Calendar.DAY_OF_MONTH, expireDate.getDay());
+                    order.setExpire(calendar.getTime());
                 }
             }
 

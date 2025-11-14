@@ -13,15 +13,15 @@ package org.eclipsetrader.ui.internal.charts;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.nebula.widgets.cdatetime.CDT;
-import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -38,7 +38,7 @@ import org.eclipsetrader.ui.internal.UIActivator;
 public class DefaultsPage extends PreferencePage implements IWorkbenchPreferencePage {
 
     Button useStartDate;
-    CDateTime startDate;
+    DateTime startDate;
     Button useYears;
     Spinner years;
 
@@ -74,8 +74,7 @@ public class DefaultsPage extends PreferencePage implements IWorkbenchPreference
 
         useStartDate = new Button(group, SWT.RADIO);
         useStartDate.setText("Start Date");
-        startDate = new CDateTime(group, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        startDate.setPattern(Util.getDateFormatPattern());
+        startDate = new DateTime(group, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
         startDate.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 2, 1));
 
         useYears = new Button(group, SWT.RADIO);
@@ -105,7 +104,9 @@ public class DefaultsPage extends PreferencePage implements IWorkbenchPreference
         if (!s.equals("")) {
             try {
                 Date date = prefsDateFormat.parse(s);
-                startDate.setSelection(date);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                startDate.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             } catch (ParseException e) {
                 Status status = new Status(IStatus.ERROR, UIActivator.PLUGIN_ID, 0, "Error parsing start date " + s, e);
                 UIActivator.log(status);
@@ -131,12 +132,11 @@ public class DefaultsPage extends PreferencePage implements IWorkbenchPreference
             preferences.setValue(UIActivator.PREFS_INITIAL_BACKFILL_METHOD, 1);
         }
 
-        if (startDate.getSelection() != null) {
-            preferences.setValue(UIActivator.PREFS_INITIAL_BACKFILL_START_DATE, prefsDateFormat.format(startDate.getSelection()));
-        }
-        else {
-            preferences.setValue(UIActivator.PREFS_INITIAL_BACKFILL_START_DATE, "");
-        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, startDate.getYear());
+        calendar.set(Calendar.MONTH, startDate.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, startDate.getDay());
+        preferences.setValue(UIActivator.PREFS_INITIAL_BACKFILL_START_DATE, prefsDateFormat.format(calendar.getTime()));
 
         preferences.setValue(UIActivator.PREFS_INITIAL_BACKFILL_YEARS, years.getSelection());
 

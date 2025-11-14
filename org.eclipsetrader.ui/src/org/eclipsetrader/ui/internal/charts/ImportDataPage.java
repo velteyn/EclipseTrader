@@ -30,10 +30,9 @@ import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.nebula.widgets.cdatetime.CDT;
-import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -58,8 +57,8 @@ public class ImportDataPage extends WizardPage {
     private static final String K_AGGREGATION = "AGGREGATION"; //$NON-NLS-1$
 
     private Combo type;
-    private CDateTime from;
-    private CDateTime to;
+    private DateTime from;
+    private DateTime to;
     private CheckboxTableViewer aggregation;
     private Combo combo;
     private CheckboxTableViewer members;
@@ -98,7 +97,8 @@ public class ImportDataPage extends WizardPage {
                 from.setEnabled(typeIndex == 0 || typeIndex == 2);
                 to.setEnabled(typeIndex == 0);
                 if (typeIndex != 0) {
-                    to.setSelection(Calendar.getInstance().getTime());
+                    Calendar today = Calendar.getInstance();
+                    to.setDate(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
                 }
                 setPageComplete(isPageComplete());
             }
@@ -111,17 +111,15 @@ public class ImportDataPage extends WizardPage {
         gridLayout.marginWidth = gridLayout.marginHeight = 0;
         gridLayout.verticalSpacing = 0;
         group.setLayout(gridLayout);
-        from = new CDateTime(group, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        from.setPattern(Util.getDateFormatPattern());
+        from = new DateTime(group, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
         label = new Label(group, SWT.NONE);
         label.setText(Messages.ImportDataPage_ToLabel);
-        to = new CDateTime(group, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        to.setPattern(Util.getDateFormatPattern());
+        to = new DateTime(group, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
 
         Calendar today = Calendar.getInstance();
-        to.setSelection(today.getTime());
+        to.setDate(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
         today.add(Calendar.YEAR, -10);
-        from.setSelection(today.getTime());
+        from.setDate(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
 
         label = new Label(content, SWT.NONE);
         label.setText(Messages.ImportDataPage_AggregationLabel);
@@ -211,7 +209,10 @@ public class ImportDataPage extends WizardPage {
 
             if (dialogSettings.get(K_FROM_DATE) != null) {
                 try {
-                    from.setSelection(new SimpleDateFormat("yyyyMMdd").parse(dialogSettings.get(K_FROM_DATE))); //$NON-NLS-1$
+                    Date date = new SimpleDateFormat("yyyyMMdd").parse(dialogSettings.get(K_FROM_DATE));
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    from.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 } catch (Exception e) {
                     // Do nothing
                 }
@@ -256,7 +257,11 @@ public class ImportDataPage extends WizardPage {
 
         dialogSettings.put(K_MODE, type.getSelectionIndex());
 
-        dialogSettings.put(K_FROM_DATE, new SimpleDateFormat("yyyyMMdd").format(from.getSelection())); //$NON-NLS-1$
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, from.getYear());
+        calendar.set(Calendar.MONTH, from.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, from.getDay());
+        dialogSettings.put(K_FROM_DATE, new SimpleDateFormat("yyyyMMdd").format(calendar.getTime())); //$NON-NLS-1$
 
         TimeSpan[] ts = getAggregation();
         String[] s = new String[ts.length];
@@ -284,12 +289,6 @@ public class ImportDataPage extends WizardPage {
         if (aggregation.getCheckedElements().length == 0) {
             return false;
         }
-        if (from.getEnabled() && from.getSelection() == null) {
-            return false;
-        }
-        if (to.getEnabled() && to.getSelection() == null) {
-            return false;
-        }
         if (combo.getSelectionIndex() == 0) {
             return true;
         }
@@ -311,11 +310,19 @@ public class ImportDataPage extends WizardPage {
     }
 
     public Date getFromDate() {
-        return from.getSelection();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, from.getYear());
+        calendar.set(Calendar.MONTH, from.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, from.getDay());
+        return calendar.getTime();
     }
 
     public Date getToDate() {
-        return to.getSelection();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, to.getYear());
+        calendar.set(Calendar.MONTH, to.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, to.getDay());
+        return calendar.getTime();
     }
 
     public int getImportType() {

@@ -17,9 +17,8 @@ import java.util.Date;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.nebula.widgets.cdatetime.CDT;
-import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -35,8 +34,8 @@ public class SimulationParametersDialog extends Dialog {
     public static final String K_END_DATE = "END_DATE";
     public static final String TODAY = "Today";
 
-    private CDateTime begin;
-    private CDateTime end;
+    private DateTime begin;
+    private DateTime end;
 
     private Date beginDate;
     private Date endDate;
@@ -73,29 +72,26 @@ public class SimulationParametersDialog extends Dialog {
 
         Label label = new Label(composite, SWT.NONE);
         label.setText("Begin");
-        begin = new CDateTime(composite, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        begin.setPattern(Util.getDateFormatPattern());
+        begin = new DateTime(composite, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
         begin.setLayoutData(new GridData(convertHorizontalDLUsToPixels("gtk".equals(SWT.getPlatform()) ? 80 : 65), SWT.DEFAULT));
         label = new Label(composite, SWT.NONE);
         label.setText("End");
-        end = new CDateTime(composite, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        end.setPattern(Util.getDateFormatPattern());
-        end.setNullText(TODAY);
+        end = new DateTime(composite, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
         end.setLayoutData(new GridData(convertHorizontalDLUsToPixels("gtk".equals(SWT.getPlatform()) ? 80 : 65), SWT.DEFAULT));
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -30);
-        begin.setSelection(calendar.getTime());
+        begin.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
         IDialogSettings dialogSettings = rootDialogSettings.getSection(getClass().getName());
         if (dialogSettings != null) {
             if (dialogSettings.get(K_BEGIN_DATE) != null) {
                 calendar.setTimeInMillis(dialogSettings.getLong(K_BEGIN_DATE));
-                begin.setSelection(calendar.getTime());
+                begin.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             }
             if (dialogSettings.get(K_END_DATE) != null && !TODAY.equals(dialogSettings.get(K_END_DATE))) {
                 calendar.setTimeInMillis(dialogSettings.getLong(K_END_DATE));
-                end.setSelection(calendar.getTime());
+                end.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             }
         }
 
@@ -107,21 +103,23 @@ public class SimulationParametersDialog extends Dialog {
      */
     @Override
     protected void okPressed() {
-        beginDate = begin.getSelection();
-        endDate = end.getSelection();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, begin.getYear());
+        calendar.set(Calendar.MONTH, begin.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, begin.getDay());
+        beginDate = calendar.getTime();
+
+        calendar.set(Calendar.YEAR, end.getYear());
+        calendar.set(Calendar.MONTH, end.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, end.getDay());
+        endDate = calendar.getTime();
 
         IDialogSettings dialogSettings = rootDialogSettings.getSection(getClass().getName());
         if (dialogSettings == null) {
             dialogSettings = rootDialogSettings.addNewSection(getClass().getName());
         }
         dialogSettings.put(K_BEGIN_DATE, beginDate.getTime());
-        if (endDate == null) {
-            dialogSettings.put(K_END_DATE, TODAY);
-            endDate = Calendar.getInstance().getTime();
-        }
-        else {
-            dialogSettings.put(K_END_DATE, endDate.getTime());
-        }
+        dialogSettings.put(K_END_DATE, endDate.getTime());
 
         super.okPressed();
     }
