@@ -31,4 +31,4 @@ Export-Package: org.eclipsetrader.core,
  org.eclipsetrader.core.repositories,
  org.eclipsetrader.core.trading,
  org.eclipsetrader.core.views
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

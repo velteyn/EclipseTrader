@@ -10,5 +10,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipsetrader.core,
  org.eclipse.core.net
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.apache.commons.logging;version="[1.0.0,2.0.0)"

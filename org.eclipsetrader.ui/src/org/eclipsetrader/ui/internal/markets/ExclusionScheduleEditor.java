@@ -29,7 +29,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
-import org.eclipse.nebula.jface.cdatetime.CDateTimeCellEditor;
+import org.eclipsetrader.ui.internal.markets.CDateTimeCellEditorSimple;
 import org.eclipse.nebula.widgets.cdatetime.CDT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -183,8 +183,8 @@ public class ExclusionScheduleEditor {
                 "0", "1"
         });
         viewer.setCellEditors(new CellEditor[] {
-                new CDateTimeCellEditor(viewer.getTable(), CDT.DATE_SHORT),
-                new CDateTimeCellEditor(viewer.getTable(), CDT.DATE_SHORT),
+                new CDateTimeCellEditorSimple(viewer.getTable(), CDT.DATE_SHORT),
+                new CDateTimeCellEditorSimple(viewer.getTable(), CDT.DATE_SHORT),
         });
 
         viewer.setInput(input);

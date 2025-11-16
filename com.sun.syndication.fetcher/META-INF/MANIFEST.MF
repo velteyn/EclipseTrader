@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.sun.syndication.fetcher
-Bundle-ClassPath: src/
+Bundle-ClassPath: .
 Bundle-Name: ROME: Fetcher Plugin
 Bundle-SymbolicName: com.sun.syndication.fetcher
 Bundle-Version: 1.0.0.qualifier

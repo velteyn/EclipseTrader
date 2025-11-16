@@ -15,7 +15,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.property,
  org.eclipse.nebula.cwt,
- org.eclipse.nebula.jface.cdatetime,
  org.eclipse.nebula.widgets.cdatetime,
  org.eclipse.core.databinding.observable
 Import-Package: com.google.common.collect,
@@ -42,5 +41,5 @@ Export-Package: org.eclipsetrader.ui,
  org.eclipsetrader.ui.internal.views;x-internal:=true,
  org.eclipsetrader.ui.navigator
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Eclipse-BuddyPolicy: global
