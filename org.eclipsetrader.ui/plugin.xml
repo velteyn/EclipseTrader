@@ -661,6 +661,12 @@
                <count
                      value="+">
                </count>
+               <iterate
+                     operator="and">
+                  <adapt
+                        type="org.eclipsetrader.ui.internal.ats.monitor.TradingSystemItem">
+                  </adapt>
+               </iterate>
                <not>
                   <or>
                      <iterate>
@@ -690,6 +696,12 @@
                <count
                      value="+">
                </count>
+               <iterate
+                     operator="and">
+                  <adapt
+                        type="org.eclipsetrader.ui.internal.ats.monitor.TradingSystemItem">
+                  </adapt>
+               </iterate>
                <not>
                   <or>
                      <iterate>
