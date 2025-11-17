@@ -128,7 +128,7 @@ public class SecuritySelectionControl {
             }
         });
         available.setContentProvider(new ArrayContentProvider());
-        available.setSorter(new ViewerSorter());
+        available.setComparator(new org.eclipse.jface.viewers.ViewerComparator());
         available.setInput(input);
         available.addSelectionChangedListener(new ISelectionChangedListener() {
 

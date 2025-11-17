@@ -96,7 +96,7 @@ public class CurrencyExchangePage extends WizardPage {
             }
         });
         fromCurrency.setContentProvider(new ArrayContentProvider());
-        fromCurrency.setSorter(new ViewerSorter());
+        fromCurrency.setComparator(new org.eclipse.jface.viewers.ViewerComparator());
 
         label = new Label(content, SWT.NONE);
         label.setText("To Currency:");
@@ -113,7 +113,7 @@ public class CurrencyExchangePage extends WizardPage {
             }
         });
         toCurrency.setContentProvider(new ArrayContentProvider());
-        toCurrency.setSorter(new ViewerSorter());
+        toCurrency.setComparator(new org.eclipse.jface.viewers.ViewerComparator());
 
         label = new Label(content, SWT.NONE);
         label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));

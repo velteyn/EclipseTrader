@@ -167,7 +167,7 @@ public class PortfolioViewPart extends ViewPart {
         viewer.getTree().setHeaderVisible(true);
         viewer.getTree().setLinesVisible(false);
         viewer.setContentProvider(new PortfolioContentProvider());
-        viewer.setSorter(new ViewerSorter());
+        viewer.setComparator(new org.eclipse.jface.viewers.ViewerComparator());
 
         viewer.setInput(new PortfolioView());
 

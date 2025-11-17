@@ -486,7 +486,7 @@ public class OrdersView extends ViewPart {
                 return ((ITradingService) inputElement).getOrders();
             }
         });
-        viewer.setSorter(new ViewerSorter() {
+        viewer.setComparator(new org.eclipse.jface.viewers.ViewerComparator() {
 
             @Override
             public int compare(Viewer viewer, Object e1, Object e2) {

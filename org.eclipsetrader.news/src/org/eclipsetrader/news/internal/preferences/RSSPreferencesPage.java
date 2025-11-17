@@ -39,7 +39,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -182,7 +182,7 @@ public class RSSPreferencesPage extends PreferencePage implements IWorkbenchPref
                 return ((FeedSource) element).getName();
             }
         });
-        table.setSorter(new ViewerSorter());
+        table.setComparator(new ViewerComparator());
         table.setInput(list);
 
         table.addSelectionChangedListener(new ISelectionChangedListener() {

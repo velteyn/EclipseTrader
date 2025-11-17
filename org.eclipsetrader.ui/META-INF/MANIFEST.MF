@@ -14,11 +14,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.property,
- org.eclipse.nebula.cwt,
- org.eclipse.nebula.widgets.cdatetime,
  org.eclipse.core.databinding.observable
-Import-Package: com.google.common.collect,
- org.eclipse.core.databinding,
+Import-Package: org.eclipse.core.databinding,
  org.eclipse.core.databinding.observable
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipsetrader.ui,

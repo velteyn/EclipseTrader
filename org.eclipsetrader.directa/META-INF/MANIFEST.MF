@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.core.expressions,
  org.eclipse.core.runtime,
  org.eclipse.equinox.security,
  org.eclipse.ui,
- org.eclipse.nebula.widgets.cdatetime,
+ org.eclipse.jface,
+ org.eclipse.swt,
  org.eclipsetrader.core,
  org.eclipsetrader.ui
 Bundle-ActivationPolicy: lazy

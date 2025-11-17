@@ -4,6 +4,7 @@ Bundle-Name: Jessx
 Bundle-SymbolicName: org.eclipsetrader.jessx; singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipsetrader.jessx.internal.JessxActivator
+Bundle-ClassPath: .
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.net;bundle-version="1.2.200",
  org.eclipse.ui,
@@ -39,4 +40,3 @@ Export-Package: org.eclipsetrader.jessx.internal;x-internal:=true,
  org.eclipsetrader.jessx.server.net;x-internal:=true;x-friends:="org.eclipsetrader.jessx.test",
  org.eclipsetrader.jessx.internal.core.connector;x-internal:=true;uses:="org.eclipse.core.runtime,org.eclipsetrader.core.feed",
  org.eclipsetrader.jessx.internal.core.repository;x-internal:=true
-Bundle-ClassPath: .

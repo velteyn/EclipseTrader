@@ -99,7 +99,7 @@ public class ConnectorOverrideProperties extends PropertyPage implements IWorkbe
                 return ((IFeedConnector) element).getName();
             }
         });
-        liveFeed.setSorter(new ViewerSorter());
+        liveFeed.setComparator(new org.eclipse.jface.viewers.ViewerComparator());
         liveFeed.setContentProvider(new ArrayContentProvider());
 
         backfillFeedOverride = new Button(content, SWT.CHECK);
@@ -126,7 +126,7 @@ public class ConnectorOverrideProperties extends PropertyPage implements IWorkbe
                 return ((IBackfillConnector) element).getName();
             }
         });
-        backfillFeed.setSorter(new ViewerSorter());
+        backfillFeed.setComparator(new org.eclipse.jface.viewers.ViewerComparator());
         backfillFeed.setContentProvider(new ArrayContentProvider());
 
         intradayBackfillFeedOverride = new Button(content, SWT.CHECK);
@@ -156,7 +156,7 @@ public class ConnectorOverrideProperties extends PropertyPage implements IWorkbe
                 return ((IBackfillConnector) element).getName();
             }
         });
-        intradayBackfillFeed.setSorter(new ViewerSorter());
+        intradayBackfillFeed.setComparator(new org.eclipse.jface.viewers.ViewerComparator());
         intradayBackfillFeed.setContentProvider(new ArrayContentProvider());
 
         List<Object> feedConnectors = new ArrayList<Object>();

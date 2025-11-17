@@ -9,7 +9,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipsetrader.core,
  org.eclipsetrader.news,
- org.eclipse.nebula.widgets.cdatetime,
  org.eclipsetrader.ui
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: EclipseTrader.org

@@ -459,7 +459,7 @@ public class WatchListView extends ViewPart implements ISaveablePart {
             }
         });
 
-        viewer.setSorter(new ViewerSorter() {
+        viewer.setComparator(new org.eclipse.jface.viewers.ViewerComparator() {
 
             @Override
             public int compare(Viewer viewer, Object e1, Object e2) {

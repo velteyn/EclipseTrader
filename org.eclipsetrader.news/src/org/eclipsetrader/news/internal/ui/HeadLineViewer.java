@@ -397,7 +397,7 @@ public class HeadLineViewer extends ViewPart {
 
         viewer.setLabelProvider(new HeadLineLabelProvider());
         viewer.setContentProvider(new ArrayContentProvider());
-        viewer.setSorter(new ViewerSorter() {
+        viewer.setComparator(new org.eclipse.jface.viewers.ViewerComparator() {
 
             @Override
             public int compare(Viewer viewer, Object e1, Object e2) {
