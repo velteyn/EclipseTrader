@@ -107,6 +107,18 @@
                 <version>${tycho.version}</version>
                 <extensions>true</extensions>
             </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-surefire-plugin</artifactId>
+                <version>${tycho.version}</version>
+                <configuration>
+                    <testSuite>org.eclipsetrader.jessx</testSuite>
+                    <testClass>org.eclipsetrader.jessx.internal.core.BrokerLauncherTest</testClass>
+                    <useUIHarness>true</useUIHarness>
+                    <useUIThread>true</useUIThread>
+                    <argLine>-Xmx512m</argLine>
+                </configuration>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>

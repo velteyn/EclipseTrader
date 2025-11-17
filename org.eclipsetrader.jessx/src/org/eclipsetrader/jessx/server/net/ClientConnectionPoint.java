@@ -69,10 +69,10 @@ public class ClientConnectionPoint extends Thread {
       serverReadyLatch.countDown();
     }
     catch (NumberFormatException ex) {
-      Utils.fatalError("Property ServerWaitingPort is not an integer. Could not initialise SocketServer. " + ex.toString(), 1, ex);
+        Utils.logger.error("Property ServerWaitingPort is not an integer. Could not initialise SocketServer. " + ex.toString(), ex);
     }
     catch (IOException ex) {
-      Utils.fatalError("An Input/output exception has occured while trying to initiate the serverSocket" + ex.toString(), 1, ex);
+        Utils.logger.error("An Input/output exception has occured while trying to initiate the serverSocket" + ex.toString(), ex);
     }
   }
 
