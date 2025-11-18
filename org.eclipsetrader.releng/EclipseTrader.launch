@@ -134,7 +134,6 @@
         <setEntry value="org.eclipse.ui.net@default:default"/>
         <setEntry value="org.eclipse.ui.workbench@default:default"/>
         <setEntry value="org.eclipse.ui@default:default"/>
-        <setEntry value="org.junit@default:default"/>
     </setAttribute>
     <setAttribute key="selected_workspace_bundles">
         <setEntry value="com.sun.syndication.fetcher@default:default"/>
