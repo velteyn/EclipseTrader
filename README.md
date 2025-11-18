@@ -13,33 +13,40 @@ This repository represents an ongoing effort to modernize the original EclipseTr
 To develop and run EclipseTrader from your IDE, you will need to set up an Eclipse RCP development environment.
 
 ### Prerequisites
-- **Java 8**: The project is built on Java 8 or upper. Ensure you have a compatible JDK installed.
-- **Eclipse IDE for RCP and RAP Developers**: Download the appropriate version (e.g., Eclipse 3.8/Juno) to ensure compatibility with the project's dependencies.
+- **Java 11**: The project is built on Java 11. Ensure you have a compatible JDK installed.
+- **Eclipse IDE for RCP and RAP Developers**: Download a recent version (e.g., 2024-03) to ensure compatibility with the project's dependencies.
 
 ### Setup Instructions
 1.  **Import Projects**:
     *   In Eclipse, go to `File > Import...`.
-    *   Select `General > Existing Projects into Workspace`.
+    *   Select `Maven > Existing Maven Projects`.
     *   Browse to the root directory of this repository and import all discovered projects.
 
 2.  **Set the Target Platform**:
     *   The target platform defines the set of plugins your workspace will be built and launched against.
     *   Open the `org.eclipsetrader.releng/eclipsetrader.target` file.
     *   Wait for Eclipse to resolve all dependencies. Once it's finished, click **Set as Target Platform** in the top-right corner of the editor.
-    *   This may take a few minutes as Eclipse downloads all the necessary plugins from the Juno p2 repository.
+    *   This may take a few minutes as Eclipse downloads all the necessary plugins.
 
 3.  **Launch the Application**:
     *   Open the `org.eclipsetrader.releng/eclipsetrader.product` file.
     *   Click the **Synchronize** link to ensure the product definition is up-to-date with the target platform.
     *   Click the **Launch an Eclipse application** link in the **Testing** section to start the EclipseTrader application.
 
-## How to Compile
+## How to Compile and Run
 
 The project is built using Maven and Tycho. To compile all plugins and create the final product, run the following command from the root of the repository:
 
 ```bash
 mvn clean install
 ```
+
+After a successful build, you can run the application from the command line:
+
+```bash
+org.eclipsetrader.releng\target\products\org.eclipsetrader.platform.workbench\win32\win32\x86_64\trader.exe
+```
+*(Adjust the path according to your operating system)*
 
 ### Important Notes
 *   **Skipping Tests**: The project currently lacks a comprehensive automated test suite. It is recommended to skip the test execution during the build process:

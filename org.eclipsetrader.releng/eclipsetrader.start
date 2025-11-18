@@ -1,0 +1,11 @@
+To run EclipseTrader from within the Eclipse IDE, follow these steps:
+
+1.  **Open the Product Configuration**:
+    *   In the Package Explorer, navigate to the `org.eclipsetrader.releng` project.
+    *   Open the `eclipsetrader.product` file. This will open the product configuration editor.
+
+2.  **Synchronize the Product Definition**:
+    *   In the top-right corner of the editor, click the **Synchronize** link. This ensures that the product definition is up-to-date with the target platform.
+
+3.  **Launch the Application**:
+    *   In the **Testing** section of the editor, click the **Launch an Eclipse application** link. This will start the EclipseTrader application.
