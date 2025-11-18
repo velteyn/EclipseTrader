@@ -346,6 +346,19 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
      */
     @Override
     public synchronized void connect() {
+        // Do nothing, connection is handled manually via start()
+    }
+
+    /* (non-Javadoc)
+     * @see org.eclipsetrader.core.feed.IFeedConnector#disconnect()
+     */
+    @Override
+    public synchronized void disconnect() {
+        // Do nothing, connection is handled manually via stop()
+    }
+
+    public synchronized void start() {
+        logger.info("StreamingConnector starting...");
         stopping = false;
 
         if (notificationThread == null || !notificationThread.isAlive()) {
@@ -359,17 +372,17 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.core.feed.IFeedConnector#disconnect()
-     */
-    @Override
-    public synchronized void disconnect() {
+    public synchronized void stop() {
+        logger.info("StreamingConnector stopping...");
         stopping = true;
 
         if (thread != null) {
             try {
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
                 thread.join(30 * 1000);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping thread", e); //$NON-NLS-1$
                 JessxActivator.log(status);
             }
@@ -383,7 +396,7 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
                 }
                 notificationThread.join(30 * 1000);
             } catch (InterruptedException e) {
-				Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping notification thread", e); //$NON-NLS-1$
+                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping notification thread", e); //$NON-NLS-1$
                 JessxActivator.log(status);
             }
             notificationThread = null;
