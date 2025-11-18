@@ -11,8 +11,12 @@
 
 package org.eclipsetrader.jessx.internal.core;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URL;
@@ -35,10 +39,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
@@ -52,20 +55,20 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.widgets.Display;
+import org.eclipsetrader.core.Cash;
 import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.feed.FeedProperties;
 import org.eclipsetrader.core.feed.IBookEntry;
-import org.eclipsetrader.core.feed.IHistory;
-import org.eclipsetrader.core.feed.IOHLC;
-import org.eclipsetrader.core.feed.OHLC;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedProperties;
 import org.eclipsetrader.core.feed.IFeedSubscription2;
+import org.eclipsetrader.core.feed.IHistory;
+import org.eclipsetrader.core.feed.IOHLC;
+import org.eclipsetrader.core.feed.OHLC;
 import org.eclipsetrader.core.feed.Quote;
 import org.eclipsetrader.core.feed.TodayOHL;
 import org.eclipsetrader.core.feed.Trade;
 import org.eclipsetrader.core.instruments.ISecurity;
-import org.eclipsetrader.core.instruments.Security;
 import org.eclipsetrader.core.instruments.Stock;
 import org.eclipsetrader.core.markets.IMarket;
 import org.eclipsetrader.core.markets.IMarketService;
@@ -73,7 +76,6 @@ import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
 import org.eclipsetrader.core.trading.BrokerException;
-import org.eclipsetrader.core.Cash;
 import org.eclipsetrader.core.trading.IAccount;
 import org.eclipsetrader.core.trading.IBroker;
 import org.eclipsetrader.core.trading.IOrder;
@@ -116,6 +118,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	public static final IOrderRoute AfterHours = new OrderRoute("5", "AfterHours"); //$NON-NLS-1$ //$NON-NLS-2$
 	public static final IOrderRoute Open = new OrderRoute("7", "open//"); //$NON-NLS-1$ //$NON-NLS-2$
 
+    public static final CountDownLatch serverReadyLatch = new CountDownLatch(1);
+
 	private static BrokerConnector instance;
 
 	private String id;
@@ -132,7 +136,6 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	private SocketChannel socketChannel;
 	private Thread thread;
-	private Log logger = LogFactory.getLog(getClass());
 	public static final IOrderValidity Valid30Days = new OrderValidity("30days", Messages.BrokerConnector_30Days); //$NON-NLS-1$
     private Server srv;
 
@@ -151,7 +154,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.core.runtime.IExecutableExtension#setInitializationData(org
 	 * .eclipse.core.runtime.IConfigurationElement, java.lang.String,
@@ -166,7 +169,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.core.runtime.IExecutableExtensionFactory#create()
 	 */
 	@Override
@@ -179,7 +182,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#getId()
 	 */
 	@Override
@@ -189,7 +192,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#getName()
 	 */
 	@Override
@@ -199,22 +202,38 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#connect()
 	 */
 	@Override
 	public void connect() {
 
-		// EDOZ TODO vedi quello di directa , qua facciamo partire il server
-		// incvece di "collegarci"
-		// e i read che facciamo partire � il server i JESSX !
-
         try {
-            URL url = JessxActivator.getDefault().getBundle().getEntry("src/org/eclipsetrader/jessx/utils/default.xml");
-            InputStream is = url.openStream();
-            srv = new Server(is, false);
-            srv.addServerStateListener(this);
-            srv.startServer();
+            File file = JessxActivator.getDefault().getStateLocation().append("default.xml").toFile();
+            if (!file.exists()) {
+                URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("resources/default.xml"), null);
+                if (url != null) {
+                    try (InputStream in = url.openStream(); OutputStream out = new FileOutputStream(file)) {
+                        byte[] buf = new byte[1024];
+                        int len;
+                        while ((len = in.read(buf)) > 0) {
+                            out.write(buf, 0, len);
+                        }
+                    }
+                }
+            }
+
+            if (file.exists()) {
+                try (InputStream is = new FileInputStream(file)) {
+                    srv = new Server(is, false);
+                    srv.addServerStateListener(this);
+                    srv.startServer();
+                }
+            }
+            else {
+                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Default scenario file not found");
+                JessxActivator.log(status);
+            }
         }
         catch (Exception e) {
             Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading default scenario", e);
@@ -223,7 +242,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 		if (thread == null || !thread.isAlive()) {
 			thread = new Thread(this, getName() + " - Orders Monitor"); //$NON-NLS-1$
-			logger.info("Starting " + thread.getName()); //$NON-NLS-1$
+			JessxActivator.log("Starting " + thread.getName()); //$NON-NLS-1$
 			thread.start();
 		}
 
@@ -237,11 +256,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#disconnect()
 	 */
 	@Override
 	public void disconnect() {
+        JessxActivator.log("Broker disconnecting, stopping StreamingConnector.");
+        StreamingConnector.getInstance().disconnect();
 
 		// TODO qua c'� da spegnere il server di JESSX (un bel kill e tutto si
 		// risolve)
@@ -259,14 +280,14 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			} catch (InterruptedException e) {
 				// Do nothing
 			}
-			logger.info("Stopped " + thread.getName()); //$NON-NLS-1$
+			JessxActivator.log("Stopped " + thread.getName()); //$NON-NLS-1$
 			thread = null;
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipsetrader.core.trading.IBroker#canTrade(org.eclipsetrader.core
 	 * .instruments.ISecurity)
@@ -287,7 +308,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#getSymbolFromSecurity(org.
 	 * eclipsetrader.core.instruments.ISecurity)
 	 */
@@ -314,7 +335,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipsetrader.core.trading.IBroker#getSecurityFromSymbol(java.lang
 	 * .String)
@@ -348,13 +369,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     @Override
 	public void connectionStateChanged(int newState) {
 		if (newState == ClientCore.CONNECTED) {
-			logger.info("Client connected to server");
+			JessxActivator.log("Client connected to server");
 		}
 	}
 
 	@Override
 	public void objectReceived(Document doc) {
-		logger.info("Broker received " + doc.getRootElement().getName());
+		JessxActivator.log("Broker received " + doc.getRootElement().getName());
 		if (doc.getRootElement().getName().equals("Portfolio")) {
 			List<Position> list = new ArrayList<Position>();
 			Element portfolio = doc.getRootElement();
@@ -512,7 +533,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	}
 
     private void registerSecurity(final String name) {
-        logger.info("########## I'm going to register security " + name);
+        JessxActivator.log("########## I'm going to register security " + name);
         BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
         ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
         ServiceReference marketServiceReference = context.getServiceReference(IMarketService.class.getName());
@@ -561,16 +582,18 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     @Override
     public void serverStateChanged(int state) {
         if (state == Server.SERVER_STATE_ONLINE) {
+            JessxActivator.log("JESSX Server is online, signaling ready latch.");
+            serverReadyLatch.countDown();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        logger.info("JessX-Setup: Server is online. Waiting for connection point to be ready...");
+                        JessxActivator.log("JessX-Setup: Server is online. Waiting for connection point to be ready...");
                         if (!ClientConnectionPoint.serverReadyLatch.await(10, TimeUnit.SECONDS)) {
-                            logger.error("JessX-Setup: Timed out waiting for server connection point. Setup aborted.");
+                            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "JessX-Setup: Timed out waiting for server connection point. Setup aborted."));
                             return;
                         }
-                        logger.info("JessX-Setup: Connection point is ready. Connecting ThePlayer...");
+                        JessxActivator.log("JessX-Setup: Connection point is ready. Connecting ThePlayer...");
 
                         // 1. Connect ThePlayer FIRST
                         ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
@@ -585,17 +608,17 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                             Thread.sleep(100);
                         }
                         if (thePlayer == null) {
-                            logger.error("JessX-Setup: Timed out waiting for ThePlayer to connect. Setup aborted.");
+                            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "JessX-Setup: Timed out waiting for ThePlayer to connect. Setup aborted."));
                             return;
                         }
-                        logger.info("JessX-Setup: ThePlayer is connected. Now loading bots...");
+                        JessxActivator.log("JessX-Setup: ThePlayer is connected. Now loading bots...");
 
                         // 3. Load bots ONLY after ThePlayer is connected
                         srv.loadBots();
 
                         // 4. Wait for all bots to connect
                         int expectedTotalPlayers = 42; // 41 bots + 1 ThePlayer
-                        logger.info("JessX-Setup: Waiting for all " + (expectedTotalPlayers - 1) + " bots to connect...");
+                        JessxActivator.log("JessX-Setup: Waiting for all " + (expectedTotalPlayers - 1) + " bots to connect...");
                         for (int i = 0; i < 200; i++) { // Wait up to 20 seconds
                             if (NetworkCore.getPlayerList().size() >= expectedTotalPlayers) {
                                 break;
@@ -604,20 +627,20 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                         }
 
                         if (NetworkCore.getPlayerList().size() < expectedTotalPlayers) {
-                            logger.error("JessX-Setup: Timed out waiting for all bots to connect. " + NetworkCore.getPlayerList().size() + "/" + expectedTotalPlayers + " connected. Aborting.");
+                            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "JessX-Setup: Timed out waiting for all bots to connect. " + NetworkCore.getPlayerList().size() + "/" + expectedTotalPlayers + " connected. Aborting."));
                             return;
                         }
-                        logger.info("JessX-Setup: All " + NetworkCore.getPlayerList().size() + " players are connected.");
+                        JessxActivator.log("JessX-Setup: All " + NetworkCore.getPlayerList().size() + " players are connected.");
 
                         // 5. Initialize General Parameters
-                        logger.info("JessX-Setup: Initializing general parameters...");
+                        JessxActivator.log("JessX-Setup: Initializing general parameters...");
                         GeneralParametersLocal generalParams = new GeneralParametersLocal();
                         generalParams.initializeGeneralParameters();
                         BusinessCore.setGeneralParameters(generalParams);
-                        logger.info("JessX-Setup: General parameters initialized and set in BusinessCore.");
+                        JessxActivator.log("JessX-Setup: General parameters initialized and set in BusinessCore.");
 
                         // 6. Assign categories and start experiment (with retry logic)
-                        logger.info("JessX-Setup: All players connected. Assigning categories and attempting to start experiment...");
+                        JessxActivator.log("JessX-Setup: All players connected. Assigning categories and attempting to start experiment...");
 
                         Scenario scn = BusinessCore.getScenario();
                         Map plTypes = scn.getPlayerTypes();
@@ -638,14 +661,14 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                                         assignedCategory = categories.get(random.nextInt(categories.size()));
                                     }
                                     player.setPlayerCategory(assignedCategory.getPlayerTypeName());
-                                    logger.info(String.format("Assigned category '%s' to player '%s'", player.getPlayerCategory(), player.getLogin()));
+                                    JessxActivator.log(String.format("Assigned category '%s' to player '%s'", player.getPlayerCategory(), player.getLogin()));
                                 }
                             }
 
                             // Try to start the experiment.
                             if (NetworkCore.getExperimentManager().beginExperiment()) {
                                 new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
-                                logger.info("JessX-Setup: Experiment started successfully.");
+                                JessxActivator.log("JessX-Setup: Experiment started successfully.");
                                 experimentStarted = true;
                                 break; // Exit the retry loop on success
                             }
@@ -655,10 +678,10 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                         }
 
                         if (!experimentStarted) {
-                            logger.error("JessX-Setup: Failed to start experiment after multiple retries. Preconditions not met. Check server logs.");
+                            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "JessX-Setup: Failed to start experiment after multiple retries. Preconditions not met. Check server logs."));
                         }
                     } catch (Exception e) {
-                        logger.error("Error in JessX setup thread", e);
+                        JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error in JessX setup thread", e));
                     }
                 }
             }, "JessX-Setup").start();
@@ -667,7 +690,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipsetrader.core.trading.IBroker#prepareOrder(org.eclipsetrader
 	 * .core.trading.IOrder)
@@ -689,7 +712,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#getAllowedSides()
 	 */
 	@Override
@@ -699,7 +722,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#getAllowedTypes()
 	 */
 	@Override
@@ -709,7 +732,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#getAllowedValidity()
 	 */
 	@Override
@@ -719,7 +742,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#getAllowedRoutes()
 	 */
 	@Override
@@ -738,7 +761,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#getOrders()
 	 */
 	@Override
@@ -755,7 +778,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -792,7 +815,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		for (;;) {
 			try {
 				if (socketSelector.select(30 * 1000) == 0) {
-					logger.trace(">" + HEARTBEAT); //$NON-NLS-1$
+					// logger.trace(">" + HEARTBEAT); //$NON-NLS-1$
 					socketChannel.write(ByteBuffer.wrap(new String(HEARTBEAT + "\r\n").getBytes())); //$NON-NLS-1$
 				}
 			} catch (Exception e) {
@@ -828,7 +851,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						key.interestOps(SelectionKey.OP_WRITE);
 					}
 					if (key.isWritable()) {
-						logger.trace(">" + LOGIN + WebConnector.getInstance().getUser()); //$NON-NLS-1$
+						// logger.trace(">" + LOGIN + WebConnector.getInstance().getUser()); //$NON-NLS-1$
 						socketChannel.write(ByteBuffer.wrap(new String(LOGIN + WebConnector.getInstance().getUser() + "\r\n").getBytes())); //$NON-NLS-1$
 
 						// Register an interest in reading on this channel
@@ -840,12 +863,12 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						if (readed > 0) {
 							String[] s = new String(dst.array(), 0, readed).split("\r\n"); //$NON-NLS-1$
 							for (int i = 0; i < s.length; i++) {
-								logger.trace("<" + s[i]); //$NON-NLS-1$
+								// logger.trace("<" + s[i]); //$NON-NLS-1$
 
 								if (s[i].endsWith(";" + WebConnector.getInstance().getUser() + ";")) { //$NON-NLS-1$ //$NON-NLS-2$
-									logger.trace(">" + UNKNOWN70); //$NON-NLS-1$
+									// logger.trace(">" + UNKNOWN70); //$NON-NLS-1$
 									socketChannel.write(ByteBuffer.wrap(new String(UNKNOWN70 + "\r\n").getBytes())); //$NON-NLS-1$
-									logger.trace(">" + UNKNOWN55); //$NON-NLS-1$
+									// logger.trace(">" + UNKNOWN55); //$NON-NLS-1$
 									socketChannel.write(ByteBuffer.wrap(new String(UNKNOWN55 + "\r\n").getBytes())); //$NON-NLS-1$
 								}
 
@@ -998,7 +1021,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		if ((status == IOrderStatus.Filled || status == IOrderStatus.Canceled || status == IOrderStatus.Rejected) && tracker.getStatus() != status) {
 			tracker.setStatus(status);
 
-			if (logger.isInfoEnabled()) {
+			if (true) {
 				StringBuilder sb = new StringBuilder();
 				if (status == IOrderStatus.Filled) {
 					sb.append("Order Filled:");
@@ -1020,7 +1043,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 				if (tracker.getOrder().getReference() != null) {
 					sb.append(", reference=" + tracker.getOrder().getReference());
 				}
-				logger.info(sb.toString());
+                JessxActivator.log(sb.toString());
 			}
 
 			tracker.fireOrderCompletedEvent();
@@ -1067,7 +1090,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#addOrderChangeListener(org.
 	 * eclipsetrader.core.trading.IOrderChangeListener)
 	 */
@@ -1078,7 +1101,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipsetrader.core.trading.IBroker#removeOrderChangeListener(org.
 	 * eclipsetrader.core.trading.IOrderChangeListener)
@@ -1143,7 +1166,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
                 ClientCore.executeOperation(op);
             }
         } catch (Exception e) {
-            logger.error("Error sending order", e);
+            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error sending order", e));
         }
     }
 
@@ -1162,13 +1185,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
             ClientCore.executeOperation(op);
         }
         catch (Exception e) {
-            logger.error("Error sending order cancellation", e);
+            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error sending order cancellation", e));
         }
     }
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipsetrader.core.trading.IBroker#getAccounts()
 	 */
 	@Override

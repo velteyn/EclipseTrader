@@ -44,6 +44,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
         IPreferenceStore preferences = UIActivator.getDefault().getPreferenceStore();
 
+        preferences.setDefault("RUN_ALL_LAUNCHERS", false);
+        preferences.setDefault("RUN_LAUNCHERS", "org.eclipsetrader.jessx.broker;");
+
         PeriodList list = new PeriodList();
         list.add(new Period("2 Years", TimeSpan.years(2), TimeSpan.days(1)));
         list.add(new Period("1 Year", TimeSpan.years(1), TimeSpan.days(1)));

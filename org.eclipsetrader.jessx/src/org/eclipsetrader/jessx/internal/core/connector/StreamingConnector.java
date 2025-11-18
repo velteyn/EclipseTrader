@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Marco Maccaferri - initial API and implementation
- *     Edoardo BAROLO - virtual investor 
+ *     Edoardo BAROLO - virtual investor
  */
 
 package org.eclipsetrader.jessx.internal.core.connector;
@@ -32,9 +32,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.CoreException;
@@ -62,6 +61,7 @@ import org.eclipsetrader.core.feed.TimeSpan;
 import org.eclipsetrader.core.feed.TodayOHL;
 import org.eclipsetrader.core.feed.Trade;
 import org.eclipsetrader.jessx.internal.JessxActivator;
+import org.eclipsetrader.jessx.internal.core.BrokerConnector;
 import org.eclipsetrader.jessx.internal.core.messages.AstaApertura;
 import org.eclipsetrader.jessx.internal.core.messages.AstaChiusura;
 import org.eclipsetrader.jessx.internal.core.messages.BidAsk;
@@ -107,8 +107,6 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
     private DataInputStream is;
     private Set<String> sTit;
     private Set<String> sTit2;
-
-    private Log logger = LogFactory.getLog(getClass());
 
     private Runnable notificationRunnable = new Runnable() {
 
@@ -284,11 +282,11 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
         IdentifierType identifierType;
 
         synchronized (symbolSubscriptions) {
-        	
+
         	FeedProperties prop = new FeedProperties();
-        	
+
         	FeedIdentifier fi = new FeedIdentifier(symbol,prop);
-        	
+
             identifierType = IdentifiersList.getInstance().getIdentifierFor(fi);
             subscription = symbolSubscriptions.get(identifierType.getSymbol());
             if (subscription == null) {
@@ -346,6 +344,7 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
      */
     @Override
     public synchronized void connect() {
+        JessxActivator.log("StreamingConnector connecting...");
         stopping = false;
 
         if (notificationThread == null || !notificationThread.isAlive()) {
@@ -364,12 +363,16 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
      */
     @Override
     public synchronized void disconnect() {
+        JessxActivator.log("StreamingConnector disconnecting...");
         stopping = true;
 
         if (thread != null) {
             try {
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
                 thread.join(30 * 1000);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping thread", e); //$NON-NLS-1$
                 JessxActivator.log(status);
             }
@@ -383,7 +386,7 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
                 }
                 notificationThread.join(30 * 1000);
             } catch (InterruptedException e) {
-				Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping notification thread", e); //$NON-NLS-1$
+                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping notification thread", e); //$NON-NLS-1$
                 JessxActivator.log(status);
             }
             notificationThread = null;
@@ -402,6 +405,19 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
         "rawtypes", "unchecked"
     })
     public void run() {
+        try {
+            JessxActivator.log("StreamingConnector waiting for server ready signal...");
+            if (!BrokerConnector.serverReadyLatch.await(30, TimeUnit.SECONDS)) {
+                JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Timed out waiting for JESSX server to start."));
+                return;
+            }
+            JessxActivator.log("StreamingConnector received server ready signal. Proceeding with connection.");
+        }
+        catch (InterruptedException e) {
+            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "StreamingConnector was interrupted while waiting for server.", e));
+            return;
+        }
+
         int n = 0;
         byte bHeader[] = new byte[4];
 
@@ -569,7 +585,7 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
         }
 
         if (toRemove.size() != 0) {
-            logger.info("Removing " + toRemove); //$NON-NLS-1$
+            JessxActivator.log("Removing " + toRemove); //$NON-NLS-1$
             String[] symbols = toRemove.toArray(new String[toRemove.size()]);
             int[] flags = new int[symbols.length];
             byte[] msg = CreaMsg.creaPortMsg(CreaMsg.PORT_DEL, symbols, flags);
@@ -578,7 +594,7 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
         }
 
         if (toAdd.size() != 0) {
-            logger.info("Adding " + toAdd); //$NON-NLS-1$
+            JessxActivator.log("Adding " + toAdd); //$NON-NLS-1$
             String[] symbols = toAdd.toArray(new String[toAdd.size()]);
             int[] flags = new int[symbols.length];
             for (int i = 0; i < symbols.length; i++) {
@@ -601,7 +617,7 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
             }
 
             if (toMod.size() != 0) {
-                logger.info("Modifying " + toMod); //$NON-NLS-1$
+                JessxActivator.log("Modifying " + toMod); //$NON-NLS-1$
                 String[] symbols = toMod.keySet().toArray(new String[toMod.keySet().size()]);
                 int[] flags = new int[symbols.length];
                 for (int i = 0; i < symbols.length; i++) {
