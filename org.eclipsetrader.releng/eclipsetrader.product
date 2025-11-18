@@ -14,6 +14,8 @@
    </configIni>
 
    <launcherArgs>
+      -clearPersistedState
+      -clean
    </launcherArgs>
 
    <windowImages i16="/org.eclipsetrader.platform/eclipse.gif" i32="/org.eclipsetrader.platform/eclipse32.gif" i48="/org.eclipsetrader.platform/eclipse48.gif"/>
@@ -29,6 +31,9 @@
    </vm>
 
    <plugins>
+      <plugin
+            id="org.eclipse.equinox.ds"
+            version="0.0.0"/>
    </plugins>
 
    <features>
@@ -39,6 +44,7 @@
       <feature id="com.tictactec.ta.lib-feature" version="0.0.0"/>
       <feature id="com.sun.syndication-feature" version="0.0.0"/>
       <feature id="org.mozilla.rhino-feature" version="0.0.0"/>
+      <feature id="org.eclipse.e4.rcp" version="0.0.0"/>
       <feature id="org.eclipse.rcp" version="0.0.0"/>
       <feature id="org.eclipse.help" version="0.0.0"/>
       <feature id="org.eclipse.equinox.p2.user.ui" version="0.0.0"/>
@@ -53,6 +59,15 @@
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.apache.felix.scr" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.e4.core.services" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.e4.core.di" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.e4.core.contexts" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.e4.ui.services" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.e4.ui.workbench.renderers.swt" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.e4.ui.workbench.addons.swt" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.e4.ui.workbench" autoStart="true" startLevel="4" />
    </configurations>
 
 </product>

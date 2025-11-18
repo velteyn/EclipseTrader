@@ -18,19 +18,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipsetrader.yahoo.internal.core.Util;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.fetcher.impl.FeedFetcherCache;
-import com.sun.syndication.fetcher.impl.HashMapFeedInfoCache;
-import com.sun.syndication.fetcher.impl.HttpClientFeedFetcher;
+import com.sun.syndication.io.SyndFeedInput;
+import com.sun.syndication.io.XmlReader;
 
 public class RSSNewsHandler implements INewsHandler {
-
-    private FeedFetcherCache feedInfoCache = HashMapFeedInfoCache.getInstance();
-    private HttpClientFeedFetcher fetcher = new HttpClientFeedFetcher(feedInfoCache);
 
     public RSSNewsHandler() {
     }
@@ -51,7 +48,11 @@ public class RSSNewsHandler implements INewsHandler {
             try {
                 Util.setupProxy(client, url[i].getHost());
 
-                SyndFeed feed = fetcher.retrieveFeed(url[i], client);
+                GetMethod method = new GetMethod(url[i].toString());
+                client.executeMethod(method);
+                SyndFeedInput input = new SyndFeedInput();
+                SyndFeed feed = input.build(new XmlReader(method.getResponseBodyAsStream()));
+
                 for (Iterator<?> iter = feed.getEntries().iterator(); iter.hasNext();) {
                     SyndEntry entry = (SyndEntry) iter.next();
 

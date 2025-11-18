@@ -56,7 +56,7 @@ public class MarketsPage extends WizardPage {
         ((GridData) markets.getControl().getLayoutData()).heightHint = markets.getTable().getItemHeight() * 4 + markets.getTable().getBorderWidth() * 2;
         markets.setLabelProvider(new LabelProvider());
         markets.setContentProvider(new ArrayContentProvider());
-        markets.setSorter(new ViewerSorter());
+        markets.setComparator(new org.eclipse.jface.viewers.ViewerComparator());
         markets.setInput(getMarkets());
 
         markets.addCheckStateListener(new ICheckStateListener() {

@@ -79,7 +79,7 @@ public class MarketTradingPage extends PropertyPage implements IWorkbenchPropert
                 return ((IBroker) element).getName();
             }
         });
-        brokerCombo.setSorter(new ViewerSorter() {
+        brokerCombo.setComparator(new org.eclipse.jface.viewers.ViewerComparator() {
 
             @Override
             public int category(Object element) {

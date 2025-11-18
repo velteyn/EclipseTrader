@@ -28,9 +28,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
-import org.eclipse.nebula.jface.cdatetime.CDateTimeCellEditor;
-import org.eclipse.nebula.widgets.cdatetime.CDT;
+import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipsetrader.ui.internal.markets.CDateTimeCellEditorSimple;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -126,7 +125,7 @@ public class ExclusionScheduleEditor {
 
         viewer.setLabelProvider(new ScheduleElementLabelProvider());
         viewer.setContentProvider(new ArrayContentProvider());
-        viewer.setSorter(new ViewerSorter() {
+        viewer.setComparator(new org.eclipse.jface.viewers.ViewerComparator() {
 
             @Override
             public int compare(Viewer viewer, Object e1, Object e2) {
@@ -183,8 +182,8 @@ public class ExclusionScheduleEditor {
                 "0", "1"
         });
         viewer.setCellEditors(new CellEditor[] {
-                new CDateTimeCellEditor(viewer.getTable(), CDT.DATE_SHORT),
-                new CDateTimeCellEditor(viewer.getTable(), CDT.DATE_SHORT),
+                new CDateTimeCellEditorSimple(viewer.getTable(), SWT.DATE | SWT.DROP_DOWN),
+                new CDateTimeCellEditorSimple(viewer.getTable(), SWT.DATE | SWT.DROP_DOWN),
         });
 
         viewer.setInput(input);

@@ -28,8 +28,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
-import org.eclipse.nebula.widgets.pshelf.PShelf;
-import org.eclipse.nebula.widgets.pshelf.PShelfItem;
+//import org.eclipse.nebula.widgets.pshelf.PShelf;
+//import org.eclipse.nebula.widgets.pshelf.PShelfItem;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -59,7 +59,8 @@ public class PaletteView extends ViewPart {
     public static final String K_ICON = "icon"; //$NON-NLS-1$
     public static final String K_CATEGORY = "category"; //$NON-NLS-1$
 
-    private PShelf shelf;
+    // TODO: [pshelf] PShelf is disabled
+    //private PShelf shelf;
 
     public PaletteView() {
     }
@@ -78,23 +79,24 @@ public class PaletteView extends ViewPart {
      */
     @Override
     public void createPartControl(Composite parent) {
-        shelf = new PShelf(parent, SWT.NONE);
-
-        createItems();
-
-        shelf.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                TableViewer viewer = (TableViewer) e.item.getData();
-                if (viewer != null) {
-                    updateSiteSelection((IStructuredSelection) viewer.getSelection());
-                }
-                else {
-                    getViewSite().getSelectionProvider().setSelection(StructuredSelection.EMPTY);
-                }
-            }
-        });
+        // TODO: [pshelf] PShelf is disabled
+        //shelf = new PShelf(parent, SWT.NONE);
+        //
+        //createItems();
+        //
+        //shelf.addSelectionListener(new SelectionAdapter() {
+        //
+        //    @Override
+        //    public void widgetSelected(SelectionEvent e) {
+        //        TableViewer viewer = (TableViewer) e.item.getData();
+        //        if (viewer != null) {
+        //            updateSiteSelection((IStructuredSelection) viewer.getSelection());
+        //        }
+        //        else {
+        //            getViewSite().getSelectionProvider().setSelection(StructuredSelection.EMPTY);
+        //        }
+        //    }
+        //});
     }
 
     /* (non-Javadoc)
@@ -102,7 +104,8 @@ public class PaletteView extends ViewPart {
      */
     @Override
     public void setFocus() {
-        shelf.setFocus();
+        // TODO: [pshelf] PShelf is disabled
+        //shelf.setFocus();
     }
 
     protected void createItems() {
@@ -122,128 +125,132 @@ public class PaletteView extends ViewPart {
         }
 
         for (IConfigurationElement categoryElement : categories) {
-            PShelfItem shelfItem = new PShelfItem(shelf, SWT.NONE);
-            shelfItem.setText(categoryElement.getAttribute(K_NAME));
-            String icon = categoryElement.getAttribute(K_ICON);
-            if (icon != null) {
-                ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(categoryElement.getContributor().getName(), icon);
-                final Image image = imageDescriptor != null ? imageDescriptor.createImage() : null;
-                if (image != null) {
-                    shelfItem.setImage(image);
-                    shelfItem.addDisposeListener(new DisposeListener() {
-
-                        @Override
-                        public void widgetDisposed(DisposeEvent e) {
-                            image.dispose();
-                        }
-                    });
-                }
-            }
-            List<IConfigurationElement> addedElements = createContents(shelfItem, contributionElements.toArray(new IConfigurationElement[contributionElements.size()]), categoryElement.getAttribute(K_ID));
-            contributionElements.removeAll(addedElements);
+            // TODO: [pshelf] PShelf is disabled
+            //PShelfItem shelfItem = new PShelfItem(shelf, SWT.NONE);
+            //shelfItem.setText(categoryElement.getAttribute(K_NAME));
+            //String icon = categoryElement.getAttribute(K_ICON);
+            //if (icon != null) {
+            //    ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(categoryElement.getContributor().getName(), icon);
+            //    final Image image = imageDescriptor != null ? imageDescriptor.createImage() : null;
+            //    if (image != null) {
+            //        shelfItem.setImage(image);
+            //        shelfItem.addDisposeListener(new DisposeListener() {
+            //
+            //            @Override
+            //            public void widgetDisposed(DisposeEvent e) {
+            //                image.dispose();
+            //            }
+            //        });
+            //    }
+            //}
+            //List<IConfigurationElement> addedElements = createContents(shelfItem, contributionElements.toArray(new IConfigurationElement[contributionElements.size()]), categoryElement.getAttribute(K_ID));
+            //contributionElements.removeAll(addedElements);
         }
 
-        PShelfItem shelfItem = new PShelfItem(shelf, SWT.NONE);
-        shelfItem.setText(Messages.PaletteView_OtherTitle);
-        ImageDescriptor imageDescriptor = UIActivator.getImageDescriptor("icons/obj16/blank_obj.gif"); //$NON-NLS-1$
-        final Image image = imageDescriptor != null ? imageDescriptor.createImage() : null;
-        if (image != null) {
-            shelfItem.setImage(image);
-            shelfItem.addDisposeListener(new DisposeListener() {
-
-                @Override
-                public void widgetDisposed(DisposeEvent e) {
-                    image.dispose();
-                }
-            });
-        }
-        createContents(shelfItem, contributionElements.toArray(new IConfigurationElement[contributionElements.size()]), null);
+        // TODO: [pshelf] PShelf is disabled
+        //PShelfItem shelfItem = new PShelfItem(shelf, SWT.NONE);
+        //shelfItem.setText(Messages.PaletteView_OtherTitle);
+        //ImageDescriptor imageDescriptor = UIActivator.getImageDescriptor("icons/obj16/blank_obj.gif"); //$NON-NLS-1$
+        //final Image image = imageDescriptor != null ? imageDescriptor.createImage() : null;
+        //if (image != null) {
+        //    shelfItem.setImage(image);
+        //    shelfItem.addDisposeListener(new DisposeListener() {
+        //
+        //        @Override
+        //        public void widgetDisposed(DisposeEvent e) {
+        //            image.dispose();
+        //        }
+        //    });
+        //}
+        //createContents(shelfItem, contributionElements.toArray(new IConfigurationElement[contributionElements.size()]), null);
     }
 
-    protected List<IConfigurationElement> createContents(PShelfItem shelfItem, IConfigurationElement[] configElements, String categoryId) {
-        shelfItem.getBody().setLayout(new FillLayout());
-
-        final TableViewer viewer = new TableViewer(shelfItem.getBody(), SWT.MULTI | SWT.FULL_SELECTION);
-        viewer.setContentProvider(new ArrayContentProvider());
-        viewer.setLabelProvider(new LabelProvider() {
-
-            private Map<Object, Image> imageMap = new HashMap<Object, Image>();
-
-            @Override
-            public Image getImage(Object element) {
-                Image image = imageMap.get(element);
-                if (image == null) {
-                    IConfigurationElement configurationElement = (IConfigurationElement) element;
-                    String icon = configurationElement.getAttribute(K_ICON);
-                    if (icon != null) {
-                        ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(configurationElement.getContributor().getName(), icon);
-                        image = imageDescriptor != null ? imageDescriptor.createImage() : null;
-                        imageMap.put(element, image);
-                    }
-                }
-                return image;
-            }
-
-            @Override
-            public void dispose() {
-                for (Image image : imageMap.values()) {
-                    image.dispose();
-                }
-                super.dispose();
-            }
-
-            @Override
-            public String getText(Object element) {
-                IConfigurationElement configurationElement = (IConfigurationElement) element;
-                String template = configurationElement.getAttribute(K_DESCRIPTION) != null ? "{0} - {1}" : "{0}"; //$NON-NLS-1$ //$NON-NLS-2$
-                return NLS.bind(template, new Object[] {
-                    configurationElement.getAttribute(K_NAME),
-                    configurationElement.getAttribute(K_DESCRIPTION)
-                });
-            }
-        });
-        viewer.setSorter(new ViewerSorter());
-
-        shelfItem.setData(viewer);
-
-        viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-            @Override
-            public void selectionChanged(SelectionChangedEvent event) {
-                updateSiteSelection((IStructuredSelection) event.getSelection());
-            }
-        });
-
-        Transfer[] transferTypes = new Transfer[] {
-            ChartObjectFactoryTransfer.getInstance(),
-        };
-        viewer.addDragSupport(DND.DROP_COPY | DND.DROP_MOVE, transferTypes, new DragSourceAdapter() {
-
-            @Override
-            public void dragStart(DragSourceEvent event) {
-                event.doit = !viewer.getSelection().isEmpty();
-            }
-
-            @Override
-            public void dragSetData(DragSourceEvent event) {
-                Object[] selection = ((IStructuredSelection) viewer.getSelection()).toArray();
-                String[] elements = new String[selection.length];
-                for (int i = 0; i < elements.length; i++) {
-                    elements[i] = ((IConfigurationElement) selection[i]).getAttribute("id"); //$NON-NLS-1$
-                }
-                event.data = elements;
-            }
-        });
-
-        List<IConfigurationElement> input = new ArrayList<IConfigurationElement>();
-        for (int i = 0; i < configElements.length; i++) {
-            if (categoryId == null || categoryId.equals(configElements[i].getAttribute(K_CATEGORY))) {
-                input.add(configElements[i]);
-            }
-        }
-        viewer.setInput(input.toArray());
-
-        return input;
+    protected List<IConfigurationElement> createContents(Object shelfItem, IConfigurationElement[] configElements, String categoryId) {
+        // TODO: [pshelf] PShelf is disabled
+        //shelfItem.getBody().setLayout(new FillLayout());
+        //
+        //final TableViewer viewer = new TableViewer(shelfItem.getBody(), SWT.MULTI | SWT.FULL_SELECTION);
+        //viewer.setContentProvider(new ArrayContentProvider());
+        //viewer.setLabelProvider(new LabelProvider() {
+        //
+        //    private Map<Object, Image> imageMap = new HashMap<Object, Image>();
+        //
+        //    @Override
+        //    public Image getImage(Object element) {
+        //        Image image = imageMap.get(element);
+        //        if (image == null) {
+        //            IConfigurationElement configurationElement = (IConfigurationElement) element;
+        //            String icon = configurationElement.getAttribute(K_ICON);
+        //            if (icon != null) {
+        //                ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(configurationElement.getContributor().getName(), icon);
+        //                image = imageDescriptor != null ? imageDescriptor.createImage() : null;
+        //                imageMap.put(element, image);
+        //            }
+        //        }
+        //        return image;
+        //    }
+        //
+        //    @Override
+        //    public void dispose() {
+        //        for (Image image : imageMap.values()) {
+        //            image.dispose();
+        //        }
+        //        super.dispose();
+        //    }
+        //
+        //    @Override
+        //    public String getText(Object element) {
+        //        IConfigurationElement configurationElement = (IConfigurationElement) element;
+        //        String template = configurationElement.getAttribute(K_DESCRIPTION) != null ? "{0} - {1}" : "{0}"; //$NON-NLS-1$ //$NON-NLS-2$
+        //        return NLS.bind(template, new Object[] {
+        //            configurationElement.getAttribute(K_NAME),
+        //            configurationElement.getAttribute(K_DESCRIPTION)
+        //        });
+        //    }
+        //});
+        //viewer.setSorter(new ViewerSorter());
+        //
+        //shelfItem.setData(viewer);
+        //
+        //viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+        //
+        //    @Override
+        //    public void selectionChanged(SelectionChangedEvent event) {
+        //        updateSiteSelection((IStructuredSelection) event.getSelection());
+        //    }
+        //});
+        //
+        //Transfer[] transferTypes = new Transfer[] {
+        //    ChartObjectFactoryTransfer.getInstance(),
+        //};
+        //viewer.addDragSupport(DND.DROP_COPY | DND.DROP_MOVE, transferTypes, new DragSourceAdapter() {
+        //
+        //    @Override
+        //    public void dragStart(DragSourceEvent event) {
+        //        event.doit = !viewer.getSelection().isEmpty();
+        //    }
+        //
+        //    @Override
+        //    public void dragSetData(DragSourceEvent event) {
+        //        Object[] selection = ((IStructuredSelection) viewer.getSelection()).toArray();
+        //        String[] elements = new String[selection.length];
+        //        for (int i = 0; i < elements.length; i++) {
+        //            elements[i] = ((IConfigurationElement) selection[i]).getAttribute("id"); //$NON-NLS-1$
+        //        }
+        //        event.data = elements;
+        //    }
+        //});
+        //
+        //List<IConfigurationElement> input = new ArrayList<IConfigurationElement>();
+        //for (int i = 0; i < configElements.length; i++) {
+        //    if (categoryId == null || categoryId.equals(configElements[i].getAttribute(K_CATEGORY))) {
+        //        input.add(configElements[i]);
+        //    }
+        //}
+        //viewer.setInput(input.toArray());
+        //
+        //return input;
+        return null;
     }
 
     protected void updateSiteSelection(IStructuredSelection selection) {

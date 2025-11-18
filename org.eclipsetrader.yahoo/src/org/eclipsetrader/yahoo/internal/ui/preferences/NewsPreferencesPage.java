@@ -106,7 +106,7 @@ public class NewsPreferencesPage extends PreferencePage implements IWorkbenchPre
         providers.getControl().setLayoutData(gridData);
         providers.setContentProvider(new NewsContentProvider());
         providers.setLabelProvider(new LabelProvider());
-        providers.setSorter(new ViewerSorter());
+        providers.setComparator(new org.eclipse.jface.viewers.ViewerComparator());
         providers.setUseHashlookup(true);
 
         providers.addCheckStateListener(new ICheckStateListener() {

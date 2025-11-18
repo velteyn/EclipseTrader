@@ -9,7 +9,8 @@
     <properties>
         <tycho.version>4.0.8</tycho.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <eclipse-repo.url>https://archive.eclipse.org/releases/juno/</eclipse-repo.url>
+      <!--  <eclipse-repo.url>https://archive.eclipse.org/releases/juno/</eclipse-repo.url>-->
+        <eclipse-repo.url>https://download.eclipse.org/releases/2024-03</eclipse-repo.url>
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     </properties>
 
@@ -28,10 +29,10 @@
         <module>org.apache.commons.collections</module>
         <module>org.apache.log4j</module>
         <module>org.apache.log4j-feature</module>
-        <module>org.eclipse.nebula.cwt</module>
-        <module>org.eclipse.nebula.jface.cdatetime</module>
-        <module>org.eclipse.nebula.widgets.cdatetime</module>
-        <module>org.eclipse.nebula.widgets.pshelf</module>
+        <!-- <module>org.eclipse.nebula.cwt</module> -->
+        <!-- <module>org.eclipse.nebula.jface.cdatetime</module> -->
+        <!-- <module>org.eclipse.nebula.widgets.cdatetime</module> -->
+        <!-- <module>org.eclipse.nebula.widgets.pshelf</module> -->
         <module>org.eclipsetrader.archipelago</module>
         <module>org.eclipsetrader.borsaitalia</module>
         <module>org.eclipsetrader.brokers.paper</module>
@@ -72,25 +73,51 @@
     </modules>
 
     <repositories>
+     <repository>
+        <id>central</id>
+        <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
         <repository>
             <id>eclipse-juno</id>
             <url>${eclipse-repo.url}</url>
             <layout>p2</layout>
         </repository>
         <repository>
-            <id>dai-labor-open</id>
-            <url>https://repositories.dai-labor.de/extern/content/repositories/dai-open/</url>
+            <id>nebula</id>
+            <url>https://download.eclipse.org/nebula/updates/release/latest/</url>
+            <layout>p2</layout>
         </repository>
+        
+        <!-- 
+			
+         <repository>
+            <id>nexus</id>
+            <url>http://nexus.emergya.es/nexus/content/repositories/public/</url>
+        </repository>
+		-->
+        
     </repositories>
 
     <build>
-	    <directory>eclipsetrader-build/${project.artifactId}</directory>
+	    <directory>${project.basedir}/target</directory>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-maven-plugin</artifactId>
                 <version>${tycho.version}</version>
                 <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-surefire-plugin</artifactId>
+                <version>${tycho.version}</version>
+                <configuration>
+                    <testSuite>org.eclipsetrader.jessx</testSuite>
+                    <testClass>org.eclipsetrader.jessx.internal.core.BrokerLauncherTest</testClass>
+                    <useUIHarness>true</useUIHarness>
+                    <useUIThread>true</useUIThread>
+                    <argLine>-Xmx512m</argLine>
+                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -108,8 +135,33 @@
                     <artifactId>tycho-compiler-plugin</artifactId>
                     <version>${tycho.version}</version>
                     <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.eclipse.tycho</groupId>
+                                        <artifactId>tycho-packaging-plugin</artifactId>
+                                        <versionRange>[${tycho.version},)</versionRange>
+                                        <goals>
+                                            <goal>build-qualifier</goal>
+                                            <goal>package-plugin</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
             </plugins>

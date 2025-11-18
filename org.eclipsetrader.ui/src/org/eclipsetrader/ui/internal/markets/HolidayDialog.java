@@ -13,11 +13,12 @@ package org.eclipsetrader.ui.internal.markets;
 
 import java.util.Calendar;
 
+import java.util.Date;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.nebula.widgets.cdatetime.CDT;
-import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -34,14 +35,14 @@ import org.eclipsetrader.ui.Util;
 
 public class HolidayDialog extends Dialog {
 
-    CDateTime date;
+    DateTime date;
     Text description;
     Button closed;
     Button open;
     Label openTimeLabel;
-    CDateTime openTime;
+    DateTime openTime;
     Label closeTimeLabel;
-    CDateTime closeTime;
+    DateTime closeTime;
     MarketHolidayElement element;
 
     private SelectionAdapter buttonSelectionListener = new SelectionAdapter() {
@@ -96,8 +97,7 @@ public class HolidayDialog extends Dialog {
 
         Label label = new Label(content, SWT.NONE);
         label.setText("Date");
-        date = new CDateTime(content, CDT.BORDER | CDT.DATE_SHORT | CDT.DROP_DOWN | CDT.TAB_FIELDS);
-        date.setPattern(Util.getDateFormatPattern());
+        date = new DateTime(content, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
 
         label = new Label(content, SWT.NONE);
         label.setText("Description");
@@ -116,33 +116,36 @@ public class HolidayDialog extends Dialog {
 
         openTimeLabel = new Label(content, SWT.NONE);
         openTimeLabel.setText("Open Time");
-        openTime = new CDateTime(content, CDT.BORDER | CDT.TAB_FIELDS | CDT.SPINNER);
-        openTime.setPattern("HH:mm");
+        openTime = new DateTime(content, SWT.BORDER | SWT.TIME | SWT.SHORT);
         openTime.setLayoutData(new GridData(convertHorizontalDLUsToPixels(50), SWT.DEFAULT));
-        openTime.setNullText("");
 
         closeTimeLabel = new Label(content, SWT.NONE);
         closeTimeLabel.setText("Close Time");
-        closeTime = new CDateTime(content, CDT.BORDER | CDT.TAB_FIELDS | CDT.SPINNER);
-        closeTime.setPattern("HH:mm");
+        closeTime = new DateTime(content, SWT.BORDER | SWT.TIME | SWT.SHORT);
         closeTime.setLayoutData(new GridData(convertHorizontalDLUsToPixels(50), SWT.DEFAULT));
-        closeTime.setNullText("");
 
         if (element != null) {
-            date.setSelection(element.getDate());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(element.getDate());
+            date.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             description.setText(element.getDescription() != null ? element.getDescription() : "");
             closed.setSelection(element.getOpenTime() == null || element.getCloseTime() == null);
             open.setSelection(element.getOpenTime() != null && element.getCloseTime() != null);
-            openTime.setSelection(element.getOpenTime());
-            closeTime.setSelection(element.getCloseTime());
+            if (element.getOpenTime() != null) {
+                calendar.setTime(element.getOpenTime());
+                openTime.setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+            }
+            if (element.getCloseTime() != null) {
+                calendar.setTime(element.getCloseTime());
+                closeTime.setTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+            }
         }
         else {
-            date.setSelection(Calendar.getInstance().getTime());
+            Calendar calendar = Calendar.getInstance();
+            date.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             description.setText("");
             closed.setSelection(true);
             open.setSelection(false);
-            openTime.setSelection(null);
-            closeTime.setSelection(null);
         }
 
         date.addSelectionListener(validationSelectionListener);
@@ -174,19 +177,8 @@ public class HolidayDialog extends Dialog {
     }
 
     protected boolean isValid() {
-        if (date.getSelection() == null) {
-            return false;
-        }
         if (description.getText().equals("")) {
             return false;
-        }
-        if (open.getSelection()) {
-            if (openTime.getSelection() == null) {
-                return false;
-            }
-            if (closeTime.getSelection() == null) {
-                return false;
-            }
         }
         return true;
     }
@@ -205,10 +197,29 @@ public class HolidayDialog extends Dialog {
             element = new MarketHolidayElement();
         }
 
-        element.setDate(date.getSelection());
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, date.getYear());
+        calendar.set(Calendar.MONTH, date.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, date.getDay());
+        element.setDate(calendar.getTime());
+
         element.setDescription(!description.getText().equals("") ? description.getText() : null);
-        element.setOpenTime(open.getSelection() ? openTime.getSelection() : null);
-        element.setCloseTime(open.getSelection() ? closeTime.getSelection() : null);
+
+        if (open.getSelection()) {
+            calendar.set(Calendar.HOUR_OF_DAY, openTime.getHours());
+            calendar.set(Calendar.MINUTE, openTime.getMinutes());
+            calendar.set(Calendar.SECOND, openTime.getSeconds());
+            element.setOpenTime(calendar.getTime());
+
+            calendar.set(Calendar.HOUR_OF_DAY, closeTime.getHours());
+            calendar.set(Calendar.MINUTE, closeTime.getMinutes());
+            calendar.set(Calendar.SECOND, closeTime.getSeconds());
+            element.setCloseTime(calendar.getTime());
+        }
+        else {
+            element.setOpenTime(null);
+            element.setCloseTime(null);
+        }
     }
 
     public MarketHolidayElement getElement() {

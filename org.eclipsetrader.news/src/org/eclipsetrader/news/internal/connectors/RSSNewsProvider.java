@@ -287,7 +287,7 @@ public class RSSNewsProvider implements INewsProvider, IExecutableExtension {
                 }
             }
 
-            SyndFeed feed = fetcher.retrieveFeed(feedUrl, client);
+            SyndFeed feed = fetcher.retrieveFeed(feedUrl);
             for (Iterator<?> iter = feed.getEntries().iterator(); iter.hasNext();) {
                 SyndEntry entry = (SyndEntry) iter.next();
 

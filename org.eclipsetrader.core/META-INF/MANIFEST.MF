@@ -4,12 +4,17 @@ Bundle-Name: Core Plug-in
 Bundle-SymbolicName: org.eclipsetrader.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipsetrader.core.internal.CoreActivator
+Bundle-ClassPath: .
 Bundle-Vendor: Eclipsetrader.org
 Require-Bundle: org.eclipse.core.runtime,
- javax.xml.bind,
- org.apache.commons.logging,
- org.mozilla.rhino,
- org.eclipse.ui.workbench;bundle-version="3.8.2"
+ org.apache.commons.logging
+Import-Package: org.mozilla.javascript,
+ javax.xml.bind;version="[2.0.0,3.0.0)",
+ javax.xml.bind.annotation;version="[2.0.0,3.0.0)",
+ javax.xml.bind.annotation.adapters;version="[2.0.0,3.0.0)",
+ javax.xml.bind.attachment;version="[2.0.0,3.0.0)",
+ javax.xml.bind.helpers;version="[2.0.0,3.0.0)",
+ javax.xml.bind.util;version="[2.0.0,3.0.0)"
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipsetrader.core,
  org.eclipsetrader.core.ats,
@@ -31,4 +36,4 @@ Export-Package: org.eclipsetrader.core,
  org.eclipsetrader.core.repositories,
  org.eclipsetrader.core.trading,
  org.eclipsetrader.core.views
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

@@ -109,4 +109,13 @@
       </provider>
    </extension>
 
+   <extension
+         point="org.eclipsetrader.core.launchers">
+      <launcher
+            class="org.eclipsetrader.jessx.internal.core.BrokerLauncher"
+            id="org.eclipsetrader.jessx.broker"
+            name="JESSX Broker">
+      </launcher>
+   </extension>
+
 </plugin>

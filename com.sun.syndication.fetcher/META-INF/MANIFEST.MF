@@ -1,14 +1,16 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.sun.syndication.fetcher
+Bundle-ClassPath: .
 Bundle-Name: ROME: Fetcher Plugin
 Bundle-SymbolicName: com.sun.syndication.fetcher
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
-Bundle-ClassPath: .
-Export-Package: com.sun.syndication.fetcher;version="0.9.0",
- com.sun.syndication.fetcher.impl;version="0.9.0",
- com.sun.syndication.fetcher.samples;version="0.9.0"
-Require-Bundle: com.sun.syndication
+Export-Package: com.sun.syndication.fetcher;version="1.0.0",
+ com.sun.syndication.fetcher.impl;version="1.0.0" ,
+ com.sun.syndication.fetcher.samples;version="1.0.0"
+Require-Bundle: com.sun.syndication,
+ org.jdom;bundle-version="1.0.0"
 Import-Package: org.apache.commons.httpclient,
  org.apache.commons.httpclient.auth,
  org.apache.commons.httpclient.cookie,
@@ -17,4 +19,4 @@ Import-Package: org.apache.commons.httpclient,
  org.apache.commons.httpclient.params,
  org.apache.commons.httpclient.protocol,
  org.apache.commons.httpclient.util
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

@@ -1,102 +1,180 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
-<setAttribute key="additional_plugins"/>
-<booleanAttribute key="append.args" value="true"/>
-<booleanAttribute key="askclear" value="true"/>
-<booleanAttribute key="automaticAdd" value="false"/>
-<booleanAttribute key="automaticValidate" value="false"/>
-<stringAttribute key="bad_container_name" value="/org.eclipsetrader.releng/r"/>
-<stringAttribute key="bootstrap" value=""/>
-<stringAttribute key="checked" value="[NONE]"/>
-<booleanAttribute key="clearConfig" value="true"/>
-<booleanAttribute key="clearws" value="false"/>
-<booleanAttribute key="clearwslog" value="false"/>
-<stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/EclipseTrader"/>
-<booleanAttribute key="default" value="false"/>
-<stringAttribute key="featureDefaultLocation" value="workspace"/>
-<stringAttribute key="featurePluginResolution" value="workspace"/>
-<booleanAttribute key="includeOptional" value="true"/>
-<stringAttribute key="location" value="${workspace_loc}/../runtime_workspace"/>
-<booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
-<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog -debug"/>
-<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc}"/>
-<stringAttribute key="pde.version" value="3.3"/>
-<stringAttribute key="product" value="org.eclipsetrader.platform.workbench"/>
-<setAttribute key="selected_features">
-<setEntry value="com.sun.syndication:default"/>
-<setEntry value="com.tictactec.ta.lib:default"/>
-<setEntry value="org.apache.commons:default"/>
-<setEntry value="org.apache.log4j:default"/>
-<setEntry value="org.eclipse.cvs.source:default"/>
-<setEntry value="org.eclipse.cvs:default"/>
-<setEntry value="org.eclipse.egit.mylyn:default"/>
-<setEntry value="org.eclipse.egit.source:default"/>
-<setEntry value="org.eclipse.egit:default"/>
-<setEntry value="org.eclipse.equinox.p2.core.feature.source:default"/>
-<setEntry value="org.eclipse.equinox.p2.core.feature:default"/>
-<setEntry value="org.eclipse.equinox.p2.extras.feature.source:default"/>
-<setEntry value="org.eclipse.equinox.p2.extras.feature:default"/>
-<setEntry value="org.eclipse.equinox.p2.rcp.feature.source:default"/>
-<setEntry value="org.eclipse.equinox.p2.rcp.feature:default"/>
-<setEntry value="org.eclipse.equinox.p2.user.ui.source:default"/>
-<setEntry value="org.eclipse.equinox.p2.user.ui:default"/>
-<setEntry value="org.eclipse.help.source:default"/>
-<setEntry value="org.eclipse.help:default"/>
-<setEntry value="org.eclipse.jdt.source:default"/>
-<setEntry value="org.eclipse.jdt:default"/>
-<setEntry value="org.eclipse.jgit.http.apache:default"/>
-<setEntry value="org.eclipse.jgit.java7:default"/>
-<setEntry value="org.eclipse.jgit.pgm.source:default"/>
-<setEntry value="org.eclipse.jgit.pgm:default"/>
-<setEntry value="org.eclipse.jgit.source:default"/>
-<setEntry value="org.eclipse.jgit:default"/>
-<setEntry value="org.eclipse.mylyn.commons.identity:default"/>
-<setEntry value="org.eclipse.mylyn.commons.notifications:default"/>
-<setEntry value="org.eclipse.mylyn.commons.repositories:default"/>
-<setEntry value="org.eclipse.mylyn.commons:default"/>
-<setEntry value="org.eclipse.mylyn.context_feature:default"/>
-<setEntry value="org.eclipse.mylyn.discovery:default"/>
-<setEntry value="org.eclipse.mylyn.docs.intent.feature:default"/>
-<setEntry value="org.eclipse.mylyn.java_feature:default"/>
-<setEntry value="org.eclipse.mylyn.monitor:default"/>
-<setEntry value="org.eclipse.mylyn.team_feature:default"/>
-<setEntry value="org.eclipse.mylyn_feature:default"/>
-<setEntry value="org.eclipse.pde.source:default"/>
-<setEntry value="org.eclipse.pde:default"/>
-<setEntry value="org.eclipse.platform.source:default"/>
-<setEntry value="org.eclipse.platform:default"/>
-<setEntry value="org.eclipse.rcp.source:default"/>
-<setEntry value="org.eclipse.rcp:default"/>
-<setEntry value="org.eclipse.sdk:default"/>
-<setEntry value="org.eclipse.wb.core.feature:default"/>
-<setEntry value="org.eclipse.wb.core.java.feature:default"/>
-<setEntry value="org.eclipse.wb.core.ui.feature:default"/>
-<setEntry value="org.eclipse.wb.layout.group.feature:default"/>
-<setEntry value="org.eclipse.wb.swing.feature:default"/>
-<setEntry value="org.eclipsetrader.brokers.jessx:default"/>
-<setEntry value="org.eclipsetrader.directa:default"/>
-<setEntry value="org.eclipsetrader.directaworld:default"/>
-<setEntry value="org.eclipsetrader.platform:default"/>
-<setEntry value="org.eclipsetrader.repository.hibernate.derby:default"/>
-<setEntry value="org.eclipsetrader.repository.hibernate.postgresql:default"/>
-<setEntry value="org.eclipsetrader.repository.hibernate:default"/>
-<setEntry value="org.eclipsetrader.tests:default"/>
-<setEntry value="org.eclipsetrader.yahoo:default"/>
-<setEntry value="org.hibernate:default"/>
-<setEntry value="org.htmlparser:default"/>
-<setEntry value="org.jdom:default"/>
-<setEntry value="org.mozilla.rhino:default"/>
-</setAttribute>
-<stringAttribute key="selected_target_plugins" value="com.ibm.icu@default:default,javax.el@default:default,javax.servlet.jsp@default:default,javax.servlet@default:default,javax.xml@default:default,org.apache.ant@default:default,org.apache.jasper.glassfish@default:default,org.apache.lucene.analysis@default:default,org.apache.lucene.core@default:default,org.apache.lucene@default:default,org.eclipse.ant.core@default:default,org.eclipse.core.commands@default:default,org.eclipse.core.contenttype@default:default,org.eclipse.core.databinding.beans@default:default,org.eclipse.core.databinding.observable@default:default,org.eclipse.core.databinding.property@default:default,org.eclipse.core.databinding@default:default,org.eclipse.core.expressions@default:default,org.eclipse.core.jobs@default:default,org.eclipse.core.net.win32.x86@default:false,org.eclipse.core.net@default:default,org.eclipse.core.runtime.compatibility.auth@default:default,org.eclipse.core.runtime.compatibility.registry@default:false,org.eclipse.core.runtime@default:true,org.eclipse.core.variables@default:default,org.eclipse.equinox.app@default:default,org.eclipse.equinox.common@2:true,org.eclipse.equinox.http.jetty@default:default,org.eclipse.equinox.http.registry@default:default,org.eclipse.equinox.http.servlet@default:default,org.eclipse.equinox.jsp.jasper.registry@default:default,org.eclipse.equinox.jsp.jasper@default:default,org.eclipse.equinox.preferences@default:default,org.eclipse.equinox.registry@default:default,org.eclipse.equinox.security.win32.x86@default:false,org.eclipse.equinox.security@default:default,org.eclipse.help.appserver@default:default,org.eclipse.help.base@default:default,org.eclipse.help.ui@default:default,org.eclipse.help.webapp@default:default,org.eclipse.help@default:default,org.eclipse.jetty.continuation@default:default,org.eclipse.jetty.http@default:default,org.eclipse.jetty.io@default:default,org.eclipse.jetty.security@default:default,org.eclipse.jetty.server@default:default,org.eclipse.jetty.servlet@default:default,org.eclipse.jetty.util@default:default,org.eclipse.jface.databinding@default:default,org.eclipse.jface@default:default,org.eclipse.osgi.services@default:default,org.eclipse.osgi@-1:true,org.eclipse.swt.win32.win32.x86@default:false,org.eclipse.swt@default:default,org.eclipse.ui.forms@default:default,org.eclipse.ui.net@default:default,org.eclipse.ui.workbench@default:default,org.eclipse.ui@default:default,org.hamcrest.core@default:default,org.junit*4.10.0.v4_10_0_v20120426-0900@default:default,org.junit4@default:default"/>
-<stringAttribute key="selected_workspace_plugins" value="com.sun.syndication.fetcher@default:default,com.sun.syndication@default:default,com.tictactec.ta.lib@default:default,javax.xml.bind@default:default,org.apache.commons.codec@default:default,org.apache.commons.collections@default:default,org.apache.commons.httpclient@default:default,org.apache.commons.logging@default:default,org.apache.commons@default:default,org.apache.log4j@default:default,org.eclipse.nebula.cwt@default:default,org.eclipse.nebula.jface.cdatetime@default:default,org.eclipse.nebula.widgets.cdatetime@default:default,org.eclipse.nebula.widgets.pshelf@default:default,org.eclipsetrader.archipelago@default:default,org.eclipsetrader.borsaitalia@default:default,org.eclipsetrader.brokers.paper.tests@default:default,org.eclipsetrader.brokers.paper@default:default,org.eclipsetrader.core.tests@default:default,org.eclipsetrader.core@default:default,org.eclipsetrader.jessx@default:default,org.eclipsetrader.news.tests@default:default,org.eclipsetrader.news@default:default,org.eclipsetrader.platform.doc.isv@default:default,org.eclipsetrader.platform.doc.user@default:default,org.eclipsetrader.platform@default:default,org.eclipsetrader.repository.hibernate.derby@default:default,org.eclipsetrader.repository.hibernate.postgresql@default:default,org.eclipsetrader.repository.hibernate.tests@default:default,org.eclipsetrader.repository.hibernate@default:default,org.eclipsetrader.repository.local.tests@default:default,org.eclipsetrader.repository.local@default:default,org.eclipsetrader.tests@default:default,org.eclipsetrader.ui.application@default:default,org.eclipsetrader.ui.charts.indicators@default:default,org.eclipsetrader.ui.tests@default:default,org.eclipsetrader.ui@default:default,org.hibernate@default:default,org.htmlparser@default:default,org.jdom@default:default,org.mozilla.rhino@default:default"/>
-<booleanAttribute key="show_selected_only" value="false"/>
-<stringAttribute key="templateConfig" value="${workspace_loc:org.eclipsetrader.platform-feature/rootfiles/configuration/config.ini}"/>
-<booleanAttribute key="tracing" value="false"/>
-<booleanAttribute key="useCustomFeatures" value="false"/>
-<booleanAttribute key="useDefaultConfig" value="true"/>
-<booleanAttribute key="useDefaultConfigArea" value="true"/>
-<booleanAttribute key="useProduct" value="true"/>
-<booleanAttribute key="usefeatures" value="false"/>
+    <setAttribute key="additional_plugins"/>
+    <booleanAttribute key="append.args" value="true"/>
+    <booleanAttribute key="askclear" value="true"/>
+    <booleanAttribute key="automaticAdd" value="false"/>
+    <booleanAttribute key="automaticValidate" value="false"/>
+    <stringAttribute key="bad_container_name" value="/org.eclipsetrader.releng/r"/>
+    <stringAttribute key="bootstrap" value=""/>
+    <stringAttribute key="checked" value="[NONE]"/>
+    <booleanAttribute key="clearConfig" value="true"/>
+    <booleanAttribute key="clearws" value="false"/>
+    <booleanAttribute key="clearwslog" value="false"/>
+    <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/EclipseTrader"/>
+    <booleanAttribute key="default" value="false"/>
+    <setAttribute key="deselected_workspace_bundles"/>
+    <stringAttribute key="featureDefaultLocation" value="workspace"/>
+    <stringAttribute key="featurePluginResolution" value="workspace"/>
+    <booleanAttribute key="includeOptional" value="true"/>
+    <stringAttribute key="location" value="${workspace_loc}/../runtime_workspace"/>
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
+    <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog -debug"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc}"/>
+    <stringAttribute key="pde.version" value="3.3"/>
+    <stringAttribute key="product" value="org.eclipsetrader.platform.workbench"/>
+    <setAttribute key="selected_features">
+        <setEntry value="com.sun.syndication:default"/>
+        <setEntry value="com.tictactec.ta.lib:default"/>
+        <setEntry value="org.apache.commons:default"/>
+        <setEntry value="org.apache.log4j:default"/>
+        <setEntry value="org.eclipse.cvs.source:default"/>
+        <setEntry value="org.eclipse.cvs:default"/>
+        <setEntry value="org.eclipse.egit.mylyn:default"/>
+        <setEntry value="org.eclipse.egit.source:default"/>
+        <setEntry value="org.eclipse.egit:default"/>
+        <setEntry value="org.eclipse.equinox.p2.core.feature.source:default"/>
+        <setEntry value="org.eclipse.equinox.p2.core.feature:default"/>
+        <setEntry value="org.eclipse.equinox.p2.extras.feature.source:default"/>
+        <setEntry value="org.eclipse.equinox.p2.extras.feature:default"/>
+        <setEntry value="org.eclipse.equinox.p2.rcp.feature.source:default"/>
+        <setEntry value="org.eclipse.equinox.p2.rcp.feature:default"/>
+        <setEntry value="org.eclipse.equinox.p2.user.ui.source:default"/>
+        <setEntry value="org.eclipse.equinox.p2.user.ui:default"/>
+        <setEntry value="org.eclipse.help.source:default"/>
+        <setEntry value="org.eclipse.help:default"/>
+        <setEntry value="org.eclipse.jdt.source:default"/>
+        <setEntry value="org.eclipse.jdt:default"/>
+        <setEntry value="org.eclipse.jgit.http.apache:default"/>
+        <setEntry value="org.eclipse.jgit.java7:default"/>
+        <setEntry value="org.eclipse.jgit.pgm.source:default"/>
+        <setEntry value="org.eclipse.jgit.pgm:default"/>
+        <setEntry value="org.eclipse.jgit.source:default"/>
+        <setEntry value="org.eclipse.jgit:default"/>
+        <setEntry value="org.eclipse.mylyn.commons.identity:default"/>
+        <setEntry value="org.eclipse.mylyn.commons.notifications:default"/>
+        <setEntry value="org.eclipse.mylyn.commons.repositories:default"/>
+        <setEntry value="org.eclipse.mylyn.commons:default"/>
+        <setEntry value="org.eclipse.mylyn.context_feature:default"/>
+        <setEntry value="org.eclipse.mylyn.discovery:default"/>
+        <setEntry value="org.eclipse.mylyn.docs.intent.feature:default"/>
+        <setEntry value="org.eclipse.mylyn.java_feature:default"/>
+        <setEntry value="org.eclipse.mylyn.monitor:default"/>
+        <setEntry value="org.eclipse.mylyn.team_feature:default"/>
+        <setEntry value="org.eclipse.mylyn_feature:default"/>
+        <setEntry value="org.eclipse.pde.source:default"/>
+        <setEntry value="org.eclipse.pde:default"/>
+        <setEntry value="org.eclipse.platform.source:default"/>
+        <setEntry value="org.eclipse.platform:default"/>
+        <setEntry value="org.eclipse.rcp.source:default"/>
+        <setEntry value="org.eclipse.rcp:default"/>
+        <setEntry value="org.eclipse.sdk:default"/>
+        <setEntry value="org.eclipse.wb.core.feature:default"/>
+        <setEntry value="org.eclipse.wb.core.java.feature:default"/>
+        <setEntry value="org.eclipse.wb.core.ui.feature:default"/>
+        <setEntry value="org.eclipse.wb.layout.group.feature:default"/>
+        <setEntry value="org.eclipse.wb.swing.feature:default"/>
+        <setEntry value="org.eclipsetrader.brokers.jessx:default"/>
+        <setEntry value="org.eclipsetrader.directa:default"/>
+        <setEntry value="org.eclipsetrader.directaworld:default"/>
+        <setEntry value="org.eclipsetrader.platform:default"/>
+        <setEntry value="org.eclipsetrader.repository.hibernate.derby:default"/>
+        <setEntry value="org.eclipsetrader.repository.hibernate.postgresql:default"/>
+        <setEntry value="org.eclipsetrader.repository.hibernate:default"/>
+        <setEntry value="org.eclipsetrader.tests:default"/>
+        <setEntry value="org.eclipsetrader.yahoo:default"/>
+        <setEntry value="org.hibernate:default"/>
+        <setEntry value="org.htmlparser:default"/>
+        <setEntry value="org.jdom:default"/>
+        <setEntry value="org.mozilla.rhino:default"/>
+    </setAttribute>
+    <setAttribute key="selected_target_bundles">
+        <setEntry value="com.ibm.icu@default:default"/>
+        <setEntry value="org.apache.ant@default:default"/>
+        <setEntry value="org.apache.lucene.core@default:default"/>
+        <setEntry value="org.eclipse.ant.core@default:default"/>
+        <setEntry value="org.eclipse.core.commands@default:default"/>
+        <setEntry value="org.eclipse.core.contenttype@default:default"/>
+        <setEntry value="org.eclipse.core.databinding.beans@default:default"/>
+        <setEntry value="org.eclipse.core.databinding.observable@default:default"/>
+        <setEntry value="org.eclipse.core.databinding.property@default:default"/>
+        <setEntry value="org.eclipse.core.databinding@default:default"/>
+        <setEntry value="org.eclipse.core.expressions@default:default"/>
+        <setEntry value="org.eclipse.core.jobs@default:default"/>
+        <setEntry value="org.eclipse.core.net@default:default"/>
+        <setEntry value="org.eclipse.core.runtime@default:true"/>
+        <setEntry value="org.eclipse.core.variables@default:default"/>
+        <setEntry value="org.eclipse.equinox.app@default:default"/>
+        <setEntry value="org.eclipse.equinox.common@2:true"/>
+        <setEntry value="org.eclipse.equinox.http.jetty@default:default"/>
+        <setEntry value="org.eclipse.equinox.http.registry@default:default"/>
+        <setEntry value="org.eclipse.equinox.http.servlet@default:default"/>
+        <setEntry value="org.eclipse.equinox.jsp.jasper.registry@default:default"/>
+        <setEntry value="org.eclipse.equinox.jsp.jasper@default:default"/>
+        <setEntry value="org.eclipse.equinox.preferences@default:default"/>
+        <setEntry value="org.eclipse.equinox.registry@default:default"/>
+        <setEntry value="org.eclipse.equinox.security@default:default"/>
+        <setEntry value="org.eclipse.help.base@default:default"/>
+        <setEntry value="org.eclipse.help.ui@default:default"/>
+        <setEntry value="org.eclipse.help.webapp@default:default"/>
+        <setEntry value="org.eclipse.help@default:default"/>
+        <setEntry value="org.eclipse.jetty.http@default:default"/>
+        <setEntry value="org.eclipse.jetty.io@default:default"/>
+        <setEntry value="org.eclipse.jetty.security@default:default"/>
+        <setEntry value="org.eclipse.jetty.server@default:default"/>
+        <setEntry value="org.eclipse.jetty.util@default:default"/>
+        <setEntry value="org.eclipse.jface.databinding@default:default"/>
+        <setEntry value="org.eclipse.jface@default:default"/>
+        <setEntry value="org.eclipse.osgi@-1:true"/>
+        <setEntry value="org.eclipse.swt@default:default"/>
+        <setEntry value="org.eclipse.ui.forms@default:default"/>
+        <setEntry value="org.eclipse.ui.net@default:default"/>
+        <setEntry value="org.eclipse.ui.workbench@default:default"/>
+        <setEntry value="org.eclipse.ui@default:default"/>
+        <setEntry value="org.junit@default:default"/>
+    </setAttribute>
+    <setAttribute key="selected_workspace_bundles">
+        <setEntry value="com.sun.syndication.fetcher@default:default"/>
+        <setEntry value="com.sun.syndication@default:default"/>
+        <setEntry value="com.tictactec.ta.lib@default:default"/>
+        <setEntry value="javax.xml.bind@default:default"/>
+        <setEntry value="org.apache.commons.codec@default:default"/>
+        <setEntry value="org.apache.commons.collections@default:default"/>
+        <setEntry value="org.apache.commons.httpclient@default:default"/>
+        <setEntry value="org.apache.commons.logging@default:default"/>
+        <setEntry value="org.apache.commons@default:default"/>
+        <setEntry value="org.apache.log4j@default:default"/>
+        <setEntry value="org.eclipse.nebula.widgets.cdatetime@default:default"/>
+        <setEntry value="org.eclipsetrader.archipelago@default:default"/>
+        <setEntry value="org.eclipsetrader.borsaitalia@default:default"/>
+        <setEntry value="org.eclipsetrader.brokers.paper@default:default"/>
+        <setEntry value="org.eclipsetrader.core@default:default"/>
+        <setEntry value="org.eclipsetrader.jessx@default:default"/>
+        <setEntry value="org.eclipsetrader.news@default:default"/>
+        <setEntry value="org.eclipsetrader.platform.doc.isv@default:default"/>
+        <setEntry value="org.eclipsetrader.platform.doc.user@default:default"/>
+        <setEntry value="org.eclipsetrader.platform@default:default"/>
+        <setEntry value="org.eclipsetrader.repository.hibernate.derby@default:false"/>
+        <setEntry value="org.eclipsetrader.repository.hibernate.postgresql@default:false"/>
+        <setEntry value="org.eclipsetrader.repository.hibernate@default:default"/>
+        <setEntry value="org.eclipsetrader.repository.local@default:default"/>
+        <setEntry value="org.eclipsetrader.ui.application@default:default"/>
+        <setEntry value="org.eclipsetrader.ui.charts.indicators@default:default"/>
+        <setEntry value="org.eclipsetrader.ui@default:default"/>
+        <setEntry value="org.hibernate@default:default"/>
+        <setEntry value="org.htmlparser@default:default"/>
+        <setEntry value="org.jdom@default:default"/>
+        <setEntry value="org.mozilla.rhino@default:default"/>
+    </setAttribute>
+    <booleanAttribute key="show_selected_only" value="false"/>
+    <stringAttribute key="templateConfig" value="${workspace_loc:org.eclipsetrader.platform-feature/rootfiles/configuration/config.ini}"/>
+    <booleanAttribute key="tracing" value="false"/>
+    <booleanAttribute key="useCustomFeatures" value="false"/>
+    <booleanAttribute key="useDefaultConfig" value="true"/>
+    <booleanAttribute key="useDefaultConfigArea" value="true"/>
+    <booleanAttribute key="useProduct" value="true"/>
+    <booleanAttribute key="usefeatures" value="false"/>
 </launchConfiguration>

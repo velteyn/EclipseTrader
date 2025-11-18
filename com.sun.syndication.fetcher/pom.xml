@@ -12,4 +12,11 @@
     <artifactId>com.sun.syndication.fetcher</artifactId>
     <packaging>eclipse-plugin</packaging>
 
+    <dependencies>
+    	<dependency>
+    		<groupId>org.eclipsetrader</groupId>
+    		<artifactId>com.sun.syndication</artifactId>
+    		<version>1.0.0-SNAPSHOT</version>
+    	</dependency>
+    </dependencies>
 </project>

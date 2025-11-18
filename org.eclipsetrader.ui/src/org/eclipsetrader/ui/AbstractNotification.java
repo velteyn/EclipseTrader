@@ -12,38 +12,8 @@
 package org.eclipsetrader.ui;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.swt.graphics.Image;
 
 public abstract class AbstractNotification implements INotification, IAdaptable, Comparable<AbstractNotification> {
 
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.ui.commons.INotification#getDescription()
-     */
-    @Override
-    public String getDescription() {
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.ui.commons.INotification#getLabel()
-     */
-    @Override
-    public String getLabel() {
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.ui.commons.INotification#getNotificationImage()
-     */
-    @Override
-    public Image getNotificationImage() {
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.eclipsetrader.ui.commons.INotification#open()
-     */
-    @Override
-    public void open() {
-    }
+     
 }

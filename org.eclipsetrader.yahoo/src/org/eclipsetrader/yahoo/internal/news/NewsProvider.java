@@ -39,6 +39,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.FileLocator;
@@ -64,9 +65,8 @@ import org.osgi.framework.ServiceReference;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.fetcher.impl.FeedFetcherCache;
-import com.sun.syndication.fetcher.impl.HashMapFeedInfoCache;
-import com.sun.syndication.fetcher.impl.HttpClientFeedFetcher;
+import com.sun.syndication.io.SyndFeedInput;
+import com.sun.syndication.io.XmlReader;
 
 public class NewsProvider implements INewsProvider {
 
@@ -74,9 +74,6 @@ public class NewsProvider implements INewsProvider {
 
     private String id;
     private String name;
-
-    private FeedFetcherCache feedInfoCache = HashMapFeedInfoCache.getInstance();
-    private HttpClientFeedFetcher fetcher = new HttpClientFeedFetcher(feedInfoCache);
 
     private INewsService newsService;
     private IRepositoryService repositoryService;
@@ -338,7 +335,11 @@ public class NewsProvider implements INewsProvider {
                             }
                         }
 
-                        SyndFeed feed = fetcher.retrieveFeed(feedUrl, client);
+                        GetMethod method = new GetMethod(feedUrl.toString());
+                        client.executeMethod(method);
+                        SyndFeedInput input = new SyndFeedInput();
+                        SyndFeed feed = input.build(new XmlReader(method.getResponseBodyAsStream()));
+
                         for (Iterator<?> iter = feed.getEntries().iterator(); iter.hasNext();) {
                             SyndEntry entry = (SyndEntry) iter.next();
 

@@ -7,18 +7,16 @@ Bundle-Activator: org.eclipsetrader.ui.internal.UIActivator
 Bundle-Vendor: %bundleVendor
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.expressions,
- org.eclipse.core.databinding,
- org.eclipse.core.databinding.beans,
- org.eclipse.core.databinding.observable,
- org.eclipse.core.databinding.property,
  org.eclipse.ui,
  org.eclipse.ui.forms,
- org.eclipse.jface.databinding,
- org.eclipse.nebula.widgets.cdatetime,
- org.eclipse.nebula.widgets.pshelf,
- org.eclipse.nebula.jface.cdatetime,
  org.eclipsetrader.core,
- javax.xml.bind
+ javax.xml.bind,
+ org.eclipse.jface.databinding,
+ org.eclipse.core.databinding.beans,
+ org.eclipse.core.databinding.property,
+ org.eclipse.core.databinding.observable
+Import-Package: org.eclipse.core.databinding,
+ org.eclipse.core.databinding.observable
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipsetrader.ui,
  org.eclipsetrader.ui.charts,
@@ -40,5 +38,5 @@ Export-Package: org.eclipsetrader.ui,
  org.eclipsetrader.ui.internal.views;x-internal:=true,
  org.eclipsetrader.ui.navigator
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Eclipse-BuddyPolicy: global

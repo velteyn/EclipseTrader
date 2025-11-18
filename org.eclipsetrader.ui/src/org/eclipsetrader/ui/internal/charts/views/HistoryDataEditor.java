@@ -16,10 +16,10 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.beans.BeanProperties;
-import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.core.databinding.beans.typed.BeanProperties;
 import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.ListChangeEvent;
+import org.eclipse.jface.databinding.viewers.ObservableMapCellLabelProvider;
 import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
@@ -197,18 +197,26 @@ public class HistoryDataEditor {
         }
 
         final String[] properties = new String[] {
-            HistoryDataElement.PROP_DATE,
-            HistoryDataElement.PROP_OPEN,
-            HistoryDataElement.PROP_HIGH,
-            HistoryDataElement.PROP_LOW,
-            HistoryDataElement.PROP_CLOSE,
-            HistoryDataElement.PROP_VOLUME,
-            ""
-        };
+                HistoryDataElement.PROP_DATE,
+                HistoryDataElement.PROP_OPEN,
+                HistoryDataElement.PROP_HIGH,
+                HistoryDataElement.PROP_LOW,
+                HistoryDataElement.PROP_CLOSE,
+                HistoryDataElement.PROP_VOLUME,
+                ""
+            };
 
-        DataViewerLabelProvider labelProvider = new DataViewerLabelProvider(BeansObservables.observeMaps(contentProvider.getKnownElements(), properties));
-        labelProvider.setDateFormat(Util.getDateFormat());
-        viewer.setLabelProvider(labelProvider);
+            ObservableMapCellLabelProvider labelProvider = new ObservableMapCellLabelProvider(BeanProperties.value(HistoryDataElement.class, properties[0]).observeDetail(contentProvider.getKnownElements())) {
+                @Override
+                public void update(ViewerCell cell) {
+                    Object element = cell.getElement();
+                    if (element instanceof HistoryDataElement) {
+                        HistoryDataElement data = (HistoryDataElement) element;
+                        cell.setText(Util.getDateFormat().format(data.getDate()));
+                    }
+                }
+            };
+            viewer.setLabelProvider(labelProvider);
 
         viewer.setSorter(new ViewerSorter() {
 

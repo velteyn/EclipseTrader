@@ -20,7 +20,7 @@ import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -88,7 +88,7 @@ public class NewsPreferencesPage extends PreferencePage implements IWorkbenchPre
                 return ((IConfigurationElement) element).getAttribute(K_NAME);
             }
         });
-        providers.setSorter(new ViewerSorter());
+        providers.setComparator(new ViewerComparator());
 
         performDefaults();
 

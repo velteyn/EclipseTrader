@@ -155,7 +155,7 @@ public class Navigator extends ViewPart {
         viewer.setUseHashlookup(true);
         viewer.setLabelProvider(new DecoratingLabelProvider(new NavigatorLabelProvider(), WorkbenchPlugin.getDefault().getDecoratorManager().getLabelDecorator()));
         viewer.setContentProvider(new NavigatorContentProvider());
-        viewer.setSorter(new ViewerSorter() {
+        viewer.setComparator(new org.eclipse.jface.viewers.ViewerComparator() {
 
             @Override
             public int category(Object element) {

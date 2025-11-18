@@ -18,16 +18,7 @@ Export-Package: org.mozilla.classfile,
  org.mozilla.javascript.regexp,
  org.mozilla.javascript.resources,
  org.mozilla.javascript.serialize,
- org.mozilla.javascript.tools,
- org.mozilla.javascript.tools.debugger,
- org.mozilla.javascript.tools.debugger.treetable,
- org.mozilla.javascript.tools.idswitch,
- org.mozilla.javascript.tools.jsc,
- org.mozilla.javascript.tools.resources,
- org.mozilla.javascript.tools.shell,
- org.mozilla.javascript.xml,
- org.mozilla.javascript.xml.impl.xmlbeans,
- org.mozilla.javascript.xmlimpl
+ org.mozilla.javascript.tools
 Eclipse-BuddyPolicy: global
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
