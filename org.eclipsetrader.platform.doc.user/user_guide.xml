@@ -49,6 +49,7 @@
 	    <topic label="Working with trading systems">
 		    <topic label="Creating a trading strategy" href="guide/ts01.html" />
 		    <topic label="Simulation" href="guide/ts02.html" />
+        <topic label="JESSX Simulator" href="guide/jessx.html" />
       <topic href="guide/ts04.html" label="Script events">
       </topic>
       <topic href="guide/ts05.html" label="Script classes and functions">
