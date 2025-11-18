@@ -8,7 +8,13 @@ Bundle-ClassPath: .
 Bundle-Vendor: Eclipsetrader.org
 Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.logging
-Import-Package: org.mozilla.javascript
+Import-Package: org.mozilla.javascript,
+ javax.xml.bind;version="[2.0.0,3.0.0)",
+ javax.xml.bind.annotation;version="[2.0.0,3.0.0)",
+ javax.xml.bind.annotation.adapters;version="[2.0.0,3.0.0)",
+ javax.xml.bind.attachment;version="[2.0.0,3.0.0)",
+ javax.xml.bind.helpers;version="[2.0.0,3.0.0)",
+ javax.xml.bind.util;version="[2.0.0,3.0.0)"
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipsetrader.core,
  org.eclipsetrader.core.ats,
