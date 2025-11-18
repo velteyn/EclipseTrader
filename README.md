@@ -6,12 +6,14 @@ The core of the current project is the **JESSX plugin**, a powerful stock market
 
 This repository represents an ongoing effort to modernize the original EclipseTrader application by migrating it to a Maven/Tycho build system, addressing critical bugs, and improving overall stability. While the codebase contains legacy plugins for various brokers (e.g., `directa`, `yahoo`), these are currently deactivated and retained for archival purposes.
 
+[![Java CI with Maven](https://github.com/velteyn/EclipseTrader/actions/workflows/maven.yml/badge.svg)](https://github.com/velteyn/EclipseTrader/actions/workflows/maven.yml)
+
 ## Getting Started: Setting Up Your Development Environment
 
 To develop and run EclipseTrader from your IDE, you will need to set up an Eclipse RCP development environment.
 
 ### Prerequisites
-- **Java 7**: The project is built on Java 7. Ensure you have a compatible JDK installed.
+- **Java 8**: The project is built on Java 8 or upper. Ensure you have a compatible JDK installed.
 - **Eclipse IDE for RCP and RAP Developers**: Download the appropriate version (e.g., Eclipse 3.8/Juno) to ensure compatibility with the project's dependencies.
 
 ### Setup Instructions
