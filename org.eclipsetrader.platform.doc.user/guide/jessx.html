@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JESSX Simulator</title>
+</head>
+<body>
+<h1>JESSX Stock Market Simulator</h1>
+
+<p>
+JESSX is a powerful stock market simulator integrated into EclipseTrader. It allows you to create and run complex trading scenarios, test automated trading strategies using bots, and analyze market behavior in a controlled environment.
+</p>
+
+<h2>Configuration</h2>
+<p>
+The JESSX simulation is configured through the <code>default.xml</code> file located in the <code>org.eclipsetrader.jessx/src/org/eclipsetrader/jessx/utils/</code> directory. This file defines all aspects of the simulation, including:
+</p>
+<ul>
+    <li><b>Assets:</b> The securities (stocks) available for trading.</li>
+    <li><b>Institutions:</b> The market makers or exchanges where assets are traded.</li>
+    <li><b>Player Types:</b> The different categories of participants in the simulation.</li>
+    <li><b>Robots (Bots):</b> The automated trading agents that will participate in the simulation. Each bot has a specific trading strategy.</li>
+    <li><b>News Items:</b> Simulated news events that can influence market behavior.</li>
+</ul>
+
+<h2>Running a Simulation</h2>
+<p>
+To run a JESSX simulation, you must first have the JESSX broker configured as your default broker. Then, simply click the "Play" button in the main toolbar. This will start the JESSX server and connect the bots and the human player ("ThePlayer") to the simulation.
+</p>
+<p>
+The simulation will start, and you will see the market data updating in real-time in the watchlists and charts. You can interact with the simulation by placing orders manually, just as you would with a real broker.
+</p>
+
+<h2>Trading Bots</h2>
+<p>
+The JESSX simulator includes several types of trading bots, each with a different trading strategy. The bots are defined in the <code>default.xml</code> file and their logic is implemented in Java classes within the <code>org.eclipsetrader.jessx</code> plugin. The primary bots are:
+</p>
+<ul>
+    <li><b>Discreet:</b> A bot that trades based on market trends.</li>
+    <li><b>DiscreetIT:</b> A variation of the Discreet bot.</li>
+    <li><b>NotDiscreet:</b> A more aggressive trading bot.</li>
+</ul>
+<p>
+The bots will automatically start trading once the simulation begins. You can observe their activity in the orders view.
+</p>
+
+</body>
+</html>

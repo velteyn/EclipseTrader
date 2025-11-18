@@ -32,3 +32,4 @@ bin/
 *.prefs
 eclipsetrader-build/
 **/eclipsetrader-build/
+fragment.jar
