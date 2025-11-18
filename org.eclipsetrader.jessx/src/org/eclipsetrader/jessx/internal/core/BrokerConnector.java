@@ -11,8 +11,12 @@
 
 package org.eclipsetrader.jessx.internal.core;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URL;
@@ -205,16 +209,32 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	@Override
 	public void connect() {
 
-		// EDOZ TODO vedi quello di directa , qua facciamo partire il server
-		// incvece di "collegarci"
-		// e i read che facciamo partire � il server i JESSX !
-
         try {
-            URL url = JessxActivator.getDefault().getBundle().getEntry("src/org/eclipsetrader/jessx/utils/default.xml");
-            InputStream is = url.openStream();
-            srv = new Server(is, false);
-            srv.addServerStateListener(this);
-            srv.startServer();
+            File file = JessxActivator.getDefault().getStateLocation().append("default.xml").toFile();
+            if (!file.exists()) {
+                URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("resources/default.xml"), null);
+                if (url != null) {
+                    try (InputStream in = url.openStream(); OutputStream out = new FileOutputStream(file)) {
+                        byte[] buf = new byte[1024];
+                        int len;
+                        while ((len = in.read(buf)) > 0) {
+                            out.write(buf, 0, len);
+                        }
+                    }
+                }
+            }
+
+            if (file.exists()) {
+                try (InputStream is = new FileInputStream(file)) {
+                    srv = new Server(is, false);
+                    srv.addServerStateListener(this);
+                    srv.startServer();
+                }
+            }
+            else {
+                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Default scenario file not found");
+                JessxActivator.log(status);
+            }
         }
         catch (Exception e) {
             Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading default scenario", e);
@@ -242,6 +262,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 */
 	@Override
 	public void disconnect() {
+        logger.info("Broker disconnecting, stopping StreamingConnector.");
+        StreamingConnector.getInstance().stop();
 
 		// TODO qua c'� da spegnere il server di JESSX (un bel kill e tutto si
 		// risolve)
@@ -561,6 +583,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
     @Override
     public void serverStateChanged(int state) {
         if (state == Server.SERVER_STATE_ONLINE) {
+            logger.info("JESSX Server is online, starting StreamingConnector.");
+            StreamingConnector.getInstance().start();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
