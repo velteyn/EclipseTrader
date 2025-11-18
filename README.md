@@ -28,10 +28,11 @@ To develop and run EclipseTrader from your IDE, you will need to set up an Eclip
     *   Wait for Eclipse to resolve all dependencies. Once it's finished, click **Set as Target Platform** in the top-right corner of the editor.
     *   This may take a few minutes as Eclipse downloads all the necessary plugins.
 
-3.  **Launch the Application**:
-    *   Open the `org.eclipsetrader.releng/eclipsetrader.product` file.
-    *   Click the **Synchronize** link to ensure the product definition is up-to-date with the target platform.
-    *   Click the **Launch an Eclipse application** link in the **Testing** section to start the EclipseTrader application.
+3.  **Launch the Application from the IDE**:
+    *   In the Package Explorer, navigate to the `org.eclipsetrader.releng` project.
+    *   Open the `eclipsetrader.product` file. This will open the product configuration editor.
+    *   In the top-right corner of the editor, click the **Synchronize** link. This ensures that the product definition is up-to-date with the target platform.
+    *   In the **Testing** section of the editor, click the **Launch an Eclipse application** link. This will start the EclipseTrader application.
 
 ## How to Compile and Run
 
