@@ -358,6 +358,11 @@ public class OrderDialog extends TitleAreaDialog {
     }
 
     void setInitialParameters() {
+        if (security != null) {
+            symbol.setText(getSecuritySymbol(security));
+            symbolDescription.setText(security.getName());
+        }
+
         if (position != null) {
             quantity.setText(numberFormat.format(position));
         }
@@ -367,15 +372,11 @@ public class OrderDialog extends TitleAreaDialog {
         }
 
         if (broker != null) {
-            IStructuredSelection selection = new StructuredSelection(broker);
-            brokerCombo.setSelection(selection);
+        	 IBroker jessx = tradingService.getBroker("org.eclipsetrader.brokers.jessx");
+             if (jessx != null)  
+                 brokerCombo.setSelection(new StructuredSelection(jessx));
         }
-        else {
-            IBroker[] brokers = tradingService.getBrokers();
-            if (brokers.length != 0) {
-                brokerCombo.setSelection(new StructuredSelection(brokers[0]));
-            }
-        }
+        
         handleBrokerSelection((IStructuredSelection) brokerCombo.getSelection());
 
         if (account != null) {
@@ -386,21 +387,13 @@ public class OrderDialog extends TitleAreaDialog {
             sideCombo.setSelection(new StructuredSelection(orderSide));
         }
 
-        if (security != null) {
-            IBroker defaultBroker = broker != null ? broker : tradingService.getBrokerForSecurity(security);
-            if (defaultBroker != null) {
-                String symbolText = defaultBroker.getSymbolFromSecurity(security);
-                symbol.setText(symbolText != null ? symbolText : "");
-            }
-        }
     }
 
     protected void handleBrokerSelection(IStructuredSelection selection) {
         IBroker connector = (IBroker) selection.getFirstElement();
 
         if (security != null) {
-            String symbolText = connector.getSymbolFromSecurity(security);
-            symbol.setText(symbolText != null ? symbolText : "");
+            symbol.setText(connector.getSymbolFromSecurity(security));
             symbolDescription.setText(security.getName().replaceAll("&", "&&")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
@@ -447,7 +440,7 @@ public class OrderDialog extends TitleAreaDialog {
     }
 
     protected String getSecuritySymbol(ISecurity security) {
-        IFeedIdentifier identifier = security.getIdentifier();
+        IFeedIdentifier identifier = security != null ? security.getIdentifier() : null;
         if (identifier == null) {
             return null;
         }

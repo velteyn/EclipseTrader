@@ -33,3 +33,8 @@ bin/
 eclipsetrader-build/
 **/eclipsetrader-build/
 fragment.jar
+/org.eclipsetrader.repository.hibernate.derby/fragment.jar
+/org.eclipsetrader.repository.hibernate.derby/fragment.jar
+/org.eclipsetrader.repository.hibernate.derby/fragment.jar
+/org.eclipsetrader.repository.hibernate.postgresql/fragment.jar
+/org.eclipsetrader.repository.hibernate.derby/fragment.jar

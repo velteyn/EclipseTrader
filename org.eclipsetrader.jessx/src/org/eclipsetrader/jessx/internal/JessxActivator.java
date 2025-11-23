@@ -1,4 +1,4 @@
-﻿package org.eclipsetrader.jessx.internal;
+package org.eclipsetrader.jessx.internal;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -47,10 +47,13 @@ public class JessxActivator extends AbstractUIPlugin {
     
     @Override
     public void start(BundleContext context) throws Exception {
-       	super.start(context);
+        	super.start(context);
         plugin = this;
+        System.setProperty("com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize", "true");
 
         startupRepository(getStateLocation().append(REPOSITORY_FILE).toFile());
+
+        migrateInvalidJessxIdentifiers();
     }
 
     @Override
@@ -103,6 +106,7 @@ public class JessxActivator extends AbstractUIPlugin {
                 file.delete();
             }
 
+            System.setProperty("com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize", "true");
             JAXBContext jaxbContext = JAXBContext.newInstance(IdentifiersList.class);
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -119,6 +123,50 @@ public class JessxActivator extends AbstractUIPlugin {
             marshaller.marshal(identifiersList, new FileWriter(file));
         } catch (Exception e) {
             Status status = new Status(IStatus.ERROR, PLUGIN_ID, 0, "Error saving repository", e); //$NON-NLS-1$
+            getLog().log(status);
+        }
+    }
+
+    private void migrateInvalidJessxIdentifiers() {
+        try {
+            BundleContext context = getBundle().getBundleContext();
+            org.osgi.framework.ServiceReference sr = context.getServiceReference(org.eclipsetrader.core.repositories.IRepositoryService.class.getName());
+            if (sr == null) {
+                return;
+            }
+            org.eclipsetrader.core.repositories.IRepositoryService repositoryService = (org.eclipsetrader.core.repositories.IRepositoryService) context.getService(sr);
+            if (repositoryService == null) {
+                return;
+            }
+
+            org.eclipsetrader.core.instruments.ISecurity[] securities = repositoryService.getSecurities();
+            for (org.eclipsetrader.core.instruments.ISecurity security : securities) {
+                org.eclipsetrader.core.feed.IFeedIdentifier identifier = security.getIdentifier();
+                if (identifier == null) {
+                    continue;
+                }
+                String symbol = identifier.getSymbol();
+                if ("org.eclipsetrader.jessx.feed".equals(symbol)) {
+                    org.eclipsetrader.core.feed.IFeedProperties props = (org.eclipsetrader.core.feed.IFeedProperties) identifier.getAdapter(org.eclipsetrader.core.feed.IFeedProperties.class);
+                    String newSymbol = security.getName();
+                    if (props != null) {
+                        String s = props.getProperty("org.eclipsetrader.jessx.symbol");
+                        if (s != null && s.length() != 0) {
+                            newSymbol = s;
+                        }
+                    }
+                    org.eclipsetrader.core.feed.FeedProperties fp = props instanceof org.eclipsetrader.core.feed.FeedProperties ? (org.eclipsetrader.core.feed.FeedProperties) props : null;
+                    org.eclipsetrader.core.feed.FeedIdentifier newId = new org.eclipsetrader.core.feed.FeedIdentifier(newSymbol, fp);
+                    if (security instanceof org.eclipsetrader.core.instruments.Security) {
+                        ((org.eclipsetrader.core.instruments.Security) security).setIdentifier(newId);
+                        repositoryService.saveAdaptable(new org.eclipse.core.runtime.IAdaptable[]{ (org.eclipse.core.runtime.IAdaptable) security });
+                    }
+                }
+            }
+            context.ungetService(sr);
+        }
+        catch (Exception e) {
+            IStatus status = new Status(IStatus.ERROR, PLUGIN_ID, 0, "Error migrating identifiers", e);
             getLog().log(status);
         }
     }

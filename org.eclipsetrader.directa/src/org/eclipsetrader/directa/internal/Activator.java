@@ -154,6 +154,7 @@ public class Activator extends AbstractUIPlugin {
     }
 
     public void startupRepository(File file) {
+        System.setProperty("com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize", "true");
         if (file.exists() == true) {
             try {
                 JAXBContext jaxbContext = JAXBContext.newInstance(IdentifiersList.class);
@@ -186,6 +187,7 @@ public class Activator extends AbstractUIPlugin {
                 file.delete();
             }
 
+            System.setProperty("com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize", "true");
             JAXBContext jaxbContext = JAXBContext.newInstance(IdentifiersList.class);
             Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);

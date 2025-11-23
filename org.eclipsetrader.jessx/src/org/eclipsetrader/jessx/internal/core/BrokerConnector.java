@@ -112,7 +112,8 @@ import org.jdom.Element;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-public class BrokerConnector implements IBroker, IExecutableExtension, IExecutableExtensionFactory, Runnable, ConnectionListener, NetworkListener, ServerStateListener {
+public class BrokerConnector implements IBroker, IExecutableExtension, IExecutableExtensionFactory, Runnable,
+		ConnectionListener, NetworkListener, ServerStateListener {
 
 	public static final IOrderRoute Immediate = new OrderRoute("1", "immed"); //$NON-NLS-1$ //$NON-NLS-2$
 	public static final IOrderRoute MTA = new OrderRoute("2", "MTA"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -138,7 +139,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	private Thread thread;
 	private Log logger = LogFactory.getLog(getClass());
 	public static final IOrderValidity Valid30Days = new OrderValidity("30days", Messages.BrokerConnector_30Days); //$NON-NLS-1$
-    private Server srv;
+	private Server srv;
 
 	public BrokerConnector() {
 		amountFormatter.setMinimumFractionDigits(2);
@@ -162,7 +163,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 * java.lang.Object)
 	 */
 	@Override
-	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
+	public void setInitializationData(IConfigurationElement config, String propertyName, Object data)
+			throws CoreException {
 		id = config.getAttribute("id"); //$NON-NLS-1$
 		name = config.getAttribute("name"); //$NON-NLS-1$
 		account = new Account(getId(), getName(), new Cash(100000.0, Currency.getInstance("USD")));
@@ -260,10 +262,11 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 * 
 	 * @see org.eclipsetrader.core.trading.IBroker#disconnect()
 	 */
+
 	@Override
 	public void disconnect() {
-        logger.info("Broker disconnecting, stopping StreamingConnector.");
-        StreamingConnector.getInstance().stop();
+		logger.info("Broker disconnecting, stopping StreamingConnector.");
+		StreamingConnector.getInstance().stop();
 
 		// TODO qua c'� da spegnere il server di JESSX (un bel kill e tutto si
 		// risolve)
@@ -295,16 +298,16 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 */
 	@Override
 	public boolean canTrade(ISecurity security) {
-        if (security == null) {
-            return false;
-        }
-        IFeedIdentifier identifier = security.getIdentifier();
-        if (identifier == null) {
-            return false;
-        }
-        // A security is tradable by JESSX if it was assigned a JESSX feed symbol.
-        IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
-        return properties != null && properties.getProperty("org.eclipsetrader.jessx.symbol") != null;
+		if (security == null) {
+			return false;
+		}
+		IFeedIdentifier identifier = security.getIdentifier();
+		if (identifier == null) {
+			return false;
+		}
+		// A security is tradable by JESSX if it was assigned a JESSX feed symbol.
+		IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
+		return properties != null && properties.getProperty("org.eclipsetrader.jessx.symbol") != null;
 	}
 
 	/*
@@ -315,23 +318,23 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 */
 	@Override
 	public String getSymbolFromSecurity(ISecurity security) {
-	    if (security == null) {
-	        return null;
-	    }
-	    IFeedIdentifier identifier = security.getIdentifier();
-	    if (identifier == null) {
-	        return null;
-	    }
+		if (security == null) {
+			return null;
+		}
+		IFeedIdentifier identifier = security.getIdentifier();
+		if (identifier == null) {
+			return null;
+		}
 
-	    IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
-	    if (properties != null) {
-	        String symbol = properties.getProperty("org.eclipsetrader.jessx.symbol");
-	        if (symbol != null && !symbol.isEmpty()) {
-	            return symbol;
-	        }
-	    }
+		IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
+		if (properties != null) {
+			String symbol = properties.getProperty("org.eclipsetrader.jessx.symbol");
+			if (symbol != null && !symbol.isEmpty()) {
+				return symbol;
+			}
+		}
 
-	    return null;
+		return null;
 	}
 
 	/*
@@ -367,7 +370,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		return security;
 	}
 
-    @Override
+	@Override
 	public void connectionStateChanged(int newState) {
 		if (newState == ClientCore.CONNECTED) {
 			logger.info("Client connected to server");
@@ -406,288 +409,313 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			account.setPositions(list.toArray(new Position[list.size()]));
 		}
 		if (doc.getRootElement().getName().equals("OrderBook")) {
-		    Element orderBook = doc.getRootElement();
-		    String institutionName = orderBook.getAttributeValue("institution");
-		    if (institutionName != null) {
-		        org.eclipsetrader.jessx.business.Institution institution = BusinessCore.getInstitution(institutionName);
-		        if (institution != null) {
-		            String securityName = institution.getAssetName();
-		            ISecurity security = getSecurityFromSymbol(securityName);
-		            if (security != null) {
-		                IFeedIdentifier identifier = security.getIdentifier();
-		                if (identifier != null) {
-		                    IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
-                            if (subscription != null) {
-                                List<IBookEntry> bids = new ArrayList<IBookEntry>();
-                                Element bidElement = orderBook.getChild("Bid");
-                                if (bidElement != null) {
-                                    for (Object o : bidElement.getChildren("Operation")) {
-                                        Element op = (Element) o;
-                                        Element limitOrder = op.getChild("LimitOrder");
-                                        double price = Double.parseDouble(limitOrder.getAttributeValue("price"));
-                                        long quantity = Long.parseLong(limitOrder.getAttributeValue("quantity"));
-                                        bids.add(new org.eclipsetrader.core.feed.BookEntry(null, price, quantity, 1L, null));
-                                    }
-                                }
+			Element orderBook = doc.getRootElement();
+			String institutionName = orderBook.getAttributeValue("institution");
+			if (institutionName != null) {
+				org.eclipsetrader.jessx.business.Institution institution = BusinessCore.getInstitution(institutionName);
+				if (institution != null) {
+					String securityName = institution.getAssetName();
+					ISecurity security = getSecurityFromSymbol(securityName);
+					if (security != null) {
+						IFeedIdentifier identifier = security.getIdentifier();
+						if (identifier != null) {
+							IFeedSubscription2 subscription = StreamingConnector.getInstance()
+									.subscribeLevel2(identifier);
+							if (subscription != null) {
+								List<IBookEntry> bids = new ArrayList<IBookEntry>();
+								Element bidElement = orderBook.getChild("Bid");
+								if (bidElement != null) {
+									for (Object o : bidElement.getChildren("Operation")) {
+										Element op = (Element) o;
+										Element limitOrder = op.getChild("LimitOrder");
+										double price = Double.parseDouble(limitOrder.getAttributeValue("price"));
+										long quantity = Long.parseLong(limitOrder.getAttributeValue("quantity"));
+										bids.add(new org.eclipsetrader.core.feed.BookEntry(null, price, quantity, 1L,
+												null));
+									}
+								}
 
-                                List<IBookEntry> asks = new ArrayList<IBookEntry>();
-                                Element askElement = orderBook.getChild("Ask");
-                                if (askElement != null) {
-                                    for (Object o : askElement.getChildren("Operation")) {
-                                        Element op = (Element) o;
-                                        Element limitOrder = op.getChild("LimitOrder");
-                                        double price = Double.parseDouble(limitOrder.getAttributeValue("price"));
-                                        long quantity = Long.parseLong(limitOrder.getAttributeValue("quantity"));
-                                        asks.add(new org.eclipsetrader.core.feed.BookEntry(null, price, quantity, 1L, null));
-                                    }
-                                }
+								List<IBookEntry> asks = new ArrayList<IBookEntry>();
+								Element askElement = orderBook.getChild("Ask");
+								if (askElement != null) {
+									for (Object o : askElement.getChildren("Operation")) {
+										Element op = (Element) o;
+										Element limitOrder = op.getChild("LimitOrder");
+										double price = Double.parseDouble(limitOrder.getAttributeValue("price"));
+										long quantity = Long.parseLong(limitOrder.getAttributeValue("quantity"));
+										asks.add(new org.eclipsetrader.core.feed.BookEntry(null, price, quantity, 1L,
+												null));
+									}
+								}
 
-                                ((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription)subscription).setBook(new org.eclipsetrader.core.feed.Book(bids.toArray(new IBookEntry[bids.size()]), asks.toArray(new IBookEntry[asks.size()])));
-                                StreamingConnector.getInstance().wakeupNotifyThread();
-                            }
-		                }
-		            }
-		        }
-		    }
+								((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription)
+										.setBook(new org.eclipsetrader.core.feed.Book(
+												bids.toArray(new IBookEntry[bids.size()]),
+												asks.toArray(new IBookEntry[asks.size()])));
+								StreamingConnector.getInstance().wakeupNotifyThread();
+							}
+						}
+					}
+				}
+			}
 		}
-        if (doc.getRootElement().getName().equals("Trade")) {
-            Element trade = doc.getRootElement();
-            String securityName = trade.getAttributeValue("security");
-            ISecurity security = getSecurityFromSymbol(securityName);
-            if (security != null) {
-                IFeedIdentifier identifier = security.getIdentifier();
-                if (identifier != null) {
-                    IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
-                    if (subscription != null) {
-                        double price = Double.parseDouble(trade.getAttributeValue("price"));
-                        long quantity = Long.parseLong(trade.getAttributeValue("quantity"));
-                        long volume = Long.parseLong(trade.getAttributeValue("volume"));
-                        Trade tradeData = new Trade(new Date(), price, quantity, volume);
-                        ((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription)subscription).setTrade(tradeData);
+		if (doc.getRootElement().getName().equals("Trade")) {
+			Element trade = doc.getRootElement();
+			String securityName = trade.getAttributeValue("security");
+			ISecurity security = getSecurityFromSymbol(securityName);
+			if (security != null) {
+				IFeedIdentifier identifier = security.getIdentifier();
+				if (identifier != null) {
+					IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
+					if (subscription != null) {
+						double price = Double.parseDouble(trade.getAttributeValue("price"));
+						long quantity = Long.parseLong(trade.getAttributeValue("quantity"));
+						long volume = Long.parseLong(trade.getAttributeValue("volume"));
+						Trade tradeData = new Trade(new Date(), price, quantity, volume);
+						((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription)
+								.setTrade(tradeData);
 
-                        BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
-                        ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
-                        if (serviceReference != null) {
-                            IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
-                            IHistory history = repositoryService.getHistoryFor(security);
-                            if (history instanceof org.eclipsetrader.core.feed.History) {
-                                IOHLC[] bars = history.getOHLC();
-                                IOHLC last = bars.length > 0 ? bars[bars.length - 1] : null;
+						BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
+						ServiceReference serviceReference = context
+								.getServiceReference(IRepositoryService.class.getName());
+						if (serviceReference != null) {
+							IRepositoryService repositoryService = (IRepositoryService) context
+									.getService(serviceReference);
+							IHistory history = repositoryService.getHistoryFor(security);
+							if (history instanceof org.eclipsetrader.core.feed.History) {
+								IOHLC[] bars = history.getOHLC();
+								IOHLC last = bars.length > 0 ? bars[bars.length - 1] : null;
 
-                                if (last != null && last.getDate().equals(tradeData.getTime())) {
-                                    last = new OHLC(last.getDate(), last.getOpen(), Math.max(last.getHigh(), tradeData.getPrice()), Math.min(last.getLow(), tradeData.getPrice()), tradeData.getPrice(), last.getVolume() + tradeData.getSize());
-                                    bars[bars.length - 1] = last;
-                                }
-                                else {
-                                    IOHLC[] newBars = new IOHLC[bars.length + 1];
-                                    System.arraycopy(bars, 0, newBars, 0, bars.length);
-                                    newBars[bars.length] = new OHLC(tradeData.getTime(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getSize());
-                                    bars = newBars;
-                                }
-                                ((org.eclipsetrader.core.feed.History) history).setOHLC(bars);
-                            }
-                            context.ungetService(serviceReference);
-                        }
+								if (last != null && last.getDate().equals(tradeData.getTime())) {
+									last = new OHLC(last.getDate(), last.getOpen(),
+											Math.max(last.getHigh(), tradeData.getPrice()),
+											Math.min(last.getLow(), tradeData.getPrice()), tradeData.getPrice(),
+											last.getVolume() + tradeData.getSize());
+									bars[bars.length - 1] = last;
+								} else {
+									IOHLC[] newBars = new IOHLC[bars.length + 1];
+									System.arraycopy(bars, 0, newBars, 0, bars.length);
+									newBars[bars.length] = new OHLC(tradeData.getTime(), tradeData.getPrice(),
+											tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(),
+											tradeData.getSize());
+									bars = newBars;
+								}
+								((org.eclipsetrader.core.feed.History) history).setOHLC(bars);
+							}
+							context.ungetService(serviceReference);
+						}
 
-                        StreamingConnector.getInstance().wakeupNotifyThread();
-                    }
-                }
-            }
-        }
-        if (doc.getRootElement().getName().equals("Quote")) {
-            Element quote = doc.getRootElement();
-            String securityName = quote.getAttributeValue("security");
-            ISecurity security = getSecurityFromSymbol(securityName);
-            if (security != null) {
-                IFeedIdentifier identifier = security.getIdentifier();
-                if (identifier != null) {
-                    IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
-                    if (subscription != null) {
-                        double bid = Double.parseDouble(quote.getAttributeValue("bid"));
-                        double ask = Double.parseDouble(quote.getAttributeValue("ask"));
-                        long bidSize = Long.parseLong(quote.getAttributeValue("bidSize"));
-                        long askSize = Long.parseLong(quote.getAttributeValue("askSize"));
-                        ((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription)subscription).setQuote(new Quote(bid, ask, bidSize, askSize));
-                        StreamingConnector.getInstance().wakeupNotifyThread();
-                    }
-                }
-            }
-        }
-        if (doc.getRootElement().getName().equals("TodayOHL")) {
-            Element todayOHL = doc.getRootElement();
-            String securityName = todayOHL.getAttributeValue("security");
-            ISecurity security = getSecurityFromSymbol(securityName);
-            if (security != null) {
-                IFeedIdentifier identifier = security.getIdentifier();
-                if (identifier != null) {
-                    IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
-                    if (subscription != null) {
-                        double open = Double.parseDouble(todayOHL.getAttributeValue("open"));
-                        double high = Double.parseDouble(todayOHL.getAttributeValue("high"));
-                        double low = Double.parseDouble(todayOHL.getAttributeValue("low"));
-                        ((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription)subscription).setTodayOHL(new TodayOHL(open, high, low));
-                        StreamingConnector.getInstance().wakeupNotifyThread();
-                    }
-                }
-            }
-        }
+						StreamingConnector.getInstance().wakeupNotifyThread();
+					}
+				}
+			}
+		}
+		if (doc.getRootElement().getName().equals("Quote")) {
+			Element quote = doc.getRootElement();
+			String securityName = quote.getAttributeValue("security");
+			ISecurity security = getSecurityFromSymbol(securityName);
+			if (security != null) {
+				IFeedIdentifier identifier = security.getIdentifier();
+				if (identifier != null) {
+					IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
+					if (subscription != null) {
+						double bid = Double.parseDouble(quote.getAttributeValue("bid"));
+						double ask = Double.parseDouble(quote.getAttributeValue("ask"));
+						long bidSize = Long.parseLong(quote.getAttributeValue("bidSize"));
+						long askSize = Long.parseLong(quote.getAttributeValue("askSize"));
+						((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription)
+								.setQuote(new Quote(bid, ask, bidSize, askSize));
+						StreamingConnector.getInstance().wakeupNotifyThread();
+					}
+				}
+			}
+		}
+		if (doc.getRootElement().getName().equals("TodayOHL")) {
+			Element todayOHL = doc.getRootElement();
+			String securityName = todayOHL.getAttributeValue("security");
+			ISecurity security = getSecurityFromSymbol(securityName);
+			if (security != null) {
+				IFeedIdentifier identifier = security.getIdentifier();
+				if (identifier != null) {
+					IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
+					if (subscription != null) {
+						double open = Double.parseDouble(todayOHL.getAttributeValue("open"));
+						double high = Double.parseDouble(todayOHL.getAttributeValue("high"));
+						double low = Double.parseDouble(todayOHL.getAttributeValue("low"));
+						((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription)
+								.setTodayOHL(new TodayOHL(open, high, low));
+						StreamingConnector.getInstance().wakeupNotifyThread();
+					}
+				}
+			}
+		}
 	}
 
-    private void registerSecurity(final String name) {
-        logger.info("########## I'm going to register security " + name);
-        BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
-        ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
-        ServiceReference marketServiceReference = context.getServiceReference(IMarketService.class.getName());
-        if (serviceReference != null) {
-            final IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
-            final IMarketService marketService = (IMarketService) context.getService(marketServiceReference);
-            try {
-                Display.getDefault().asyncExec(new Runnable() {
-                    @Override
-                    public void run() {
-                        IRepositoryRunnable runnable = new IRepositoryRunnable() {
-                            @Override
-                            public IStatus run(IProgressMonitor monitor) throws Exception {
-                                ISecurity security = repositoryService.getSecurityFromName(name);
-                                if (security == null) {
-                                    FeedProperties properties = new FeedProperties();
-                                    properties.setProperty("org.eclipsetrader.jessx.symbol", name);
-                                    FeedIdentifier identifier = new FeedIdentifier("org.eclipsetrader.jessx.feed", properties);
-                                    security = new Stock(name, identifier, Currency.getInstance("USD"));
-                                    IAdaptable[] adaptables = new IAdaptable[] {
-                                        (IAdaptable) security,
-                                    };
-                                    IRepository repository = repositoryService.getRepository("local");
-                                    repositoryService.moveAdaptable(adaptables, repository);
+	private void registerSecurity(final String name) {
+		logger.info("########## I'm going to register security " + name);
+		BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
+		ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
+		ServiceReference marketServiceReference = context.getServiceReference(IMarketService.class.getName());
+		if (serviceReference != null) {
+			final IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
+			final IMarketService marketService = (IMarketService) context.getService(marketServiceReference);
+			try {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						IRepositoryRunnable runnable = new IRepositoryRunnable() {
+							@Override
+							public IStatus run(IProgressMonitor monitor) throws Exception {
+								ISecurity security = repositoryService.getSecurityFromName(name);
+								if (security == null) {
+									FeedProperties properties = new FeedProperties();
+									properties.setProperty("org.eclipsetrader.jessx.symbol", name);
+									FeedIdentifier identifier = new FeedIdentifier("org.eclipsetrader.jessx.feed",
+											properties);
+									security = new Stock(name, identifier, Currency.getInstance("USD"));
+									IAdaptable[] adaptables = new IAdaptable[] {
+											(IAdaptable) security,
+									};
+									IRepository repository = repositoryService.getRepository("local");
+									repositoryService.moveAdaptable(adaptables, repository);
 
-                                    IMarket[] markets = marketService.getMarkets();
-                                    if (markets.length > 0) {
-                                        markets[0].addMembers(new ISecurity[] {
-                                            security
-                                        });
-                                    }
-                                }
-                                return Status.OK_STATUS;
-                            }
-                        };
-                        repositoryService.runInService(runnable, null);
-                    }
-                });
-            }
-            finally {
-                context.ungetService(serviceReference);
-            }
-        }
-    }
+									IMarket[] markets = marketService.getMarkets();
+									if (markets.length > 0) {
+										markets[0].addMembers(new ISecurity[] {
+												security
+										});
+									}
+								}
+								return Status.OK_STATUS;
+							}
+						};
+						repositoryService.runInService(runnable, null);
+					}
+				});
+			} finally {
+				context.ungetService(serviceReference);
+			}
+		}
+	}
 
-    @Override
-    public void serverStateChanged(int state) {
-        if (state == Server.SERVER_STATE_ONLINE) {
-            logger.info("JESSX Server is online, starting StreamingConnector.");
-            StreamingConnector.getInstance().start();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        logger.info("JessX-Setup: Server is online. Waiting for connection point to be ready...");
-                        if (!ClientConnectionPoint.serverReadyLatch.await(10, TimeUnit.SECONDS)) {
-                            logger.error("JessX-Setup: Timed out waiting for server connection point. Setup aborted.");
-                            return;
-                        }
-                        logger.info("JessX-Setup: Connection point is ready. Connecting ThePlayer...");
+	@Override
+	public void serverStateChanged(int state) {
+		if (state == Server.SERVER_STATE_ONLINE) {
+			logger.info("JESSX Server is online, starting StreamingConnector.");
+			StreamingConnector.getInstance().start();
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						logger.info("JessX-Setup: Server is online. Waiting for connection point to be ready...");
+						if (!ClientConnectionPoint.serverReadyLatch.await(10, TimeUnit.SECONDS)) {
+							logger.error("JessX-Setup: Timed out waiting for server connection point. Setup aborted.");
+							return;
+						}
+						logger.info("JessX-Setup: Connection point is ready. Connecting ThePlayer...");
 
-                        // 1. Connect ThePlayer FIRST
-                        ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
+						// 1. Connect ThePlayer FIRST
+						ClientCore.connecToServer("localhost", "ThePlayer", "he-man");
 
-                        // 2. Wait for ThePlayer to appear in the NetworkCore
-                        Player thePlayer = null;
-                        for (int i = 0; i < 100; i++) { // Wait up to 10 seconds
-                            thePlayer = NetworkCore.getPlayer("ThePlayer");
-                            if (thePlayer != null) {
-                                break;
-                            }
-                            Thread.sleep(100);
-                        }
-                        if (thePlayer == null) {
-                            logger.error("JessX-Setup: Timed out waiting for ThePlayer to connect. Setup aborted.");
-                            return;
-                        }
-                        logger.info("JessX-Setup: ThePlayer is connected. Now loading bots...");
+						// 2. Wait for ThePlayer to appear in the NetworkCore
+						Player thePlayer = null;
+						for (int i = 0; i < 100; i++) { // Wait up to 10 seconds
+							thePlayer = NetworkCore.getPlayer("ThePlayer");
+							if (thePlayer != null) {
+								break;
+							}
+							Thread.sleep(100);
+						}
+						if (thePlayer == null) {
+							logger.error("JessX-Setup: Timed out waiting for ThePlayer to connect. Setup aborted.");
+							return;
+						}
+						logger.info("JessX-Setup: ThePlayer is connected. Now loading bots...");
 
-                        // 3. Load bots ONLY after ThePlayer is connected
-                        srv.loadBots();
+						// 3. Load bots ONLY after ThePlayer is connected
+						srv.loadBots();
 
-                        // 4. Wait for all bots to connect
-                        int expectedTotalPlayers = 42; // 41 bots + 1 ThePlayer
-                        logger.info("JessX-Setup: Waiting for all " + (expectedTotalPlayers - 1) + " bots to connect...");
-                        for (int i = 0; i < 200; i++) { // Wait up to 20 seconds
-                            if (NetworkCore.getPlayerList().size() >= expectedTotalPlayers) {
-                                break;
-                            }
-                            Thread.sleep(100);
-                        }
+						// 4. Wait for all bots to connect
+						int expectedTotalPlayers = 42; // 41 bots + 1 ThePlayer
+						logger.info(
+								"JessX-Setup: Waiting for all " + (expectedTotalPlayers - 1) + " bots to connect...");
+						for (int i = 0; i < 200; i++) { // Wait up to 20 seconds
+							if (NetworkCore.getPlayerList().size() >= expectedTotalPlayers) {
+								break;
+							}
+							Thread.sleep(100);
+						}
 
-                        if (NetworkCore.getPlayerList().size() < expectedTotalPlayers) {
-                            logger.error("JessX-Setup: Timed out waiting for all bots to connect. " + NetworkCore.getPlayerList().size() + "/" + expectedTotalPlayers + " connected. Aborting.");
-                            return;
-                        }
-                        logger.info("JessX-Setup: All " + NetworkCore.getPlayerList().size() + " players are connected.");
+						if (NetworkCore.getPlayerList().size() < expectedTotalPlayers) {
+							logger.error("JessX-Setup: Timed out waiting for all bots to connect. "
+									+ NetworkCore.getPlayerList().size() + "/" + expectedTotalPlayers
+									+ " connected. Aborting.");
+							return;
+						}
+						logger.info(
+								"JessX-Setup: All " + NetworkCore.getPlayerList().size() + " players are connected.");
 
-                        // 5. Initialize General Parameters
-                        logger.info("JessX-Setup: Initializing general parameters...");
-                        GeneralParametersLocal generalParams = new GeneralParametersLocal();
-                        generalParams.initializeGeneralParameters();
-                        BusinessCore.setGeneralParameters(generalParams);
-                        logger.info("JessX-Setup: General parameters initialized and set in BusinessCore.");
+						// 5. Initialize General Parameters
+						logger.info("JessX-Setup: Initializing general parameters...");
+						GeneralParametersLocal generalParams = new GeneralParametersLocal();
+						generalParams.initializeGeneralParameters();
+						BusinessCore.setGeneralParameters(generalParams);
+						logger.info("JessX-Setup: General parameters initialized and set in BusinessCore.");
 
-                        // 6. Assign categories and start experiment (with retry logic)
-                        logger.info("JessX-Setup: All players connected. Assigning categories and attempting to start experiment...");
+						// 6. Assign categories and start experiment (with retry logic)
+						logger.info(
+								"JessX-Setup: All players connected. Assigning categories and attempting to start experiment...");
 
-                        Scenario scn = BusinessCore.getScenario();
-                        Map plTypes = scn.getPlayerTypes();
-                        List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
-                        Random random = new Random();
+						Scenario scn = BusinessCore.getScenario();
+						Map plTypes = scn.getPlayerTypes();
+						List<PlayerType> categories = new ArrayList<PlayerType>(plTypes.values());
+						Random random = new Random();
 
-                        boolean experimentStarted = false;
-                        for (int i = 0; i < 100; i++) { // Poll for up to 10 seconds
-                            // On each attempt, snapshot the current player list and assign categories to any player that is missing one.
-                            // This ensures that even if a player's state update was delayed, it will be retried.
-                            List<Player> playerSnapshot = new ArrayList<Player>(NetworkCore.getPlayerList().values());
-                            for (Player player : playerSnapshot) {
-                                if (player.getPlayerCategory() == null || player.getPlayerCategory().isEmpty()) {
-                                    PlayerType assignedCategory;
-                                    if (player.getLogin().equals("ThePlayer")) {
-                                        assignedCategory = categories.get(0);
-                                    } else {
-                                        assignedCategory = categories.get(random.nextInt(categories.size()));
-                                    }
-                                    player.setPlayerCategory(assignedCategory.getPlayerTypeName());
-                                    logger.info(String.format("Assigned category '%s' to player '%s'", player.getPlayerCategory(), player.getLogin()));
-                                }
-                            }
+						boolean experimentStarted = false;
+						for (int i = 0; i < 100; i++) { // Poll for up to 10 seconds
+							// On each attempt, snapshot the current player list and assign categories to
+							// any player that is missing one.
+							// This ensures that even if a player's state update was delayed, it will be
+							// retried.
+							List<Player> playerSnapshot = new ArrayList<Player>(NetworkCore.getPlayerList().values());
+							for (Player player : playerSnapshot) {
+								if (player.getPlayerCategory() == null || player.getPlayerCategory().isEmpty()) {
+									PlayerType assignedCategory;
+									if (player.getLogin().equals("ThePlayer")) {
+										assignedCategory = categories.get(0);
+									} else {
+										assignedCategory = categories.get(random.nextInt(categories.size()));
+									}
+									player.setPlayerCategory(assignedCategory.getPlayerTypeName());
+									logger.info(String.format("Assigned category '%s' to player '%s'",
+											player.getPlayerCategory(), player.getLogin()));
+								}
+							}
 
-                            // Try to start the experiment.
-                            if (NetworkCore.getExperimentManager().beginExperiment()) {
-                                new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
-                                logger.info("JessX-Setup: Experiment started successfully.");
-                                experimentStarted = true;
-                                break; // Exit the retry loop on success
-                            }
+							// Try to start the experiment.
+							if (NetworkCore.getExperimentManager().beginExperiment()) {
+								new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone())
+										.start();
+								logger.info("JessX-Setup: Experiment started successfully.");
+								experimentStarted = true;
+								break; // Exit the retry loop on success
+							}
 
-                            // If it failed, wait a moment before the next retry.
-                            Thread.sleep(100);
-                        }
+							// If it failed, wait a moment before the next retry.
+							Thread.sleep(100);
+						}
 
-                        if (!experimentStarted) {
-                            logger.error("JessX-Setup: Failed to start experiment after multiple retries. Preconditions not met. Check server logs.");
-                        }
-                    } catch (Exception e) {
-                        logger.error("Error in JessX setup thread", e);
-                    }
-                }
-            }, "JessX-Setup").start();
-        }
-    }
+						if (!experimentStarted) {
+							logger.error(
+									"JessX-Setup: Failed to start experiment after multiple retries. Preconditions not met. Check server logs.");
+						}
+					} catch (Exception e) {
+						logger.error("Error in JessX setup thread", e);
+					}
+				}
+			}, "JessX-Setup").start();
+		}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -748,13 +776,14 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 */
 	@Override
 	public IOrderRoute[] getAllowedRoutes() {
-	    if (BusinessCore.getInstitutions() == null) {
-	        return new IOrderRoute[0];
-	    }
+		if (BusinessCore.getInstitutions() == null) {
+			return new IOrderRoute[0];
+		}
 
 		List<IOrderRoute> routes = new ArrayList<IOrderRoute>();
-		for(Object institution : BusinessCore.getInstitutions().values()) {
-		    routes.add(new OrderRoute(((org.eclipsetrader.jessx.business.Institution)institution).getName(), ((org.eclipsetrader.jessx.business.Institution)institution).getName()));
+		for (Object institution : BusinessCore.getInstitutions().values()) {
+			routes.add(new OrderRoute(((org.eclipsetrader.jessx.business.Institution) institution).getName(),
+					((org.eclipsetrader.jessx.business.Institution) institution).getName()));
 		}
 
 		return routes.toArray(new IOrderRoute[routes.size()]);
@@ -808,7 +837,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			// accepting new connections
 			socketChannel.register(socketSelector, SelectionKey.OP_READ | SelectionKey.OP_CONNECT);
 		} catch (Exception e) {
-			Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error connecting to orders monitor", e); //$NON-NLS-1$
+			Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error connecting to orders monitor", //$NON-NLS-1$
+					e);
 			JessxActivator.log(status);
 			return;
 		}
@@ -853,7 +883,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 					}
 					if (key.isWritable()) {
 						logger.trace(">" + LOGIN + WebConnector.getInstance().getUser()); //$NON-NLS-1$
-						socketChannel.write(ByteBuffer.wrap(new String(LOGIN + WebConnector.getInstance().getUser() + "\r\n").getBytes())); //$NON-NLS-1$
+						socketChannel.write(ByteBuffer
+								.wrap(new String(LOGIN + WebConnector.getInstance().getUser() + "\r\n").getBytes())); //$NON-NLS-1$
 
 						// Register an interest in reading on this channel
 						key.interestOps(SelectionKey.OP_READ);
@@ -881,14 +912,17 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 										synchronized (orders) {
 											if (!orders.contains(monitor)) {
 												orders.add(monitor);
-												delta = new OrderDelta[] { new OrderDelta(OrderDelta.KIND_ADDED, monitor) };
+												delta = new OrderDelta[] {
+														new OrderDelta(OrderDelta.KIND_ADDED, monitor) };
 											} else {
-												delta = new OrderDelta[] { new OrderDelta(OrderDelta.KIND_UPDATED, monitor) };
+												delta = new OrderDelta[] {
+														new OrderDelta(OrderDelta.KIND_UPDATED, monitor) };
 											}
 										}
 										fireUpdateNotifications(delta);
 									} catch (ParseException e) {
-										Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing line: " + s[i], e); //$NON-NLS-1$
+										Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0,
+												"Error parsing line: " + s[i], e); //$NON-NLS-1$
 										JessxActivator.log(status);
 									}
 								}
@@ -899,7 +933,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 									try {
 										positions.add(parsePositionLine(s[i]));
 									} catch (Exception e) {
-										Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing line: " + s[i], e); //$NON-NLS-1$
+										Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0,
+												"Error parsing line: " + s[i], e); //$NON-NLS-1$
 										JessxActivator.log(status);
 									}
 								}
@@ -946,7 +981,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			}
 			if (tracker == null) {
 				for (OrderMonitor m : orders) {
-					if (m.getId() == null && getSymbolFromSecurity(m.getOrder().getSecurity()).equals(item[IDX_SYMBOL])) {
+					if (m.getId() == null
+							&& getSymbolFromSecurity(m.getOrder().getSecurity()).equals(item[IDX_SYMBOL])) {
 						tracker = m;
 						tracker.setId(item[IDX_ID]);
 						break;
@@ -964,7 +1000,10 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			}
 			Order order = new Order(
 					null,
-					!item[IDX_PRICE].equals("") ? IOrderType.Limit : IOrderType.Market, item[IDX_SIDE].equalsIgnoreCase("V") ? IOrderSide.Sell : IOrderSide.Buy, getSecurityFromSymbol(item[IDX_SYMBOL]), quantity, !item[IDX_PRICE].equals("") ? numberFormatter.parse(item[IDX_PRICE]).doubleValue() : null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					!item[IDX_PRICE].equals("") ? IOrderType.Limit : IOrderType.Market, //$NON-NLS-1$
+					item[IDX_SIDE].equalsIgnoreCase("V") ? IOrderSide.Sell : IOrderSide.Buy, //$NON-NLS-1$
+					getSecurityFromSymbol(item[IDX_SYMBOL]), quantity,
+					!item[IDX_PRICE].equals("") ? numberFormatter.parse(item[IDX_PRICE]).doubleValue() : null); //$NON-NLS-1$
 			tracker = new OrderMonitor(BrokerConnector.getInstance(), order);
 			tracker.setId(item[IDX_ID]);
 		}
@@ -1019,7 +1058,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			}
 		}
 
-		if ((status == IOrderStatus.Filled || status == IOrderStatus.Canceled || status == IOrderStatus.Rejected) && tracker.getStatus() != status) {
+		if ((status == IOrderStatus.Filled || status == IOrderStatus.Canceled || status == IOrderStatus.Rejected)
+				&& tracker.getStatus() != status) {
 			tracker.setStatus(status);
 
 			if (logger.isInfoEnabled()) {
@@ -1070,7 +1110,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		ServiceReference serviceReference = context.getServiceReference(IStatusLineManager.class.getName());
 		if (serviceReference != null) {
 			IStatusLineManager statusLine = (IStatusLineManager) context.getService(serviceReference);
-			final StatusLineContributionItem contributionItem = (StatusLineContributionItem) statusLine.find(JessxActivator.PLUGIN_ID);
+			final StatusLineContributionItem contributionItem = (StatusLineContributionItem) statusLine
+					.find(JessxActivator.PLUGIN_ID);
 			try {
 				String[] item = line.split("\\;"); //$NON-NLS-1$
 				final double liquidity = amountParser.parse(item[3]).doubleValue();
@@ -1078,11 +1119,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 					@Override
 					public void run() {
-						contributionItem.setText(Messages.BrokerConnector_Liquidity + amountFormatter.format(liquidity));
+						contributionItem
+								.setText(Messages.BrokerConnector_Liquidity + amountFormatter.format(liquidity));
 					}
 				});
 			} catch (Exception e) {
-				Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing line: " + line, e); //$NON-NLS-1$
+				Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing line: " + line, //$NON-NLS-1$
+						e);
 				JessxActivator.log(status);
 			}
 			context.ungetService(serviceReference);
@@ -1136,59 +1179,59 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		fireUpdateNotifications(new OrderDelta[] { new OrderDelta(OrderDelta.KIND_ADDED, orderMonitor), });
 	}
 
-    public void sendOrder(IOrder order) {
-        try {
-            Element root = new Element("Operation");
-            root.setAttribute("emitter", ClientCore.getLogin());
-            root.setAttribute("institution", order.getRoute().getId());
+	public void sendOrder(IOrder order) {
+		try {
+			Element root = new Element("Operation");
+			root.setAttribute("emitter", ClientCore.getLogin());
+			root.setAttribute("institution", order.getRoute().getId());
 
-            Element orderElement = new Element("Order");
-            orderElement.setAttribute("id", String.valueOf(new Random().nextInt()));
-            orderElement.setAttribute("side", order.getSide() == IOrderSide.Buy ? "1" : "0");
-            orderElement.setAttribute("timestamp", String.valueOf(System.currentTimeMillis()));
-            root.addContent(orderElement);
+			Element orderElement = new Element("Order");
+			orderElement.setAttribute("id", String.valueOf(new Random().nextInt()));
+			orderElement.setAttribute("side", order.getSide() == IOrderSide.Buy ? "1" : "0");
+			orderElement.setAttribute("timestamp", String.valueOf(System.currentTimeMillis()));
+			root.addContent(orderElement);
 
-            if (order.getType() == IOrderType.Limit) {
-                root.setAttribute("type", "LimitOrder");
-                Element limitOrder = new Element("LimitOrder");
-                limitOrder.setAttribute("price", String.valueOf(order.getPrice()));
-                limitOrder.setAttribute("quantity", String.valueOf(order.getQuantity()));
-                root.addContent(limitOrder);
-            }
-            else if (order.getType() == IOrderType.Market) {
-                root.setAttribute("type", "MarketOrder");
-                Element marketOrder = new Element("MarketOrder");
-                marketOrder.setAttribute("quantity", String.valueOf(order.getQuantity()));
-                root.addContent(marketOrder);
-            }
+			if (order.getType() == IOrderType.Limit) {
+				root.setAttribute("type", "LimitOrder");
+				Element limitOrder = new Element("LimitOrder");
+				limitOrder.setAttribute("price", String.valueOf(order.getPrice()));
+				limitOrder.setAttribute("quantity", String.valueOf(order.getQuantity()));
+				root.addContent(limitOrder);
+			} else if (order.getType() == IOrderType.Market) {
+				root.setAttribute("type", "MarketOrder");
+				Element marketOrder = new Element("MarketOrder");
+				marketOrder.setAttribute("quantity", String.valueOf(order.getQuantity()));
+				root.addContent(marketOrder);
+			}
 
-            if (root.getAttribute("type") != null) {
-                org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation.initOperationFromXml(root);
-                ClientCore.executeOperation(op);
-            }
-        } catch (Exception e) {
-            logger.error("Error sending order", e);
-        }
-    }
+			if (root.getAttribute("type") != null) {
+				org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation
+						.initOperationFromXml(root);
+				ClientCore.executeOperation(op);
+			}
+		} catch (Exception e) {
+			logger.error("Error sending order", e);
+		}
+	}
 
-    public void cancelOrder(IOrderMonitor monitor) {
-        try {
-            Element root = new Element("Operation");
-            root.setAttribute("type", "DeleteOrder");
-            root.setAttribute("emitter", ClientCore.getLogin());
-            root.setAttribute("institution", monitor.getOrder().getRoute().getId());
+	public void cancelOrder(IOrderMonitor monitor) {
+		try {
+			Element root = new Element("Operation");
+			root.setAttribute("type", "DeleteOrder");
+			root.setAttribute("emitter", ClientCore.getLogin());
+			root.setAttribute("institution", monitor.getOrder().getRoute().getId());
 
-            Element deleteOrder = new Element("DeleteOrder");
-            deleteOrder.setAttribute("orderId", monitor.getId());
-            root.addContent(deleteOrder);
+			Element deleteOrder = new Element("DeleteOrder");
+			deleteOrder.setAttribute("orderId", monitor.getId());
+			root.addContent(deleteOrder);
 
-            org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation.initOperationFromXml(root);
-            ClientCore.executeOperation(op);
-        }
-        catch (Exception e) {
-            logger.error("Error sending order cancellation", e);
-        }
-    }
+			org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation
+					.initOperationFromXml(root);
+			ClientCore.executeOperation(op);
+		} catch (Exception e) {
+			logger.error("Error sending order cancellation", e);
+		}
+	}
 
 	/*
 	 * (non-Javadoc)

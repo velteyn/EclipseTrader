@@ -22,6 +22,7 @@ import org.eclipsetrader.core.markets.IMarketService;
 import org.eclipsetrader.core.repositories.IPropertyConstants;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
+import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IStore;
 import org.eclipsetrader.core.repositories.IStoreProperties;
 import org.eclipsetrader.jessx.business.event.AssetEvent;
@@ -169,7 +170,15 @@ public abstract class BusinessCore {
                     @Override
                     public IStatus run(IProgressMonitor monitor) {
                         try {
-                            IStore store = finalRepositoryService.getRepository("hibernate").createObject();
+                            IRepository repo = finalRepositoryService.getRepository("hibernate");
+if (repo == null) {
+    repo = finalRepositoryService.getRepository("local");
+}
+if (repo == null) {
+    Utils.logger.error("No repository available: hibernate/local");
+    return Status.CANCEL_STATUS;
+}
+IStore store = repo.createObject();
                             IStoreProperties properties = store.fetchProperties(monitor);
                             properties.setProperty(IPropertyConstants.OBJECT_TYPE, Stock.class.getName());
                             properties.setProperty(IPropertyConstants.NAME, assetName);
@@ -228,7 +237,15 @@ public abstract class BusinessCore {
                         @Override
                         public IStatus run(IProgressMonitor monitor) {
                             try {
-                                IStore store = finalRepositoryService.getRepository("hibernate").createObject();
+                                IRepository repo = finalRepositoryService.getRepository("hibernate");
+if (repo == null) {
+    repo = finalRepositoryService.getRepository("local");
+}
+if (repo == null) {
+    Utils.logger.error("No repository available: hibernate/local");
+    return Status.CANCEL_STATUS;
+}
+IStore store = repo.createObject();
                                 IStoreProperties properties = store.fetchProperties(monitor);
                                 properties.setProperty(IPropertyConstants.OBJECT_TYPE, Stock.class.getName());
                                 properties.setProperty(IPropertyConstants.NAME, assetName);

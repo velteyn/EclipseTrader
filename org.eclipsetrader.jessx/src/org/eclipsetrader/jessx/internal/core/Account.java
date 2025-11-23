@@ -151,13 +151,14 @@ public class Account implements IAccount {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof IAccount) {
-            return id.equals(((IAccount) obj).getId());
+            String otherId = ((IAccount) obj).getId();
+            return id != null && id.equals(otherId);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return id != null ? id.hashCode() : 0;
     }
 }
