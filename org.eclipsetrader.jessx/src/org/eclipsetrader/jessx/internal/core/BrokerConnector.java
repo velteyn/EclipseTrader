@@ -210,6 +210,11 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 */
 	@Override
 	public void connect() {
+		
+		if (srv != null && Server.getServerState() == Server.SERVER_STATE_ONLINE) {
+			logger.info("JESSX Server is already online. Skipping duplicate start.");
+			return;
+		}
 
         try {
             File file = JessxActivator.getDefault().getStateLocation().append("default.xml").toFile();
@@ -548,6 +553,19 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 					}
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Public wrapper to register a JESSX security if it doesn't already exist.
+	 * Used during plugin startup to pre-register securities from default.xml.
+	 * 
+	 * @param name The asset name to register (e.g., "AAT", "GPLRF", "MSFT", "PLS")
+	 */
+	public void registerSecurityIfNeeded(String name) {
+		ISecurity security = getSecurityFromSymbol(name);
+		if (security == null) {
+			registerSecurity(name);
 		}
 	}
 

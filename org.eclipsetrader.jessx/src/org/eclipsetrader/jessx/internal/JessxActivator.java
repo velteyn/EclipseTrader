@@ -1,7 +1,12 @@
 package org.eclipsetrader.jessx.internal;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -9,11 +14,17 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipsetrader.jessx.internal.core.BrokerConnector;
 import org.eclipsetrader.jessx.internal.core.repository.IdentifiersList;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
 import org.osgi.framework.BundleContext;
 
 
@@ -54,6 +65,8 @@ public class JessxActivator extends AbstractUIPlugin {
         startupRepository(getStateLocation().append(REPOSITORY_FILE).toFile());
 
         migrateInvalidJessxIdentifiers();
+        
+        preRegisterJessxSecurities();
     }
 
     @Override
@@ -194,5 +207,58 @@ public class JessxActivator extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+	
+	/**
+	 * Pre-register JESSX securities from default.xml during plugin startup.
+	 * This ensures securities exist before chart views initialize, preventing NPEs.
+	 */
+	private void preRegisterJessxSecurities() {
+		try {
+			// Copy default.xml to state location if needed
+			File file = getStateLocation().append("default.xml").toFile();
+			if (!file.exists()) {
+				URL url = FileLocator.find(getBundle(), new Path("resources/default.xml"), null);
+				if (url != null) {
+					try (InputStream in = url.openStream(); 
+						 OutputStream out = new FileOutputStream(file)) {
+						byte[] buf = new byte[1024];
+						int len;
+						while ((len = in.read(buf)) > 0) {
+							out.write(buf, 0, len);
+						}
+					}
+				}
+			}
+			if (file.exists()) {
+				// Parse default.xml to extract asset names
+				SAXBuilder builder = new SAXBuilder();
+				Document doc = builder.build(file);
+				Element root = doc.getRootElement();
+				List<Element> assets = root.getChildren("Asset");
+				
+				if (!assets.isEmpty()) {
+					log("Pre-registering " + assets.size() + " JESSX securities from default.xml");
+					
+					// Get BrokerConnector instance
+					BrokerConnector broker = BrokerConnector.getInstance();
+					
+					// Pre-register each asset as a security
+					for (Element asset : assets) {
+						String assetName = asset.getAttributeValue("name");
+						if (assetName != null && !assetName.isEmpty()) {
+							log("Pre-registering JESSX security: " + assetName);
+							broker.registerSecurityIfNeeded(assetName);
+						}
+					}
+					
+					log("JESSX security pre-registration complete");
+				}
+			}
+		} catch (Exception e) {
+			IStatus status = new Status(IStatus.WARNING, PLUGIN_ID, 
+				"Could not pre-register JESSX securities. Charts may fail to initialize.", e);
+			getLog().log(status);
+		}
 	}
 }

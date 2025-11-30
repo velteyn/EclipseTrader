@@ -146,8 +146,11 @@ public class OrderDialog extends TitleAreaDialog {
         this.orderSide = orderSide;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
      */
     @Override
     protected void configureShell(Shell newShell) {
@@ -155,8 +158,12 @@ public class OrderDialog extends TitleAreaDialog {
         newShell.setText(Messages.OrderDialog_Text);
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.jface.dialogs.TitleAreaDialog#createContents(org.eclipse.swt.widgets.Composite)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.eclipse.jface.dialogs.TitleAreaDialog#createContents(org.eclipse.swt.
+     * widgets.Composite)
      */
     @Override
     protected Control createContents(Composite parent) {
@@ -202,8 +209,12 @@ public class OrderDialog extends TitleAreaDialog {
         return true;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.
+     * Composite)
      */
     @Override
     protected Control createDialogArea(Composite parent) {
@@ -372,11 +383,11 @@ public class OrderDialog extends TitleAreaDialog {
         }
 
         if (broker != null) {
-        	 IBroker jessx = tradingService.getBroker("org.eclipsetrader.brokers.jessx");
-             if (jessx != null)  
-                 brokerCombo.setSelection(new StructuredSelection(jessx));
+            IBroker jessx = tradingService.getBroker("org.eclipsetrader.brokers.jessx");
+            if (jessx != null)
+                brokerCombo.setSelection(new StructuredSelection(jessx));
         }
-        
+
         handleBrokerSelection((IStructuredSelection) brokerCombo.getSelection());
 
         if (account != null) {
@@ -391,6 +402,12 @@ public class OrderDialog extends TitleAreaDialog {
 
     protected void handleBrokerSelection(IStructuredSelection selection) {
         IBroker connector = (IBroker) selection.getFirstElement();
+
+        // Check if connector is null (e.g., JESSX server offline)
+        if (connector == null) {
+            setErrorMessage("Please select a broker");
+            return;
+        }
 
         if (security != null) {
             symbol.setText(connector.getSymbolFromSecurity(security));
@@ -519,17 +536,15 @@ public class OrderDialog extends TitleAreaDialog {
             IOrderType orderType = (IOrderType) ((IStructuredSelection) typeCombo.getSelection()).getFirstElement();
             if (orderType == IOrderType.Limit) {
                 price = priceFormat.parse(this.price.getText()).doubleValue();
-            }
-            else if (limitPrice != null) {
+            } else if (limitPrice != null) {
                 price = limitPrice;
             }
 
             if (quantity != 0 && price != 0.0) {
                 summaryLabel.setText(NLS.bind(Messages.OrderDialog_TotalLabel, new Object[] {
-                    totalPriceFormat.format(quantity * price)
+                        totalPriceFormat.format(quantity * price)
                 }));
-            }
-            else {
+            } else {
                 summaryLabel.setText(""); //$NON-NLS-1$
             }
         } catch (Exception e) {
@@ -537,7 +552,9 @@ public class OrderDialog extends TitleAreaDialog {
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.eclipse.jface.dialogs.Dialog#okPressed()
      */
     @Override
@@ -545,16 +562,20 @@ public class OrderDialog extends TitleAreaDialog {
         try {
             IAccount account = (IAccount) ((IStructuredSelection) accountCombo.getSelection()).getFirstElement();
             IOrderType orderType = (IOrderType) ((IStructuredSelection) typeCombo.getSelection()).getFirstElement();
-            Double limitPrice = orderType == IOrderType.Market ? null : priceFormat.parse(price.getText()).doubleValue();
+            Double limitPrice = orderType == IOrderType.Market ? null
+                    : priceFormat.parse(price.getText()).doubleValue();
 
-            Order order = new Order(account, orderType, (IOrderSide) ((IStructuredSelection) sideCombo.getSelection()).getFirstElement(), security, numberFormat.parse(quantity.getText()).longValue(), limitPrice);
+            Order order = new Order(account, orderType,
+                    (IOrderSide) ((IStructuredSelection) sideCombo.getSelection()).getFirstElement(), security,
+                    numberFormat.parse(quantity.getText()).longValue(), limitPrice);
 
             if (!routeCombo.getSelection().isEmpty()) {
                 order.setRoute((IOrderRoute) ((IStructuredSelection) routeCombo.getSelection()).getFirstElement());
             }
 
             if (!validityCombo.getSelection().isEmpty()) {
-                IOrderValidity validity = (IOrderValidity) ((IStructuredSelection) validityCombo.getSelection()).getFirstElement();
+                IOrderValidity validity = (IOrderValidity) ((IStructuredSelection) validityCombo.getSelection())
+                        .getFirstElement();
                 order.setValidity(validity);
                 if (expireDate.getEnabled()) {
                     Calendar calendar = Calendar.getInstance();
@@ -575,7 +596,8 @@ public class OrderDialog extends TitleAreaDialog {
 
             super.okPressed();
         } catch (Exception e) {
-            Status status = new Status(IStatus.ERROR, UIActivator.PLUGIN_ID, 0, Messages.OrderDialog_SubmitErrorMessage, e);
+            Status status = new Status(IStatus.ERROR, UIActivator.PLUGIN_ID, 0, Messages.OrderDialog_SubmitErrorMessage,
+                    e);
             UIActivator.log(status);
             ErrorDialog.openError(getShell(), getShell().getText(), null, status);
         }

@@ -1,8 +1,4 @@
-﻿// 
-//This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
-// 
-
-package org.eclipsetrader.jessx.server;
+﻿package org.eclipsetrader.jessx.server;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -110,26 +106,46 @@ public class Server
         }
     }
 
+ 
     public void loadBots(){
         final int temp = 10;
         final int tempIT = 10;
+        
+        // Add delay between bot connections to avoid overwhelming server
+        final int DELAY_MS = 50; // 50ms delay between bots
+        
+        try { 
+            Thread.sleep(200); // 200ms initial delay
+            System.out.println("Server socket ready, starting bot connections...");
+        } catch (InterruptedException e) {}
+        
         for (int i = 0; i < NUMBER_DISCREET_BOTS; ++i) {
             final Robot zitDiscreet = new Discreet(i, temp);
             System.out.println("in for, after creating the discreet "+ i +" and before start");
             zitDiscreet.start();
             System.out.println("after discreet start " + i);
+            
+            // Add delay to stagger connections
+            try { Thread.sleep(DELAY_MS); } catch (InterruptedException e) {}
         }
+        
         for (int i = 0; i < 19; ++i) {
             final Robot zitDiscreetIT = new DiscreetIT(i, tempIT);
-            System.out.println("dans for, apr\u00e8s cr\u00e9ation du discreet " + i + " et avant start");
+            System.out.println("dans for, après création du discreet " + i + " et avant start");
             zitDiscreetIT.start();
-            System.out.println("apr\u00e8s start du discreetIT " + i);
+            System.out.println("après start du discreetIT " + i);
+            
+            // Add delay to stagger connections  
+            try { Thread.sleep(DELAY_MS); } catch (InterruptedException e) {}
         }
+        
         for (int i = 0; i < 15; ++i) {
             final Robot zitNotDiscreet = new NotDiscreet(i, 10, 0, 100);
             zitNotDiscreet.start();
+            
+            // Add delay to stagger connections
+            try { Thread.sleep(DELAY_MS); } catch (InterruptedException e) {}
         }
-
     }
     
     private void loadJessXModules() {
