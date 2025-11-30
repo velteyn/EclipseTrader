@@ -112,8 +112,7 @@ import org.jdom.Element;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-public class BrokerConnector implements IBroker, IExecutableExtension, IExecutableExtensionFactory, Runnable,
-		ConnectionListener, NetworkListener, ServerStateListener {
+public class BrokerConnector implements IBroker, IExecutableExtension, IExecutableExtensionFactory, Runnable, ConnectionListener, NetworkListener, ServerStateListener {
 
 	public static final IOrderRoute Immediate = new OrderRoute("1", "immed"); //$NON-NLS-1$ //$NON-NLS-2$
 	public static final IOrderRoute MTA = new OrderRoute("2", "MTA"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -145,6 +144,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		amountFormatter.setMinimumFractionDigits(2);
 		amountFormatter.setMaximumFractionDigits(2);
 		amountFormatter.setGroupingUsed(true);
+
+		account = new Account("JESSX", "JESSX Account", new Cash(0.0, Currency.getInstance("USD")));
 	}
 
 	public static BrokerConnector getInstance() {
@@ -163,8 +164,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 * java.lang.Object)
 	 */
 	@Override
-	public void setInitializationData(IConfigurationElement config, String propertyName, Object data)
-			throws CoreException {
+	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 		id = config.getAttribute("id"); //$NON-NLS-1$
 		name = config.getAttribute("name"); //$NON-NLS-1$
 		account = new Account(getId(), getName(), new Cash(100000.0, Currency.getInstance("USD")));
@@ -210,43 +210,41 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	 */
 	@Override
 	public void connect() {
-		
+
 		if (srv != null && Server.getServerState() == Server.SERVER_STATE_ONLINE) {
 			logger.info("JESSX Server is already online. Skipping duplicate start.");
 			return;
 		}
 
-        try {
-            File file = JessxActivator.getDefault().getStateLocation().append("default.xml").toFile();
-            if (!file.exists()) {
-                URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("resources/default.xml"), null);
-                if (url != null) {
-                    try (InputStream in = url.openStream(); OutputStream out = new FileOutputStream(file)) {
-                        byte[] buf = new byte[1024];
-                        int len;
-                        while ((len = in.read(buf)) > 0) {
-                            out.write(buf, 0, len);
-                        }
-                    }
-                }
-            }
+		try {
+			File file = JessxActivator.getDefault().getStateLocation().append("default.xml").toFile();
+			if (!file.exists()) {
+				URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("resources/default.xml"), null);
+				if (url != null) {
+					try (InputStream in = url.openStream(); OutputStream out = new FileOutputStream(file)) {
+						byte[] buf = new byte[1024];
+						int len;
+						while ((len = in.read(buf)) > 0) {
+							out.write(buf, 0, len);
+						}
+					}
+				}
+			}
 
-            if (file.exists()) {
-                try (InputStream is = new FileInputStream(file)) {
-                    srv = new Server(is, false);
-                    srv.addServerStateListener(this);
-                    srv.startServer();
-                }
-            }
-            else {
-                Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Default scenario file not found");
-                JessxActivator.log(status);
-            }
-        }
-        catch (Exception e) {
-            Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading default scenario", e);
-            JessxActivator.log(status);
-        }
+			if (file.exists()) {
+				try (InputStream is = new FileInputStream(file)) {
+					srv = new Server(is, false);
+					srv.addServerStateListener(this);
+					srv.startServer();
+				}
+			} else {
+				Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Default scenario file not found");
+				JessxActivator.log(status);
+			}
+		} catch (Exception e) {
+			Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading default scenario", e);
+			JessxActivator.log(status);
+		}
 
 		if (thread == null || !thread.isAlive()) {
 			thread = new Thread(this, getName() + " - Orders Monitor"); //$NON-NLS-1$
@@ -254,12 +252,12 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			thread.start();
 		}
 
-        ClientCore.addConnectionListener(this);
-        ClientCore.addNetworkListener(this, "Portfolio");
-        ClientCore.addNetworkListener(this, "OrderBook");
-        ClientCore.addNetworkListener(this, "Trade");
-        ClientCore.addNetworkListener(this, "Quote");
-        ClientCore.addNetworkListener(this, "TodayOHL");
+		ClientCore.addConnectionListener(this);
+		ClientCore.addNetworkListener(this, "Portfolio");
+		ClientCore.addNetworkListener(this, "OrderBook");
+		ClientCore.addNetworkListener(this, "Trade");
+		ClientCore.addNetworkListener(this, "Quote");
+		ClientCore.addNetworkListener(this, "TodayOHL");
 	}
 
 	/*
@@ -310,7 +308,8 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		if (identifier == null) {
 			return false;
 		}
-		// A security is tradable by JESSX if it was assigned a JESSX feed symbol.
+		// A security is tradable by JESSX if it was assigned a JESSX feed
+		// symbol.
 		IFeedProperties properties = (IFeedProperties) identifier.getAdapter(IFeedProperties.class);
 		return properties != null && properties.getProperty("org.eclipsetrader.jessx.symbol") != null;
 	}
@@ -424,8 +423,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 					if (security != null) {
 						IFeedIdentifier identifier = security.getIdentifier();
 						if (identifier != null) {
-							IFeedSubscription2 subscription = StreamingConnector.getInstance()
-									.subscribeLevel2(identifier);
+							IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
 							if (subscription != null) {
 								List<IBookEntry> bids = new ArrayList<IBookEntry>();
 								Element bidElement = orderBook.getChild("Bid");
@@ -435,8 +433,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 										Element limitOrder = op.getChild("LimitOrder");
 										double price = Double.parseDouble(limitOrder.getAttributeValue("price"));
 										long quantity = Long.parseLong(limitOrder.getAttributeValue("quantity"));
-										bids.add(new org.eclipsetrader.core.feed.BookEntry(null, price, quantity, 1L,
-												null));
+										bids.add(new org.eclipsetrader.core.feed.BookEntry(null, price, quantity, 1L, null));
 									}
 								}
 
@@ -448,15 +445,12 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 										Element limitOrder = op.getChild("LimitOrder");
 										double price = Double.parseDouble(limitOrder.getAttributeValue("price"));
 										long quantity = Long.parseLong(limitOrder.getAttributeValue("quantity"));
-										asks.add(new org.eclipsetrader.core.feed.BookEntry(null, price, quantity, 1L,
-												null));
+										asks.add(new org.eclipsetrader.core.feed.BookEntry(null, price, quantity, 1L, null));
 									}
 								}
 
 								((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription)
-										.setBook(new org.eclipsetrader.core.feed.Book(
-												bids.toArray(new IBookEntry[bids.size()]),
-												asks.toArray(new IBookEntry[asks.size()])));
+										.setBook(new org.eclipsetrader.core.feed.Book(bids.toArray(new IBookEntry[bids.size()]), asks.toArray(new IBookEntry[asks.size()])));
 								StreamingConnector.getInstance().wakeupNotifyThread();
 							}
 						}
@@ -477,32 +471,25 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						long quantity = Long.parseLong(trade.getAttributeValue("quantity"));
 						long volume = Long.parseLong(trade.getAttributeValue("volume"));
 						Trade tradeData = new Trade(new Date(), price, quantity, volume);
-						((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription)
-								.setTrade(tradeData);
+						((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription).setTrade(tradeData);
 
 						BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
-						ServiceReference serviceReference = context
-								.getServiceReference(IRepositoryService.class.getName());
+						ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
 						if (serviceReference != null) {
-							IRepositoryService repositoryService = (IRepositoryService) context
-									.getService(serviceReference);
+							IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
 							IHistory history = repositoryService.getHistoryFor(security);
 							if (history instanceof org.eclipsetrader.core.feed.History) {
 								IOHLC[] bars = history.getOHLC();
 								IOHLC last = bars.length > 0 ? bars[bars.length - 1] : null;
 
 								if (last != null && last.getDate().equals(tradeData.getTime())) {
-									last = new OHLC(last.getDate(), last.getOpen(),
-											Math.max(last.getHigh(), tradeData.getPrice()),
-											Math.min(last.getLow(), tradeData.getPrice()), tradeData.getPrice(),
+									last = new OHLC(last.getDate(), last.getOpen(), Math.max(last.getHigh(), tradeData.getPrice()), Math.min(last.getLow(), tradeData.getPrice()), tradeData.getPrice(),
 											last.getVolume() + tradeData.getSize());
 									bars[bars.length - 1] = last;
 								} else {
 									IOHLC[] newBars = new IOHLC[bars.length + 1];
 									System.arraycopy(bars, 0, newBars, 0, bars.length);
-									newBars[bars.length] = new OHLC(tradeData.getTime(), tradeData.getPrice(),
-											tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(),
-											tradeData.getSize());
+									newBars[bars.length] = new OHLC(tradeData.getTime(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getSize());
 									bars = newBars;
 								}
 								((org.eclipsetrader.core.feed.History) history).setOHLC(bars);
@@ -528,8 +515,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						double ask = Double.parseDouble(quote.getAttributeValue("ask"));
 						long bidSize = Long.parseLong(quote.getAttributeValue("bidSize"));
 						long askSize = Long.parseLong(quote.getAttributeValue("askSize"));
-						((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription)
-								.setQuote(new Quote(bid, ask, bidSize, askSize));
+						((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription).setQuote(new Quote(bid, ask, bidSize, askSize));
 						StreamingConnector.getInstance().wakeupNotifyThread();
 					}
 				}
@@ -547,20 +533,21 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						double open = Double.parseDouble(todayOHL.getAttributeValue("open"));
 						double high = Double.parseDouble(todayOHL.getAttributeValue("high"));
 						double low = Double.parseDouble(todayOHL.getAttributeValue("low"));
-						((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription)
-								.setTodayOHL(new TodayOHL(open, high, low));
+						((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription).setTodayOHL(new TodayOHL(open, high, low));
 						StreamingConnector.getInstance().wakeupNotifyThread();
 					}
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Public wrapper to register a JESSX security if it doesn't already exist.
 	 * Used during plugin startup to pre-register securities from default.xml.
 	 * 
-	 * @param name The asset name to register (e.g., "AAT", "GPLRF", "MSFT", "PLS")
+	 * @param name
+	 *            The asset name to register (e.g., "AAT", "GPLRF", "MSFT",
+	 *            "PLS")
 	 */
 	public void registerSecurityIfNeeded(String name) {
 		ISecurity security = getSecurityFromSymbol(name);
@@ -574,9 +561,11 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
 		ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
 		ServiceReference marketServiceReference = context.getServiceReference(IMarketService.class.getName());
+		ServiceReference feedServiceReference = context.getServiceReference(org.eclipsetrader.core.feed.IFeedService.class.getName());
 		if (serviceReference != null) {
 			final IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
 			final IMarketService marketService = (IMarketService) context.getService(marketServiceReference);
+			final org.eclipsetrader.core.feed.IFeedService feedService = (org.eclipsetrader.core.feed.IFeedService) context.getService(feedServiceReference);
 			try {
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
@@ -588,20 +577,28 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 								if (security == null) {
 									FeedProperties properties = new FeedProperties();
 									properties.setProperty("org.eclipsetrader.jessx.symbol", name);
-									FeedIdentifier identifier = new FeedIdentifier("org.eclipsetrader.jessx.feed",
-											properties);
+									// Use the actual security name (e.g.,
+									// "AAT") as the symbol
+									FeedIdentifier identifier = new FeedIdentifier(name, properties);
 									security = new Stock(name, identifier, Currency.getInstance("USD"));
-									IAdaptable[] adaptables = new IAdaptable[] {
-											(IAdaptable) security,
-									};
+									IAdaptable[] adaptables = new IAdaptable[] { (IAdaptable) security, };
 									IRepository repository = repositoryService.getRepository("local");
 									repositoryService.moveAdaptable(adaptables, repository);
-
-									IMarket[] markets = marketService.getMarkets();
-									if (markets.length > 0) {
-										markets[0].addMembers(new ISecurity[] {
-												security
-										});
+									IMarket jessxMarket = marketService.getMarket("JESSX");
+									if (jessxMarket == null) {
+										org.eclipsetrader.core.internal.markets.Market newMarket = new org.eclipsetrader.core.internal.markets.Market("JESSX", null);
+										if (feedService != null) {
+											org.eclipsetrader.core.feed.IFeedConnector connector = feedService.getConnector("org.eclipsetrader.jessx.feed");
+											if (connector != null) {
+												newMarket.setLiveFeedConnector(connector);
+											}
+										}
+										((org.eclipsetrader.core.internal.markets.MarketService) org.eclipsetrader.core.internal.markets.MarketService.getInstance()).addMarket(newMarket);
+										jessxMarket = newMarket;
+									}
+									if (jessxMarket != null) {
+										jessxMarket.addMembers(new ISecurity[] { security });
+										logger.info("Added security " + name + " to market: " + jessxMarket.getName());
 									}
 								}
 								return Status.OK_STATUS;
@@ -612,6 +609,12 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 				});
 			} finally {
 				context.ungetService(serviceReference);
+				if (marketServiceReference != null) {
+					context.ungetService(marketServiceReference);
+				}
+				if (feedServiceReference != null) {
+					context.ungetService(feedServiceReference);
+				}
 			}
 		}
 	}
@@ -655,8 +658,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 						// 4. Wait for all bots to connect
 						int expectedTotalPlayers = 42; // 41 bots + 1 ThePlayer
-						logger.info(
-								"JessX-Setup: Waiting for all " + (expectedTotalPlayers - 1) + " bots to connect...");
+						logger.info("JessX-Setup: Waiting for all " + (expectedTotalPlayers - 1) + " bots to connect...");
 						for (int i = 0; i < 200; i++) { // Wait up to 20 seconds
 							if (NetworkCore.getPlayerList().size() >= expectedTotalPlayers) {
 								break;
@@ -665,13 +667,10 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						}
 
 						if (NetworkCore.getPlayerList().size() < expectedTotalPlayers) {
-							logger.error("JessX-Setup: Timed out waiting for all bots to connect. "
-									+ NetworkCore.getPlayerList().size() + "/" + expectedTotalPlayers
-									+ " connected. Aborting.");
+							logger.error("JessX-Setup: Timed out waiting for all bots to connect. " + NetworkCore.getPlayerList().size() + "/" + expectedTotalPlayers + " connected. Aborting.");
 							return;
 						}
-						logger.info(
-								"JessX-Setup: All " + NetworkCore.getPlayerList().size() + " players are connected.");
+						logger.info("JessX-Setup: All " + NetworkCore.getPlayerList().size() + " players are connected.");
 
 						// 5. Initialize General Parameters
 						logger.info("JessX-Setup: Initializing general parameters...");
@@ -680,9 +679,9 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						BusinessCore.setGeneralParameters(generalParams);
 						logger.info("JessX-Setup: General parameters initialized and set in BusinessCore.");
 
-						// 6. Assign categories and start experiment (with retry logic)
-						logger.info(
-								"JessX-Setup: All players connected. Assigning categories and attempting to start experiment...");
+						// 6. Assign categories and start experiment (with retry
+						// logic)
+						logger.info("JessX-Setup: All players connected. Assigning categories and attempting to start experiment...");
 
 						Scenario scn = BusinessCore.getScenario();
 						Map plTypes = scn.getPlayerTypes();
@@ -690,10 +689,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						Random random = new Random();
 
 						boolean experimentStarted = false;
-						for (int i = 0; i < 100; i++) { // Poll for up to 10 seconds
-							// On each attempt, snapshot the current player list and assign categories to
+						for (int i = 0; i < 100; i++) { // Poll for up to 10
+														// seconds
+							// On each attempt, snapshot the current player list
+							// and assign categories to
 							// any player that is missing one.
-							// This ensures that even if a player's state update was delayed, it will be
+							// This ensures that even if a player's state update
+							// was delayed, it will be
 							// retried.
 							List<Player> playerSnapshot = new ArrayList<Player>(NetworkCore.getPlayerList().values());
 							for (Player player : playerSnapshot) {
@@ -705,27 +707,25 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 										assignedCategory = categories.get(random.nextInt(categories.size()));
 									}
 									player.setPlayerCategory(assignedCategory.getPlayerTypeName());
-									logger.info(String.format("Assigned category '%s' to player '%s'",
-											player.getPlayerCategory(), player.getLogin()));
+									logger.info(String.format("Assigned category '%s' to player '%s'", player.getPlayerCategory(), player.getLogin()));
 								}
 							}
 
 							// Try to start the experiment.
 							if (NetworkCore.getExperimentManager().beginExperiment()) {
-								new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone())
-										.start();
+								new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
 								logger.info("JessX-Setup: Experiment started successfully.");
 								experimentStarted = true;
 								break; // Exit the retry loop on success
 							}
 
-							// If it failed, wait a moment before the next retry.
+							// If it failed, wait a moment before the next
+							// retry.
 							Thread.sleep(100);
 						}
 
 						if (!experimentStarted) {
-							logger.error(
-									"JessX-Setup: Failed to start experiment after multiple retries. Preconditions not met. Check server logs.");
+							logger.error("JessX-Setup: Failed to start experiment after multiple retries. Preconditions not met. Check server logs.");
 						}
 					} catch (Exception e) {
 						logger.error("Error in JessX setup thread", e);
@@ -800,8 +800,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 		List<IOrderRoute> routes = new ArrayList<IOrderRoute>();
 		for (Object institution : BusinessCore.getInstitutions().values()) {
-			routes.add(new OrderRoute(((org.eclipsetrader.jessx.business.Institution) institution).getName(),
-					((org.eclipsetrader.jessx.business.Institution) institution).getName()));
+			routes.add(new OrderRoute(((org.eclipsetrader.jessx.business.Institution) institution).getName(), ((org.eclipsetrader.jessx.business.Institution) institution).getName()));
 		}
 
 		return routes.toArray(new IOrderRoute[routes.size()]);
@@ -901,8 +900,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 					}
 					if (key.isWritable()) {
 						logger.trace(">" + LOGIN + WebConnector.getInstance().getUser()); //$NON-NLS-1$
-						socketChannel.write(ByteBuffer
-								.wrap(new String(LOGIN + WebConnector.getInstance().getUser() + "\r\n").getBytes())); //$NON-NLS-1$
+						socketChannel.write(ByteBuffer.wrap(new String(LOGIN + WebConnector.getInstance().getUser() + "\r\n").getBytes())); //$NON-NLS-1$
 
 						// Register an interest in reading on this channel
 						key.interestOps(SelectionKey.OP_READ);
@@ -930,17 +928,14 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 										synchronized (orders) {
 											if (!orders.contains(monitor)) {
 												orders.add(monitor);
-												delta = new OrderDelta[] {
-														new OrderDelta(OrderDelta.KIND_ADDED, monitor) };
+												delta = new OrderDelta[] { new OrderDelta(OrderDelta.KIND_ADDED, monitor) };
 											} else {
-												delta = new OrderDelta[] {
-														new OrderDelta(OrderDelta.KIND_UPDATED, monitor) };
+												delta = new OrderDelta[] { new OrderDelta(OrderDelta.KIND_UPDATED, monitor) };
 											}
 										}
 										fireUpdateNotifications(delta);
 									} catch (ParseException e) {
-										Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0,
-												"Error parsing line: " + s[i], e); //$NON-NLS-1$
+										Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing line: " + s[i], e); //$NON-NLS-1$
 										JessxActivator.log(status);
 									}
 								}
@@ -951,8 +946,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 									try {
 										positions.add(parsePositionLine(s[i]));
 									} catch (Exception e) {
-										Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0,
-												"Error parsing line: " + s[i], e); //$NON-NLS-1$
+										Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error parsing line: " + s[i], e); //$NON-NLS-1$
 										JessxActivator.log(status);
 									}
 								}
@@ -999,8 +993,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			}
 			if (tracker == null) {
 				for (OrderMonitor m : orders) {
-					if (m.getId() == null
-							&& getSymbolFromSecurity(m.getOrder().getSecurity()).equals(item[IDX_SYMBOL])) {
+					if (m.getId() == null && getSymbolFromSecurity(m.getOrder().getSecurity()).equals(item[IDX_SYMBOL])) {
 						tracker = m;
 						tracker.setId(item[IDX_ID]);
 						break;
@@ -1016,12 +1009,9 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 				} catch (Exception e) {
 				}
 			}
-			Order order = new Order(
-					null,
-					!item[IDX_PRICE].equals("") ? IOrderType.Limit : IOrderType.Market, //$NON-NLS-1$
+			Order order = new Order(null, !item[IDX_PRICE].equals("") ? IOrderType.Limit : IOrderType.Market, //$NON-NLS-1$
 					item[IDX_SIDE].equalsIgnoreCase("V") ? IOrderSide.Sell : IOrderSide.Buy, //$NON-NLS-1$
-					getSecurityFromSymbol(item[IDX_SYMBOL]), quantity,
-					!item[IDX_PRICE].equals("") ? numberFormatter.parse(item[IDX_PRICE]).doubleValue() : null); //$NON-NLS-1$
+					getSecurityFromSymbol(item[IDX_SYMBOL]), quantity, !item[IDX_PRICE].equals("") ? numberFormatter.parse(item[IDX_PRICE]).doubleValue() : null); //$NON-NLS-1$
 			tracker = new OrderMonitor(BrokerConnector.getInstance(), order);
 			tracker.setId(item[IDX_ID]);
 		}
@@ -1076,8 +1066,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			}
 		}
 
-		if ((status == IOrderStatus.Filled || status == IOrderStatus.Canceled || status == IOrderStatus.Rejected)
-				&& tracker.getStatus() != status) {
+		if ((status == IOrderStatus.Filled || status == IOrderStatus.Canceled || status == IOrderStatus.Rejected) && tracker.getStatus() != status) {
 			tracker.setStatus(status);
 
 			if (logger.isInfoEnabled()) {
@@ -1128,8 +1117,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		ServiceReference serviceReference = context.getServiceReference(IStatusLineManager.class.getName());
 		if (serviceReference != null) {
 			IStatusLineManager statusLine = (IStatusLineManager) context.getService(serviceReference);
-			final StatusLineContributionItem contributionItem = (StatusLineContributionItem) statusLine
-					.find(JessxActivator.PLUGIN_ID);
+			final StatusLineContributionItem contributionItem = (StatusLineContributionItem) statusLine.find(JessxActivator.PLUGIN_ID);
 			try {
 				String[] item = line.split("\\;"); //$NON-NLS-1$
 				final double liquidity = amountParser.parse(item[3]).doubleValue();
@@ -1137,8 +1125,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 					@Override
 					public void run() {
-						contributionItem
-								.setText(Messages.BrokerConnector_Liquidity + amountFormatter.format(liquidity));
+						contributionItem.setText(Messages.BrokerConnector_Liquidity + amountFormatter.format(liquidity));
 					}
 				});
 			} catch (Exception e) {
@@ -1223,8 +1210,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			}
 
 			if (root.getAttribute("type") != null) {
-				org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation
-						.initOperationFromXml(root);
+				org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation.initOperationFromXml(root);
 				ClientCore.executeOperation(op);
 			}
 		} catch (Exception e) {
@@ -1243,8 +1229,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			deleteOrder.setAttribute("orderId", monitor.getId());
 			root.addContent(deleteOrder);
 
-			org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation
-					.initOperationFromXml(root);
+			org.eclipsetrader.jessx.business.Operation op = org.eclipsetrader.jessx.business.Operation.initOperationFromXml(root);
 			ClientCore.executeOperation(op);
 		} catch (Exception e) {
 			logger.error("Error sending order cancellation", e);

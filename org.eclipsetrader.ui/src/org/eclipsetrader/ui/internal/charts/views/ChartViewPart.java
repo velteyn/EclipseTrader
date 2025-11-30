@@ -723,8 +723,10 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
      */
     @Override
     public void dispose() {
-        view.removeViewChangeListener(viewChangeListener);
-
+		if (view != null) {
+             view.removeViewChangeListener(viewChangeListener);
+         }
+    	 
         if (subsetHistory != null) {
             PropertyChangeSupport propertyChangeSupport = (PropertyChangeSupport) subsetHistory.getAdapter(PropertyChangeSupport.class);
             if (propertyChangeSupport != null) {

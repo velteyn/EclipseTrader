@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2004-2011 Marco Maccaferri and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -240,7 +240,9 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
 	public void connect(final String hostName, final String login, final String password) throws IOException {
 		try {
 			Utils.logger.debug("Getting the socket to the server...");
-			this.socket = new Socket(InetAddress.getByName(hostName), Integer.parseInt(Utils.appsProperties.getProperty("ServerWaitingPort")));
+            String portStr = Utils.appsProperties.getProperty("ServerWaitingPort");
+            int port = portStr != null ? Integer.parseInt(portStr) : 1080;
+            this.socket = new Socket(InetAddress.getByName(hostName), port);
 		} catch (UnknownHostException ex4) {
 			Utils.logger.error("Host " + hostName + " unknown. Connection aborted. Retry with an other hostname.");
 			return;

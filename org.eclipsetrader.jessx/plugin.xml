@@ -5,7 +5,7 @@
          name="Jessx"
          point="org.eclipsetrader.core.connectors">
           <connector
-                class="org.eclipsetrader.jessx.internal.core.connector.FeedConnector"
+                class="org.eclipsetrader.jessx.internal.core.connector.SnapshotConnector"
                 id="org.eclipsetrader.jessx.feed"
                 name="JessX! Finance">
           </connector>

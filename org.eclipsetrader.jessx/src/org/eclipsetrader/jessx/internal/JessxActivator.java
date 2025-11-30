@@ -65,6 +65,7 @@ public class JessxActivator extends AbstractUIPlugin {
         startupRepository(getStateLocation().append(REPOSITORY_FILE).toFile());
 
         migrateInvalidJessxIdentifiers();
+        ensureJessxMarketAndReassign();
         
         preRegisterJessxSecurities();
     }
@@ -180,6 +181,69 @@ public class JessxActivator extends AbstractUIPlugin {
         }
         catch (Exception e) {
             IStatus status = new Status(IStatus.ERROR, PLUGIN_ID, 0, "Error migrating identifiers", e);
+            getLog().log(status);
+        }
+    }
+    
+    private void ensureJessxMarketAndReassign() {
+        try {
+            BundleContext context = getBundle().getBundleContext();
+            org.osgi.framework.ServiceReference marketRef = context.getServiceReference(org.eclipsetrader.core.markets.IMarketService.class.getName());
+            org.osgi.framework.ServiceReference feedRef = context.getServiceReference(org.eclipsetrader.core.feed.IFeedService.class.getName());
+            org.osgi.framework.ServiceReference repoRef = context.getServiceReference(org.eclipsetrader.core.repositories.IRepositoryService.class.getName());
+            if (marketRef == null || repoRef == null) {
+                return;
+            }
+            org.eclipsetrader.core.markets.IMarketService marketService = (org.eclipsetrader.core.markets.IMarketService) context.getService(marketRef);
+            org.eclipsetrader.core.feed.IFeedService feedService = feedRef != null ? (org.eclipsetrader.core.feed.IFeedService) context.getService(feedRef) : null;
+            org.eclipsetrader.core.repositories.IRepositoryService repositoryService = (org.eclipsetrader.core.repositories.IRepositoryService) context.getService(repoRef);
+            if (marketService == null || repositoryService == null) {
+                return;
+            }
+            org.eclipsetrader.core.markets.IMarket jessx = marketService.getMarket("JESSX");
+            if (jessx == null) {
+                org.eclipsetrader.core.internal.markets.Market newMarket = new org.eclipsetrader.core.internal.markets.Market("JESSX", null);
+                if (feedService != null) {
+                    org.eclipsetrader.core.feed.IFeedConnector connector = feedService.getConnector("org.eclipsetrader.jessx.feed");
+                    if (connector != null) {
+                        newMarket.setLiveFeedConnector(connector);
+                    }
+                }
+                ((org.eclipsetrader.core.internal.markets.MarketService) org.eclipsetrader.core.internal.markets.MarketService.getInstance()).addMarket(newMarket);
+                jessx = newMarket;
+            }
+            org.eclipsetrader.core.instruments.ISecurity[] securities = repositoryService.getSecurities();
+            for (org.eclipsetrader.core.instruments.ISecurity security : securities) {
+                org.eclipsetrader.core.feed.IFeedIdentifier id = security.getIdentifier();
+                if (id == null) {
+                    continue;
+                }
+                org.eclipsetrader.core.feed.IFeedProperties props = (org.eclipsetrader.core.feed.IFeedProperties) id.getAdapter(org.eclipsetrader.core.feed.IFeedProperties.class);
+                if (props != null && props.getProperty("org.eclipsetrader.jessx.symbol") != null) {
+                    boolean alreadyMember = jessx != null && jessx.hasMember(security);
+                    if (!alreadyMember && jessx != null) {
+                        jessx.addMembers(new org.eclipsetrader.core.instruments.ISecurity[] { security });
+                    }
+                    org.eclipsetrader.core.markets.IMarket[] markets = marketService.getMarkets();
+                    for (org.eclipsetrader.core.markets.IMarket m : markets) {
+                        if (m != null && m != jessx && m.hasMember(security)) {
+                            m.removeMembers(new org.eclipsetrader.core.instruments.ISecurity[] { security });
+                        }
+                    }
+                }
+            }
+            if (marketRef != null) {
+                context.ungetService(marketRef);
+            }
+            if (feedRef != null) {
+                context.ungetService(feedRef);
+            }
+            if (repoRef != null) {
+                context.ungetService(repoRef);
+            }
+        }
+        catch (Exception e) {
+            IStatus status = new Status(IStatus.ERROR, PLUGIN_ID, 0, "Error ensuring JESSX market", e);
             getLog().log(status);
         }
     }
