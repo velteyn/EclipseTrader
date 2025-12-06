@@ -15,15 +15,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.core.internal.runtime.AdapterManager;
+
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -184,7 +184,7 @@ public class ConnectorOverrideProperties extends PropertyPage implements IWorkbe
     @Override
     protected void performDefaults() {
         ISecurity security = (ISecurity) getElement().getAdapter(ISecurity.class);
-        IConnectorOverride override = (IConnectorOverride) AdapterManager.getDefault().getAdapter(security, IConnectorOverride.class);
+        IConnectorOverride override = (IConnectorOverride) Platform.getAdapterManager().getAdapter(security, IConnectorOverride.class);
         if (override != null) {
             liveFeed.setSelection(override.getLiveFeedConnector() != null ? new StructuredSelection(override.getLiveFeedConnector()) : StructuredSelection.EMPTY);
             backfillFeed.setSelection(override.getBackfillConnector() != null ? new StructuredSelection(override.getBackfillConnector()) : StructuredSelection.EMPTY);
@@ -205,7 +205,7 @@ public class ConnectorOverrideProperties extends PropertyPage implements IWorkbe
 
     protected void applyChanges() {
         ISecurity security = (ISecurity) getElement().getAdapter(ISecurity.class);
-        ConnectorOverrideAdapter adapter = (ConnectorOverrideAdapter) AdapterManager.getDefault().getAdapter(security, ConnectorOverrideAdapter.class);
+        ConnectorOverrideAdapter adapter = (ConnectorOverrideAdapter) Platform.getAdapterManager().getAdapter(security, ConnectorOverrideAdapter.class);
 
         if (!liveFeedOverride.getSelection() && !backfillFeedOverride.getSelection() && !intradayBackfillFeedOverride.getSelection()) {
             adapter.clearOverride(security);

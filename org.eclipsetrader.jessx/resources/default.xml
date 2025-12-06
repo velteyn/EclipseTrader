@@ -2,9 +2,9 @@
 <JessXSetup>
   <GeneralParameters>
     <WorkingDirectory>R:\tmp</WorkingDirectory>
-    <SetupFileName>PROVA EDOZ</SetupFileName>
+    <SetupFileName>Standard Simulation</SetupFileName>
     <XMLVersion>1.6</XMLVersion>
-    <LoggingFileName>provaedo Log 1.xml</LoggingFileName>
+    <LoggingFileName>simulation_log_1.xml</LoggingFileName>
     <PeriodNumber>5</PeriodNumber>
     <PeriodDuration>5000</PeriodDuration>
     <InterestRate periodCount="5">
@@ -16,7 +16,7 @@
     </InterestRate>
     <JoiningAfterStartup>false</JoiningAfterStartup>
   </GeneralParameters>
-  <Asset type="Stock" name="AAT">
+  <Asset type="Stock" name="AAPL">
     <DividendModel periodCount="5">
       <Dividend mean="10.0" variance="2.0" />
       <Dividend mean="20.0" variance="0.0" />
@@ -25,8 +25,8 @@
       <Dividend mean="0.0" variance="0.0" />
     </DividendModel>
   </Asset>
-  <Asset type="Stock" name="GPLRF">
-    <DividendModel periodCount="5" biggestWindow="Fucker" size="2">
+  <Asset type="Stock" name="GOOGL">
+    <DividendModel periodCount="5" biggestWindow="MAX" size="2">
       <Dividend mean="3.0" variance="3.0" />
       <Dividend mean="4.0" variance="3.0" />
       <Dividend mean="5.0" variance="3.0" />
@@ -44,7 +44,7 @@
       <Dividend mean="11.0" variance="1.0" />
     </DividendModel>
   </Asset>
-  <Asset type="Stock" name="PLS">
+  <Asset type="Stock" name="TSLA">
     <DividendModel periodCount="5">
       <Dividend mean="0.0" variance="0.0" />
       <Dividend mean="0.0" variance="0.0" />
@@ -53,7 +53,7 @@
       <Dividend mean="0.0" variance="0.0" />
     </DividendModel>
   </Asset>
-  <Institution type="OrderMarket" name="BANK CANARIE" quotedAsset="AAT">
+  <Institution type="OrderMarket" name="Global Bank" quotedAsset="AAPL">
     <KeepOrderBook allow="true" />
     <OperationsCost>
       <Operation name="Market Order" percentageCost="2.0" minimalCost="1.0" />
@@ -62,7 +62,7 @@
       <Operation name="Best Limit Order" percentageCost="2.0" minimalCost="0.0" />
     </OperationsCost>
     <Operators>
-      <Operator name="Porcon" orderbookVisibility="5">
+      <Operator name="Standard Operator" orderbookVisibility="5">
         <GrantedOperation name="Market Order" />
         <GrantedOperation name="Delete Order" />
         <GrantedOperation name="Limit Order" />
@@ -70,7 +70,7 @@
       </Operator>
     </Operators>
   </Institution>
-  <Institution type="OrderMarket" name="PLS Exchange" quotedAsset="PLS">
+  <Institution type="OrderMarket" name="NASDAQ Exchange" quotedAsset="TSLA">
     <KeepOrderBook allow="true" />
     <OperationsCost>
       <Operation name="Market Order" percentageCost="2.0" minimalCost="2.0" />
@@ -79,7 +79,7 @@
       <Operation name="Best Limit Order" percentageCost="3.0" minimalCost="2.0" />
     </OperationsCost>
     <Operators>
-      <Operator name="culon 1" orderbookVisibility="5">
+      <Operator name="Algo Trader 1" orderbookVisibility="5">
         <GrantedOperation name="Market Order" />
         <GrantedOperation name="Delete Order" />
         <GrantedOperation name="Limit Order" />
@@ -87,7 +87,7 @@
       </Operator>
     </Operators>
   </Institution>
-  <Institution type="OrderMarket" name="Mank America" quotedAsset="MSFT">
+  <Institution type="OrderMarket" name="Bank of America" quotedAsset="MSFT">
     <KeepOrderBook allow="true" />
     <OperationsCost>
       <Operation name="Market Order" percentageCost="2.0" minimalCost="2.0" />
@@ -96,7 +96,7 @@
       <Operation name="Best Limit Order" percentageCost="3.0" minimalCost="2.0" />
     </OperationsCost>
     <Operators>
-      <Operator name="culon 1" orderbookVisibility="5">
+      <Operator name="Algo Trader 1" orderbookVisibility="5">
         <GrantedOperation name="Market Order" />
         <GrantedOperation name="Delete Order" />
         <GrantedOperation name="Limit Order" />
@@ -104,7 +104,7 @@
       </Operator>
     </Operators>
   </Institution>
-  <Institution type="OrderMarket" name="GPLRF Exchange" quotedAsset="GPLRF">
+  <Institution type="OrderMarket" name="Tech Exchange" quotedAsset="GOOGL">
     <KeepOrderBook allow="true" />
     <OperationsCost>
       <Operation name="Market Order" percentageCost="2.0" minimalCost="2.0" />
@@ -113,7 +113,7 @@
       <Operation name="Best Limit Order" percentageCost="3.0" minimalCost="2.0" />
     </OperationsCost>
     <Operators>
-      <Operator name="culon 1" orderbookVisibility="5">
+      <Operator name="Algo Trader 1" orderbookVisibility="5">
         <GrantedOperation name="Market Order" />
         <GrantedOperation name="Delete Order" />
         <GrantedOperation name="Limit Order" />
@@ -122,18 +122,18 @@
     </Operators>
   </Institution>
   <Scenario>
-    <PlayerType name="Fucker">
+    <PlayerType name="Hedge Fund">
       <OperatorsPlayed>
-        <Operator name="Porcon on BANK CANARIE" />
-        <Operator name="culon 1 on Mank America" />
+        <Operator name="Standard Operator on Global Bank" />
+        <Operator name="Algo Trader 1 on Bank of America" />
       </OperatorsPlayed>
       <Portfolio cash="3000.0">
-        <Owning asset="AAT" qtty="400" />
-        <Owning asset="GPLRF" qtty="300" />
-        <Owning asset="PLS" qtty="500" />
+        <Owning asset="AAPL" qtty="400" />
+        <Owning asset="GOOGL" qtty="300" />
+        <Owning asset="TSLA" qtty="500" />
         <Owning asset="MSFT" qtty="200" />
       </Portfolio>
-      <DividendInfo asset="AAT">
+      <DividendInfo asset="AAPL">
         <DividendDetailledProperties value="Dividends shown for the experiment" />
         <WindowSize value="1" />
         <DisplayWindowSize value="true" />
@@ -142,7 +142,7 @@
         <DisplayHoldingValueForWindow value="true" />
         <DisplayOperationsCosts value="true" />
       </DividendInfo>
-      <DividendInfo asset="GPLRF">
+      <DividendInfo asset="GOOGL">
         <DividendDetailledProperties value="Dividends shown for the experiment" />
         <WindowSize value="2" />
         <DisplayWindowSize value="true" />
@@ -151,7 +151,7 @@
         <DisplayHoldingValueForWindow value="true" />
         <DisplayOperationsCosts value="true" />
       </DividendInfo>
-      <DividendInfo asset="PLS">
+      <DividendInfo asset="TSLA">
         <DividendDetailledProperties value="Dividends shown for the experiment" />
         <WindowSize value="1" />
         <DisplayWindowSize value="true" />
@@ -170,18 +170,18 @@
         <DisplayOperationsCosts value="true" />
       </DividendInfo>
     </PlayerType>
-    <PlayerType name="Merdon">
+    <PlayerType name="Retail Investor">
       <OperatorsPlayed>
-        <Operator name="Porcon on BANK CANARIE" />
-        <Operator name="culon 1 on Mank America" />
+        <Operator name="Standard Operator on Global Bank" />
+        <Operator name="Algo Trader 1 on Bank of America" />
       </OperatorsPlayed>
       <Portfolio cash="5000.0">
-        <Owning asset="AAT" qtty="110" />
-        <Owning asset="GPLRF" qtty="100" />
-        <Owning asset="PLS" qtty="100" />
+        <Owning asset="AAPL" qtty="110" />
+        <Owning asset="GOOGL" qtty="100" />
+        <Owning asset="TSLA" qtty="100" />
         <Owning asset="MSFT" qtty="0" />
       </Portfolio>
-      <DividendInfo asset="AAT">
+      <DividendInfo asset="AAPL">
         <DividendDetailledProperties value="Dividends not shown" />
         <WindowSize value="1" />
         <DisplayWindowSize value="false" />
@@ -190,7 +190,7 @@
         <DisplayHoldingValueForWindow value="false" />
         <DisplayOperationsCosts value="false" />
       </DividendInfo>
-      <DividendInfo asset="GPLRF">
+      <DividendInfo asset="GOOGL">
         <DividendDetailledProperties value="Dividends shown for the experiment" />
         <WindowSize value="1" />
         <DisplayWindowSize value="false" />
@@ -199,7 +199,7 @@
         <DisplayHoldingValueForWindow value="false" />
         <DisplayOperationsCosts value="false" />
       </DividendInfo>
-      <DividendInfo asset="PLS">
+      <DividendInfo asset="TSLA">
         <DividendDetailledProperties value="Dividends not shown" />
         <WindowSize value="1" />
         <DisplayWindowSize value="false" />
@@ -218,17 +218,17 @@
         <DisplayOperationsCosts value="false" />
       </DividendInfo>
     </PlayerType>
-    <PlayerType name="Riccon">
+    <PlayerType name="Institutional Investor">
       <OperatorsPlayed>
-        <Operator name="Porcon on BANK CANARIE" />
+        <Operator name="Standard Operator on Global Bank" />
       </OperatorsPlayed>
       <Portfolio cash="5000000.0">
-        <Owning asset="AAT" qtty="1000" />
-        <Owning asset="GPLRF" qtty="1000" />
-        <Owning asset="PLS" qtty="1000" />
+        <Owning asset="AAPL" qtty="1000" />
+        <Owning asset="GOOGL" qtty="1000" />
+        <Owning asset="TSLA" qtty="1000" />
         <Owning asset="MSFT" qtty="1000" />
       </Portfolio>
-      <DividendInfo asset="AAT">
+      <DividendInfo asset="AAPL">
         <DividendDetailledProperties value="Dividends not shown" />
         <WindowSize value="1" />
         <DisplayWindowSize value="false" />
@@ -237,7 +237,7 @@
         <DisplayHoldingValueForWindow value="false" />
         <DisplayOperationsCosts value="false" />
       </DividendInfo>
-      <DividendInfo asset="GPLRF">
+      <DividendInfo asset="GOOGL">
         <DividendDetailledProperties value="Dividends shown for the experiment" />
         <WindowSize value="1" />
         <DisplayWindowSize value="false" />
@@ -246,7 +246,7 @@
         <DisplayHoldingValueForWindow value="false" />
         <DisplayOperationsCosts value="false" />
       </DividendInfo>
-      <DividendInfo asset="PLS">
+      <DividendInfo asset="TSLA">
         <DividendDetailledProperties value="Dividends not shown" />
         <WindowSize value="1" />
         <DisplayWindowSize value="false" />
@@ -267,8 +267,8 @@
     </PlayerType>
     <Information />
     <News>
-      <Item priority="HIGH" asset="AAT">"AAT stock is expected to rise."</Item>
-      <Item priority="LOW" asset="GPLRF">"GPLRF stock is expected to fall."</Item>
+      <Item priority="HIGH" asset="AAPL">"AAPL stock is expected to rise."</Item>
+      <Item priority="LOW" asset="GOOGL">"GOOGL stock is expected to fall."</Item>
       <Item priority="MEDIUM" asset="MSFT">"MSFT stock is stable."</Item>
     </News>
   </Scenario>

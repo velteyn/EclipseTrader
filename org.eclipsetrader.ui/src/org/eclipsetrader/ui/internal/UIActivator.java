@@ -15,7 +15,6 @@ import java.net.URI;
 import java.util.Hashtable;
 import java.util.UUID;
 
-import org.eclipse.core.internal.runtime.AdapterManager;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IStatus;
@@ -120,13 +119,13 @@ public class UIActivator extends AbstractUIPlugin {
         super.start(context);
         plugin = this;
 
-        AdapterManager.getDefault().registerAdapters(new SecurityAdapterFactory(), ISecurity.class);
-        AdapterManager.getDefault().registerAdapters(new WatchListAdapterFactory(), IWatchList.class);
-        AdapterManager.getDefault().registerAdapters(new MarketAdapterFactory(), IMarket.class);
-        AdapterManager.getDefault().registerAdapters(new RepositoryAdapterFactory(), IRepository.class);
+        Platform.getAdapterManager().registerAdapters(new SecurityAdapterFactory(), ISecurity.class);
+        Platform.getAdapterManager().registerAdapters(new WatchListAdapterFactory(), IWatchList.class);
+        Platform.getAdapterManager().registerAdapters(new MarketAdapterFactory(), IMarket.class);
+        Platform.getAdapterManager().registerAdapters(new RepositoryAdapterFactory(), IRepository.class);
 
-        AdapterManager.getDefault().registerAdapters(new NavigatorViewItemAdapterFactory(), NavigatorViewItem.class);
-        AdapterManager.getDefault().registerAdapters(new RepositoryViewItemAdapterFactory(), RepositoryViewItem.class);
+        Platform.getAdapterManager().registerAdapters(new NavigatorViewItemAdapterFactory(), NavigatorViewItem.class);
+        Platform.getAdapterManager().registerAdapters(new RepositoryViewItemAdapterFactory(), RepositoryViewItem.class);
 
         NotificationService notificationService = new NotificationService();
         notificationServiceRegistration = context.registerService(new String[] {

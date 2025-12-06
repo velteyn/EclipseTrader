@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.internal.runtime.AdapterManager;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.Platform;
 import org.eclipsetrader.core.views.IViewItem;
 import org.eclipsetrader.core.views.IViewItemVisitor;
 
@@ -161,7 +161,7 @@ public class NavigatorViewItem implements IViewItem {
         }
 
         if (reference instanceof IAdaptable) {
-            return AdapterManager.getDefault().getAdapter(reference, adapter);
+            return Platform.getAdapterManager().getAdapter(reference, adapter);
         }
 
         return null;

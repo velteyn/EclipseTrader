@@ -23,10 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.internal.runtime.AdapterManager;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -129,7 +130,7 @@ public class DataImportJob extends Job {
                         intradayBackfillConnector = market.getIntradayBackfillConnector() != null ? market.getIntradayBackfillConnector() : market.getBackfillConnector();
                     }
 
-                    IConnectorOverride override = (IConnectorOverride) AdapterManager.getDefault().getAdapter(security, IConnectorOverride.class);
+                    IConnectorOverride override = (IConnectorOverride) Platform.getAdapterManager().getAdapter(security, IConnectorOverride.class);
                     if (override != null) {
                         if (override.getBackfillConnector() != null) {
                             backfillConnector = override.getBackfillConnector();

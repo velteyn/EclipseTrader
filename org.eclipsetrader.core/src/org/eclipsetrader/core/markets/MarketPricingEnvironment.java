@@ -23,9 +23,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.eclipse.core.internal.runtime.AdapterManager;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipsetrader.core.feed.Bar;
 import org.eclipsetrader.core.feed.IBar;
@@ -184,7 +185,7 @@ public class MarketPricingEnvironment implements IPricingEnvironment {
             connector = market.getLiveFeedConnector();
         }
 
-        IConnectorOverride override = (IConnectorOverride) AdapterManager.getDefault().getAdapter(security,
+        IConnectorOverride override = (IConnectorOverride) Platform.getAdapterManager().getAdapter(security,
                 IConnectorOverride.class);
         if (override != null) {
             if (override.getLiveFeedConnector() != null) {

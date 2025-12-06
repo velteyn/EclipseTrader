@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.core.internal.runtime.AdapterManager;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.Platform;
 import org.eclipsetrader.core.views.IViewItem;
 import org.eclipsetrader.core.views.IViewItemVisitor;
 
@@ -140,7 +140,7 @@ public class RepositoryViewItem implements IViewItem {
         }
 
         if (object instanceof IAdaptable) {
-            return AdapterManager.getDefault().getAdapter(object, adapter);
+            return Platform.getAdapterManager().getAdapter(object, adapter);
         }
 
         return null;

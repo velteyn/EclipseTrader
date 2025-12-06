@@ -15,15 +15,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.core.internal.runtime.AdapterManager;
+
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -129,7 +129,7 @@ public class MarketTradingPage extends PropertyPage implements IWorkbenchPropert
     public boolean performOk() {
         if (isControlCreated()) {
             IMarket market = (IMarket) getElement().getAdapter(IMarket.class);
-            MarketBrokerAdapterFactory adapter = (MarketBrokerAdapterFactory) AdapterManager.getDefault().getAdapter(market, MarketBrokerAdapterFactory.class);
+            MarketBrokerAdapterFactory adapter = (MarketBrokerAdapterFactory) Platform.getAdapterManager().getAdapter(market, MarketBrokerAdapterFactory.class);
 
             Object s = ((IStructuredSelection) brokerCombo.getSelection()).getFirstElement();
             if (s instanceof IBroker) {

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.eclipse.core.internal.runtime.AdapterManager;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IStatus;
@@ -138,7 +138,7 @@ public class CoreActivator extends Plugin {
         }, currencyServiceFactory, new Hashtable<String, Object>());
 
         marketBrokerFactory = new MarketBrokerAdapterFactory(getStateLocation().append("market_brokers.xml").toFile());
-        AdapterManager.getDefault().registerAdapters(marketBrokerFactory, IMarket.class);
+        Platform.getAdapterManager().registerAdapters(marketBrokerFactory, IMarket.class);
 
         tradingServiceFactory = new TradingServiceFactory();
         tradingServiceRegistration = context.registerService(new String[] {
@@ -173,7 +173,7 @@ public class CoreActivator extends Plugin {
 
         try {
             overrideAdapter = new ConnectorOverrideAdapter(getStateLocation().append("overrides.xml").toFile());
-            AdapterManager.getDefault().registerAdapters(overrideAdapter, ISecurity.class);
+            Platform.getAdapterManager().registerAdapters(overrideAdapter, ISecurity.class);
         } catch (Exception e) {
             Status status = new Status(IStatus.ERROR, PLUGIN_ID, 0, "Error reading override settings", e); //$NON-NLS-1$
             getLog().log(status);

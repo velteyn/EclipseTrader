@@ -11,7 +11,7 @@
 
 package org.eclipsetrader.ui.internal.navigator;
 
-import org.eclipse.core.internal.runtime.AdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -49,7 +49,7 @@ public class NavigatorLabelProvider extends LabelProvider implements IColorProvi
     public Image getImage(Object element) {
         NavigatorViewItem viewItem = (NavigatorViewItem) element;
 
-        ILabelProvider labelProvider = (ILabelProvider) AdapterManager.getDefault().getAdapter(viewItem.getReference(), ILabelProvider.class);
+        ILabelProvider labelProvider = (ILabelProvider) Platform.getAdapterManager().getAdapter(viewItem.getReference(), ILabelProvider.class);
         if (labelProvider != null) {
             return labelProvider.getImage(element);
         }
@@ -78,7 +78,7 @@ public class NavigatorLabelProvider extends LabelProvider implements IColorProvi
     public String getText(Object element) {
         NavigatorViewItem viewItem = (NavigatorViewItem) element;
 
-        ILabelProvider labelProvider = (ILabelProvider) AdapterManager.getDefault().getAdapter(viewItem.getReference(), ILabelProvider.class);
+        ILabelProvider labelProvider = (ILabelProvider) Platform.getAdapterManager().getAdapter(viewItem.getReference(), ILabelProvider.class);
         if (labelProvider != null) {
             return labelProvider.getText(element);
         }
@@ -101,7 +101,7 @@ public class NavigatorLabelProvider extends LabelProvider implements IColorProvi
      */
     @Override
     public Color getBackground(Object element) {
-        IColorProvider colorProvider = (IColorProvider) AdapterManager.getDefault().getAdapter(((NavigatorViewItem) element).getReference(), IColorProvider.class);
+        IColorProvider colorProvider = (IColorProvider) Platform.getAdapterManager().getAdapter(((NavigatorViewItem) element).getReference(), IColorProvider.class);
         if (colorProvider != null) {
             return colorProvider.getBackground(element);
         }
@@ -114,7 +114,7 @@ public class NavigatorLabelProvider extends LabelProvider implements IColorProvi
      */
     @Override
     public Color getForeground(Object element) {
-        IColorProvider colorProvider = (IColorProvider) AdapterManager.getDefault().getAdapter(((NavigatorViewItem) element).getReference(), IColorProvider.class);
+        IColorProvider colorProvider = (IColorProvider) Platform.getAdapterManager().getAdapter(((NavigatorViewItem) element).getReference(), IColorProvider.class);
         if (colorProvider != null) {
             return colorProvider.getForeground(element);
         }
