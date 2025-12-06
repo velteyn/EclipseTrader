@@ -1,13 +1,16 @@
 package org.eclipsetrader.jessx.business;
 
 import java.util.Date;
+
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipsetrader.core.repositories.IPropertyConstants;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
 import org.eclipsetrader.core.repositories.IStore;
 import org.eclipsetrader.core.repositories.IStoreProperties;
-import org.eclipsetrader.core.repositories.IPropertyConstants;
+import org.eclipsetrader.core.repositories.StoreProperties;
 import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -51,19 +54,29 @@ public class JessxTradeHistory {
                     return Status.CANCEL_STATUS;
                 }
 
-                org.eclipsetrader.core.repositories.IRepository[] repositories = repositoryService.getRepositories();
-                if (repositories.length == 0) {
-                    JessxActivator.log("JessxTradeHistory: No repositories found.");
+                org.eclipsetrader.core.repositories.IRepository repository = repositoryService.getRepository("local");
+                if (repository == null) {
+                    org.eclipsetrader.core.repositories.IRepository[] repositories = repositoryService.getRepositories();
+                    if (repositories.length > 0) {
+                        repository = repositories[0];
+                    }
+                }
+
+                if (repository == null) {
+                    JessxActivator.log("JessxTradeHistory: No suitable repository found.");
                     return Status.CANCEL_STATUS;
                 }
 
-                IStore store = repositories[0].createObject();
+                IStore store = repository.createObject();
                 if (store == null) {
                     JessxActivator.log("JessxTradeHistory: Failed to create a new store object.");
                     return Status.CANCEL_STATUS;
                 }
 
                 IStoreProperties properties = store.fetchProperties(monitor);
+                if (properties == null) {
+                    properties = new StoreProperties();
+                }
                 properties.setProperty(IPropertyConstants.PURCHASE_DATE, new Date(finalDeal.getTimestamp()));
                 properties.setProperty(IPropertyConstants.SECURITY, security);
                 properties.setProperty(IPropertyConstants.PURCHASE_QUANTITY, (long) finalDeal.getQuantity());

@@ -48,16 +48,18 @@ public class ChartViewItemFinder implements IViewVisitor, IViewItemVisitor {
             return true;
         }
         IChartObject object = (IChartObject) viewItem.getAdapter(IChartObject.class);
-        object.accept(new IChartObjectVisitor() {
+        if (object != null) {
+            object.accept(new IChartObjectVisitor() {
 
-            @Override
-            public boolean visit(IChartObject object) {
-                if (object == target) {
-                    ChartViewItemFinder.this.viewItem = (ChartViewItem) viewItem;
+                @Override
+                public boolean visit(IChartObject object) {
+                    if (object == target) {
+                        ChartViewItemFinder.this.viewItem = (ChartViewItem) viewItem;
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        }
         return true;
     }
 
