@@ -92,6 +92,8 @@ import org.eclipsetrader.core.trading.Order;
 import org.eclipsetrader.core.trading.OrderChangeEvent;
 import org.eclipsetrader.core.trading.OrderDelta;
 import org.eclipsetrader.jessx.business.BusinessCore;
+import org.eclipsetrader.jessx.business.Deal;
+import org.eclipsetrader.jessx.business.JessxTradeHistory;
 import org.eclipsetrader.jessx.business.PlayerType;
 import org.eclipsetrader.jessx.business.Scenario;
 import org.eclipsetrader.jessx.client.ClientCore;
@@ -256,6 +258,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		ClientCore.addNetworkListener(this, "Portfolio");
 		ClientCore.addNetworkListener(this, "OrderBook");
 		ClientCore.addNetworkListener(this, "Trade");
+		ClientCore.addNetworkListener(this, "Deal");
 		ClientCore.addNetworkListener(this, "Quote");
 		ClientCore.addNetworkListener(this, "TodayOHL");
 	}
@@ -454,6 +457,56 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 								StreamingConnector.getInstance().wakeupNotifyThread();
 							}
 						}
+					}
+				}
+			}
+		}
+		if (doc.getRootElement().getName().equals("Deal")) {
+			Element dealElement = doc.getRootElement();
+			Deal deal = new Deal("", 0.0F, 0, 0L, "", "", 0.0F, "", "");
+			if (deal.initFromNetworkInput(dealElement)) {
+				org.eclipsetrader.jessx.business.Institution institution = BusinessCore.getInstitution(deal.getDealInstitution());
+				if (institution != null) {
+					String securityName = institution.getAssetName();
+					ISecurity security = getSecurityFromSymbol(securityName);
+					if (security != null) {
+						deal.setSecurity(security);
+
+						IFeedIdentifier identifier = security.getIdentifier();
+						if (identifier != null) {
+							IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
+							if (subscription != null) {
+								Trade tradeData = new Trade(new Date(deal.getTimestamp()), (double) deal.getDealPrice(), (long) deal.getQuantity(), (long) deal.getQuantity());
+								((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription).setTrade(tradeData);
+
+								BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
+								ServiceReference serviceReference = context.getServiceReference(IRepositoryService.class.getName());
+								if (serviceReference != null) {
+									IRepositoryService repositoryService = (IRepositoryService) context.getService(serviceReference);
+									IHistory history = repositoryService.getHistoryFor(security);
+									if (history instanceof org.eclipsetrader.core.feed.History) {
+										IOHLC[] bars = history.getOHLC();
+										IOHLC last = bars.length > 0 ? bars[bars.length - 1] : null;
+
+										if (last != null && last.getDate().equals(tradeData.getTime())) {
+											last = new OHLC(last.getDate(), last.getOpen(), Math.max(last.getHigh(), tradeData.getPrice()), Math.min(last.getLow(), tradeData.getPrice()), tradeData.getPrice(),
+													last.getVolume() + tradeData.getSize());
+											bars[bars.length - 1] = last;
+										} else {
+											IOHLC[] newBars = new IOHLC[bars.length + 1];
+											System.arraycopy(bars, 0, newBars, 0, bars.length);
+											newBars[bars.length] = new OHLC(tradeData.getTime(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getPrice(), tradeData.getSize());
+											bars = newBars;
+										}
+										((org.eclipsetrader.core.feed.History) history).setOHLC(bars);
+									}
+									context.ungetService(serviceReference);
+								}
+
+								StreamingConnector.getInstance().wakeupNotifyThread();
+							}
+						}
+						JessxTradeHistory.saveDeal(deal);
 					}
 				}
 			}

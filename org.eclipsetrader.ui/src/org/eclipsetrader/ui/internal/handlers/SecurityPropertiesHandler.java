@@ -53,8 +53,12 @@ public class SecurityPropertiesHandler extends AbstractHandler {
     public SecurityPropertiesHandler() {
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.core.commands.AbstractHandler#execute(org.eclipse.core.commands.ExecutionEvent)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.eclipse.core.commands.AbstractHandler#execute(org.eclipse.core.commands.
+     * ExecutionEvent)
      */
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -78,10 +82,11 @@ public class SecurityPropertiesHandler extends AbstractHandler {
         PropertyPageManager pageManager = new PropertyPageManager();
         if (adaptableElement.getAdapter(Security.class) != null) {
             if (adaptableElement.getAdapter(CurrencyExchange.class) != null) {
-                pageManager.addToRoot(new PriorityPreferenceNode("org.eclipsetrader.ui.propertypages.general", currencyGeneralProperties = new CurrencyGeneralProperties(), -1));
-            }
-            else {
-                pageManager.addToRoot(new PriorityPreferenceNode("org.eclipsetrader.ui.propertypages.general", generalProperties = new GeneralProperties(), -1));
+                pageManager.addToRoot(new PriorityPreferenceNode("org.eclipsetrader.ui.propertypages.general",
+                        currencyGeneralProperties = new CurrencyGeneralProperties(), -1));
+            } else {
+                pageManager.addToRoot(new PriorityPreferenceNode("org.eclipsetrader.ui.propertypages.general",
+                        generalProperties = new GeneralProperties(), -1));
             }
         }
         PropertyPageContributorManager.getManager().contribute(pageManager, adaptableElement);
@@ -116,16 +121,17 @@ public class SecurityPropertiesHandler extends AbstractHandler {
 
                             @Override
                             public IStatus run(IProgressMonitor monitor) throws Exception {
-                                IStoreObject storeObject = (IStoreObject) adaptableElement.getAdapter(IStoreObject.class);
-                                IRepository repository = generalProperties != null ? generalProperties.getRepository() : currencyGeneralProperties.getRepository();
-                                if (repository != storeObject.getStore().getRepository()) {
+                                IStoreObject storeObject = (IStoreObject) adaptableElement
+                                        .getAdapter(IStoreObject.class);
+                                IRepository repository = generalProperties != null ? generalProperties.getRepository()
+                                        : currencyGeneralProperties.getRepository();
+                                if (repository != null && repository != storeObject.getStore().getRepository()) {
                                     service.moveAdaptable(new IAdaptable[] {
-                                        adaptableElement
+                                            adaptableElement
                                     }, repository);
-                                }
-                                else {
+                                } else {
                                     service.saveAdaptable(new IAdaptable[] {
-                                        adaptableElement
+                                            adaptableElement
                                     });
                                 }
                                 return Status.OK_STATUS;
