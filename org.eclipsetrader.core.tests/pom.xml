@@ -50,7 +50,7 @@
                     <appArgLine>-Dorg.eclipse.swt.internal.gtk.disablePrinting</appArgLine>
                     <testFramework>junit</testFramework>
                     <includes>
-                        <include>**/*Test.java</include>
+                        <include>**/AllTests.java</include>
                     </includes>
                 </configuration>
             </plugin>
