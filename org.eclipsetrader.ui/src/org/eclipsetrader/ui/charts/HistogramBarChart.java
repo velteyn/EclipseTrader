@@ -28,7 +28,7 @@ import org.eclipsetrader.core.charts.IDataSeries;
  * @since 1.0
  */
 public class HistogramBarChart implements IChartObject, ISummaryBarDecorator, IAdaptable {
-
+    // Re-saved to force compilation
     private IDataSeries dataSeries;
 
     private int width = 5;

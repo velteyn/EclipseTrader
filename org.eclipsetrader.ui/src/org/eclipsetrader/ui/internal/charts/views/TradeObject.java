@@ -25,15 +25,27 @@ public class TradeObject implements IChartObject {
     @Override
     public void paint(IGraphics graphics) {
         if (trades == null) {
+            System.out.println("TradeObject: trades list is null");
             return;
         }
+        System.out.println("TradeObject: Painting " + trades.size() + " trades");
 
         for (IStore trade : trades) {
-            long time = ((Date) trade.fetchProperties(null).getProperty(IPropertyConstants.PURCHASE_DATE)).getTime();
-            double price = (Double) trade.fetchProperties(null).getProperty(IPropertyConstants.PURCHASE_PRICE);
+            Object dateObj = trade.fetchProperties(null).getProperty(IPropertyConstants.PURCHASE_DATE);
+            Object priceObj = trade.fetchProperties(null).getProperty(IPropertyConstants.PURCHASE_PRICE);
+            
+            if (dateObj == null || priceObj == null) {
+                System.out.println("TradeObject: Missing properties for trade " + trade);
+                continue;
+            }
+
+            long time = ((Date) dateObj).getTime();
+            double price = (Double) priceObj;
 
             int x = graphics.mapToHorizontalAxis(time);
             int y = graphics.mapToVerticalAxis(price);
+            
+            System.out.println("TradeObject: Drawing trade at time=" + time + ", price=" + price + " -> x=" + x + ", y=" + y);
 
             graphics.setForegroundColor(new RGB(255, 0, 0));
             graphics.drawArc(x - 2, y - 2, 4, 4, 0, 360);

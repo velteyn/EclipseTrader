@@ -179,13 +179,9 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
             if (IPropertyConstants.BARS.equals(evt.getPropertyName())) {
                 TimeSpan resolution = TimeSpan.fromString(dialogSettings.get(K_RESOLUTION));
                 view.setRootDataSeries(new OHLCDataSeries(security.getName(), subsetHistory.getAdjustedOHLC(), resolution));
-                Display.getDefault().asyncExec(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if (!viewer.getControl().isDisposed()) {
-                            refreshChart();
-                        }
+                Display.getDefault().asyncExec(() -> {
+                    if (!viewer.getControl().isDisposed()) {
+                        refreshChart();
                     }
                 });
             }

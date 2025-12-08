@@ -62,7 +62,8 @@ public class ChartLoadJob extends Job {
         try {
             buildHistory();
             trades = getTradesFor(security);
-            UIActivator.log(String.format("[TRADE LIFECYCLE - 5] Found %d trades in repository for %s", trades.size(), security.getName()));
+        System.out.println("ChartLoadJob: Loaded " + (trades != null ? trades.size() : "null") + " trades for " + security.getName());
+        UIActivator.log(String.format("[TRADE LIFECYCLE - 5] Found %d trades in repository for %s", trades.size(), security.getName()));
         } catch (Exception e) {
             Status status = new Status(IStatus.ERROR, UIActivator.PLUGIN_ID, 0, Messages.ChartLoadJob_ExceptionMessage + security.getName(), e);
             UIActivator.log(status);
