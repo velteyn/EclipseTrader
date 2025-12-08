@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -29,9 +30,9 @@ import org.eclipsetrader.core.feed.History;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IHistory;
 import org.eclipsetrader.core.feed.IOHLC;
-import org.eclipsetrader.core.feed.ITrade;
 import org.eclipsetrader.core.feed.OHLC;
 import org.eclipsetrader.core.feed.Trade;
+import org.eclipsetrader.core.feed.ITrade;
 import org.eclipsetrader.core.instruments.CurrencyExchange;
 import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.markets.MarketPricingEnvironment;
@@ -39,6 +40,7 @@ import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryChangeListener;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
+import org.eclipsetrader.core.repositories.IStore;
 import org.eclipsetrader.core.repositories.IStoreObject;
 import org.eclipsetrader.core.views.IHolding;
 import org.eclipsetrader.core.views.IWatchList;
@@ -225,6 +227,11 @@ public class CurrencyServiceTest extends TestCase {
          */
         @Override
         public IStoreObject[] getAllObjects() {
+            return null;
+        }
+
+        @Override
+        public List<IStore> getTradesFor(ISecurity security) {
             return null;
         }
     };

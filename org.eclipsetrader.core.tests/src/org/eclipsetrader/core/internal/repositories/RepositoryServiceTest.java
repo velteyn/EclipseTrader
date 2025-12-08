@@ -30,6 +30,7 @@ import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.feed.History;
 import org.eclipsetrader.core.feed.IHistory;
 import org.eclipsetrader.core.feed.IOHLC;
+import org.eclipsetrader.core.feed.ITrade;
 import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.instruments.Security;
 import org.eclipsetrader.core.repositories.IPropertyConstants;
@@ -158,6 +159,11 @@ public class RepositoryServiceTest extends TestCase {
                 e.printStackTrace();
             }
             return Status.OK_STATUS;
+        }
+
+        @Override
+        public List<IStore> getTradesFor(ISecurity security) {
+            return null;
         }
     }
 

@@ -7,23 +7,9 @@ Bundle-Vendor: EclipseTrader.org
 Require-Bundle: org.eclipse.core.runtime,
  org.junit
 Export-Package: org.easymock,
- org.easymock.classextension,
- org.easymock.classextension.internal,
- org.easymock.classextension.internal.objenesis,
- org.easymock.classextension.internal.objenesis.instantiator,
- org.easymock.classextension.internal.objenesis.instantiator.basic,
- org.easymock.classextension.internal.objenesis.instantiator.gcj,
- org.easymock.classextension.internal.objenesis.instantiator.jrockit,
- org.easymock.classextension.internal.objenesis.instantiator.perc,
- org.easymock.classextension.internal.objenesis.instantiator.sun,
- org.easymock.classextension.internal.objenesis.strategy,
- org.easymock.internal,
- org.easymock.internal.matchers,
+ org.objenesis,
+ net.sf.cglib,
  org.eclipsetrader.tests,
  org.eclipsetrader.tests.core
-Bundle-ClassPath: plugin.jar,
- easymock.jar,
- easymockclassextension.jar,
- cglib-2.1.3.jar,
- asm.jar
+Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
