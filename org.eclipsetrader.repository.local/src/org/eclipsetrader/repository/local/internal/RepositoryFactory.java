@@ -24,6 +24,10 @@ public class RepositoryFactory implements IExecutableExtensionFactory {
      */
     @Override
     public Object create() throws CoreException {
-        return Activator.getDefault().getRepository();
+        Activator activator = Activator.getDefault();
+        if (activator == null) {
+            throw new CoreException(new org.eclipse.core.runtime.Status(org.eclipse.core.runtime.IStatus.ERROR, Activator.PLUGIN_ID, "Local Repository Activator is not available (bundle may have failed to start)."));
+        }
+        return activator.getRepository();
     }
 }

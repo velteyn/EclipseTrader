@@ -27,10 +27,13 @@ import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IStore;
 import org.eclipsetrader.core.repositories.IStoreObject;
 import org.eclipsetrader.core.repositories.IStoreProperties;
+import org.eclipsetrader.core.views.IHolding;
 import org.eclipsetrader.core.views.IWatchList;
+import org.eclipsetrader.repository.local.LocalRepository;
 import org.eclipsetrader.repository.local.internal.ScriptsCollection;
 import org.eclipsetrader.repository.local.internal.SecurityCollection;
 import org.eclipsetrader.repository.local.internal.StrategiesCollection;
+import org.eclipsetrader.repository.local.internal.TradeCollection;
 import org.eclipsetrader.repository.local.internal.WatchListCollection;
 
 public class RepositoryStore implements IStore {
@@ -101,6 +104,12 @@ public class RepositoryStore implements IStore {
             }
             else if (IScriptStrategy.class.getName().equals(type)) {
                 store = StrategiesCollection.getInstance().create();
+            }
+            else if (IHolding.class.getName().equals(type)) {
+                if (TradeCollection.getInstance() == null) {
+                    LocalRepository.getInstance().fetchObjects(null);
+                }
+                store = TradeCollection.getInstance().create();
             }
         }
         if (store != null) {

@@ -1,4 +1,4 @@
-﻿package org.eclipsetrader.jessx.business;
+package org.eclipsetrader.jessx.business;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,6 +9,7 @@ import org.eclipsetrader.jessx.business.event.AssetEvent;
 import org.eclipsetrader.jessx.business.event.AssetListener;
 import org.eclipsetrader.jessx.business.event.PlayerTypeEvent;
 import org.eclipsetrader.jessx.business.event.PlayerTypeListener;
+import org.eclipsetrader.jessx.client.ClientCore;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.eclipsetrader.jessx.utils.XmlExportable;
 import org.eclipsetrader.jessx.utils.XmlLoadable;
@@ -166,8 +167,13 @@ public class PlayerType implements AssetListener, XmlLoadable, XmlExportable {
 			String opName = opCompleteName.substring(0, index);
 			String institutionName = opCompleteName.substring(index + 4);
 			Utils.logger.debug("Operator name: >-" + opName + "-< institution name: >-" + institutionName + "-<");
-			addOperatorPlayed(BusinessCore.getInstitution(institutionName).getOperator(opName));
 			addInstitution(institutionName);
+            Institution institution = BusinessCore.getInstitution(institutionName);
+            if (institution != null) {
+                addOperatorPlayed(institution.getOperator(opName));
+            } else {
+                Utils.logger.error("Institution not found for operator: " + opCompleteName);
+            }
 		}
 		Utils.logger.debug("Loading portfolio...");
 		Portfolio portfolio = new Portfolio(0.0F, new HashMap<Object, Object>());

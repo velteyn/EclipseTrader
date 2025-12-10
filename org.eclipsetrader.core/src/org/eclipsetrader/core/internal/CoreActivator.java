@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IStatus;
@@ -115,68 +114,78 @@ public class CoreActivator extends Plugin {
         super.start(context);
         plugin = this;
 
-        repositoryService = new RepositoryService();
-        repositoryServiceRegistration = context.registerService(new String[] {
-            IRepositoryService.class.getName(), RepositoryService.class.getName()
-        }, repositoryService, new Hashtable<String, Object>());
-        repositoryService.startUp();
+        try {
+            getLog().log(new Status(IStatus.INFO, PLUGIN_ID, "Starting CoreActivator..."));
+            
+            repositoryService = new RepositoryService();
+            repositoryServiceRegistration = context.registerService(new String[] {
+                IRepositoryService.class.getName(), RepositoryService.class.getName()
+            }, repositoryService, new Hashtable<String, Object>());
+            getLog().log(new Status(IStatus.INFO, PLUGIN_ID, "Starting RepositoryService..."));
+            repositoryService.startUp();
 
-        feedServiceFactory = new FeedServiceFactory();
-        feedServiceRegistration = context.registerService(new String[] {
-            IFeedService.class.getName(), FeedService.class.getName()
-        }, feedServiceFactory, new Hashtable<String, Object>());
+            feedServiceFactory = new FeedServiceFactory();
+            feedServiceRegistration = context.registerService(new String[] {
+                IFeedService.class.getName(), FeedService.class.getName()
+            }, feedServiceFactory, new Hashtable<String, Object>());
 
-        marketServiceFactory = new MarketServiceFactory();
-        marketServiceRegistration = context.registerService(new String[] {
-            IMarketService.class.getName(), MarketService.class.getName()
-        }, marketServiceFactory, new Hashtable<String, Object>());
+            marketServiceFactory = new MarketServiceFactory();
+            marketServiceRegistration = context.registerService(new String[] {
+                IMarketService.class.getName(), MarketService.class.getName()
+            }, marketServiceFactory, new Hashtable<String, Object>());
 
-        currencyServiceFactory = new CurrencyServiceFactory();
-        currencyServiceRegistration = context.registerService(new String[] {
-            ICurrencyService.class.getName(),
-            CurrencyService.class.getName()
-        }, currencyServiceFactory, new Hashtable<String, Object>());
+            currencyServiceFactory = new CurrencyServiceFactory();
+            currencyServiceRegistration = context.registerService(new String[] {
+                ICurrencyService.class.getName(),
+                CurrencyService.class.getName()
+            }, currencyServiceFactory, new Hashtable<String, Object>());
 
-        marketBrokerFactory = new MarketBrokerAdapterFactory(getStateLocation().append("market_brokers.xml").toFile());
-        Platform.getAdapterManager().registerAdapters(marketBrokerFactory, IMarket.class);
+            marketBrokerFactory = new MarketBrokerAdapterFactory(getStateLocation().append("market_brokers.xml").toFile());
+            Platform.getAdapterManager().registerAdapters(marketBrokerFactory, IMarket.class);
 
-        tradingServiceFactory = new TradingServiceFactory();
-        tradingServiceRegistration = context.registerService(new String[] {
-            ITradingService.class.getName(), TradingService.class.getName()
-        }, tradingServiceFactory, new Hashtable<String, Object>());
+            tradingServiceFactory = new TradingServiceFactory();
+            tradingServiceRegistration = context.registerService(new String[] {
+                ITradingService.class.getName(), TradingService.class.getName()
+            }, tradingServiceFactory, new Hashtable<String, Object>());
 
-        alertService = new AlertService();
-        alertServiceRegistration = context.registerService(new String[] {
-            IAlertService.class.getName(), AlertService.class.getName()
-        }, alertService, new Hashtable<String, Object>());
-        alertService.startUp();
+            alertService = new AlertService();
+            alertServiceRegistration = context.registerService(new String[] {
+                IAlertService.class.getName(), AlertService.class.getName()
+            }, alertService, new Hashtable<String, Object>());
+            alertService.startUp();
 
-        tradingSystemServiceFactory = new TradingSystemServiceFactory(repositoryService);
-        tradingSystemServiceRegistration = context.registerService(new String[] {
-            ITradingSystemService.class.getName(), TradingSystemService.class.getName()
-        }, tradingSystemServiceFactory, new Hashtable<String, Object>());
+            tradingSystemServiceFactory = new TradingSystemServiceFactory(repositoryService);
+            tradingSystemServiceRegistration = context.registerService(new String[] {
+                ITradingSystemService.class.getName(), TradingSystemService.class.getName()
+            }, tradingSystemServiceFactory, new Hashtable<String, Object>());
 
-        IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(PROVIDERS_FACTORY_ID);
-        if (extensionPoint != null) {
-            IConfigurationElement[] configElements = extensionPoint.getConfigurationElements();
-            for (int j = 0; j < configElements.length; j++) {
-                String strID = configElements[j].getAttribute("id"); //$NON-NLS-1$
-                try {
-                    IDataProviderFactory factory = (IDataProviderFactory) configElements[j].createExecutableExtension("class");
-                    providersFactoryMap.put(strID, factory);
-                } catch (Exception e) {
-                    Status status = new Status(IStatus.WARNING, PLUGIN_ID, 0, "Unable to create data provider factory with id " + strID, e);
-                    getLog().log(status);
+            IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(PROVIDERS_FACTORY_ID);
+            if (extensionPoint != null) {
+                IConfigurationElement[] configElements = extensionPoint.getConfigurationElements();
+                for (int j = 0; j < configElements.length; j++) {
+                    String strID = configElements[j].getAttribute("id"); //$NON-NLS-1$
+                    try {
+                        IDataProviderFactory factory = (IDataProviderFactory) configElements[j].createExecutableExtension("class");
+                        providersFactoryMap.put(strID, factory);
+                    } catch (Exception e) {
+                        Status status = new Status(IStatus.WARNING, PLUGIN_ID, 0, "Unable to create data provider factory with id " + strID, e);
+                        getLog().log(status);
+                    }
                 }
             }
-        }
 
-        try {
-            overrideAdapter = new ConnectorOverrideAdapter(getStateLocation().append("overrides.xml").toFile());
-            Platform.getAdapterManager().registerAdapters(overrideAdapter, ISecurity.class);
+            try {
+                overrideAdapter = new ConnectorOverrideAdapter(getStateLocation().append("overrides.xml").toFile());
+                Platform.getAdapterManager().registerAdapters(overrideAdapter, ISecurity.class);
+            } catch (Exception e) {
+                Status status = new Status(IStatus.ERROR, PLUGIN_ID, 0, "Error reading override settings", e); //$NON-NLS-1$
+                getLog().log(status);
+            }
+            
+            getLog().log(new Status(IStatus.INFO, PLUGIN_ID, "CoreActivator started successfully."));
         } catch (Exception e) {
-            Status status = new Status(IStatus.ERROR, PLUGIN_ID, 0, "Error reading override settings", e); //$NON-NLS-1$
-            getLog().log(status);
+            getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, "Error starting CoreActivator", e));
+            throw e;
         }
     }
 

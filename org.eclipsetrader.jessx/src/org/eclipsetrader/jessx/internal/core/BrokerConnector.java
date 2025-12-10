@@ -41,6 +41,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.CoreException;
@@ -56,20 +57,20 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.widgets.Display;
+import org.eclipsetrader.core.Cash;
 import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.feed.FeedProperties;
 import org.eclipsetrader.core.feed.IBookEntry;
-import org.eclipsetrader.core.feed.IHistory;
-import org.eclipsetrader.core.feed.IOHLC;
-import org.eclipsetrader.core.feed.OHLC;
 import org.eclipsetrader.core.feed.IFeedIdentifier;
 import org.eclipsetrader.core.feed.IFeedProperties;
 import org.eclipsetrader.core.feed.IFeedSubscription2;
+import org.eclipsetrader.core.feed.IHistory;
+import org.eclipsetrader.core.feed.IOHLC;
+import org.eclipsetrader.core.feed.OHLC;
 import org.eclipsetrader.core.feed.Quote;
 import org.eclipsetrader.core.feed.TodayOHL;
 import org.eclipsetrader.core.feed.Trade;
 import org.eclipsetrader.core.instruments.ISecurity;
-import org.eclipsetrader.core.instruments.Security;
 import org.eclipsetrader.core.instruments.Stock;
 import org.eclipsetrader.core.markets.IMarket;
 import org.eclipsetrader.core.markets.IMarketService;
@@ -77,7 +78,6 @@ import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
 import org.eclipsetrader.core.trading.BrokerException;
-import org.eclipsetrader.core.Cash;
 import org.eclipsetrader.core.trading.IAccount;
 import org.eclipsetrader.core.trading.IBroker;
 import org.eclipsetrader.core.trading.IOrder;
@@ -181,6 +181,10 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	public Object create() throws CoreException {
 		if (instance == null) {
 			instance = this;
+		} else {
+			instance.id = id;
+			instance.name = name;
+			instance.account = new Account(instance.getId(), instance.getName(), new Cash(100000.0, Currency.getInstance("USD")));
 		}
 		return instance;
 	}

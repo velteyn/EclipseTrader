@@ -222,7 +222,6 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
 		if (thread == null || !thread.isAlive()) {
 			stopping = false;
 			thread = new Thread(this, name + " - Data Reader");
-			thread.start();
 		}
 
 		try {

@@ -1,4 +1,4 @@
-﻿// 
+// 
 //This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
 // 
 
@@ -6,6 +6,7 @@ package org.eclipsetrader.jessx.net;
 
 import org.jdom.Element;
 
+// This comment is added to force recompilation of the class
 public class WarnForClient implements NetworkWritable, NetworkReadable
 {
     private String warn;

@@ -72,7 +72,6 @@ public class TradeStore implements IStore {
 
         properties.setProperty(IPropertyConstants.PURCHASE_DATE, date);
         properties.setProperty(IPropertyConstants.SECURITY, security);
-        properties.setProperty(IPropertyConstants.PURCHASE_DATE, security);
         properties.setProperty(IPropertyConstants.PURCHASE_QUANTITY, quantity);
         properties.setProperty(IPropertyConstants.PURCHASE_PRICE, price);
 

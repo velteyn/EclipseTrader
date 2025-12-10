@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -758,23 +759,39 @@ public class RepositoryService implements IRepositoryService {
         }
 
         for (IRepository repository : repositoryMap.values()) {
-            for (IStore store : repository.fetchObjects(null)) {
-                if (uriMap.containsKey(store.toURI())) {
-                    continue;
+            try {
+                for (IStore store : repository.fetchObjects(null)) {
+                    if (uriMap.containsKey(store.toURI())) {
+                        continue;
+                    }
+                    if (watchlistUriMap.containsKey(store.toURI())) {
+                        continue;
+                    }
+                    try {
+                        IStoreObject element = createElement(store, store.fetchProperties(null));
+                        if (element instanceof ISecurity) {
+                            putSecurity(store, (ISecurity) element);
+                        }
+                        else if (element instanceof IWatchList) {
+                            putWatchList(store, (IWatchList) element);
+                        }
+                        else if (element instanceof IHolding) {
+                            trades.add((IHolding) element);
+                        }
+                    } catch (Exception e) {
+                        Status status = new Status(IStatus.ERROR, CoreActivator.PLUGIN_ID, 0, "Error creating element from store " + store.toURI(), e);
+                        CoreActivator.log(status);
+                    } catch (LinkageError e) {
+                        Status status = new Status(IStatus.ERROR, CoreActivator.PLUGIN_ID, 0, "Error creating element from store " + store.toURI(), e);
+                        CoreActivator.log(status);
+                    }
                 }
-                if (watchlistUriMap.containsKey(store.toURI())) {
-                    continue;
-                }
-                IStoreObject element = createElement(store, store.fetchProperties(null));
-                if (element instanceof ISecurity) {
-                    putSecurity(store, (ISecurity) element);
-                }
-                else if (element instanceof IWatchList) {
-                    putWatchList(store, (IWatchList) element);
-                }
-                else if (element instanceof IHolding) {
-                    trades.add((IHolding) element);
-                }
+            } catch (Exception e) {
+                Status status = new Status(IStatus.ERROR, CoreActivator.PLUGIN_ID, 0, "Error fetching objects from repository " + repository.getSchema(), e);
+                CoreActivator.log(status);
+            } catch (LinkageError e) {
+                Status status = new Status(IStatus.ERROR, CoreActivator.PLUGIN_ID, 0, "Error fetching objects from repository " + repository.getSchema(), e);
+                CoreActivator.log(status);
             }
         }
     }

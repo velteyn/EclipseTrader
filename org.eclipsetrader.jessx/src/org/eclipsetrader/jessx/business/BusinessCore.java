@@ -162,6 +162,10 @@ public abstract class BusinessCore {
 		Iterator<Element> assetNodes = root.getChildren("Asset").iterator();
 		while (assetNodes.hasNext()) {
 			final Asset asset = Asset.loadAssetFromXml(assetNodes.next());
+            if (asset == null) {
+                Utils.logger.error("Failed to load asset from XML");
+                continue;
+            }
             final String assetName = asset.getAssetName().trim();
             ISecurity security = securitiesMap.get(assetName);
             if (security == null) {

@@ -1,4 +1,4 @@
-﻿// 
+// 
 //This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
 // 
 
@@ -20,16 +20,21 @@ public abstract class InstitutionCreator
     public static Institution createInstitution(final String name) throws InstitutionNotCreatedException {
         Utils.logger.info("Trying to create the following institution: " + name);
         Utils.logger.debug("Looking for its class in the Hashtable.");
-        final Class institutionClass = (Class) InstitutionCreator.institutionFactories.get(name);
+        Class institutionClass = (Class) InstitutionCreator.institutionFactories.get(name);
         if (institutionClass == null) {
-            Utils.logger.error("Class not found. The institution has never been loaded.");
-            Utils.logger.error("As all institutions from the modules/institutions directory has already been loaded, we are looking in the classPath.");
-            Utils.logger.error("Here is a list of loaded institution: ");
-            final Iterator inIter = InstitutionCreator.institutionFactories.keySet().iterator();
-            while (inIter.hasNext()) {
-                Utils.logger.error(inIter.next().toString());
+            Utils.logger.debug("Class not found. The institution has never been loaded.");
+            Utils.logger.debug("As all institutions from the modules/institutions directory has already been loaded, we are looking in the classPath.");
+            try {
+                Class.forName("org.eclipsetrader.jessx.business.institutions." + name);
+                institutionClass = (Class) InstitutionCreator.institutionFactories.get(name);
+                if (institutionClass == null) {
+                    throw new InstitutionNotCreatedException();
+                }
             }
-            throw new InstitutionNotCreatedException();
+            catch (ClassNotFoundException e) {
+                Utils.logger.warn("institution not found in the classPath.");
+                throw new InstitutionNotCreatedException();
+            }
         }
         Utils.logger.debug("Returning the result of the create method of the factory: the institution.");
         try {

@@ -68,7 +68,59 @@ public class JessxActivator extends AbstractUIPlugin {
         ensureJessxMarketAndReassign();
         
         preRegisterJessxSecurities();
+        
+        // Populate Tickers view with Jessx securities if empty
+        preRegisterJessxSecurities();
+        
+        // Populate Tickers view with Jessx securities if empty
+        populateTickersView();
+        
+        // Initialize BusinessCore with data from default.xml to ensure institutions are loaded
+        initializeBusinessCore();
     }
+    
+    /**
+     * Initialize BusinessCore with data from default.xml
+     */
+    private void initializeBusinessCore() {
+        try {
+            File file = getStateLocation().append("default.xml").toFile();
+            if (file.exists()) {
+                SAXBuilder builder = new SAXBuilder();
+                Document doc = builder.build(file);
+                Element root = doc.getRootElement();
+                
+                log("Initializing BusinessCore from " + file.getAbsolutePath());
+                
+                // Initialize GeneralParameters before loading from XML
+                org.eclipsetrader.jessx.server.GeneralParametersLocal generalParams = new org.eclipsetrader.jessx.server.GeneralParametersLocal();
+                log("Created GeneralParametersLocal instance: " + generalParams);
+                generalParams.initializeGeneralParameters();
+                org.eclipsetrader.jessx.business.BusinessCore.setGeneralParameters(generalParams);
+                
+                if (org.eclipsetrader.jessx.business.BusinessCore.getGeneralParameters() == null) {
+                    log("ERROR: BusinessCore.getGeneralParameters() is null after setting it!");
+                } else {
+                    log("BusinessCore.getGeneralParameters() is set correctly.");
+                }
+                
+                org.eclipsetrader.jessx.business.BusinessCore.loadFromXml(root);
+                
+                // Log loaded institutions for debugging
+                java.util.HashMap institutions = org.eclipsetrader.jessx.business.BusinessCore.getInstitutions();
+                if (institutions != null) {
+                    log("BusinessCore loaded " + institutions.size() + " institutions: " + institutions.keySet());
+                } else {
+                    log("BusinessCore loaded 0 institutions (map is null)");
+                }
+            } else {
+                log("default.xml not found at " + file.getAbsolutePath() + " - BusinessCore not initialized");
+            }
+        } catch (Exception e) {
+            log(new Status(IStatus.ERROR, PLUGIN_ID, "Error initializing BusinessCore", e));
+        }
+    }
+
 
     @Override
     public void stop(BundleContext context) throws Exception {
@@ -324,5 +376,49 @@ public class JessxActivator extends AbstractUIPlugin {
 				"Could not pre-register JESSX securities. Charts may fail to initialize.", e);
 			getLog().log(status);
 		}
+	}
+	
+	private void populateTickersView() {
+		org.eclipse.swt.widgets.Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				try {
+					// Access UIActivator safely
+					org.eclipse.jface.dialogs.IDialogSettings settings = org.eclipsetrader.ui.internal.UIActivator.getDefault().getDialogSettings();
+					org.eclipse.jface.dialogs.IDialogSettings section = settings.getSection("org.eclipsetrader.ui.views.tickers");
+					if (section == null) {
+						section = settings.addNewSection("org.eclipsetrader.ui.views.tickers");
+					}
+					
+					String[] existing = section.getArray("securities");
+					if (existing == null || existing.length == 0) {
+						BundleContext context = getBundle().getBundleContext();
+						org.osgi.framework.ServiceReference serviceReference = context.getServiceReference(org.eclipsetrader.core.repositories.IRepositoryService.class.getName());
+						if (serviceReference != null) {
+							org.eclipsetrader.core.repositories.IRepositoryService service = (org.eclipsetrader.core.repositories.IRepositoryService) context.getService(serviceReference);
+							org.eclipsetrader.core.instruments.ISecurity[] securities = service.getSecurities();
+							
+							java.util.List<String> uris = new java.util.ArrayList<String>();
+							for (org.eclipsetrader.core.instruments.ISecurity security : securities) {
+								if (security.getName().equals("AAT") || security.getName().equals("GPLRF") || security.getName().equals("MSFT") || security.getName().equals("PLS")) {
+									org.eclipsetrader.core.repositories.IStoreObject storeObject = (org.eclipsetrader.core.repositories.IStoreObject) security.getAdapter(org.eclipsetrader.core.repositories.IStoreObject.class);
+									if (storeObject != null) {
+										uris.add(storeObject.getStore().toURI().toString());
+									}
+								}
+							}
+							
+							if (!uris.isEmpty()) {
+								section.put("securities", uris.toArray(new String[uris.size()]));
+								log("Populated Tickers view with " + uris.size() + " JESSX securities");
+							}
+							
+							context.ungetService(serviceReference);
+						}
+					}
+				} catch (Throwable e) {
+					log("Error populating Tickers view: " + e.getMessage());
+				}
+			}
+		});
 	}
 }

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -204,8 +205,10 @@ public class TickersView extends ViewPart {
             for (int i = 0; i < uri.length; i++) {
                 try {
                     ISecurity security = repository.getSecurityFromURI(new URI(uri[i]));
-                    l.add(security);
-                    input.add(new TickerViewItem(security));
+                    if (security != null) {
+                        l.add(security);
+                        input.add(new TickerViewItem(security));
+                    }
                 } catch (Exception e) {
                     Status status = new Status(IStatus.ERROR, UIActivator.PLUGIN_ID, "Error loading security " + uri[i], e);
                     UIActivator.getDefault().getLog().log(status);
@@ -270,12 +273,17 @@ public class TickersView extends ViewPart {
     }
 
     protected void saveInput() {
-        String[] ar = new String[input.size()];
-        for (int i = 0; i < ar.length; i++) {
-            IStoreObject storeObject = (IStoreObject) input.get(i).getSecurity().getAdapter(IStoreObject.class);
-            ar[i] = storeObject.getStore().toURI().toString();
+        List<String> uris = new ArrayList<String>();
+        for (TickerViewItem item : input) {
+            ISecurity security = item.getSecurity();
+            if (security != null) {
+                IStoreObject storeObject = (IStoreObject) security.getAdapter(IStoreObject.class);
+                if (storeObject != null) {
+                    uris.add(storeObject.getStore().toURI().toString());
+                }
+            }
         }
-        dialogSettings.put(K_SECURITIES, ar);
+        dialogSettings.put(K_SECURITIES, uris.toArray(new String[uris.size()]));
     }
 
     protected BoxViewer createViewer(Composite parent) {

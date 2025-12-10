@@ -1,4 +1,4 @@
-﻿// 
+// 
 //This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
 // 
 
@@ -25,7 +25,7 @@ public abstract class AssetCreator
             Utils.logger.debug("Class not found. The asset has never been loaded.");
             Utils.logger.debug("As all assets from the modules/assets directory has already been loaded, we are looking in the classPath.");
             try {
-                Class.forName("jessx.business.assets." + name);
+                Class.forName("org.eclipsetrader.jessx.business.assets." + name);
                 assetClass = (Class) AssetCreator.assetFactories.get(name);
                 if (assetClass == null) {
                     Utils.logger.warn("Asset not found in the classPath.");
