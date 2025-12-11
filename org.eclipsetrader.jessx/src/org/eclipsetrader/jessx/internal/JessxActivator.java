@@ -65,12 +65,9 @@ public class JessxActivator extends AbstractUIPlugin {
         startupRepository(getStateLocation().append(REPOSITORY_FILE).toFile());
 
         migrateInvalidJessxIdentifiers();
+        
+        preRegisterJessxSecurities();
         ensureJessxMarketAndReassign();
-        
-        preRegisterJessxSecurities();
-        
-        // Populate Tickers view with Jessx securities if empty
-        preRegisterJessxSecurities();
         
         // Populate Tickers view with Jessx securities if empty
         populateTickersView();
