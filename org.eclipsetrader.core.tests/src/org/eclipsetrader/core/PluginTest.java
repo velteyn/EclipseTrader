@@ -3,7 +3,7 @@ package org.eclipsetrader.core;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class AllTests {
+public class PluginTest {
     public static Test suite() {
         TestSuite suite = new TestSuite("Test for org.eclipsetrader.core");
         //$JUnit-BEGIN$
