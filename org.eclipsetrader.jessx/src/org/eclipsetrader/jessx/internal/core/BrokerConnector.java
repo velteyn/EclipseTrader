@@ -278,6 +278,16 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		logger.info("Broker disconnecting, stopping StreamingConnector.");
 		StreamingConnector.getInstance().stop();
 
+		if (srv != null && Server.getServerState() == Server.SERVER_STATE_ONLINE) {
+			logger.info("Stopping JESSX Server...");
+			srv.setServerState(Server.SERVER_STATE_OFFLINE);
+		}
+
+		if (srv != null && Server.getServerState() == Server.SERVER_STATE_ONLINE) {
+			logger.info("Stopping JESSX Server...");
+			srv.setServerState(Server.SERVER_STATE_OFFLINE);
+		}
+
 		// TODO qua c'� da spegnere il server di JESSX (un bel kill e tutto si
 		// risolve)
 		if (thread != null) {

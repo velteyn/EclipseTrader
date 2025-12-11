@@ -121,6 +121,11 @@ public class JessxActivator extends AbstractUIPlugin {
 
     @Override
     public void stop(BundleContext context) throws Exception {
+    	 // Ensure JESSX server is stopped
+         if (org.eclipsetrader.jessx.internal.core.BrokerConnector.getInstance() != null) {
+             org.eclipsetrader.jessx.internal.core.BrokerConnector.getInstance().disconnect();
+         }
+         
     	 shutdownRepository(getStateLocation().append(REPOSITORY_FILE).toFile());
 
          plugin = null;
