@@ -13,7 +13,7 @@ The following table summarizes the security support status for different version
 
 We take security vulnerabilities seriously. We appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
 
-To report a vulnerability, please email our security team at [vulnerability@eclipsetrader.org](mailto:vulnerability@eclipsetrader.org) with a detailed description of the issue, the steps to reproduce it, and the affected version.
+To report a vulnerability, please open a new issue or start a private discussion on our GitHub repository. Please provide a detailed description of the issue, the steps to reproduce it, and the affected version.
 
 **What to Expect:**
 
