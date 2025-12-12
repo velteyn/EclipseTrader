@@ -280,9 +280,12 @@ public class SiteCapturer
         String type;
         boolean ret;
 
-        ret = false;
+        // SSRF mitigation: Only allow URLs on the original source host
         try
         {
+            if (!isSameHost(link, getSource())) {
+                return false;
+            }
             url = new URL (link);
             connection = url.openConnection ();
             type = connection.getContentType ();
@@ -298,6 +301,22 @@ public class SiteCapturer
         
         return (ret);
     }
+     * Helper function to check that the link refers to the same host as the source.
+     * Only permit links to the same host to prevent SSRF.
+     */
+    private boolean isSameHost(String link, String source) {
+        try {
+            URL linkUrl = new URL(link);
+            URL sourceUrl = new URL(source);
+            return linkUrl.getHost().equalsIgnoreCase(sourceUrl.getHost())
+                && linkUrl.getPort() == sourceUrl.getPort()
+                && linkUrl.getProtocol().equalsIgnoreCase(sourceUrl.getProtocol());
+        } catch (MalformedURLException e) {
+            return false;
+        }
+    }
+
+    /**
 
     /**
      * Converts a link to local.
