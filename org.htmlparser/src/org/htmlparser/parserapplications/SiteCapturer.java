@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -283,6 +285,12 @@ public class SiteCapturer
         // SSRF mitigation: Only allow URLs on the original source host
         try
         {
+            // SSRF mitigation: explicit protocol check
+            URI uri = new URI(link);
+            String scheme = uri.getScheme();
+            if (scheme == null || (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme))) {
+                return false;
+            }
             if (!isSameHost(link, getSource())) {
                 return false;
             }
@@ -294,24 +302,47 @@ public class SiteCapturer
             else
                 ret = type.startsWith ("text/html");
         }
-        catch (Exception e)
+        catch (IOException | URISyntaxException e)
         {
             throw new ParserException ("URL " + link + " has a problem", e);
         }
         
         return (ret);
     }
+    /**
      * Helper function to check that the link refers to the same host as the source.
      * Only permit links to the same host to prevent SSRF.
      */
     private boolean isSameHost(String link, String source) {
         try {
-            URL linkUrl = new URL(link);
-            URL sourceUrl = new URL(source);
-            return linkUrl.getHost().equalsIgnoreCase(sourceUrl.getHost())
-                && linkUrl.getPort() == sourceUrl.getPort()
-                && linkUrl.getProtocol().equalsIgnoreCase(sourceUrl.getProtocol());
-        } catch (MalformedURLException e) {
+            URI linkUri = new URI(link);
+            URI sourceUri = new URI(source);
+
+            // Restrict protocols to http and https
+            String scheme = linkUri.getScheme();
+            if (scheme == null || (!scheme.equalsIgnoreCase("http") && !scheme.equalsIgnoreCase("https"))) {
+                return false;
+            }
+
+            // Compare hosts
+            String linkHost = linkUri.getHost();
+            String sourceHost = sourceUri.getHost();
+            if (linkHost == null || sourceHost == null || !linkHost.equalsIgnoreCase(sourceHost)) {
+                return false;
+            }
+
+            // Compare ports, accounting for default ports
+            int linkPort = linkUri.getPort();
+            if (linkPort == -1) {
+                linkPort = "https".equalsIgnoreCase(scheme) ? 443 : 80;
+            }
+            int sourcePort = sourceUri.getPort();
+            if (sourcePort == -1) {
+                sourcePort = "https".equalsIgnoreCase(sourceUri.getScheme()) ? 443 : 80;
+            }
+
+            return linkUri.getScheme().equalsIgnoreCase(sourceUri.getScheme()) && linkPort == sourcePort;
+        } catch (URISyntaxException e) {
             return false;
         }
     }
