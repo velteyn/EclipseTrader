@@ -35,6 +35,8 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import javax.swing.JFileChooser;
@@ -280,13 +282,17 @@ public class SiteCapturer
         String type;
         boolean ret;
 
-        // SSRF mitigation: Only allow URLs on the original source host
+        // SSRF mitigation: Only allow URLs on the original source host with HTTP(S) scheme
         try
         {
-            if (!isSameHost(link, getSource())) {
+            if (!isSameHostAndProtocol(link, getSource())) {
                 return false;
             }
             url = new URL (link);
+            String protocol = url.getProtocol().toLowerCase();
+            if (!protocol.equals("http") && !protocol.equals("https")) {
+                return false;  // Only allow http/https
+            }
             connection = url.openConnection ();
             type = connection.getContentType ();
             if (type == null)
@@ -301,10 +307,55 @@ public class SiteCapturer
         
         return (ret);
     }
-     * Helper function to check that the link refers to the same host as the source.
-     * Only permit links to the same host to prevent SSRF.
+
+    /**
+     * Helper function to check that the link refers to the same host and protocol as the source,
+     * and does not use a dangerous protocol. Only permit links to the same host to prevent SSRF.
      */
-    private boolean isSameHost(String link, String source) {
+    private boolean isSameHostAndProtocol(String link, String source) {
+            URI linkUri = new URI(link);
+            URI sourceUri = new URI(source);
+
+            String linkScheme = linkUri.getScheme();
+            String sourceScheme = sourceUri.getScheme();
+
+            if (linkScheme == null || sourceScheme == null)
+                return false;
+
+            String linkHost = linkUri.getHost();
+            String sourceHost = sourceUri.getHost();
+            if (linkHost == null || sourceHost == null)
+                return false;
+
+            // Only allow http and https
+            if (!("http".equalsIgnoreCase(linkScheme) || "https".equalsIgnoreCase(linkScheme))) {
+                return false;
+            }
+
+            // Compare hosts (case-insensitive), schemes (preferably allow http and https cross-matching).
+            if (!linkHost.equalsIgnoreCase(sourceHost)) {
+                return false;
+            }
+
+            // Optionally, compare ports if desired
+            int linkPort = linkUri.getPort() == -1 ? linkUri.toURL().getDefaultPort() : linkUri.getPort();
+            int sourcePort = sourceUri.getPort() == -1 ? sourceUri.toURL().getDefaultPort() : sourceUri.getPort();
+            if (linkPort != sourcePort) {
+                // Comment this check out if you want to allow default port matching
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Old helper left for reference, but not used.
+    // private boolean isSameHost(String link, String source) {
+    //   ...
+    // }
+        try {
         try {
             URL linkUrl = new URL(link);
             URL sourceUrl = new URL(source);
