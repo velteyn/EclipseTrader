@@ -16,7 +16,7 @@ import java.beans.PropertyChangeListener;
 
 import junit.framework.TestCase;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.eclipsetrader.core.ats.ScriptStrategy;
 import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.instruments.ISecurity;

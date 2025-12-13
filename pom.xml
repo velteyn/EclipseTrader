@@ -38,6 +38,8 @@
         <module>org.eclipsetrader.brokers.paper</module>
         <module>org.eclipsetrader.brokers.paper-feature</module>
         <module>org.eclipsetrader.core</module>
+        <module>org.eclipsetrader.core.tests</module>
+        <module>org.eclipsetrader.tests</module>
         <module>org.eclipsetrader.directa</module>
         <module>org.eclipsetrader.directa-feature</module>
         <module>org.eclipsetrader.directaworld</module>

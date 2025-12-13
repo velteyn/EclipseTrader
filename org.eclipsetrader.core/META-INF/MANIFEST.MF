@@ -37,3 +37,5 @@ Export-Package: org.eclipsetrader.core,
  org.eclipsetrader.core.trading,
  org.eclipsetrader.core.views
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Eclipse-RegisterBuddy: org.eclipsetrader.core.tests
+Eclipse-BuddyPolicy: registered
