@@ -37,6 +37,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import javax.swing.JFileChooser;
@@ -282,16 +284,10 @@ public class SiteCapturer
         String type;
         boolean ret;
 
-        // SSRF mitigation: Only allow URLs on the original source host
         try
         {
-            // SSRF mitigation: explicit protocol check
-            URI uri = new URI(link);
-            String scheme = uri.getScheme();
-            if (scheme == null || (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme))) {
-                return false;
-            }
-            if (!isSameHost(link, getSource())) {
+            // SSRF mitigation: more robust validation
+            if (!isSafeDestinationUrl(link, getSource())) {
                 return false;
             }
             url = new URL (link);
@@ -305,7 +301,47 @@ public class SiteCapturer
         catch (IOException | URISyntaxException e)
         {
             throw new ParserException ("URL " + link + " has a problem", e);
+
         }
+     * Checks whether the destination URL is safe to be requested.
+     * Restrictions:
+     *  - protocol is http or https
+     *  - must be same host as origin
+     *  - must not resolve to localhost, loopback, or private IP addresses
+     *  - "host" string cannot be "localhost", "127.0.0.1", "::1", etc.
+     */
+    private boolean isSafeDestinationUrl(String candidateUrl, String originUrl) throws URISyntaxException, UnknownHostException {
+        // Parse candidate and origin URLs
+        URI candidate = new URI(candidateUrl);
+        URI origin = new URI(originUrl);
+
+        // Protocol must be http(s)
+        String scheme = candidate.getScheme();
+        if (scheme == null || (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme))) {
+            return false;
+        }
+
+        // Must be same host as source/origin (case-insensitive)
+        String candidateHost = candidate.getHost();
+        String originHost = origin.getHost();
+        if (candidateHost == null || originHost == null
+                || !candidateHost.equalsIgnoreCase(originHost)) {
+            return false;
+        }
+
+        // Reject localhost/loopback, IPv4/IPv6 loopback, and private IPs
+        InetAddress addr = InetAddress.getByName(candidateHost);
+        if (addr.isAnyLocalAddress() || addr.isLoopbackAddress() ||
+            addr.isSiteLocalAddress() || addr.isLinkLocalAddress() ||
+            candidateHost.equalsIgnoreCase("localhost") ||
+            candidateHost.equals("127.0.0.1") ||
+            candidateHost.equals("[::1]")) {
+            return false;
+        }
+
+        return true;
+    }
+    /**
         
         return (ret);
     }
