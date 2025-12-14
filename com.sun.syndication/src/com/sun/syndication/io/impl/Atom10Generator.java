@@ -400,7 +400,7 @@ public class Atom10Generator extends BaseWireFeedGenerator {
                 tmpDocString.append(content.getValue());
                 tmpDocString.append("</tmpdoc>");
                 StringReader tmpDocReader = new StringReader(tmpDocString.toString());
-                Document tmpDoc;
+                org.jdom.Document tmpDoc;
                 try {
                     SAXBuilder saxBuilder = new SAXBuilder();
                     saxBuilder.setExpandEntities(false);

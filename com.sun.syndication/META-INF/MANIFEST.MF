@@ -25,4 +25,3 @@ Import-Package: org.jdom;version="[1.0.0,2.0.0)",
  org.jdom.output;version="[1.0.0,2.0.0)",
  org.jdom.transform;version="[1.0.0,2.0.0)",
  org.jdom.xpath;version="[1.0.0,2.0.0)"
-Require-Bundle: org.jdom;bundle-version="1.0.0"

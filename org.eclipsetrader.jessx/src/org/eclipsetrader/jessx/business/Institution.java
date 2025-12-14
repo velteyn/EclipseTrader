@@ -1,4 +1,4 @@
-﻿package org.eclipsetrader.jessx.business;
+package org.eclipsetrader.jessx.business;
 
 import java.util.HashMap;
 import java.util.Iterator;

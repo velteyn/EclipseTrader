@@ -1,4 +1,4 @@
-﻿// 
+// 
 //This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
 // 
 
@@ -12,7 +12,6 @@ import org.eclipsetrader.jessx.business.BusinessCore;
 import org.eclipsetrader.jessx.net.event.ExperimentStateListener;
 import org.eclipsetrader.jessx.utils.Utils;
 import org.jdom.Content;
-
 import org.jdom.Element;
 import org.jdom.Document;
 
