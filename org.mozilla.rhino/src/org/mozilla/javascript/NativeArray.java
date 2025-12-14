@@ -1321,7 +1321,7 @@ public class NativeArray extends IdScriptableObject implements List
                         // objects that are actually NativeArrays
                         final NativeArray arg = (NativeArray) args[i];
                         canUseDense = arg.denseOnly;
-                        length += arg.length;
+                        length += (int) arg.length;
                     } else {
                         length++;
                     }

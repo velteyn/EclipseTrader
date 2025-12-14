@@ -539,7 +539,7 @@ public class InputStreamSource
             else
             {
                 ret = Math.min (mLevel - mOffset, n);
-                mOffset += ret;
+                mOffset = mOffset + (int) ret;
             }
         }
 

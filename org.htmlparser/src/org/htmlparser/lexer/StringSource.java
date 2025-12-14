@@ -269,7 +269,7 @@ public class StringSource
                 n = 0L;
             else if (n > length - mOffset)
                 n = length - mOffset;
-            mOffset += n;
+            mOffset = mOffset + (int) n;
             ret = n;
         }
 
