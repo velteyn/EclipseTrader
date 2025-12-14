@@ -39,6 +39,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.net.IDN;
 import java.util.ArrayList;
 import java.util.HashSet;
 import javax.swing.JFileChooser;
@@ -165,6 +166,7 @@ public class SiteCapturer
         mParser.setNodeFactory (factory);
         mCaptureResources = true;
         mFilter = null;
+        mAllowedHosts = new HashSet ();
     }
 
     /**
@@ -248,6 +250,18 @@ public class SiteCapturer
     public void setFilter (NodeFilter filter)
     {
         mFilter = filter;
+    }
+    protected HashSet mAllowedHosts;
+    public void setAllowedHosts (java.util.Collection hosts)
+    {
+        mAllowedHosts.clear ();
+        if (hosts != null)
+            mAllowedHosts.addAll (hosts);
+    }
+    public void addAllowedHost (String host)
+    {
+        if (host != null)
+            mAllowedHosts.add (host.toLowerCase ());
     }
     
     /**
@@ -354,10 +368,16 @@ public class SiteCapturer
             if (linkHost == null || originHost == null) return false;
             String lh = linkHost.toLowerCase();
             if ("localhost".equals(lh) || "::1".equals(lh)) return false;
+            String linkHostAscii = IDN.toASCII(lh);
+            String originHostAscii = IDN.toASCII(originHost.toLowerCase());
+            if (linkHostAscii.matches("^\\d+\\.\\d+\\.\\d+\\.\\d+$")) return false;
             InetAddress linkAddr = InetAddress.getByName(linkHost);
             InetAddress originAddr = InetAddress.getByName(originHost);
             if (linkAddr.isAnyLocalAddress() || linkAddr.isLoopbackAddress() || linkAddr.isLinkLocalAddress() || linkAddr.isSiteLocalAddress()) return false;
             if (!linkAddr.equals(originAddr)) return false;
+            if (!mAllowedHosts.isEmpty()) {
+                if (!mAllowedHosts.contains(linkHostAscii)) return false;
+            }
             int lp = linkUri.getPort();
             if (lp == -1) lp = "https".equalsIgnoreCase(scheme) ? 443 : 80;
             int op = originUri.getPort();
