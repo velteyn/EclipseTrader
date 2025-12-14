@@ -1,4 +1,4 @@
-﻿package org.eclipsetrader.jessx.utils;
+package org.eclipsetrader.jessx.utils;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -19,7 +19,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
-import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;

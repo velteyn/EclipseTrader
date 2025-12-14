@@ -5,7 +5,6 @@
 package org.eclipsetrader.jessx.net;
 
 import org.jdom.Element;
-
 // This comment is added to force recompilation of the class
 public class WarnForClient implements NetworkWritable, NetworkReadable
 {

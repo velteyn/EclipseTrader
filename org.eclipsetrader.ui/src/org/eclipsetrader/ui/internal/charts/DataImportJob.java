@@ -10,7 +10,6 @@
  */
 
 package org.eclipsetrader.ui.internal.charts;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryService;
 import org.eclipsetrader.core.repositories.IStoreObject;
 import org.eclipsetrader.ui.internal.UIActivator;
+
 
 @SuppressWarnings("restriction")
 public class DataImportJob extends Job {

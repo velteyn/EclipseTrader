@@ -1,4 +1,4 @@
-﻿package org.eclipsetrader.jessx.server.net;
+package org.eclipsetrader.jessx.server.net;
 
 /***************************************************************/
 /*                     SOFTWARE SECTION                        */
@@ -114,7 +114,11 @@ public class ClientConnectionPoint extends Thread {
        new Thread(new PreConnectionClient(clientSocket)).start();
      }
      catch (Exception ex1) {
-       System.out.println(ex1.toString());
+       if (Server.getServerState() != Server.SERVER_STATE_ONLINE && (ex1 instanceof SocketException || "Socket closed".equals(ex1.getMessage()))) {
+           // Expected exception during shutdown
+       } else {
+           System.out.println(ex1.toString());
+       }
      }
 
      // Waiting next client.

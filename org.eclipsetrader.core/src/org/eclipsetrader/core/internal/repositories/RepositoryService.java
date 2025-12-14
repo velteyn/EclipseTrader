@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -63,6 +62,7 @@ import org.eclipsetrader.core.views.IHolding;
 import org.eclipsetrader.core.views.IWatchList;
 import org.eclipsetrader.core.views.IWatchListElement;
 import org.eclipsetrader.core.views.WatchList;
+
 
 public class RepositoryService implements IRepositoryService {
 

@@ -180,6 +180,9 @@ public class SecurityAdapter extends XmlAdapter<String, ISecurity> {
             return null;
         }
         IStoreObject storeObject = (IStoreObject) v.getAdapter(IStoreObject.class);
+        if (storeObject == null || storeObject.getStore() == null) {
+            return null;
+        }
         return storeObject.getStore().toURI().toString();
     }
 

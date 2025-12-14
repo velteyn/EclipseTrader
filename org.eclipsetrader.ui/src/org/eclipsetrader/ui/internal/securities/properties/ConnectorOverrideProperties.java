@@ -47,6 +47,7 @@ import org.eclipsetrader.ui.internal.UIActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+
 @SuppressWarnings("restriction")
 public class ConnectorOverrideProperties extends PropertyPage implements IWorkbenchPropertyPage {
 

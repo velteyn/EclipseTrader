@@ -1,4 +1,4 @@
-﻿// 
+// 
 //This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
 // 
 
@@ -11,7 +11,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 
 import java.io.IOException;
-import org.apache.log4j.PropertyConfigurator;
 import java.util.Properties;
 import java.io.File;
 
@@ -67,24 +66,7 @@ public abstract class ClientCore
     }
     
     private static void InitLogs() {
-        final File file = new File("./client.log");
-        if (file.exists()) {
-            file.delete();
-        }
-        final Properties log4jconf = new Properties();
-        log4jconf.setProperty("log4j.rootCategory", "debug, stdout, R");
-        log4jconf.setProperty("log4j.category.your.category.name", "DEBUG");
-        log4jconf.setProperty("log4j.category.your.category.name", "INHERITED");
-        log4jconf.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
-        log4jconf.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
-        log4jconf.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F:%L) - %m%n");
-        log4jconf.setProperty("log4j.appender.R", "org.apache.log4j.RollingFileAppender");
-        log4jconf.setProperty("log4j.appender.R.File", "./client.log");
-        log4jconf.setProperty("log4j.appender.R.MaxFileSize", "5000KB");
-        log4jconf.setProperty("log4j.appender.R.MaxBackupIndex", "1");
-        log4jconf.setProperty("log4j.appender.R.layout", "org.apache.log4j.PatternLayout");
-        log4jconf.setProperty("log4j.appender.R.layout.ConversionPattern", "%r [%p] %m  [%t] (%F:%L) \r\n");
-        PropertyConfigurator.configure(log4jconf);
+        // Log4j configuration removed
         Utils.logger.debug("Logging enabled.");
     }
     

@@ -477,7 +477,9 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
                     n += r;
                 }
             } catch (Exception e) {
-                JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error reading data", e)); //$NON-NLS-1$
+                if (!isStopping() && !(e instanceof java.net.SocketException)) {
+                    JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error reading data", e)); //$NON-NLS-1$
+                }
                 break;
             }
 

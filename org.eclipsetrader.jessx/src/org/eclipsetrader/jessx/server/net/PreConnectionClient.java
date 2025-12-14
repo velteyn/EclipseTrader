@@ -1,4 +1,4 @@
-﻿// 
+// 
 //This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
 // 
 
@@ -66,6 +66,11 @@ public class PreConnectionClient implements Runnable
             }
         }
         catch (IOException ex1) {
+            // Check if this is an expected disconnection (EOF or Socket closed)
+            if (ex1 instanceof java.io.EOFException || "Socket closed".equals(ex1.getMessage())) {
+                 Utils.logger.info("Client disconnected during login (EOF or Socket closed).");
+                 return;
+            }
             this.loginFailed("Could not read the login from the client. Error: " + ex1.toString());
             return;
         }

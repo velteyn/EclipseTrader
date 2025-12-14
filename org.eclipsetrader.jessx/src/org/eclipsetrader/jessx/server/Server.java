@@ -1,4 +1,4 @@
-﻿package org.eclipsetrader.jessx.server;
+package org.eclipsetrader.jessx.server;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -8,7 +8,6 @@ import java.util.Properties;
 
 import javax.swing.UIManager;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.eclipsetrader.jessx.business.BusinessCore;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.trobot.Discreet;
@@ -173,24 +172,7 @@ public class Server
     }
     
     public static void InitLogs() {
-        final File file = new File("./server.log");
-        if (file.exists()) {
-            file.delete();
-        }
-        final Properties log4jconf = new Properties();
-        log4jconf.setProperty("log4j.rootCategory", "debug, stdout, R");
-        log4jconf.setProperty("log4j.category.your.category.name", "DEBUG");
-        log4jconf.setProperty("log4j.category.your.category.name", "INHERITED");
-        log4jconf.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
-        log4jconf.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
-        log4jconf.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F:%L) - %m%n");
-        log4jconf.setProperty("log4j.appender.R", "org.apache.log4j.RollingFileAppender");
-        log4jconf.setProperty("log4j.appender.R.File", "./server.log");
-        log4jconf.setProperty("log4j.appender.R.MaxFileSize", "500000KB");
-        log4jconf.setProperty("log4j.appender.R.MaxBackupIndex", "1");
-        log4jconf.setProperty("log4j.appender.R.layout", "org.apache.log4j.PatternLayout");
-        log4jconf.setProperty("log4j.appender.R.layout.ConversionPattern", "%r [%p] %m  [%t] (%F:%L) \r\n");
-        PropertyConfigurator.configure(log4jconf);
+        // Log4j configuration removed
         Utils.logger.debug("Logging enabled. Starting logging...");
     }
     

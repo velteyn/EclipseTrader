@@ -4,7 +4,6 @@
 
 package org.eclipsetrader.jessx.business;
 
-import java.util.Iterator;
 import java.util.Hashtable;
 
 import org.eclipsetrader.jessx.utils.Utils;
