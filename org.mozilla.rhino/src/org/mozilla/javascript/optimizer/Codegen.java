@@ -1553,7 +1553,7 @@ class BodyCodegen
             for (int i = 0; i != directParameterCount; ++i) {
                 varRegisters[i] = firstFreeLocal;
                 // 3 is 1 for Object parm and 2 for double parm
-                firstFreeLocal += 3;
+                firstFreeLocal = (short)(firstFreeLocal + 3);
             }
             if (!fnCurrent.getParameterNumberContext()) {
                 // make sure that all parameters are objects
