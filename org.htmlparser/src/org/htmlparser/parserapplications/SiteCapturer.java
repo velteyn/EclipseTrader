@@ -190,6 +190,17 @@ public class SiteCapturer
         if (source.endsWith ("/"))
             source = source.substring (0, source.length () - 1);
         mSource = source;
+        try {
+            URL src = new URL(mSource);
+            String host = src.getHost();
+            if (host != null) {
+                addAllowedHost(host);
+                String ascii = java.net.IDN.toASCII(host.toLowerCase());
+                addAllowedHost(ascii);
+            }
+        } catch (MalformedURLException e) {
+            // ignore
+        }
     }
     
     /**
@@ -398,6 +409,10 @@ public class SiteCapturer
             if (!mAllowedHosts.isEmpty()) {
                 if (!mAllowedHosts.contains(linkHostAscii)) return false;
             }
+            String linkPath = linkUri.getPath() == null ? "" : linkUri.getPath();
+            String originPath = originUri.getPath() == null ? "" : originUri.getPath();
+            if (originPath.length() > 0 && !linkPath.startsWith(originPath)) return false;
+            if (linkUri.getQuery() != null || linkUri.getFragment() != null) return false;
             int lp = linkUri.getPort();
             if (lp == -1) lp = "https".equalsIgnoreCase(scheme) ? 443 : 80;
             int op = originUri.getPort();
