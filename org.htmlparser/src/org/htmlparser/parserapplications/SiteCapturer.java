@@ -37,6 +37,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import javax.swing.JFileChooser;
@@ -282,16 +284,9 @@ public class SiteCapturer
         String type;
         boolean ret;
 
-        // SSRF mitigation: Only allow URLs on the original source host
         try
         {
-            // SSRF mitigation: explicit protocol check
-            URI uri = new URI(link);
-            String scheme = uri.getScheme();
-            if (scheme == null || (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme))) {
-                return false;
-            }
-            if (!isSameHost(link, getSource())) {
+            if (!isSafeDestinationUrl(link, getSource())) {
                 return false;
             }
             url = new URL (link);
@@ -302,47 +297,37 @@ public class SiteCapturer
             else
                 ret = type.startsWith ("text/html");
         }
-        catch (IOException | URISyntaxException e)
+        catch (IOException e)
         {
             throw new ParserException ("URL " + link + " has a problem", e);
         }
         
         return (ret);
     }
-    /**
-     * Helper function to check that the link refers to the same host as the source.
-     * Only permit links to the same host to prevent SSRF.
-     */
-    private boolean isSameHost(String link, String source) {
+    private boolean isSafeDestinationUrl(String link, String origin) {
         try {
             URI linkUri = new URI(link);
-            URI sourceUri = new URI(source);
-
-            // Restrict protocols to http and https
+            URI originUri = new URI(origin);
             String scheme = linkUri.getScheme();
-            if (scheme == null || (!scheme.equalsIgnoreCase("http") && !scheme.equalsIgnoreCase("https"))) {
-                return false;
-            }
-
-            // Compare hosts
+            if (scheme == null) return false;
+            if (!("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) return false;
             String linkHost = linkUri.getHost();
-            String sourceHost = sourceUri.getHost();
-            if (linkHost == null || sourceHost == null || !linkHost.equalsIgnoreCase(sourceHost)) {
-                return false;
-            }
-
-            // Compare ports, accounting for default ports
-            int linkPort = linkUri.getPort();
-            if (linkPort == -1) {
-                linkPort = "https".equalsIgnoreCase(scheme) ? 443 : 80;
-            }
-            int sourcePort = sourceUri.getPort();
-            if (sourcePort == -1) {
-                sourcePort = "https".equalsIgnoreCase(sourceUri.getScheme()) ? 443 : 80;
-            }
-
-            return linkUri.getScheme().equalsIgnoreCase(sourceUri.getScheme()) && linkPort == sourcePort;
-        } catch (URISyntaxException e) {
+            String originHost = originUri.getHost();
+            if (linkHost == null || originHost == null) return false;
+            String lh = linkHost.toLowerCase();
+            if ("localhost".equals(lh) || "::1".equals(lh)) return false;
+            InetAddress linkAddr = InetAddress.getByName(linkHost);
+            InetAddress originAddr = InetAddress.getByName(originHost);
+            if (linkAddr.isAnyLocalAddress() || linkAddr.isLoopbackAddress() || linkAddr.isLinkLocalAddress() || linkAddr.isSiteLocalAddress()) return false;
+            if (!linkAddr.equals(originAddr)) return false;
+            int lp = linkUri.getPort();
+            if (lp == -1) lp = "https".equalsIgnoreCase(scheme) ? 443 : 80;
+            int op = originUri.getPort();
+            String os = originUri.getScheme();
+            if (op == -1) op = "https".equalsIgnoreCase(os) ? 443 : 80;
+            if (!scheme.equalsIgnoreCase(os)) return false;
+            return lp == op;
+        } catch (URISyntaxException | UnknownHostException e) {
             return false;
         }
     }
