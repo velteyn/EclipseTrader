@@ -262,10 +262,48 @@ public class SiteCapturer
      */
     protected boolean isToBeCaptured (String link)
     {
-        return (
-            link.toLowerCase ().startsWith (getSource ().toLowerCase ())
-            && (-1 == link.indexOf ("?"))
-            && (-1 == link.indexOf ("#")));
+        try {
+            URL linkUrl = new URL(link);
+            URL sourceUrl = new URL(getSource());
+
+            // Only allow http and https schemes
+            String linkProtocol = linkUrl.getProtocol();
+            if (!"http".equalsIgnoreCase(linkProtocol) && !"https".equalsIgnoreCase(linkProtocol)) {
+                return false;
+            }
+
+            // Avoid localhost, 127.0.0.1, and other local addresses
+            String host = linkUrl.getHost();
+            if (host == null) return false;
+            String hostLower = host.toLowerCase();
+            if (hostLower.equals("localhost") || hostLower.equals("127.0.0.1") || hostLower.equals("::1")) {
+                return false;
+            }
+            // Reject private network IPs (simple regex for 10/8, 172.16/12, 192.168/16 - for demo purposes)
+            if (hostLower.matches("^(10\\.|192\\.168\\.|172\\.(1[6-9]|2[0-9]|3[0-1])\\.)")) {
+                return false;
+            }
+
+            // Enforce same host (case-insensitive) and port, if set
+            if (!sourceUrl.getHost().equalsIgnoreCase(linkUrl.getHost())) {
+                return false;
+            }
+            int sourcePort = sourceUrl.getPort() != -1 ? sourceUrl.getPort() : sourceUrl.getDefaultPort();
+            int linkPort = linkUrl.getPort() != -1 ? linkUrl.getPort() : linkUrl.getDefaultPort();
+            if (sourcePort != linkPort) {
+                return false;
+            }
+            if (!sourceUrl.getProtocol().equalsIgnoreCase(linkUrl.getProtocol())) {
+                return false;
+            }
+            // Disallow URLs with query or fragment
+            if (linkUrl.getQuery() != null || linkUrl.getRef() != null) {
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
