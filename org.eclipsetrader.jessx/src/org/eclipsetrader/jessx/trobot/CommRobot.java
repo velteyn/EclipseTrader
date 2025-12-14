@@ -1,4 +1,4 @@
-﻿// 
+// 
 //This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
 // 
 
@@ -128,6 +128,7 @@ class CommRobot extends Thread
         if (begin != -1 && end != -1) {
             final String message = data.substring(begin, end);
             final SAXBuilder sax = new SAXBuilder();
+            sax.setExpandEntities(false);
             try {
                 this.fireObjectReceived(sax.build(new StringReader(message)));
             }

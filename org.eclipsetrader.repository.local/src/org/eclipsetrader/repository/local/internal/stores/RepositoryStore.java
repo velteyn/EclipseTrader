@@ -76,6 +76,7 @@ public class RepositoryStore implements IStore {
     public void putProperties(IStoreProperties properties, IProgressMonitor monitor) {
         if (store == null) {
             String type = (String) properties.getProperty(IPropertyConstants.OBJECT_TYPE);
+            // System.out.println("RepositoryStore: putProperties type=" + type);
             if (ISecurity.class.getName().equals(type) || IStock.class.getName().equals(type) || ICurrencyExchange.class.getName().equals(type)) {
                 store = SecurityCollection.getInstance().create();
             }
@@ -106,10 +107,13 @@ public class RepositoryStore implements IStore {
                 store = StrategiesCollection.getInstance().create();
             }
             else if (IHolding.class.getName().equals(type)) {
+                System.out.println("RepositoryStore: Creating TradeStore for IHolding");
                 if (TradeCollection.getInstance() == null) {
+                    System.out.println("RepositoryStore: TradeCollection instance is null, fetching objects...");
                     LocalRepository.getInstance().fetchObjects(null);
                 }
                 store = TradeCollection.getInstance().create();
+                System.out.println("RepositoryStore: Created TradeStore: " + store);
             }
         }
         if (store != null) {

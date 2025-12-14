@@ -41,6 +41,7 @@ import org.eclipsetrader.core.repositories.IPropertyConstants;
 import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryElementFactory;
 import org.eclipsetrader.core.repositories.IStore;
+import org.eclipsetrader.core.repositories.IStoreObject;
 import org.eclipsetrader.core.repositories.IStoreProperties;
 import org.eclipsetrader.core.repositories.StoreProperties;
 import org.eclipsetrader.repository.local.LocalRepository;
@@ -253,5 +254,30 @@ public class SecurityStore implements IStore {
 
     public IStore createHistoryStore(Date date) {
         return new IntradayHistoryStore(id, null, date);
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof IStore) {
+            return toURI().equals(((IStore) obj).toURI());
+        }
+        if (obj instanceof IStoreObject) {
+            return toURI().equals(((IStoreObject) obj).getStore().toURI());
+        }
+        return false;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return toURI().hashCode();
     }
 }

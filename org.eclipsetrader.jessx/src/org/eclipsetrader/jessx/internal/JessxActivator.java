@@ -84,6 +84,7 @@ public class JessxActivator extends AbstractUIPlugin {
             File file = getStateLocation().append("default.xml").toFile();
             if (file.exists()) {
                 SAXBuilder builder = new SAXBuilder();
+                builder.setExpandEntities(false);
                 Document doc = builder.build(file);
                 Element root = doc.getRootElement();
                 
@@ -351,6 +352,7 @@ public class JessxActivator extends AbstractUIPlugin {
 			if (file.exists()) {
 				// Parse default.xml to extract asset names
 				SAXBuilder builder = new SAXBuilder();
+				builder.setExpandEntities(false);
 				Document doc = builder.build(file);
 				Element root = doc.getRootElement();
 				List<Element> assets = root.getChildren("Asset");

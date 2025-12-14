@@ -105,8 +105,9 @@ public abstract class Utils implements Constants {
                 pushbackInputStream.unread(bom, 0, read);
             }
         }
-		SAXBuilder sxb = new SAXBuilder();
-		return sxb.build(new InputStreamReader(pushbackInputStream, "UTF-8"));
+        SAXBuilder sxb = new SAXBuilder();
+        sxb.setExpandEntities(false);
+        return sxb.build(new InputStreamReader(pushbackInputStream, "UTF-8"));
 	}
 
 	public static void saveXmlDocument(String fileName, Document xmlDoc) throws Exception {
@@ -171,12 +172,13 @@ public abstract class Utils implements Constants {
 		int end = data.indexOf("[JessX-end]", begin);
 		if (begin != -1 && end != -1) {
 			String message = data.substring(begin, end);
-			SAXBuilder sax = new SAXBuilder();
-			try {
-				return sax.build(new StringReader(message));
-			} catch (IOException iOException) {
+            SAXBuilder sax = new SAXBuilder();
+            sax.setExpandEntities(false);
+            try {
+                return sax.build(new StringReader(message));
+            } catch (IOException iOException) {
 
-			} catch (JDOMException ex) {
+            } catch (JDOMException ex) {
 				logger.error("Could not read message : " + message + ". Error: " + ex.toString());
 			}
 		}

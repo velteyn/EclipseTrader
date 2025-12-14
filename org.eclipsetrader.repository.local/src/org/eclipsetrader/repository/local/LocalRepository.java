@@ -157,10 +157,11 @@ public class LocalRepository implements IRepository, ISchedulingRule {
             if (trades == null) {
                 trades = TradeCollection.getInstance();
                 if (trades == null) {
-                    trades = new TradeCollection();
-                }
+                trades = new TradeCollection();
             }
+            System.out.println("LocalRepository: Loaded " + trades.getList().size() + " trades");
         }
+    }
     }
 
     public void shutDown() {
@@ -184,6 +185,7 @@ public class LocalRepository implements IRepository, ISchedulingRule {
         }
 
         if (trades != null) {
+            System.out.println("LocalRepository: Saving " + trades.getList().size() + " trades to " + TRADES_FILE);
             file = location.append(TRADES_FILE).toFile();
             marshal(trades, TradeCollection.class, file);
         }
@@ -399,7 +401,7 @@ public class LocalRepository implements IRepository, ISchedulingRule {
                 return unmarshaller.unmarshal(file);
             }
         } catch (Exception e) {
-            Status status = new Status(IStatus.WARNING, Activator.PLUGIN_ID, 0, "Error loading identifiers", null); //$NON-NLS-1$
+            Status status = new Status(IStatus.WARNING, Activator.PLUGIN_ID, 0, "Error loading repository file " + file.getName(), e); //$NON-NLS-1$
             Activator.getDefault().getLog().log(status);
         }
         return null;

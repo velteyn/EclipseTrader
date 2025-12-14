@@ -162,6 +162,31 @@ public class SecurityAdapter extends XmlAdapter<String, ISecurity> {
         public URI toURI() {
             return uri;
         }
+
+        /* (non-Javadoc)
+         * @see java.lang.Object#equals(java.lang.Object)
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj instanceof IStore) {
+                return uri.equals(((IStore) obj).toURI());
+            }
+            if (obj instanceof IStoreObject) {
+                return uri.equals(((IStoreObject) obj).getStore().toURI());
+            }
+            return false;
+        }
+
+        /* (non-Javadoc)
+         * @see java.lang.Object#hashCode()
+         */
+        @Override
+        public int hashCode() {
+            return uri.hashCode();
+        }
     }
 
     public SecurityAdapter() {

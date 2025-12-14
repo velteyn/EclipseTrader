@@ -98,7 +98,7 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
 
     private Thread thread;
     private Thread notificationThread;
-    private boolean stopping = false;
+    private volatile boolean stopping = false;
 
     private String streamingServer = "localhost"; //$NON-NLS-1$
     private int streamingPort = 6290;

@@ -323,6 +323,7 @@ public class Atom03Generator extends BaseWireFeedGenerator {
 
                 try {
                     SAXBuilder saxBuilder = new SAXBuilder();
+                    saxBuilder.setExpandEntities(false);
                     tmpDoc = saxBuilder.build(tmpDocReader);
                 }
                 catch (Exception ex) {

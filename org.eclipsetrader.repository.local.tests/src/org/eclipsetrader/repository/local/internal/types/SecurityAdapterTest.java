@@ -11,11 +11,14 @@
 
 package org.eclipsetrader.repository.local.internal.types;
 
+import java.net.URI;
+
 import junit.framework.TestCase;
 
 import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.repository.local.TestRepositoryService;
 import org.eclipsetrader.repository.local.TestSecurity;
+import org.eclipsetrader.repository.local.internal.stores.SecurityStore;
 
 public class SecurityAdapterTest extends TestCase {
 
@@ -44,5 +47,18 @@ public class SecurityAdapterTest extends TestCase {
         ISecurity security = adapter.unmarshal("local:securities#1");
         assertNotNull(security);
         assertEquals("Test", security.getName());
+    }
+
+    public void testEqualsFailsafeSecurity() throws Exception {
+        SecurityAdapter adapter = new SecurityAdapter();
+        ISecurity failsafe = adapter.new FailsafeSecurity(new URI("local:securities#9"));
+        SecurityStore store = new SecurityStore(9);
+
+        assertTrue(failsafe.equals(store));
+        assertTrue(store.equals(failsafe));
+        
+        SecurityStore otherStore = new SecurityStore(10);
+        assertFalse(failsafe.equals(otherStore));
+        assertFalse(otherStore.equals(failsafe));
     }
 }

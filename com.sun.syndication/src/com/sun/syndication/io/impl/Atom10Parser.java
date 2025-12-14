@@ -627,6 +627,7 @@ public class Atom10Parser extends BaseWireFeedParser {
         throws JDOMException, IOException, IllegalArgumentException, FeedException {
         // Parse entry into JDOM tree
         SAXBuilder builder = new SAXBuilder();
+        builder.setExpandEntities(false);
         Document entryDoc = builder.build(rd);
         Element fetchedEntryElement = entryDoc.getRootElement();
         fetchedEntryElement.detach();

@@ -1,4 +1,4 @@
-﻿package org.eclipsetrader.jessx.server.net;
+package org.eclipsetrader.jessx.server.net;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -298,6 +298,7 @@ public class Player extends Thread implements PortfolioListener {
     if (begin != -1 && end != -1) {
       String message = data.substring(begin, end);
       SAXBuilder sax = new SAXBuilder();
+      sax.setExpandEntities(false);
       try {
         fireObjectReceived(sax.build(new StringReader(message)));
       } catch (IOException iOException) {

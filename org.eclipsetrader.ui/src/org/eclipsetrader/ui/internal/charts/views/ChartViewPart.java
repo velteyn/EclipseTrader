@@ -177,7 +177,13 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (IPropertyConstants.BARS.equals(evt.getPropertyName())) {
-                TimeSpan resolution = TimeSpan.fromString(dialogSettings.get(K_RESOLUTION));
+                TimeSpan resolution = null;
+                if (dialogSettings != null) {
+                    resolution = TimeSpan.fromString(dialogSettings.get(K_RESOLUTION));
+                }
+                if (resolution == null) {
+                    resolution = TimeSpan.days(1);
+                }
                 view.setRootDataSeries(new OHLCDataSeries(security.getName(), subsetHistory.getAdjustedOHLC(), resolution));
                 Display.getDefault().asyncExec(() -> {
                     if (!viewer.getControl().isDisposed()) {
@@ -265,20 +271,33 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
         this.preferenceStore = UIActivator.getDefault().getPreferenceStore();
 
         try {
-            dialogSettings = UIActivator.getDefault().getDialogSettings().getSection(K_VIEWS).getSection(site.getSecondaryId());
-            uri = new URI(dialogSettings.get(K_URI));
+            IDialogSettings viewsSection = UIActivator.getDefault().getDialogSettings().getSection(K_VIEWS);
+            if (viewsSection != null) {
+                dialogSettings = viewsSection.getSection(site.getSecondaryId());
+            }
 
-            IRepositoryService repositoryService = UIActivator.getDefault().getRepositoryService();
-            security = repositoryService.getSecurityFromURI(uri);
+            if (dialogSettings != null) {
+                String uriString = dialogSettings.get(K_URI);
+                if (uriString != null) {
+                    uri = new URI(uriString);
+                }
+            }
 
-            String privateTemplate = dialogSettings.get(K_PRIVATE_TEMPLATE);
-            if (privateTemplate != null) {
-                template = unmarshal(privateTemplate);
+            if (uri != null) {
+                IRepositoryService repositoryService = UIActivator.getDefault().getRepositoryService();
+                security = repositoryService.getSecurityFromURI(uri);
+            }
+
+            if (dialogSettings != null) {
+                String privateTemplate = dialogSettings.get(K_PRIVATE_TEMPLATE);
+                if (privateTemplate != null) {
+                    template = unmarshal(privateTemplate);
+                }
             }
 
             if (template == null) {
                 IPath templatePath = new Path("data"); //$NON-NLS-1$
-                if (dialogSettings.get(K_TEMPLATE) != null) {
+                if (dialogSettings != null && dialogSettings.get(K_TEMPLATE) != null) {
                     templatePath = templatePath.append(dialogSettings.get(K_TEMPLATE));
                 }
                 else {
@@ -316,10 +335,12 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
         IToolBarManager toolBarManager = actionBars.getToolBarManager();
         toolBarManager.add(new Separator("additions")); //$NON-NLS-1$
         toolBarManager.add(updateAction);
-
-        TimeSpan periodTimeSpan = TimeSpan.fromString(dialogSettings.get(K_PERIOD));
-        TimeSpan resolutionTimeSpan = TimeSpan.fromString(dialogSettings.get(K_RESOLUTION));
-        setPeriodActionSelection(periodTimeSpan, resolutionTimeSpan);
+        
+        if (dialogSettings != null) {
+            TimeSpan periodTimeSpan = TimeSpan.fromString(dialogSettings.get(K_PERIOD));
+            TimeSpan resolutionTimeSpan = TimeSpan.fromString(dialogSettings.get(K_RESOLUTION));
+            setPeriodActionSelection(periodTimeSpan, resolutionTimeSpan);
+        }
 
         actionBars.setGlobalActionHandler(cutAction.getId(), cutAction);
         actionBars.setGlobalActionHandler(copyAction.getId(), copyAction);
@@ -519,7 +540,9 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
             @Override
             public void run() {
                 currentPriceLineFactory.setEnable(isChecked());
-                dialogSettings.put(K_SHOW_CURRENT_PRICE, isChecked());
+                if (dialogSettings != null) {
+                    dialogSettings.put(K_SHOW_CURRENT_PRICE, isChecked());
+                }
             }
         };
 
@@ -528,7 +551,9 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
             @Override
             public void run() {
                 currentBookFactory.setEnable(isChecked());
-                dialogSettings.put(K_SHOW_CURRENT_BOOK, isChecked());
+                if (dialogSettings != null) {
+                    dialogSettings.put(K_SHOW_CURRENT_BOOK, isChecked());
+                }
             }
         };
     }
@@ -587,13 +612,17 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
 
         currentPriceLineFactory = new CurrentPriceLineFactory();
         currentPriceLineFactory.setSecurity(security);
-        currentPriceLineFactory.setEnable(dialogSettings.getBoolean(K_SHOW_CURRENT_PRICE));
-        currentPriceLineAction.setChecked(dialogSettings.getBoolean(K_SHOW_CURRENT_PRICE));
+        if (dialogSettings != null) {
+            currentPriceLineFactory.setEnable(dialogSettings.getBoolean(K_SHOW_CURRENT_PRICE));
+            currentPriceLineAction.setChecked(dialogSettings.getBoolean(K_SHOW_CURRENT_PRICE));
+        }
 
         currentBookFactory = new CurrentBookFactory();
         currentBookFactory.setSecurity(security);
-        currentBookFactory.setEnable(dialogSettings.getBoolean(K_SHOW_CURRENT_BOOK));
-        currentBookAction.setChecked(dialogSettings.getBoolean(K_SHOW_CURRENT_BOOK));
+        if (dialogSettings != null) {
+            currentBookFactory.setEnable(dialogSettings.getBoolean(K_SHOW_CURRENT_BOOK));
+            currentBookAction.setChecked(dialogSettings.getBoolean(K_SHOW_CURRENT_BOOK));
+        }
 
         tradeFactory = new TradeFactory();
 
@@ -681,7 +710,10 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
                         }
                         saveState(memento);
 
-                        TimeSpan resolutionTimeSpan = TimeSpan.fromString(dialogSettings.get(K_RESOLUTION));
+                        TimeSpan resolutionTimeSpan = null;
+                        if (dialogSettings != null) {
+                            resolutionTimeSpan = TimeSpan.fromString(dialogSettings.get(K_RESOLUTION));
+                        }
                         if (resolutionTimeSpan == null) {
                             resolutionTimeSpan = TimeSpan.days(1);
                         }
@@ -699,8 +731,10 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
                 });
             }
         });
-        job.setTimeSpan(TimeSpan.fromString(dialogSettings.get(K_PERIOD)));
-        job.setResolutionTimeSpan(TimeSpan.fromString(dialogSettings.get(K_RESOLUTION)));
+        if (dialogSettings != null) {
+            job.setTimeSpan(TimeSpan.fromString(dialogSettings.get(K_PERIOD)));
+            job.setResolutionTimeSpan(TimeSpan.fromString(dialogSettings.get(K_RESOLUTION)));
+        }
         job.setName(Messages.ChartViewPart_LoadingText + getPartName());
         job.setUser(true);
         job.schedule();
@@ -772,7 +806,9 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
     public void doSave(IProgressMonitor monitor) {
         try {
             String privateTemplate = marshal(view.getTemplate());
-            dialogSettings.put(K_PRIVATE_TEMPLATE, privateTemplate);
+            if (dialogSettings != null) {
+                dialogSettings.put(K_PRIVATE_TEMPLATE, privateTemplate);
+            }
             clearDirty();
         } catch (Exception e) {
             e.printStackTrace();
@@ -900,8 +936,10 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
     }
 
     public void setPeriod(TimeSpan period, TimeSpan resolution) {
-        dialogSettings.put(K_PERIOD, period != null ? period.toString() : (String) null);
-        dialogSettings.put(K_RESOLUTION, resolution != null ? resolution.toString() : (String) null);
+        if (dialogSettings != null) {
+            dialogSettings.put(K_PERIOD, period != null ? period.toString() : (String) null);
+            dialogSettings.put(K_RESOLUTION, resolution != null ? resolution.toString() : (String) null);
+        }
 
         periodAllAction.setChecked(period == null);
         setPeriodActionSelection(period, resolution);
@@ -951,9 +989,11 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
             }
         }
 
-        TimeSpan periodTimeSpan = TimeSpan.fromString(dialogSettings.get(K_PERIOD));
-        TimeSpan resolutionTimeSpan = TimeSpan.fromString(dialogSettings.get(K_RESOLUTION));
-        setPeriodActionSelection(periodTimeSpan, resolutionTimeSpan);
+        if (dialogSettings != null) {
+            TimeSpan periodTimeSpan = TimeSpan.fromString(dialogSettings.get(K_PERIOD));
+            TimeSpan resolutionTimeSpan = TimeSpan.fromString(dialogSettings.get(K_RESOLUTION));
+            setPeriodActionSelection(periodTimeSpan, resolutionTimeSpan);
+        }
 
         actionBars.updateActionBars();
     }

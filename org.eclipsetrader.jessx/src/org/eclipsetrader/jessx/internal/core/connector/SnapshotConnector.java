@@ -367,12 +367,13 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
 		final int end = data.indexOf("[JessX-end]", begin);
 		if (begin != -1 && end != -1) {
 			final String message = data.substring(begin, end);
-			final SAXBuilder sax = new SAXBuilder();
-			try {
-				Utils.logger.debug(message);
-				this.fireObjectReceived(sax.build(new StringReader(message)));
-			} catch (IOException ex2) {
-			} catch (JDOMException ex) {
+            final SAXBuilder sax = new SAXBuilder();
+            sax.setExpandEntities(false);
+            try {
+                Utils.logger.debug(message);
+                this.fireObjectReceived(sax.build(new StringReader(message)));
+            } catch (IOException ex2) {
+            } catch (JDOMException ex) {
 				Utils.logger.error("Could not read message : " + message + ". Error: " + ex.toString());
 			}
 			return this.readXmlFromNetwork(data.substring(end + "[JessX-end]".length()));

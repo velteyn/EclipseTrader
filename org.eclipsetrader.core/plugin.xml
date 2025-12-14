@@ -39,4 +39,12 @@
       </alert>
    </extension>
 
+   <extension point="org.eclipsetrader.core.elementFactories">
+      <factory
+            class="org.eclipsetrader.core.internal.repositories.DefaultElementFactory"
+            id="org.eclipsetrader.core.internal.repositories.DefaultElementFactory"
+            name="Default Element Factory">
+      </factory>
+   </extension>
+
 </plugin>
