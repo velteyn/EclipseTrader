@@ -372,8 +372,19 @@ public class SiteCapturer
             if (!isSafeDestinationUrl(link, getSource())) {
                 return false;
             }
-            url = new URL (link);
-            connection = url.openConnection ();
+            URI linkUri = new URI(link);
+            URI originUri = new URI(getSource());
+            String path = linkUri.getPath() == null ? "" : linkUri.getPath();
+            String basePath = originUri.getPath() == null ? "" : originUri.getPath();
+            if (basePath.length() > 0 && !path.startsWith(basePath)) {
+                return false;
+            }
+            int port = originUri.getPort();
+            if (port == -1) {
+                port = originUri.getScheme().equalsIgnoreCase("https") ? 443 : 80;
+            }
+            url = new URL(originUri.getScheme(), originUri.getHost(), port, path);
+            connection = url.openConnection();
             type = connection.getContentType ();
             if (type == null)
                 ret = false;
@@ -383,6 +394,10 @@ public class SiteCapturer
         catch (IOException e)
         {
             throw new ParserException ("URL " + link + " has a problem", e);
+        }
+        catch (URISyntaxException e)
+        {
+            throw new ParserException ("URL " + link + " is invalid", e);
         }
         
         return (ret);
