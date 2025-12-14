@@ -110,19 +110,7 @@ final class NTLM {
      * @throws AuthenticationException If the cipher cannot be retrieved.
      */
     private Cipher getCipher(byte[] key) throws AuthenticationException {
-        try {
-            final Cipher ecipher = Cipher.getInstance("DES/ECB/NoPadding");
-            key = setupKey(key);
-            ecipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "DES"));
-            return ecipher;
-        } catch (NoSuchAlgorithmException e) {
-            throw new AuthenticationException("DES encryption is not available.", e);
-        } catch (InvalidKeyException e) {
-            throw new AuthenticationException("Invalid key for DES encryption.", e);
-        } catch (NoSuchPaddingException e) {
-            throw new AuthenticationException(
-                "NoPadding option for DES is not available.", e);
-        }
+        throw new AuthenticationException("NTLM authentication is disabled");
     }
 
     /** 
@@ -162,15 +150,7 @@ final class NTLM {
      */
     private byte[] encrypt(byte[] key, byte[] bytes)
         throws AuthenticationException {
-        Cipher ecipher = getCipher(key);
-        try {
-            byte[] enc = ecipher.doFinal(bytes);
-            return enc;
-        } catch (IllegalBlockSizeException e) {
-            throw new AuthenticationException("Invalid block size for DES encryption.", e);
-        } catch (BadPaddingException e) {
-            throw new AuthenticationException("Data not padded correctly for DES encryption.", e);
-        }
+        throw new AuthenticationException("NTLM authentication is disabled");
     }
 
     /** 
