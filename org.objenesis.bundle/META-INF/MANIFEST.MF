@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Objenesis Bundle
+Bundle-SymbolicName: org.objenesis
+Bundle-Version: 1.2.0
+Bundle-Vendor: EclipseTrader.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.objenesis,org.objenesis.instantiator.basic,org.objenesis.strategy
+Bundle-ClassPath: ., lib/objenesis-1.2.jar

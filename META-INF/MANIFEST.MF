@@ -1,176 +1,36 @@
 Manifest-Version: 1.0
-Created-By: Maven Archiver 3.5.1
-Build-Jdk-Spec: 17
+Created-By: Maven Archiver 3.6.2
+Build-Jdk-Spec: 21
 Bundle-ManifestVersion: 2
-Bundle-SymbolicName: org.eclipse.nebula.widgets.cdatetime
-Bundle-Version: 1.5.0.202312260654
-Bundle-Name: %pluginName
-Bundle-Vendor: %providerName
-Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: org.eclipse.core.runtime,org.eclipse.swt,org.eclipse.neb
- ula.cwt;bundle-version="0.9.0";visibility:=reexport
-Export-Package: org.eclipse.nebula.widgets.cdatetime
-Automatic-Module-Name: org.eclipse.nebula.widgets.cdatetime
-Eclipse-SourceReferences: scm:git:https://git.eclipse.org/r/p/nebula/org
- .eclipse.nebula;path="widgets/cdatetime/org.eclipse.nebula.widgets.cdat
- etime";commitId=07038b9f9f986fd109bf2e5c4c012214ad6a9487
-Bundle-License: Eclipse Public License 2.0;link="https://www.eclipse.org
- /legal/epl-2.0/"
+Bundle-Name: Core Plug-in
+Bundle-SymbolicName: org.eclipsetrader.core;singleton:=true
+Bundle-Version: 1.0.0.202512141928
+Bundle-Activator: org.eclipsetrader.core.internal.CoreActivator
+Bundle-ClassPath: .
+Bundle-Vendor: Eclipsetrader.org
+Require-Bundle: org.eclipse.core.runtime,org.apache.commons.logging
+Import-Package: org.mozilla.javascript,javax.xml.bind;version="[2.0.0,3.
+ 0.0)",javax.xml.bind.annotation;version="[2.0.0,3.0.0)",javax.xml.bind.
+ annotation.adapters;version="[2.0.0,3.0.0)",javax.xml.bind.attachment;v
+ ersion="[2.0.0,3.0.0)",javax.xml.bind.helpers;version="[2.0.0,3.0.0)",j
+ avax.xml.bind.util;version="[2.0.0,3.0.0)"
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipsetrader.core,org.eclipsetrader.core.ats,org.ec
+ lipsetrader.core.ats.engines,org.eclipsetrader.core.ats.simulation,org.
+ eclipsetrader.core.charts,org.eclipsetrader.core.charts.repository,org.
+ eclipsetrader.core.feed,org.eclipsetrader.core.instruments,org.eclipset
+ rader.core.internal;x-friends:="org.eclipsetrader.ui",org.eclipsetrader
+ .core.internal.ats;x-friends:="org.eclipsetrader.ui",org.eclipsetrader.
+ core.internal.ats.repository;x-friends:="org.eclipsetrader.ui",org.ecli
+ psetrader.core.internal.charts.repository;x-friends:="org.eclipsetrader
+ .ui",org.eclipsetrader.core.internal.feed;x-friends:="org.eclipsetrader
+ .ui",org.eclipsetrader.core.internal.markets;x-friends:="org.eclipsetra
+ der.ui",org.eclipsetrader.core.internal.repositories;x-friends:="org.ec
+ lipsetrader.ui",org.eclipsetrader.core.internal.trading;x-friends:="org
+ .eclipsetrader.ui",org.eclipsetrader.core.markets,org.eclipsetrader.cor
+ e.repositories,org.eclipsetrader.core.trading,org.eclipsetrader.core.vi
+ ews
+Eclipse-RegisterBuddy: org.eclipsetrader.core.tests
+Eclipse-BuddyPolicy: registered
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
 
-Name: org/eclipse/nebula/widgets/cdatetime/messages_ru.properties
-SHA-256-Digest: xF2tqDtuP57pNG+3scceI0ZxSoG9MI1ezkQOj3nVsFo=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_el_GR.properties
-SHA-256-Digest: dq7uY3SfQuKo5XWt3wZraLjeyEleD5McvODj1c+ndf0=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_hu_HU.properties
-SHA-256-Digest: 1ilK6glvaT+8eJgK9+T+ssAPSbv3+CjFLiQZX1CUpmA=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDateTime$1.class
-SHA-256-Digest: D+NtuinIqAoalffPo86rSDHa1K8SX8LZcXKsqypN5VA=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_pt_BR.properties
-SHA-256-Digest: ol/GOlnFkXsKE2+tYrcwbE14rSFnkczo/mPQGKlyviI=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDateTime.class
-SHA-256-Digest: EHWJHEFaYf4CVAaDBKe6tqEumtanlwKspaz/p+0q9bc=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_es_ES.properties
-SHA-256-Digest: ttoGyIeaaIXN3QRcmMYJCJb0WLhS25E5jWlPrrA5gf8=
-
-Name: org/eclipse/nebula/widgets/cdatetime/calendar.png
-SHA-256-Digest: ZxD059bC2T3XjxSjyo350+E/AdDyRucZAxrRDfnaz9k=
-
-Name: org/eclipse/nebula/widgets/cdatetime/clock.png
-SHA-256-Digest: UFRVN6KzHLk+X4ZcoqowEFxghCMOnI3Ho51XCcKjoME=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDatePanel$1.class
-SHA-256-Digest: CtFEeZaAkHc5Dg1ByNofiaPjfXJCLNscfp5gKcl80ao=
-
-Name: org/eclipse/nebula/widgets/cdatetime/DatePicker$4.class
-SHA-256-Digest: rVwBx+wOJs9K1LGliB3EP3SAhRTMotq8bgC0Ru4tmtU=
-
-Name: plugin.properties
-SHA-256-Digest: 4gTMGLt87jU9L2t3eH/CJge0I7RxYFhVX4IXAQgYP+8=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDatePanel.class
-SHA-256-Digest: BUZ7kzvh7d51Iepc/nOJSWVu2mjWHNRywCGjbUhrMLo=
-
-Name: META-INF/maven/org.eclipse.nebula/org.eclipse.nebula.widgets.cdate
- time/pom.properties
-SHA-256-Digest: K9W1lG+JyYMsIDqRbNYlc9dVqxQcILFpWL5miMhTrME=
-
-Name: org/eclipse/nebula/widgets/cdatetime/Body.class
-SHA-256-Digest: ciiThRSHc21N/s6JV05EFp5P+6xgKoifBFO5pWGactY=
-
-Name: org/eclipse/nebula/widgets/cdatetime/dateclock.png
-SHA-256-Digest: svqK9KH9UZ2ddb5BlMi58OcegG0rpTPFhsFv8KGygpI=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDT$Key.class
-SHA-256-Digest: 9gc2n2O+wkzi4XI6YCjzycBFe5zFXYoSlLriamWcuyE=
-
-Name: org/eclipse/nebula/widgets/cdatetime/AnalogTimePicker.class
-SHA-256-Digest: 8wgy9mbrwF52FlY/qrepL77tsakXlen64gm6v1cRBXE=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDT$PickerPart.class
-SHA-256-Digest: V8un06sE9oB4OObhrQ5QG0v+fGz8PFTNK+JpYctmzqU=
-
-Name: org/eclipse/nebula/widgets/cdatetime/DiscreteTimePicker.class
-SHA-256-Digest: NGh/L8CPrk7UbisH7acb8lJb3yPcsnjQpDZxR6DQa1s=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDT.class
-SHA-256-Digest: ld3NhBsb2lhNJJZiD5BsD1exW9DBFdRFG+2oLRMmyAU=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_nl_NL.properties
-SHA-256-Digest: tdJmpU8gdDm5QLv75urpa4mhG+BTHf8L5cTWuBhTa5A=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDatePanel$2.class
-SHA-256-Digest: wkQfg9V6UUjF8+5jjHE4pFDMksEKtqVuZrKZU1xcbyI=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_fr.properties
-SHA-256-Digest: 6Kxjk1wX73Bm3lfu5FwJ7YAwS8f26YJ1CkBLWF7yzRE=
-
-Name: org/eclipse/nebula/widgets/cdatetime/DatePicker$3.class
-SHA-256-Digest: aYtdQSgXNaYRmG+tJJqhOb3eTjwjxJrAyk42TE1hSIE=
-
-Name: org/eclipse/nebula/widgets/cdatetime/AnalogClockPainter.class
-SHA-256-Digest: Qx1y2uB7lgwIX9R1fGtjWoUru8e1qzHcAIA0Jd60DJ4=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_no_NO.properties
-SHA-256-Digest: Do9g4AOlSPxsDtWjfFdeCbjyuHg0KW2UJOwdUc2bgU8=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDateTime$2.class
-SHA-256-Digest: WNGDzkqdrdihkhcSLlpy0Gq9yYZKnqWeS1yfqCctn28=
-
-Name: org/eclipse/nebula/widgets/cdatetime/Resources.class
-SHA-256-Digest: N7wUd3kGi+/QjhZ2Ix8E2P7zDwAwxOMgl5tzx8HuKZg=
-
-Name: org/eclipse/nebula/widgets/cdatetime/DatePicker$2.class
-SHA-256-Digest: VWqdZB1XBU5TFV9OLlT3M3q9RXbc8OUXJmOq36a5THU=
-
-Name: org/eclipse/nebula/widgets/cdatetime/bullet.png
-SHA-256-Digest: B7xyc5zxjlcD9dOXnubfJgVN4h0tPB3r87G13naPa/I=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_de.properties
-SHA-256-Digest: ORpON8MKuPGxPStimo84vgZCruY87EMJo/WGubm423c=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_it_IT.properties
-SHA-256-Digest: +b5zKuRVjG2J2v/ux8bwJSpvkmYc4WeLCmjEUrgjAQM=
-
-Name: org/eclipse/nebula/widgets/cdatetime/AnalogTimePicker$DialLayout.c
- lass
-SHA-256-Digest: 93Bkk+KzbE8VgeFAOW+3O/qdjIEm4A2BAkNFUzLC3ZA=
-
-Name: META-INF/maven/org.eclipse.nebula/org.eclipse.nebula.widgets.cdate
- time/pom.xml
-SHA-256-Digest: 4stl9AZ8so+9/jbY06tR0W9XMMbAEXOkpgc6AN6K3cE=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_pl_PL.properties
-SHA-256-Digest: Pb6fmughWdk33FQf9PjvqvMsn49VqgNEwtXaUqgzeVw=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDateTime$3.class
-SHA-256-Digest: vNUvJeEYu62Ozcg5+O8KWy29ZdLNll6FoRDZ0ZzJ7nc=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDateTime$SpinnerLayout.class
-SHA-256-Digest: mG1W69EnKAiqWbgbGuK4+s6EoMDr3YoYbW1m3ImUSbI=
-
-Name: org/eclipse/nebula/widgets/cdatetime/Footer.class
-SHA-256-Digest: T7jY8XvWtWC+k4VmkkFhyIoy+YGJzy7G8L+0clzDwyo=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages.properties
-SHA-256-Digest: qUg3wVSdP2wueJbMauEljl1t8/WCE8fc9769BwYc4Q8=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDateTimeBuilder.class
-SHA-256-Digest: CzuutNSNxxs1AFTaAcKGI0CSez1pi7FGwYBXSu7mVFg=
-
-Name: org/eclipse/nebula/widgets/cdatetime/DatePicker.class
-SHA-256-Digest: vm6kDa0VPd55PAgi8mSNxgps5OO+om3nq7cqr835EUc=
-
-Name: org/eclipse/nebula/widgets/cdatetime/DatePicker$1.class
-SHA-256-Digest: KbbNMJtyvG219EbdszYqKUEUSAP9gZLe3k6QzburKrM=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_en_US.properties
-SHA-256-Digest: Sr6adZRp9el1HdFRBlzxQ5/iTzrrVfxnzNUuQMt3Oe0=
-
-Name: about.html
-SHA-256-Digest: AnTMch8Mwf9UA6rZjxKRcvnoulguYwoA8E9JDlq10xU=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDateTimePainter.class
-SHA-256-Digest: L3UwxTKrf1c2RBOknVHBhYZbznw1rnyrW7iA4l/sbow=
-
-Name: org/eclipse/nebula/widgets/cdatetime/Header.class
-SHA-256-Digest: ahd1t6Mi2bFb0zRDkiPDQZRIMXrHw21eQuUuKmquADo=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDT$PickerType.class
-SHA-256-Digest: 01C53O5QgRw3HsfqhIa6a9XYp+4Wg2HNp4tV+2AMq78=
-
-Name: org/eclipse/nebula/widgets/cdatetime/CDateTime$EditField.class
-SHA-256-Digest: bbwHgOnvy43SPP/Ah7DG2CR8m13D21QzyXFBlrmpLiY=
-
-Name: org/eclipse/nebula/widgets/cdatetime/AnalogTimePicker$BaseLayout.c
- lass
-SHA-256-Digest: L7+pfPAxbUbnITlOwFYw8rrwDw8gWBqRvZecZz6Ruq8=
-
-Name: org/eclipse/nebula/widgets/cdatetime/messages_zh_CN.properties
-SHA-256-Digest: Ibj1K6zVk2PkPAML01t462qbHZHugu7bG8TcZwts3oo=

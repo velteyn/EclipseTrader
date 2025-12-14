@@ -4,10 +4,5 @@ Bundle-Name: Core Tests
 Bundle-SymbolicName: org.eclipsetrader.core.tests
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: EclipseTrader.org
-Require-Bundle: org.eclipsetrader.core;bundle-version="1.0.0",
- org.mozilla.rhino,
- javax.xml.bind
-Import-Package: junit.framework,
- org.easymock,
- net.sf.cglib
+Fragment-Host: org.eclipsetrader.core;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

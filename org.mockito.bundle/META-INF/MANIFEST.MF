@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Mockito Core
+Bundle-SymbolicName: org.mockito
+Bundle-Version: 5.12.0
+Bundle-Vendor: EclipseTrader.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.mockito
+Bundle-ClassPath: ., lib/mockito-core-5.12.0.jar, lib/byte-buddy-1.14.11.jar, lib/objenesis-3.3.jar
