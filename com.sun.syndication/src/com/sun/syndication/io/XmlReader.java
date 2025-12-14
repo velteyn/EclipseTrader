@@ -583,7 +583,7 @@ public class XmlReader extends Reader {
 
 
     private static final Pattern ENCODING_PATTERN =
-        Pattern.compile("<\\?xml[^>]*encoding\\s*=\\s*(\"[^\"]+\"|'[^']+')");
+        Pattern.compile("^\\s*<\\?xml[^>]*+encoding\\s*+=\\s*+(\"[^\"]+\"|'[^']+')");
 
     // returns the encoding declared in the <?xml encoding=...?>,  NULL if none
     private static String getXmlProlog(BufferedInputStream is,String guessedEnc) throws IOException {
