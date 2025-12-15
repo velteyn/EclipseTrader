@@ -13,7 +13,16 @@ JESSX is a powerful stock market simulator integrated into EclipseTrader. It all
 
 <h2>Configuration</h2>
 <p>
-The JESSX simulation is configured through the <code>default.xml</code> file located in the <code>org.eclipsetrader.jessx/src/org/eclipsetrader/jessx/utils/</code> directory. This file defines all aspects of the simulation, including:
+JESSX scenarios are standard XML files that define assets, institutions, participant types, robots and optional news/information. You can select and manage scenarios directly in the application:
+</p>
+<ul>
+    <li>Open <b>Preferences → Plugins → JessX! Scenarios</b>.</li>
+    <li>Pick a bundled scenario (e.g., <code>default.xml</code>, <code>bull-market.xml</code>, <code>bear-market.xml</code>, <code>volatile-market.xml</code>).</li>
+    <li>Or click <b>Browse…</b> to select any <code>.xml</code> file on disk.</li>
+    <li>You can drop custom scenario files into the folder <code>&lt;workspace&gt;/.metadata/.plugins/org.eclipsetrader.jessx/scenarios/</code>; they will appear in the list automatically.</li>
+</ul>
+<p>
+When a bundled scenario is selected, it is copied to the plug‑in state area the first time you run it, so you can further edit it. Scenarios define:
 </p>
 <ul>
     <li><b>Assets:</b> The securities (stocks) available for trading.</li>
@@ -25,7 +34,7 @@ The JESSX simulation is configured through the <code>default.xml</code> file loc
 
 <h2>Running a Simulation</h2>
 <p>
-To run a JESSX simulation, you must first have the JESSX broker configured as your default broker. Then, simply click the "Play" button in the main toolbar. This will start the JESSX server and connect the bots and the human player ("ThePlayer") to the simulation.
+Select a scenario in Preferences, ensure the JESSX broker is configured, then click the “Play” button in the main toolbar. This starts the JESSX server and connects the bots and the human player to the simulation defined by the chosen scenario.
 </p>
 <p>
 The simulation will start, and you will see the market data updating in real-time in the watchlists and charts. You can interact with the simulation by placing orders manually, just as you would with a real broker.
@@ -33,7 +42,7 @@ The simulation will start, and you will see the market data updating in real-tim
 
 <h2>Trading Bots</h2>
 <p>
-The JESSX simulator includes several types of trading bots, each with a different trading strategy. The bots are defined in the <code>default.xml</code> file and their logic is implemented in Java classes within the <code>org.eclipsetrader.jessx</code> plugin. The primary bots are:
+The JESSX simulator includes several types of trading bots, each with a different trading strategy. Bots are configured in the scenario XML and implemented in Java within the <code>org.eclipsetrader.jessx</code> plug‑in. Common bots include:
 </p>
 <ul>
     <li><b>Discreet:</b> A bot that trades based on market trends.</li>
@@ -43,6 +52,16 @@ The JESSX simulator includes several types of trading bots, each with a differen
 <p>
 The bots will automatically start trading once the simulation begins. You can observe their activity in the orders view.
 </p>
+
+<h2>Custom Scenarios</h2>
+<p>
+To add your own scenario:
+</p>
+<ol>
+    <li>Create an XML file following the structure of the bundled scenarios.</li>
+    <li>Place it under <code>&lt;workspace&gt;/.metadata/.plugins/org.eclipsetrader.jessx/scenarios/</code> or use <b>Browse…</b> in Preferences to select it.</li>
+    <li>Select it in <b>Preferences → Plugins → JessX! Scenarios</b> and apply the changes.</li>
+</ol>
 
 </body>
 </html>

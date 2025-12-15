@@ -81,7 +81,38 @@ public class JessxActivator extends AbstractUIPlugin {
      */
     private void initializeBusinessCore() {
         try {
+            String scenarioName = getPreferenceStore().getString(org.eclipsetrader.jessx.preferences.PreferenceConstants.P_SCENARIO_FILE);
+            if (scenarioName == null || scenarioName.isEmpty()) {
+                scenarioName = "default.xml";
+            }
             File file = getStateLocation().append("default.xml").toFile();
+            if (scenarioName.indexOf('/') >= 0 || scenarioName.indexOf('\\') >= 0) {
+                // absolute file path selected
+                file = new File(scenarioName);
+            } else {
+                // bundled or user scenario name; copy to state default.xml if missing
+                if (!file.exists()) {
+                    URL url = FileLocator.find(getBundle(), new Path("resources/scenarios/" + scenarioName), null);
+                    if (url == null) {
+                        url = FileLocator.find(getBundle(), new Path("resources/" + scenarioName), null);
+                    }
+                    if (url == null) {
+                        // try user scenarios folder
+                        File userScenario = getStateLocation().append("scenarios").append(scenarioName).toFile();
+                        if (userScenario.exists()) {
+                            file = userScenario;
+                        }
+                    } else {
+                        try (InputStream in = url.openStream(); OutputStream out = new FileOutputStream(file)) {
+                            byte[] buf = new byte[2048];
+                            int len;
+                            while ((len = in.read(buf)) > 0) {
+                                out.write(buf, 0, len);
+                            }
+                        }
+                    }
+                }
+            }
             if (file.exists()) {
                 SAXBuilder builder = new SAXBuilder();
                 builder.setExpandEntities(false);

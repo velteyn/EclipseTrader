@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JessXSetup>
+  <GeneralParameters>
+    <WorkingDirectory>./tmp</WorkingDirectory>
+    <SetupFileName>Bear Market</SetupFileName>
+    <XMLVersion>1.6</XMLVersion>
+    <LoggingFileName>bear-market-log.xml</LoggingFileName>
+    <PeriodNumber>5</PeriodNumber>
+    <PeriodDuration>5000</PeriodDuration>
+    <InterestRate periodCount="5">
+      <PeriodRate Rate="1.0" />
+      <PeriodRate Rate="1.0" />
+      <PeriodRate Rate="1.0" />
+      <PeriodRate Rate="1.0" />
+      <PeriodRate Rate="1.0" />
+    </InterestRate>
+    <JoiningAfterStartup>false</JoiningAfterStartup>
+  </GeneralParameters>
+  <Asset type="Stock" name="AAT">
+    <DividendModel periodCount="5">
+      <Dividend mean="6.0" variance="2.0" />
+      <Dividend mean="5.0" variance="2.0" />
+      <Dividend mean="4.0" variance="2.0" />
+      <Dividend mean="3.0" variance="2.0" />
+      <Dividend mean="2.0" variance="2.0" />
+    </DividendModel>
+  </Asset>
+  <Asset type="Stock" name="MSFT">
+    <DividendModel periodCount="5">
+      <Dividend mean="5.0" variance="2.0" />
+      <Dividend mean="5.0" variance="2.0" />
+      <Dividend mean="4.0" variance="2.0" />
+      <Dividend mean="4.0" variance="2.0" />
+      <Dividend mean="3.5" variance="2.0" />
+    </DividendModel>
+  </Asset>
+  <Institution type="OrderMarket" name="Bank America" quotedAsset="MSFT">
+    <KeepOrderBook allow="true" />
+    <OperationsCost>
+      <Operation name="Market Order" percentageCost="2.5" minimalCost="2.0" />
+      <Operation name="Delete Order" percentageCost="2.5" minimalCost="2.0" />
+      <Operation name="Limit Order" percentageCost="2.0" minimalCost="2.0" />
+      <Operation name="Best Limit Order" percentageCost="2.0" minimalCost="2.0" />
+    </OperationsCost>
+    <Operators>
+      <Operator name="Operator Cautious" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+    </Operators>
+  </Institution>
+  <Institution type="OrderMarket" name="BANK CANARIE" quotedAsset="AAT">
+    <KeepOrderBook allow="true" />
+    <OperationsCost>
+      <Operation name="Market Order" percentageCost="2.5" minimalCost="2.0" />
+      <Operation name="Delete Order" percentageCost="2.5" minimalCost="2.0" />
+      <Operation name="Limit Order" percentageCost="2.0" minimalCost="2.0" />
+      <Operation name="Best Limit Order" percentageCost="2.0" minimalCost="2.0" />
+    </OperationsCost>
+    <Operators>
+      <Operator name="Operator Defensive" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+    </Operators>
+  </Institution>
+  <Scenario>
+    <PlayerType name="Defensive">
+      <OperatorsPlayed>
+        <Operator name="Operator Defensive on BANK CANARIE" />
+        <Operator name="Operator Cautious on Bank America" />
+      </OperatorsPlayed>
+      <Portfolio cash="8000.0">
+        <Owning asset="AAT" qtty="150" />
+        <Owning asset="MSFT" qtty="150" />
+      </Portfolio>
+    </PlayerType>
+    <Information>
+      <Information Content="Bearish environment; higher costs" Category="GLOBAL" Period="all" Time="policy" />
+    </Information>
+    <News>
+      <Item priority="LOW" asset="AAT">AAT lowers dividend guidance</Item>
+      <Item priority="LOW" asset="MSFT">MSFT delays product rollout</Item>
+    </News>
+  </Scenario>
+</JessXSetup>

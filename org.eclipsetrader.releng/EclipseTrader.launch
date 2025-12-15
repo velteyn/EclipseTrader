@@ -16,7 +16,7 @@
     <setAttribute key="deselected_workspace_bundles"/>
     <stringAttribute key="featureDefaultLocation" value="workspace"/>
     <stringAttribute key="featurePluginResolution" value="workspace"/>
-    <booleanAttribute key="includeOptional" value="true"/>
+    <booleanAttribute key="includeOptional" value="false"/>
     <stringAttribute key="location" value="${workspace_loc}/../runtime_workspace"/>
     <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
     <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
@@ -26,71 +26,7 @@
     <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc}"/>
     <stringAttribute key="pde.version" value="3.3"/>
     <stringAttribute key="product" value="org.eclipsetrader.platform.workbench"/>
-    <setAttribute key="selected_features">
-        <setEntry value="com.sun.syndication:default"/>
-        <setEntry value="com.tictactec.ta.lib:default"/>
-        <setEntry value="org.apache.commons:default"/>
-        <setEntry value="org.apache.log4j:default"/>
-        <setEntry value="org.eclipse.cvs.source:default"/>
-        <setEntry value="org.eclipse.cvs:default"/>
-        <setEntry value="org.eclipse.egit.mylyn:default"/>
-        <setEntry value="org.eclipse.egit.source:default"/>
-        <setEntry value="org.eclipse.egit:default"/>
-        <setEntry value="org.eclipse.equinox.p2.core.feature.source:default"/>
-        <setEntry value="org.eclipse.equinox.p2.core.feature:default"/>
-        <setEntry value="org.eclipse.equinox.p2.extras.feature.source:default"/>
-        <setEntry value="org.eclipse.equinox.p2.extras.feature:default"/>
-        <setEntry value="org.eclipse.equinox.p2.rcp.feature.source:default"/>
-        <setEntry value="org.eclipse.equinox.p2.rcp.feature:default"/>
-        <setEntry value="org.eclipse.equinox.p2.user.ui.source:default"/>
-        <setEntry value="org.eclipse.equinox.p2.user.ui:default"/>
-        <setEntry value="org.eclipse.help.source:default"/>
-        <setEntry value="org.eclipse.help:default"/>
-        <setEntry value="org.eclipse.jdt.source:default"/>
-        <setEntry value="org.eclipse.jdt:default"/>
-        <setEntry value="org.eclipse.jgit.http.apache:default"/>
-        <setEntry value="org.eclipse.jgit.java7:default"/>
-        <setEntry value="org.eclipse.jgit.pgm.source:default"/>
-        <setEntry value="org.eclipse.jgit.pgm:default"/>
-        <setEntry value="org.eclipse.jgit.source:default"/>
-        <setEntry value="org.eclipse.jgit:default"/>
-        <setEntry value="org.eclipse.mylyn.commons.identity:default"/>
-        <setEntry value="org.eclipse.mylyn.commons.notifications:default"/>
-        <setEntry value="org.eclipse.mylyn.commons.repositories:default"/>
-        <setEntry value="org.eclipse.mylyn.commons:default"/>
-        <setEntry value="org.eclipse.mylyn.context_feature:default"/>
-        <setEntry value="org.eclipse.mylyn.discovery:default"/>
-        <setEntry value="org.eclipse.mylyn.docs.intent.feature:default"/>
-        <setEntry value="org.eclipse.mylyn.java_feature:default"/>
-        <setEntry value="org.eclipse.mylyn.monitor:default"/>
-        <setEntry value="org.eclipse.mylyn.team_feature:default"/>
-        <setEntry value="org.eclipse.mylyn_feature:default"/>
-        <setEntry value="org.eclipse.pde.source:default"/>
-        <setEntry value="org.eclipse.pde:default"/>
-        <setEntry value="org.eclipse.platform.source:default"/>
-        <setEntry value="org.eclipse.platform:default"/>
-        <setEntry value="org.eclipse.rcp.source:default"/>
-        <setEntry value="org.eclipse.rcp:default"/>
-        <setEntry value="org.eclipse.sdk:default"/>
-        <setEntry value="org.eclipse.wb.core.feature:default"/>
-        <setEntry value="org.eclipse.wb.core.java.feature:default"/>
-        <setEntry value="org.eclipse.wb.core.ui.feature:default"/>
-        <setEntry value="org.eclipse.wb.layout.group.feature:default"/>
-        <setEntry value="org.eclipse.wb.swing.feature:default"/>
-        <setEntry value="org.eclipsetrader.brokers.jessx:default"/>
-        <setEntry value="org.eclipsetrader.directa:default"/>
-        <setEntry value="org.eclipsetrader.directaworld:default"/>
-        <setEntry value="org.eclipsetrader.platform:default"/>
-        <setEntry value="org.eclipsetrader.repository.hibernate.derby:default"/>
-        <setEntry value="org.eclipsetrader.repository.hibernate.postgresql:default"/>
-        <setEntry value="org.eclipsetrader.repository.hibernate:default"/>
-        <setEntry value="org.eclipsetrader.tests:default"/>
-        <setEntry value="org.eclipsetrader.yahoo:default"/>
-        <setEntry value="org.hibernate:default"/>
-        <setEntry value="org.htmlparser:default"/>
-        <setEntry value="org.jdom:default"/>
-        <setEntry value="org.mozilla.rhino:default"/>
-    </setAttribute>
+    <setAttribute key="selected_features"/>
     <setAttribute key="selected_target_bundles">
         <setEntry value="com.ibm.icu@default:default"/>
         <setEntry value="org.apache.ant@default:default"/>

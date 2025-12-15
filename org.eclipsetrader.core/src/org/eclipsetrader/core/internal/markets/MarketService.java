@@ -221,14 +221,23 @@ public class MarketService extends Observable implements IMarketService, Runnabl
     public void run() {
         Map<IMarket, Boolean> statusMap = new HashMap<IMarket, Boolean>();
         Map<IMarket, String> messageMap = new HashMap<IMarket, String>();
-
-        for (IMarket market : marketsList) {
+        List<IMarket> snapshot;
+        synchronized (marketsList) {
+            snapshot = new ArrayList<IMarket>(marketsList);
+        }
+        for (IMarket market : snapshot) {
             statusMap.put(market, market.isOpen());
         }
 
         synchronized (thread) {
             while (!isStopping()) {
-                for (IMarket market : marketsList) {
+                synchronized (marketsList) {
+                    snapshot = new ArrayList<IMarket>(marketsList);
+                }
+                for (IMarket market : snapshot) {
+                    if (!statusMap.containsKey(market)) {
+                        statusMap.put(market, market.isOpen());
+                    }
                     boolean oldStatus = statusMap.get(market);
                     boolean newStatus = market.isOpen();
 

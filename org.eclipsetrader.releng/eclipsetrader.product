@@ -47,7 +47,6 @@
       <feature id="org.eclipse.e4.rcp" version="0.0.0"/>
       <feature id="org.eclipse.rcp" version="0.0.0"/>
       <feature id="org.eclipse.help" version="0.0.0"/>
-      <feature id="org.eclipse.equinox.p2.user.ui" version="0.0.0"/>
       <feature id="org.eclipsetrader.platform-feature" version="0.0.0"/>
       <feature id="org.eclipsetrader.brokers.paper-feature" version="0.0.0"/>
       <feature id="org.eclipsetrader.jessx-feature" version="0.0.0"/>

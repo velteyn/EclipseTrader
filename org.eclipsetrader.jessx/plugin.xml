@@ -46,6 +46,15 @@
       </initializer>
    </extension>
    <extension
+         point="org.eclipse.ui.preferencePages">
+     <page
+            category="org.eclipsetrader.ui.preferences.plugins"
+            class="org.eclipsetrader.jessx.internal.ui.preferences.ScenarioPreferencesPage"
+            id="org.eclipsetrader.jessx.scenario"
+            name="JessX! Scenarios">
+      </page>
+   </extension>
+   <extension
          point="org.eclipsetrader.core.trading.brokers">
       <broker
             class="org.eclipsetrader.jessx.internal.core.BrokerConnector"

@@ -25,6 +25,7 @@ import org.eclipsetrader.core.repositories.IRepositoryService;
 import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IStore;
 import org.eclipsetrader.core.repositories.IStoreProperties;
+import org.eclipsetrader.core.repositories.StoreProperties;
 import org.eclipsetrader.jessx.business.event.AssetEvent;
 import org.eclipsetrader.jessx.business.event.AssetListener;
 import org.eclipsetrader.jessx.business.event.InstitutionEvent;
@@ -184,6 +185,9 @@ if (repo == null) {
 }
 IStore store = repo.createObject();
                             IStoreProperties properties = store.fetchProperties(monitor);
+                            if (properties == null) {
+                                properties = new StoreProperties();
+                            }
                             properties.setProperty(IPropertyConstants.OBJECT_TYPE, Stock.class.getName());
                             properties.setProperty(IPropertyConstants.NAME, assetName);
                             properties.setProperty(IPropertyConstants.CURRENCY, Currency.getInstance("USD"));
@@ -251,6 +255,9 @@ if (repo == null) {
 }
 IStore store = repo.createObject();
                                 IStoreProperties properties = store.fetchProperties(monitor);
+                                if (properties == null) {
+                                    properties = new StoreProperties();
+                                }
                                 properties.setProperty(IPropertyConstants.OBJECT_TYPE, Stock.class.getName());
                                 properties.setProperty(IPropertyConstants.NAME, assetName);
                                 properties.setProperty(IPropertyConstants.CURRENCY, Currency.getInstance("USD"));

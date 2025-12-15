@@ -174,22 +174,28 @@ public class Scenario implements XmlExportable, XmlLoadable {
 			PlayerType pt = new PlayerType(ptElem);
 			addPlayerType(pt);
 		}
-		Iterator<Element> infoIter = node.getChild("Information").getChildren("Information").iterator();
-		Utils.logger.debug(infoIter);
-		if (this.vectorInformation.size() > 0)
-			removeAllInformation();
-		while (infoIter.hasNext()) {
-			Element infoElem = infoIter.next();
-			Utils.logger.debug("crea infoElem =" + infoElem);
-			String infoContent = new String(infoElem.getAttributeValue("Content"));
-			Utils.logger.debug("------" + infoContent);
-			String infoReceivers = new String(infoElem.getAttributeValue("Category"));
-			String infoPeriode = new String(infoElem.getAttributeValue("Period"));
-			String infoTime = new String(infoElem.getAttributeValue("Time"));
-			this.vectorInformation.add(new String[] { infoContent, infoReceivers, infoPeriode, infoTime });
-			Utils.logger.debug(this.vectorInformation);
-		}
-		fireProgammedInfoLoad();
+        Element infoParent = node.getChild("Information");
+        if (infoParent != null) {
+            Iterator<Element> infoIter = infoParent.getChildren("Information").iterator();
+            Utils.logger.debug(infoIter);
+            if (this.vectorInformation.size() > 0) {
+                removeAllInformation();
+            }
+            while (infoIter.hasNext()) {
+                Element infoElem = infoIter.next();
+                Utils.logger.debug("crea infoElem =" + infoElem);
+                String infoContent = infoElem.getAttributeValue("Content");
+                Utils.logger.debug("------" + infoContent);
+                String infoReceivers = infoElem.getAttributeValue("Category");
+                String infoPeriode = infoElem.getAttributeValue("Period");
+                String infoTime = infoElem.getAttributeValue("Time");
+                this.vectorInformation.add(new String[] { infoContent, infoReceivers, infoPeriode, infoTime });
+                Utils.logger.debug(this.vectorInformation);
+            }
+            fireProgammedInfoLoad();
+        } else {
+            Utils.logger.debug("Scenario Information node missing; skipping programmed info load.");
+        }
 
         Element newsElement = node.getChild("News");
         if (newsElement != null) {

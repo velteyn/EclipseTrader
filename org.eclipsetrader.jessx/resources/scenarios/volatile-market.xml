@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JessXSetup>
+  <GeneralParameters>
+    <WorkingDirectory>./tmp</WorkingDirectory>
+    <SetupFileName>Volatile Market</SetupFileName>
+    <XMLVersion>1.6</XMLVersion>
+    <LoggingFileName>volatile-market-log.xml</LoggingFileName>
+    <PeriodNumber>6</PeriodNumber>
+    <PeriodDuration>5000</PeriodDuration>
+    <InterestRate periodCount="6">
+      <PeriodRate Rate="2.0" />
+      <PeriodRate Rate="1.5" />
+      <PeriodRate Rate="2.2" />
+      <PeriodRate Rate="1.8" />
+      <PeriodRate Rate="2.4" />
+      <PeriodRate Rate="1.6" />
+    </InterestRate>
+    <JoiningAfterStartup>false</JoiningAfterStartup>
+  </GeneralParameters>
+  <Asset type="Stock" name="AAT">
+    <DividendModel periodCount="6">
+      <Dividend mean="10.0" variance="3.0" />
+      <Dividend mean="8.0" variance="4.0" />
+      <Dividend mean="12.0" variance="5.0" />
+      <Dividend mean="9.0" variance="3.5" />
+      <Dividend mean="11.0" variance="4.5" />
+      <Dividend mean="10.0" variance="3.5" />
+    </DividendModel>
+  </Asset>
+  <Asset type="Stock" name="MSFT">
+    <DividendModel periodCount="6">
+      <Dividend mean="7.0" variance="2.5" />
+      <Dividend mean="6.5" variance="3.0" />
+      <Dividend mean="8.0" variance="3.5" />
+      <Dividend mean="7.5" variance="2.5" />
+      <Dividend mean="8.5" variance="3.0" />
+      <Dividend mean="7.8" variance="2.5" />
+    </DividendModel>
+  </Asset>
+  <Institution type="OrderMarket" name="Global Exchange" quotedAsset="AAT">
+    <KeepOrderBook allow="true" />
+    <OperationsCost>
+      <Operation name="Market Order" percentageCost="2.0" minimalCost="1.5" />
+      <Operation name="Delete Order" percentageCost="2.0" minimalCost="1.5" />
+      <Operation name="Limit Order" percentageCost="1.5" minimalCost="1.0" />
+      <Operation name="Best Limit Order" percentageCost="1.5" minimalCost="1.0" />
+    </OperationsCost>
+    <Operators>
+      <Operator name="Operator Vol" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+    </Operators>
+  </Institution>
+  <Institution type="OrderMarket" name="Tech Exchange" quotedAsset="MSFT">
+    <KeepOrderBook allow="true" />
+    <OperationsCost>
+      <Operation name="Market Order" percentageCost="2.0" minimalCost="1.5" />
+      <Operation name="Delete Order" percentageCost="2.0" minimalCost="1.5" />
+      <Operation name="Limit Order" percentageCost="1.5" minimalCost="1.0" />
+      <Operation name="Best Limit Order" percentageCost="1.5" minimalCost="1.0" />
+    </OperationsCost>
+    <Operators>
+      <Operator name="Operator Tech" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+    </Operators>
+  </Institution>
+  <Scenario>
+    <PlayerType name="Balanced">
+      <OperatorsPlayed>
+        <Operator name="Operator Vol on Global Exchange" />
+        <Operator name="Operator Tech on Tech Exchange" />
+      </OperatorsPlayed>
+      <Portfolio cash="6000.0">
+        <Owning asset="AAT" qtty="250" />
+        <Owning asset="MSFT" qtty="250" />
+      </Portfolio>
+    </PlayerType>
+    <Information>
+      <Information Content="Volatile environment; mixed signals" Category="GLOBAL" Period="all" Time="policy" />
+    </Information>
+    <News>
+      <Item priority="HIGH" asset="AAT">AAT reports unexpected spike in demand</Item>
+      <Item priority="LOW" asset="MSFT">MSFT faces temporary supply constraints</Item>
+    </News>
+  </Scenario>
+</JessXSetup>

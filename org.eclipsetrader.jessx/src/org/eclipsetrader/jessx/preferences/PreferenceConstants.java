@@ -13,4 +13,6 @@ public class PreferenceConstants {
 
 	public static final String P_STRING = "stringPreference";
 	
+	public static final String P_SCENARIO_FILE = "jessxScenarioFile";
+	
 }
