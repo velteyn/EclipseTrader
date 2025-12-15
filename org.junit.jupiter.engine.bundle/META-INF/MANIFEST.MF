@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JUnit Jupiter Engine
+Bundle-SymbolicName: org.junit.jupiter.engine
+Bundle-Version: 5.10.2
+Bundle-Vendor: EclipseTrader.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.junit.jupiter.engine
+Bundle-ClassPath: ., lib/junit-jupiter-engine-5.10.2.jar

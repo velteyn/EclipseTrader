@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JUnit 3 Bundle
+Bundle-SymbolicName: org.junit
+Bundle-Version: 3.8.2
+Bundle-Vendor: EclipseTrader.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: junit.framework
+Bundle-ClassPath: ., lib/junit-3.8.2.jar

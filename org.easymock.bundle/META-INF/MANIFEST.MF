@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EasyMock Bundle
+Bundle-SymbolicName: org.easymock
+Bundle-Version: 4.3.0
+Bundle-Vendor: EclipseTrader.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.easymock
+Bundle-ClassPath: ., lib/easymock-4.3.jar, lib/byte-buddy-1.14.11.jar, lib/objenesis-3.3.jar

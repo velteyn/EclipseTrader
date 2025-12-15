@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CGLIB Bundle
+Bundle-SymbolicName: net.sf.cglib
+Bundle-Version: 3.3.0
+Bundle-Vendor: EclipseTrader.org
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: net.sf.cglib.core,net.sf.cglib.proxy,net.sf.cglib.reflect,net.sf.cglib.beans,net.sf.cglib.transform,net.sf.cglib.util
+Bundle-ClassPath: ., lib/cglib-3.3.0.jar
