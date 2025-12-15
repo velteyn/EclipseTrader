@@ -43,6 +43,7 @@
         <!-- <module>org.eclipsetrader.tests</module> -->
         <module>org.easymock.bundle</module>
         <module>net.sf.cglib.bundle</module>
+        <module>org.objenesis.bundle</module>
         <!-- <module>org.junit.jupiter.api.bundle</module> -->
         <!-- <module>org.junit.jupiter.engine.bundle</module> -->
         <module>org.mockito.bundle</module>
