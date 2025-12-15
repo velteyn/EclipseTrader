@@ -12,41 +12,5 @@
     <artifactId>org.eclipsetrader.core</artifactId>
     <packaging>eclipse-plugin</packaging>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.6.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-test-libs</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                
-                                <artifactItem>
-                                    <groupId>junit</groupId>
-                                    <artifactId>junit</artifactId>
-                                    <version>3.8.2</version>
-                                    <outputDirectory>${project.basedir}/lib</outputDirectory>
-                                    <destFileName>junit-3.8.2.jar</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.mozilla</groupId>
-                                    <artifactId>rhino</artifactId>
-                                    <version>1.7.7.2</version>
-                                    <outputDirectory>${project.basedir}/lib</outputDirectory>
-                                    <destFileName>rhino-1.7.7.2.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    
 </project>

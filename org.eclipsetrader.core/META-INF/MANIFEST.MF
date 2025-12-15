@@ -4,25 +4,12 @@ Bundle-Name: Core Plug-in
 Bundle-SymbolicName: org.eclipsetrader.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipsetrader.core.internal.CoreActivator
-Bundle-ClassPath: ., lib/junit-3.8.2.jar, lib/rhino-1.7.7.2.jar
+Bundle-ClassPath: .
 Bundle-Vendor: Eclipsetrader.org
 Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.logging,
- org.easymock;bundle-version="[4.3.0,5.0.0)",
- net.sf.cglib,
- org.objenesis,
- org.junit
+ org.mozilla.rhino
 Import-Package: org.mozilla.javascript,
- org.easymock,
- net.sf.cglib.core,
- net.sf.cglib.proxy,
- net.sf.cglib.reflect,
- net.sf.cglib.beans,
- net.sf.cglib.transform,
- net.sf.cglib.util,
- org.objenesis,
- org.objenesis.instantiator.basic,
- org.objenesis.strategy,
  javax.xml.bind;version="[2.0.0,3.0.0)",
  javax.xml.bind.annotation;version="[2.0.0,3.0.0)",
  javax.xml.bind.annotation.adapters;version="[2.0.0,3.0.0)",
@@ -38,19 +25,16 @@ Export-Package: org.eclipsetrader.core,
  org.eclipsetrader.core.charts.repository,
  org.eclipsetrader.core.feed,
  org.eclipsetrader.core.instruments,
- org.eclipsetrader.core.internal;x-friends:="org.eclipsetrader.ui,org.eclipsetrader.core.tests",
- org.eclipsetrader.core.internal.ats;x-friends:="org.eclipsetrader.ui,org.eclipsetrader.core.tests",
- org.eclipsetrader.core.internal.ats.repository;x-friends:="org.eclipsetrader.ui,org.eclipsetrader.core.tests",
- org.eclipsetrader.core.internal.charts.repository;x-friends:="org.eclipsetrader.ui,org.eclipsetrader.core.tests",
- org.eclipsetrader.core.internal.feed;x-friends:="org.eclipsetrader.ui,org.eclipsetrader.core.tests",
- org.eclipsetrader.core.internal.markets;x-friends:="org.eclipsetrader.ui,org.eclipsetrader.core.tests",
- org.eclipsetrader.core.internal.repositories;x-friends:="org.eclipsetrader.ui,org.eclipsetrader.core.tests",
- org.eclipsetrader.core.internal.trading;x-friends:="org.eclipsetrader.ui,org.eclipsetrader.core.tests",
+ org.eclipsetrader.core.internal;x-friends:="org.eclipsetrader.ui",
+ org.eclipsetrader.core.internal.ats;x-friends:="org.eclipsetrader.ui",
+ org.eclipsetrader.core.internal.ats.repository;x-friends:="org.eclipsetrader.ui",
+ org.eclipsetrader.core.internal.charts.repository;x-friends:="org.eclipsetrader.ui",
+ org.eclipsetrader.core.internal.feed;x-friends:="org.eclipsetrader.ui",
+ org.eclipsetrader.core.internal.markets;x-friends:="org.eclipsetrader.ui",
+ org.eclipsetrader.core.internal.repositories;x-friends:="org.eclipsetrader.ui",
+ org.eclipsetrader.core.internal.trading;x-friends:="org.eclipsetrader.ui",
  org.eclipsetrader.core.markets,
  org.eclipsetrader.core.repositories,
  org.eclipsetrader.core.trading,
  org.eclipsetrader.core.views
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Eclipse-RegisterBuddy: org.eclipsetrader.core.tests
-Eclipse-BuddyPolicy: registered
-DynamicImport-Package: org.easymock,net.sf.cglib.core,net.sf.cglib.proxy,net.sf.cglib.reflect,net.sf.cglib.beans,net.sf.cglib.transform,net.sf.cglib.util,org.objenesis,org.objenesis.instantiator.basic,org.objenesis.strategy
