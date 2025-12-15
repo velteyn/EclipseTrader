@@ -41,7 +41,7 @@
         <!-- Legacy test modules disabled during migration -->
         <!-- <module>org.eclipsetrader.core.tests</module> -->
         <!-- <module>org.eclipsetrader.tests</module> -->
-        <!-- workspace test bundles removed; use Orbit JUnit via target -->
+        <module>org.easymock.bundle</module>
         <module>net.sf.cglib.bundle</module>
         <!-- <module>org.junit.jupiter.api.bundle</module> -->
         <!-- <module>org.junit.jupiter.engine.bundle</module> -->
