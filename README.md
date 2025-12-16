@@ -13,8 +13,9 @@ This repository represents an ongoing effort to modernize the original EclipseTr
 To develop and run EclipseTrader from your IDE, you will need to set up an Eclipse RCP development environment.
 
 ### Prerequisites
-- **Java 11**: The project is built on Java 11. Ensure you have a compatible JDK installed.
-- **Eclipse IDE for RCP and RAP Developers**: Download a recent version (e.g., 2024-03) to ensure compatibility with the project's dependencies.
+- **Java 21**: Use Temurin/OpenJDK 21 (matching the workspace runtime).
+- **Eclipse IDE for RCP and RAP Developers**: A recent SimRel (e.g., 2024‑03).
+- **Tycho/Maven**: Included in the repository build; no separate install needed in Eclipse.
 
 ### Setup Instructions
 1.  **Import Projects**:
@@ -29,10 +30,33 @@ To develop and run EclipseTrader from your IDE, you will need to set up an Eclip
     *   This may take a few minutes as Eclipse downloads all the necessary plugins.
 
 3.  **Launch the Application from the IDE**:
-    *   In the Package Explorer, navigate to the `org.eclipsetrader.releng` project.
-    *   Open the `eclipsetrader.product` file. This will open the product configuration editor.
-    *   In the top-right corner of the editor, click the **Synchronize** link. This ensures that the product definition is up-to-date with the target platform.
-    *   In the **Testing** section of the editor, click the **Launch an Eclipse application** link. This will start the EclipseTrader application.
+    * Open `org.eclipsetrader.releng/eclipsetrader.product`.
+    * Click **Synchronize** (top‑right).
+    * In **Testing**, click **Launch an Eclipse application**.
+    * Alternatively, use `org.eclipsetrader.releng/EclipseTrader-Workspace.launch` for a curated workspace‑only launch (excludes Equinox p2 extras).
+
+4.  **Avoid Duplicate Singletons in Launch**:
+    * In the Run Configuration → Plug‑ins tab set “Launch with” to `Plug‑ins selected below`.
+    * Keep the workspace instance of `org.eclipsetrader.core (1.0.0.qualifier)` and uncheck any timestamped instance coming from local p2 repos.
+    * Uncheck optional Equinox **p2** bundles (console, director, operations, ui) which are not required to run EclipseTrader and can cause resolution errors in dev launches.
+
+5.  **JessX Scenario Selection (Preferences)**:
+    * Open **Preferences → Plugins → JessX! Scenarios**.
+    * Pick a bundled scenario: `default.xml`, `bull-market.xml`, `bear-market.xml`, `volatile-market.xml`, or click **Browse…** and select any `.xml` on disk.
+    * To add custom scenarios, drop files into:
+      ```
+      <workspace>/.metadata/.plugins/org.eclipsetrader.jessx/scenarios/
+      ```
+    * The selected scenario is persisted and loaded at startup by JessX.
+
+6.  **Start JessX Server and Data Flow**:
+    * Ensure the **JessX broker** is set as the active broker.
+    * Click the “Play” button to start JessX; the server initializes and the client connects on `localhost:6290`.
+    * Watchlists and charts will update from the simulated feed.
+
+7.  **Common Runtime Warnings**:
+    * **SLF4J**: If you see “Failed to load class org.slf4j.impl.StaticLoggerBinder”, logging defaults to NOP. Add one provider (`slf4j-simple`, `slf4j-jdk14`, `slf4j-reload4j`, or `logback-classic`) if desired, or `slf4j-nop` to suppress.
+    * **Jasper TLD scanner**: Informational only; safe to ignore.
 
 ## How to Compile and Run
 
@@ -50,27 +74,21 @@ org.eclipsetrader.releng\target\products\org.eclipsetrader.platform.workbench\wi
 *(Adjust the path according to your operating system)*
 
 ### Important Notes
-*   **Skipping Tests**: The project currently lacks a comprehensive automated test suite. It is recommended to skip the test execution during the build process:
-    ```bash
-    mvn clean install -DskipTests
-    ```
-*   **Build Environment**: In some environments with file-count limitations (like certain sandboxes), the Tycho build process can fail. A workaround is to temporarily modify the root `pom.xml` to redirect the build output outside the workspace:
-    ```xml
-    <properties>
-        <project.build.directory>/tmp/eclipsetrader-build/${project.artifactId}</project.build.directory>
-    </properties>
-    ```
-    This change should be reverted before committing your code.
+- **Tests**: Modern tests run under Tycho in `org.eclipsetrader.core.modern.tests`. If you prefer faster local builds:
+  ```bash
+  mvn clean install -DskipTests
+  ```
+- **Product build**: If the p2 director fails due to missing features, ensure `org.jdom-feature` and other local feature IU versions are present (built by the reactor) and avoid mixing targets.
 
 ## Contributing
 
 Contributions to EclipseTrader are welcome! The primary goal is to stabilize the JESSX simulation functionality and address blocking bugs that prevent core features from working as intended.
 
 ### Guidelines
-*   **Focus on JESSX**: The main development effort is concentrated on the `org.eclipsetrader.jessx` plugin and its related components.
-*   **Manual Verification**: Due to the current lack of an automated test suite, all changes must be thoroughly tested manually. Launch the application and ensure your changes are working correctly and have not introduced any regressions.
-*   **Code Compilation**: All submitted code must compile successfully against the provided target platform. Pull requests with compilation errors will not be accepted.
-*   **Understand the Legacy**: Be aware that this is a legacy project. Some parts of the code may seem complex or unconventional. When encountering such code, it is better to add comments and report it for future analysis rather than attempting a large-scale refactoring.
+* **Focus on JESSX**: Main effort centers on `org.eclipsetrader.jessx` and related components.
+* **Manual Verification**: Launch from the IDE and verify changes interactively.
+* **Code Compilation**: Ensure successful compilation against the target platform.
+* **Legacy Awareness**: Prefer pragmatic fixes over large refactors without coverage.
 
 ### Project Context
 The JESSX simulator was originally a separate project (https://github.com/velteyn/jessx) that was integrated into EclipseTrader. Much of its source code was decompiled, which can make it challenging to understand. The focus is on pragmatic fixes to make it functional rather than rewriting it from scratch.
