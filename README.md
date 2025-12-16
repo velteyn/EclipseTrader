@@ -13,8 +13,8 @@ This repository represents an ongoing effort to modernize the original EclipseTr
 To develop and run EclipseTrader from your IDE, you will need to set up an Eclipse RCP development environment.
 
 ### Prerequisites
-- **Java 21**: Use Temurin/OpenJDK 21 (matching the workspace runtime).
-- **Eclipse IDE for RCP and RAP Developers**: A recent SimRel (e.g., 2024‑03).
+- **Java 8**: Use Adoptium/OpenJDK 8 (matching the workspace runtime). (The goal is to move to Java 21/25 soon (HELP ME !!))
+- **Eclipse IDE for RCP and RAP Developers**: A recent SimRel (e.g., 2025‑12).
 - **Tycho/Maven**: Included in the repository build; no separate install needed in Eclipse.
 
 ### Setup Instructions
@@ -28,6 +28,7 @@ To develop and run EclipseTrader from your IDE, you will need to set up an Eclip
     *   Open the `org.eclipsetrader.releng/eclipsetrader.target` file.
     *   Wait for Eclipse to resolve all dependencies. Once it's finished, click **Set as Target Platform** in the top-right corner of the editor.
     *   This may take a few minutes as Eclipse downloads all the necessary plugins.
+    *   Set Java Compiler compliance level to Java 1.8 and select that for JREs (temporary but HELP ME to move to Java 21/25 tkz)
 
 3.  **Launch the Application from the IDE**:
     * Open `org.eclipsetrader.releng/eclipsetrader.product`.
