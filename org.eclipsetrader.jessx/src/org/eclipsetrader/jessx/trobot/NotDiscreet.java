@@ -13,8 +13,8 @@ public class NotDiscreet extends Animator {
   
   private int highLimit;
   
-  public NotDiscreet(int i, double InactivityPercentage, int lowLimit, int highLimit) {
-    super(i, InactivityPercentage);
+  public NotDiscreet(int i, double InactivityPercentage, int lowLimit, int highLimit, String persona) {
+    super(i, InactivityPercentage, persona);
     this.lowLimit = lowLimit;
     this.highLimit = highLimit;
     Utils.logger.info(String.format("NotDiscreet bot %d created with price range [%d, %d]", i, lowLimit, highLimit));

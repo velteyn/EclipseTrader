@@ -8,7 +8,7 @@ import org.eclipsetrader.core.ats.simulation.OrderMonitor;
 import org.eclipsetrader.core.feed.PricingEnvironment;
 import org.eclipsetrader.core.feed.TimeSpan;
 import org.eclipsetrader.core.feed.Trade;
-import org.eclipsetrader.core.instruments.Security;
+import org.eclipsetrader.core.instruments.Stock;
 import org.eclipsetrader.core.trading.IOrderSide;
 import org.eclipsetrader.core.trading.IOrderType;
 import org.eclipsetrader.core.trading.Order;
@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 
+import java.util.Currency;
 import java.util.Date;
 
 @RunWith(JUnitPlatform.class)
@@ -45,8 +46,8 @@ public class HasPositionFunctionModernTest {
     }
 
     private static class InstrumentStub implements ITradingSystemInstrument {
-        private final Security s;
-        InstrumentStub(Security s) { this.s = s; }
+        private final Stock s;
+        InstrumentStub(Stock s) { this.s = s; }
         @Override public org.eclipsetrader.core.instruments.ISecurity getInstrument() { return s; }
         @Override public Object getAdapter(Class adapter) { return null; }
     }
@@ -67,7 +68,7 @@ public class HasPositionFunctionModernTest {
     void testHasPositionFunctionViaScript() throws Exception {
         PricingEnvironment env = new PricingEnvironment();
         StrategyStub strategy = new StrategyStub();
-        Security sec = new Security("SEC", null);
+        Stock sec = new Stock("SEC", null, Currency.getInstance("USD"));
         TradingSystemStub ts = new TradingSystemStub(strategy, new ITradingSystemInstrument[]{new InstrumentStub(sec)});
         Account account = new Account();
         Broker broker = new Broker(env);

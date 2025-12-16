@@ -28,6 +28,8 @@ import org.jdom.Element;
 public abstract class Robot extends Thread implements ExperimentDeveloppmentListener, NetworkListener {
   private String login;
   
+  private String persona;
+
   private RobotCore robotCore;
   
   private LinkedList<NewsItem> news;
@@ -46,7 +48,8 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
   
   private HashMap<String, Date> datesLastOrder;
   
-  public Robot(int name) {
+  public Robot(int name, String persona) {
+    this.persona = persona;
     this.deals = new LinkedList<Deal>();
     this.news = new LinkedList<NewsItem>();
     this.dividendInfos = new LinkedList<DividendInfo>();
@@ -75,6 +78,10 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
   
   public String getLogin() {
     return this.login;
+  }
+
+  public String getPersona() {
+    return this.persona;
   }
   
   public abstract long NextWakeUp(String paramString);
@@ -156,8 +163,9 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
             Element newsElem = newsIter.next();
             String priority = newsElem.getAttributeValue("priority");
             String asset = newsElem.getAttributeValue("asset");
+            String sentiment = newsElem.getAttributeValue("sentiment");
             String text = newsElem.getText();
-            news.add(new NewsItem(priority, asset, text));
+            news.add(new NewsItem(priority, asset, text, sentiment));
         }
     }
   }
@@ -207,30 +215,31 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
   
   protected abstract void MyAct();
 
-  protected void reactToNews(String institution) {
-      LinkedList<NewsItem> news = getNews();
-      for (NewsItem item : news) {
-          if (item.getAsset().equals(institution)) {
-                if (item.getPriority().equals("HIGH")) {
-                    if (item.getText().contains("rise")) {
-                        buy(institution, 100);
-                    } else if (item.getText().contains("fall")) {
-                        sell(institution, 100);
-                    }
-                } else if (item.getPriority().equals("MEDIUM")) {
-                    if (item.getText().contains("rise")) {
-                        buy(institution, 50);
-                    } else if (item.getText().contains("fall")) {
-                        sell(institution, 50);
-                    }
-                }
-          }
-      }
-  }
+  public void reactToNews(String institution) {
+    LinkedList<NewsItem> news = getNews();
+    for (NewsItem item : news) {
+        if (item.getAsset().equals(institution)) {
+            int quantity = 0;
+            if (getPersona().equals("Poor")) {
+                quantity = 10;
+            } else if (getPersona().equals("Investment Group")) {
+                quantity = 100;
+            } else if (getPersona().equals("Big Institution")) {
+                quantity = 1000;
+            }
+
+            if (item.getSentiment().equals("good")) {
+                buy(institution, quantity);
+            } else if (item.getSentiment().equals("bad")) {
+                sell(institution, quantity);
+            }
+        }
+    }
+}
   
   protected abstract String chooseName(int paramInt);
   
-  protected void buy(String institution, int quantity) {
+  public void buy(String institution, int quantity) {
       LimitOrder lo = new LimitOrder();
       lo.setEmitter(getLogin());
       lo.setInstitutionName(institution);
@@ -240,7 +249,7 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
       getRobotCore().send((NetworkWritable)lo);
   }
 
-  protected void sell(String institution, int quantity) {
+  public void sell(String institution, int quantity) {
       LimitOrder lo = new LimitOrder();
       lo.setEmitter(getLogin());
       lo.setInstitutionName(institution);

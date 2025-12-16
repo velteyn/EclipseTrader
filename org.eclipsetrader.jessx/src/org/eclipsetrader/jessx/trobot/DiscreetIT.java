@@ -12,8 +12,8 @@ import org.jdom.Document;
 import org.eclipsetrader.jessx.utils.Utils;
 
 public class DiscreetIT extends Animator {
-  public DiscreetIT(int name, double InactivityPercentage) {
-    super(name, InactivityPercentage);
+  public DiscreetIT(int name, double InactivityPercentage, String persona) {
+    super(name, InactivityPercentage, persona);
     Utils.logger.info(String.format("DiscreetIT bot %d created", name));
   }
   

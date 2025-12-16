@@ -16,8 +16,8 @@ public abstract class Animator extends Robot
     private Date LastDateOrder;
     private double InactivityPercentage;
     
-    public Animator(final int i, final double InactivityPercentage) {
-        super(i);
+    public Animator(final int i, final double InactivityPercentage, final String persona) {
+        super(i, persona);
         this.InactivityPercentage = InactivityPercentage;
     }
     

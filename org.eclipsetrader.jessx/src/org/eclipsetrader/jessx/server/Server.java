@@ -106,46 +106,56 @@ public class Server
     }
 
  
-    public void loadBots(){
-        final int temp = 10;
-        final int tempIT = 10;
-        
-        // Add delay between bot connections to avoid overwhelming server
-        final int DELAY_MS = 50; // 50ms delay between bots
-        
-        try { 
-            Thread.sleep(200); // 200ms initial delay
-            System.out.println("Server socket ready, starting bot connections...");
-        } catch (InterruptedException e) {}
-        
-        for (int i = 0; i < NUMBER_DISCREET_BOTS; ++i) {
-            final Robot zitDiscreet = new Discreet(i, temp);
-            System.out.println("in for, after creating the discreet "+ i +" and before start");
-            zitDiscreet.start();
-            System.out.println("after discreet start " + i);
-            
-            // Add delay to stagger connections
-            try { Thread.sleep(DELAY_MS); } catch (InterruptedException e) {}
-        }
-        
-        for (int i = 0; i < 19; ++i) {
-            final Robot zitDiscreetIT = new DiscreetIT(i, tempIT);
-            System.out.println("dans for, après création du discreet " + i + " et avant start");
-            zitDiscreetIT.start();
-            System.out.println("après start du discreetIT " + i);
-            
-            // Add delay to stagger connections  
-            try { Thread.sleep(DELAY_MS); } catch (InterruptedException e) {}
-        }
-        
-        for (int i = 0; i < 15; ++i) {
-            final Robot zitNotDiscreet = new NotDiscreet(i, 10, 0, 100);
-            zitNotDiscreet.start();
-            
-            // Add delay to stagger connections
-            try { Thread.sleep(DELAY_MS); } catch (InterruptedException e) {}
+    public void loadBots() {
+    final int temp = 10;
+    final int tempIT = 10;
+    final int DELAY_MS = 50; // 50ms delay between bots
+
+    try {
+        Thread.sleep(200); // 200ms initial delay
+    } catch (InterruptedException e) {
+    }
+
+    // Get the available player types from the BusinessCore
+    List<String> playerTypes = new ArrayList<String>(BusinessCore.getScenario().getPlayerTypes().keySet());
+
+    // If there are no player types, create a default one
+    if (playerTypes.isEmpty()) {
+        playerTypes.add("Poor");
+    }
+
+    int botId = 0;
+    // Distribute the bots evenly among the player types and types of bots
+    for (int i = 0; i < NUMBER_DISCREET_BOTS; i++) {
+        String persona = playerTypes.get(i % playerTypes.size());
+        final Robot zitDiscreet = new Discreet(botId++, temp, persona);
+        zitDiscreet.start();
+        try {
+            Thread.sleep(DELAY_MS);
+        } catch (InterruptedException e) {
         }
     }
+
+    for (int i = 0; i < 19; i++) {
+        String persona = playerTypes.get(i % playerTypes.size());
+        final Robot zitDiscreetIT = new DiscreetIT(botId++, tempIT, persona);
+        zitDiscreetIT.start();
+        try {
+            Thread.sleep(DELAY_MS);
+        } catch (InterruptedException e) {
+        }
+    }
+
+    for (int i = 0; i < 15; i++) {
+        String persona = playerTypes.get(i % playerTypes.size());
+        final Robot zitNotDiscreet = new NotDiscreet(botId++, 10, 0, 100, persona);
+        zitNotDiscreet.start();
+        try {
+            Thread.sleep(DELAY_MS);
+        } catch (InterruptedException e) {
+        }
+    }
+}
     
     private void loadJessXModules() {
         Utils.logger.debug("Loading all available modules.");

@@ -16,11 +16,17 @@ public class NewsItem {
     private String priority;
     private String asset;
     private String text;
+    private String sentiment;
 
-    public NewsItem(String priority, String asset, String text) {
+    public NewsItem(String priority, String asset, String text, String sentiment) {
         this.priority = priority;
         this.asset = asset;
         this.text = text;
+        this.sentiment = sentiment;
+    }
+
+    public String getSentiment() {
+        return sentiment;
     }
 
     public String getPriority() {

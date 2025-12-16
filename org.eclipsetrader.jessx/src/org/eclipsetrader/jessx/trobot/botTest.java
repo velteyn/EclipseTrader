@@ -8,7 +8,7 @@ import org.eclipsetrader.jessx.net.NetworkWritable;
 
 public class botTest extends Robot {
   public botTest(int name) {
-    super(name);
+    super(name, "Poor");
   }
   
   public long BasicNextWakeUp() {

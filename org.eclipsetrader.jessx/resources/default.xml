@@ -91,11 +91,30 @@
       <OperatorsPlayed>
         <Operator name="Operator 2 on BANK CANARIE" />
       </OperatorsPlayed>
-      <Portfolio cash="3000.0">
-        <Owning asset="AAT" qtty="400" />
-        <Owning asset="GPLRF" qtty="300" />
-        <Owning asset="PLS" qtty="500" />
-        <Owning asset="MSFT" qtty="200" />
+      <Portfolio cash="10000.0">
+        <Owning asset="AAT" qtty="100" />
+        <Owning asset="GPLRF" qtty="150" />
+      </Portfolio>
+    </PlayerType>
+    <PlayerType name="Investment Group">
+      <OperatorsPlayed>
+        <Operator name="Operator 2 on BANK CANARIE" />
+      </OperatorsPlayed>
+      <Portfolio cash="100000.0">
+        <Owning asset="AAT" qtty="1000" />
+        <Owning asset="GPLRF" qtty="1500" />
+        <Owning asset="MSFT" qtty="500" />
+      </Portfolio>
+    </PlayerType>
+    <PlayerType name="Big Institution">
+      <OperatorsPlayed>
+        <Operator name="Operator 2 on BANK CANARIE" />
+      </OperatorsPlayed>
+      <Portfolio cash="1000000.0">
+        <Owning asset="AAT" qtty="10000" />
+        <Owning asset="GPLRF" qtty="15000" />
+        <Owning asset="MSFT" qtty="5000" />
+        <Owning asset="PLS" qtty="20000" />
       </Portfolio>
     </PlayerType>
     <Information>
@@ -103,9 +122,9 @@
       <Information Content="Transaction costs apply per operation" Category="GLOBAL" Period="all" Time="policy" />
     </Information>
     <News>
-      <Item priority="HIGH" asset="AAT">AAT dividend outlook improves</Item>
-      <Item priority="LOW" asset="GPLRF">GPLRF faces minor regulatory delay</Item>
-      <Item priority="MEDIUM" asset="MSFT">MSFT posts steady quarterly results</Item>
+      <Item priority="HIGH" asset="AAT" sentiment="good">AAT dividend outlook improves</Item>
+      <Item priority="LOW" asset="GPLRF" sentiment="bad">GPLRF faces minor regulatory delay</Item>
+      <Item priority="MEDIUM" asset="MSFT" sentiment="neutral">MSFT posts steady quarterly results</Item>
     </News>
   </Scenario>
   <Chat />

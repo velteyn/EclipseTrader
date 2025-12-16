@@ -2,7 +2,7 @@ package org.eclipsetrader.core.ats.simulation;
 
 import org.eclipsetrader.core.feed.PricingEnvironment;
 import org.eclipsetrader.core.feed.Trade;
-import org.eclipsetrader.core.instruments.Security;
+import org.eclipsetrader.core.instruments.Stock;
 import org.eclipsetrader.core.trading.IOrderSide;
 import org.eclipsetrader.core.trading.IOrderStatus;
 import org.eclipsetrader.core.trading.IOrderType;
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 
+import java.util.Currency;
 import java.util.Date;
 
 @RunWith(JUnitPlatform.class)
@@ -19,7 +20,7 @@ public class BrokerModernTest {
 
     private static class TestBroker extends Broker {
         public TestBroker(PricingEnvironment env) { super(env); }
-        public void trigger(Security sec, Date time, double price) {
+        public void trigger(Stock sec, Date time, double price) {
             processTrade(sec, new Trade(time, price, 1L, null));
         }
     }
@@ -29,7 +30,7 @@ public class BrokerModernTest {
         PricingEnvironment env = new PricingEnvironment();
         TestBroker broker = new TestBroker(env);
         Account account = new Account();
-        Security security = new Security("SEC", null);
+        Stock security = new Stock("SEC", null, Currency.getInstance("USD"));
 
         Order order = new Order(account, IOrderType.Market, IOrderSide.Buy, security, 100L, null);
         OrderMonitor monitor = (OrderMonitor) broker.prepareOrder(order);
@@ -47,7 +48,7 @@ public class BrokerModernTest {
         PricingEnvironment env = new PricingEnvironment();
         TestBroker broker = new TestBroker(env);
         Account account = new Account();
-        Security security = new Security("SEC", null);
+        Stock security = new Stock("SEC", null, Currency.getInstance("USD"));
 
         Order order = new Order(account, IOrderType.Limit, IOrderSide.Buy, security, 50L, 10.0);
         OrderMonitor monitor = (OrderMonitor) broker.prepareOrder(order);
@@ -64,7 +65,7 @@ public class BrokerModernTest {
         PricingEnvironment env = new PricingEnvironment();
         TestBroker broker = new TestBroker(env);
         Account account = new Account();
-        Security security = new Security("SEC", null);
+        Stock security = new Stock("SEC", null, Currency.getInstance("USD"));
 
         Order order = new Order(account, IOrderType.Limit, IOrderSide.Sell, security, 75L, 10.0);
         OrderMonitor monitor = (OrderMonitor) broker.prepareOrder(order);

@@ -1,7 +1,7 @@
 package org.eclipsetrader.core.ats.simulation;
 
 import org.eclipsetrader.core.feed.PricingEnvironment;
-import org.eclipsetrader.core.instruments.Security;
+import org.eclipsetrader.core.instruments.Stock;
 import org.eclipsetrader.core.trading.IOrderSide;
 import org.eclipsetrader.core.trading.IOrderType;
 import org.eclipsetrader.core.trading.Order;
@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
+
+import java.util.Currency;
 
 @RunWith(JUnitPlatform.class)
 public class AccountSimulationModernTest {
@@ -18,7 +20,7 @@ public class AccountSimulationModernTest {
         PricingEnvironment env = new PricingEnvironment();
         Broker broker = new Broker(env);
         Account account = new Account();
-        Security security = new Security("SEC", null);
+        Stock security = new Stock("SEC", null, Currency.getInstance("USD"));
 
         Order buyOrder = new Order(account, IOrderType.Market, IOrderSide.Buy, security, 100L, null);
         OrderMonitor monitor = new OrderMonitor(broker, buyOrder);

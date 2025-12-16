@@ -2,7 +2,7 @@ package org.eclipsetrader.core.ats.engines;
 
 import org.eclipsetrader.core.feed.PricingEnvironment;
 import org.eclipsetrader.core.feed.Trade;
-import org.eclipsetrader.core.instruments.Security;
+import org.eclipsetrader.core.instruments.Stock;
 import org.eclipsetrader.core.trading.IOrderSide;
 import org.eclipsetrader.core.trading.IOrderStatus;
 import org.junit.jupiter.api.Assertions;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 
+import java.util.Currency;
 import java.util.Date;
 
 @RunWith(JUnitPlatform.class)
@@ -17,7 +18,7 @@ public class MarketOrderFunctionModernTest {
 
     private static class TestBroker extends org.eclipsetrader.core.ats.simulation.Broker {
         public TestBroker(PricingEnvironment env) { super(env); }
-        public void trigger(Security sec, Date time, double price) {
+        public void trigger(Stock sec, Date time, double price) {
             processTrade(sec, new Trade(time, price, 1L, null));
         }
     }
@@ -27,7 +28,7 @@ public class MarketOrderFunctionModernTest {
         PricingEnvironment env = new PricingEnvironment();
         TestBroker broker = new TestBroker(env);
         org.eclipsetrader.core.ats.simulation.Account account = new org.eclipsetrader.core.ats.simulation.Account();
-        Security security = new Security("SEC", null);
+        Stock security = new Stock("SEC", null, Currency.getInstance("USD"));
 
         MarketOrderFunction fn = new MarketOrderFunction(broker, account, security);
         fn.jsSet_type(BaseOrderFunction.Market);

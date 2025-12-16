@@ -204,8 +204,9 @@ public class Scenario implements XmlExportable, XmlLoadable {
                 Element newsElem = newsIter.next();
                 String priority = newsElem.getAttributeValue("priority");
                 String asset = newsElem.getAttributeValue("asset");
+                String sentiment = newsElem.getAttributeValue("sentiment");
                 String text = newsElem.getText();
-                newsItems.add(new NewsItem(priority, asset, text));
+                newsItems.add(new NewsItem(priority, asset, text, sentiment));
             }
         }
 	}
