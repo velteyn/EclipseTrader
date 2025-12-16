@@ -21,7 +21,7 @@ public class Scenario implements XmlExportable, XmlLoadable {
 
 	private Vector playerTypeListeners = new Vector();
 
-	private Vector vectorInformation = new Vector();
+	private List<InformationItem> informationItems = new ArrayList<InformationItem>();
 
 	private Vector infoListners = new Vector();
 
@@ -84,31 +84,8 @@ public class Scenario implements XmlExportable, XmlLoadable {
 		this.playerTypeListeners.remove(listener);
 	}
 
-	public Vector getListInformation() {
-		return this.vectorInformation;
-	}
-
-	public void addInformation(String[] info) {
-		this.vectorInformation.add(info);
-		fireInfoAdded(info);
-		Utils.logger.debug("add " + info);
-	}
-
-	public void removeInformation(int i) {
-		this.vectorInformation.remove(i);
-		fireInfoRemoved(i);
-		Utils.logger.debug("remove info number " + i);
-	}
-
-	public void removeAllInformation() {
-		this.vectorInformation.clear();
-		fireInfoClear();
-		Utils.logger.debug("remove all info");
-	}
-
-	public void changeInformation(int i, String[] message) {
-		this.vectorInformation.set(i, message);
-		Utils.logger.debug("change " + i);
+	public List<InformationItem> getListInformation() {
+		return this.informationItems;
 	}
 
 	protected void fireInfoAdded(String[] info) {
@@ -131,17 +108,17 @@ public class Scenario implements XmlExportable, XmlLoadable {
 		Utils.logger.debug("fireremovall-1");
 	}
 
-	protected void fireProgammedInfoLoad() {
-		for (int i = 0; i < this.infoListners.size(); i++)
-			((ProgrammedInfoListener) this.infoListners.elementAt(i)).programmedInfoModified(new ProgrammedInfoEvent(this.vectorInformation, 3));
-	}
-
 	public void addProgrammedInfoListener(ProgrammedInfoListener listener) {
 		this.infoListners.add(listener);
 	}
 
 	public void removedInfoListener(ProgrammedInfoListener listener) {
 		this.infoListners.remove(listener);
+	}
+
+	protected void fireProgammedInfoLoad() {
+		for (int i = 0; i < this.infoListners.size(); i++)
+			((ProgrammedInfoListener) this.infoListners.elementAt(i)).programmedInfoModified(new ProgrammedInfoEvent(this.informationItems, 3));
 	}
 
 	public void saveToXml(Element node) {
@@ -153,14 +130,13 @@ public class Scenario implements XmlExportable, XmlLoadable {
 			getPlayerType(keys.get(i)).saveToXml(ptNode);
 			node.addContent((Content) ptNode);
 		}
-		int size = this.vectorInformation.size();
 		Element informationNode = new Element("Information");
-		for (int j = 0; j < size; j++) {
+		for (InformationItem item : this.informationItems) {
 			Element infoNode = new Element("Information");
-			infoNode.setAttribute("Content", ((String[]) this.vectorInformation.get(j))[0]);
-			infoNode.setAttribute("Category", ((String[]) this.vectorInformation.get(j))[1]);
-			infoNode.setAttribute("Period", ((String[]) this.vectorInformation.get(j))[2]);
-			infoNode.setAttribute("Time", ((String[]) this.vectorInformation.get(j))[3]);
+			infoNode.setAttribute("Content", item.getContent());
+			infoNode.setAttribute("Category", item.getCategory());
+			infoNode.setAttribute("Period", item.getPeriod());
+			infoNode.setAttribute("Time", item.getTime());
 			informationNode.addContent((Content) infoNode);
 		}
 		node.addContent((Content) informationNode);
@@ -176,26 +152,21 @@ public class Scenario implements XmlExportable, XmlLoadable {
 		}
         Element infoParent = node.getChild("Information");
         if (infoParent != null) {
+            this.informationItems.clear();
             Iterator<Element> infoIter = infoParent.getChildren("Information").iterator();
-            Utils.logger.debug(infoIter);
-            if (this.vectorInformation.size() > 0) {
-                removeAllInformation();
-            }
             while (infoIter.hasNext()) {
                 Element infoElem = infoIter.next();
-                Utils.logger.debug("crea infoElem =" + infoElem);
                 String infoContent = infoElem.getAttributeValue("Content");
-                Utils.logger.debug("------" + infoContent);
-                String infoReceivers = infoElem.getAttributeValue("Category");
-                String infoPeriode = infoElem.getAttributeValue("Period");
+                String infoCategory = infoElem.getAttributeValue("Category");
+                String infoPeriod = infoElem.getAttributeValue("Period");
                 String infoTime = infoElem.getAttributeValue("Time");
-                this.vectorInformation.add(new String[] { infoContent, infoReceivers, infoPeriode, infoTime });
-                Utils.logger.debug(this.vectorInformation);
+                this.informationItems.add(new InformationItem(infoContent, infoCategory, infoPeriod, infoTime));
             }
-            fireProgammedInfoLoad();
         } else {
             Utils.logger.debug("Scenario Information node missing; skipping programmed info load.");
         }
+
+        fireProgammedInfoLoad();
 
         Element newsElement = node.getChild("News");
         if (newsElement != null) {

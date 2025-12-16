@@ -230,7 +230,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		try {
 			File file = JessxActivator.getDefault().getStateLocation().append("scenario.xml").toFile();
 			if (!file.exists()) {
-				URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("resources/default.xml"), null);
+				URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("resources/scenario.xml"), null);
 				if (url != null) {
 					try (InputStream in = url.openStream(); OutputStream out = new FileOutputStream(file)) {
 						byte[] buf = new byte[1024];
@@ -785,7 +785,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 							// Try to start the experiment.
 							if (NetworkCore.getExperimentManager().beginExperiment()) {
-								new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
+								new MessageTimer(new ArrayList<>(BusinessCore.getScenario().getListInformation())).start();
 								logger.info("JessX-Setup: Experiment started successfully.");
 								experimentStarted = true;
 								break; // Exit the retry loop on success

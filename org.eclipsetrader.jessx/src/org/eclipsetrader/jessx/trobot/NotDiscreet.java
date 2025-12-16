@@ -27,6 +27,7 @@ public class NotDiscreet extends Animator {
     Iterator<String> iterInstit = getRobotCore().getInstitutions().keySet().iterator();
     while (iterInstit.hasNext()) {
       String instit = iterInstit.next();
+      reactToNews(instit);
       if ((new Date()).getTime() - ((Date)getDatesLastOrder().get(instit)).getTime() > NextWakeUp(instit)) {
         Utils.logger.info(String.format("NotDiscreet bot %s is acting on institution %s", getLogin(), instit));
         int quantity = 1 + (int)(Math.random() * 49.0D);

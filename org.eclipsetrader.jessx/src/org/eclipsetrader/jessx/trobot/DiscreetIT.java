@@ -24,6 +24,7 @@ public class DiscreetIT extends Animator {
     Iterator<String> iterInstit = getRobotCore().getInstitutions().keySet().iterator();
     while (iterInstit.hasNext()) {
       String institname = iterInstit.next();
+      reactToNews(institname);
       Institution instit = getRobotCore().getInstitution(institname);
       if ((new Date()).getTime() - ((Date)getDatesLastOrder().get(institname)).getTime() > NextWakeUp(institname) && (
         (LinkedList)getOrderBooks().get(institname)).size() > 0) {

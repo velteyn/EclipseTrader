@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -68,15 +69,13 @@ public class ExperimentManager extends Thread implements Constants {
   
   public boolean beginExperiment() {
     Utils.logger.info("Experiment is initiated...");
-    Vector information = BusinessCore.getScenario().getListInformation();
-    int size = information.size();
+    List<org.eclipsetrader.jessx.business.InformationItem> information = BusinessCore.getScenario().getListInformation();
     int periodCount = BusinessCore.getGeneralParameters().getPeriodCount();
     int periodDuration = BusinessCore.getGeneralParameters().getPeriodDuration();
-    int i = 0;
     boolean noProblem = true;
-    while (i < size && noProblem) {
-    String timeStr = ((String[]) information.get(i))[3];
-    String periodStr = ((String[]) information.get(i))[2];
+    for (org.eclipsetrader.jessx.business.InformationItem item : information) {
+    String timeStr = item.getTime();
+    String periodStr = item.getPeriod();
 
     boolean isTimeNumeric = timeStr.chars().allMatch(Character::isDigit);
     boolean isPeriodNumeric = periodStr.chars().allMatch(Character::isDigit);
@@ -88,7 +87,6 @@ public class ExperimentManager extends Thread implements Constants {
             noProblem = false;
         }
     }
-    i++;
 }
     Iterator<String> iter = NetworkCore.getPlayerList().keySet().iterator();
     while (iter.hasNext()) {

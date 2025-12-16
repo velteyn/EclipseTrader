@@ -9,51 +9,50 @@ import java.util.Vector;
 
 import org.eclipsetrader.jessx.utils.Utils;
 import org.eclipsetrader.jessx.business.BusinessCore;
+import org.eclipsetrader.jessx.business.InformationItem;
 import org.eclipsetrader.jessx.net.Information;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 
-public class MessageTimer extends Thread
-{
-    private Vector listInformation;
-    private Vector listInformationSorted;
-    
-    public MessageTimer(final Vector Informations) {
-        this.checkInformationsToSend(Informations);
-        this.listInformation = (Vector)Informations.clone();
-        this.listInformationSorted = (Vector)this.sort().clone();
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class MessageTimer extends Thread {
+    private List<InformationItem> listInformation;
+    private List<InformationItem> listInformationSorted;
+
+    public MessageTimer(final List<InformationItem> informations) {
+        this.listInformation = new ArrayList<>(informations);
+        this.checkInformationsToSend(this.listInformation);
+        this.listInformationSorted = this.sort();
         Utils.logger.info("MessageTimer created...");
     }
-    
-    public Vector sort() {
-        final Vector listSorted = new Vector();
-        final int size = this.listInformation.size();
-        for (int i = size - 1; i >= 0; --i) {
-            String[] temp = (String[]) this.listInformation.get(i);
-            int index = i;
-            for (int j = i; j >= 0; --j) {
-                final boolean comparePeriod = Integer.parseInt(((String[])this.listInformation.get(j))[2]) < Integer.parseInt(temp[2]);
-                if (comparePeriod || (Integer.parseInt(((String[])this.listInformation.get(j))[2]) == Integer.parseInt(temp[2]) & Integer.parseInt(((String[])this.listInformation.get(j))[3]) < Integer.parseInt(temp[3]))) {
-                    temp = (String[]) this.listInformation.get(j);
-                    index = j;
+
+    public List<InformationItem> sort() {
+        List<InformationItem> listSorted = new ArrayList<>(this.listInformation);
+        Collections.sort(listSorted, new Comparator<InformationItem>() {
+            @Override
+            public int compare(InformationItem o1, InformationItem o2) {
+                int period1 = Integer.parseInt(o1.getPeriod());
+                int period2 = Integer.parseInt(o2.getPeriod());
+                if (period1 != period2) {
+                    return Integer.compare(period1, period2);
                 }
+                int time1 = Integer.parseInt(o1.getTime());
+                int time2 = Integer.parseInt(o2.getTime());
+                return Integer.compare(time1, time2);
             }
-            listSorted.add(new String[] { temp[0], temp[1], temp[2], temp[3] });
-            this.listInformation.remove(index);
-        }
+        });
         return listSorted;
     }
-    
-    public void checkInformationsToSend(final Vector information) {
+
+    public void checkInformationsToSend(final List<InformationItem> information) {
         final int periodCount = BusinessCore.getGeneralParameters().getPeriodCount();
         final int periodDuration = BusinessCore.getGeneralParameters().getPeriodDuration();
-        final int size = information.size();
-        for (int i = size - 1; i >= 0; --i) {
-            if (Integer.parseInt(((String[])information.get(i))[3]) >= periodDuration || Integer.parseInt(((String[])information.get(i))[2]) > periodCount) {
-                information.remove(i);
-            }
-        }
+        information.removeIf(item -> Integer.parseInt(item.getTime()) >= periodDuration || Integer.parseInt(item.getPeriod()) > periodCount);
     }
-    
+
     @Override
     public void run() {
         final int size = this.listInformationSorted.size();
@@ -61,24 +60,22 @@ public class MessageTimer extends Thread
             int i = 0;
             try {
                 this.listInformationSorted.add(this.listInformationSorted.get(size - 1));
-                while (NetworkCore.getExperimentManager().getExperimentState() != 0 & i < size) {
-                    while (NetworkCore.getExperimentManager().getExperimentState() == 2 & i < size) {
-                        final long timeTemp = 1000 * Integer.parseInt(((String[])this.listInformationSorted.get(i))[3]) - NetworkCore.getExperimentManager().getTimeInPeriod();
+                while (NetworkCore.getExperimentManager().getExperimentState() != 0 && i < size) {
+                    while (NetworkCore.getExperimentManager().getExperimentState() == 2 && i < size) {
+                        final long timeTemp = 1000 * Integer.parseInt(this.listInformationSorted.get(i).getTime()) - NetworkCore.getExperimentManager().getTimeInPeriod();
                         if (timeTemp > 0L) {
                             Thread.sleep(timeTemp);
                         }
-                        if (NetworkCore.getExperimentManager().getPeriodNum() + 1 == Integer.parseInt(((String[])this.listInformationSorted.get(i))[2])) {
+                        if (NetworkCore.getExperimentManager().getPeriodNum() + 1 == Integer.parseInt(this.listInformationSorted.get(i).getPeriod())) {
                             do {
-                                if (((String[])this.listInformationSorted.get(i))[1].equals("All players")) {
-                                    NetworkCore.sendToAllPlayers(new Information(((String[])this.listInformationSorted.get(i))[0]));
+                                if (this.listInformationSorted.get(i).getCategory().equals("All players")) {
+                                    NetworkCore.sendToAllPlayers(new Information(this.listInformationSorted.get(i).getContent()));
+                                } else {
+                                    NetworkCore.sendToPlayerCategory(new Information(this.listInformationSorted.get(i).getContent()), this.listInformationSorted.get(i).getCategory());
                                 }
-                                else {
-                                    NetworkCore.sendToPlayerCategory(new Information(((String[])this.listInformationSorted.get(i))[0]), ((String[])this.listInformationSorted.get(i))[1]);
-                                }
-                            } while (++i < size & Integer.parseInt(((String[])this.listInformationSorted.get(i - 1))[3]) == Integer.parseInt(((String[])this.listInformationSorted.get(i))[3]) & NetworkCore.getExperimentManager().getPeriodNum() + 1 == Integer.parseInt(((String[])this.listInformationSorted.get(i))[2]));
-                        }
-                        else {
-                            while (i < size & NetworkCore.getExperimentManager().getPeriodNum() + 1 > Integer.parseInt(((String[])this.listInformationSorted.get(i))[2])) {
+                            } while (++i < size && Integer.parseInt(this.listInformationSorted.get(i - 1).getTime()) == Integer.parseInt(this.listInformationSorted.get(i).getTime()) && NetworkCore.getExperimentManager().getPeriodNum() + 1 == Integer.parseInt(this.listInformationSorted.get(i).getPeriod()));
+                        } else {
+                            while (i < size && NetworkCore.getExperimentManager().getPeriodNum() + 1 > Integer.parseInt(this.listInformationSorted.get(i).getPeriod())) {
                                 ++i;
                                 Utils.logger.warn("A message has not be sent");
                             }
@@ -89,13 +86,12 @@ public class MessageTimer extends Thread
                             Thread.sleep(time);
                         }
                     }
-                    while (NetworkCore.getExperimentManager().getExperimentState() == 1 & i < size) {
+                    while (NetworkCore.getExperimentManager().getExperimentState() == 1 && i < size) {
                         Thread.sleep(300L);
-                        final long n = Math.abs(1000 * Integer.parseInt(((String[])this.listInformationSorted.get(i))[3]));
+                        final long n = Math.abs(1000 * Integer.parseInt(this.listInformationSorted.get(i).getTime()));
                     }
                 }
-            }
-            catch (InterruptedException ex1) {
+            } catch (InterruptedException ex1) {
                 Utils.logger.warn("MessageTimer sleep interrupted. " + ex1.toString());
             }
         }

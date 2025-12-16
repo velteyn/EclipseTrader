@@ -24,6 +24,7 @@ public class Discreet extends Animator {
     Iterator<String> iterInstit = getRobotCore().getInstitutions().keySet().iterator();
     while (iterInstit.hasNext()) {
       String instit = iterInstit.next();
+      reactToNews(instit);
       if ((new Date()).getTime() - ((Date)getDatesLastOrder().get(instit)).getTime() > NextWakeUp(instit) && (
         (LinkedList)getOrderBooks().get(instit)).size() > 0) {
         Utils.logger.info(String.format("Discreet bot %s is acting on institution %s", getLogin(), instit));
