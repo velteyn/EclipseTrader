@@ -228,7 +228,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		}
 
 		try {
-			File file = JessxActivator.getDefault().getStateLocation().append("default.xml").toFile();
+			File file = JessxActivator.getDefault().getStateLocation().append("scenario.xml").toFile();
 			if (!file.exists()) {
 				URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("resources/default.xml"), null);
 				if (url != null) {
@@ -249,11 +249,11 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 					srv.startServer();
 				}
 			} else {
-				Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Default scenario file not found");
+				Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Scenario file not found");
 				JessxActivator.log(status);
 			}
 		} catch (Exception e) {
-			Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading default scenario", e);
+			Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading scenario", e);
 			JessxActivator.log(status);
 		}
 
