@@ -74,17 +74,22 @@ public class ExperimentManager extends Thread implements Constants {
     int periodDuration = BusinessCore.getGeneralParameters().getPeriodDuration();
     int i = 0;
     boolean noProblem = true;
-    while ( i < size & noProblem) {
-      if (Integer.parseInt(((String[])information.get(i))[3]) >= 
-        periodDuration || 
-        Integer.parseInt(((String[])information.get(i))[2]) > 
-        periodCount) {
-        String warnMessage = "Some pieces of information are sent after the end of a period\nor after the end of the experiment.\nDo you want to correct this mistake?";
-        Utils.logger.warn(warnMessage);
-        noProblem = false;
-      } 
-      i++;
-    } 
+    while (i < size && noProblem) {
+    String timeStr = ((String[]) information.get(i))[3];
+    String periodStr = ((String[]) information.get(i))[2];
+
+    boolean isTimeNumeric = timeStr.chars().allMatch(Character::isDigit);
+    boolean isPeriodNumeric = periodStr.chars().allMatch(Character::isDigit);
+
+    if (isTimeNumeric && isPeriodNumeric) {
+        if (Integer.parseInt(timeStr) >= periodDuration || Integer.parseInt(periodStr) > periodCount) {
+            String warnMessage = "Some pieces of information are sent after the end of a period\nor after the end of the experiment.\nDo you want to correct this mistake?";
+            Utils.logger.warn(warnMessage);
+            noProblem = false;
+        }
+    }
+    i++;
+}
     Iterator<String> iter = NetworkCore.getPlayerList().keySet().iterator();
     while (iter.hasNext()) {
       String login = iter.next();
