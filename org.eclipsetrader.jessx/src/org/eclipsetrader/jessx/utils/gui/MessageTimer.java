@@ -50,7 +50,14 @@ public class MessageTimer extends Thread {
     public void checkInformationsToSend(final List<InformationItem> information) {
         final int periodCount = BusinessCore.getGeneralParameters().getPeriodCount();
         final int periodDuration = BusinessCore.getGeneralParameters().getPeriodDuration();
-        information.removeIf(item -> Integer.parseInt(item.getTime()) >= periodDuration || Integer.parseInt(item.getPeriod()) > periodCount);
+        information.removeIf(item -> {
+            boolean isTimeNumeric = item.getTime().chars().allMatch(Character::isDigit);
+            boolean isPeriodNumeric = item.getPeriod().chars().allMatch(Character::isDigit);
+            if (isTimeNumeric && isPeriodNumeric) {
+                return Integer.parseInt(item.getTime()) >= periodDuration || Integer.parseInt(item.getPeriod()) > periodCount;
+            }
+            return false;
+        });
     }
 
     @Override
