@@ -74,20 +74,27 @@ public class ExperimentManager extends Thread implements Constants {
     int periodDuration = BusinessCore.getGeneralParameters().getPeriodDuration();
     boolean noProblem = true;
     for (org.eclipsetrader.jessx.business.InformationItem item : information) {
-    String timeStr = item.getTime();
-    String periodStr = item.getPeriod();
+        String timeStr = item.getTime();
+        String periodStr = item.getPeriod();
 
-    boolean isTimeNumeric = timeStr.chars().allMatch(Character::isDigit);
-    boolean isPeriodNumeric = periodStr.chars().allMatch(Character::isDigit);
+        boolean isTimeNumeric = timeStr.chars().allMatch(Character::isDigit);
+        boolean isPeriodNumeric = periodStr.chars().allMatch(Character::isDigit);
 
-    if (isTimeNumeric && isPeriodNumeric) {
-        if (Integer.parseInt(timeStr) >= periodDuration || Integer.parseInt(periodStr) > periodCount) {
-            String warnMessage = "Some pieces of information are sent after the end of a period\nor after the end of the experiment.\nDo you want to correct this mistake?";
-            Utils.logger.warn(warnMessage);
-            noProblem = false;
+        if (isTimeNumeric && isPeriodNumeric) {
+            if (Integer.parseInt(timeStr) >= periodDuration || Integer.parseInt(periodStr) > periodCount) {
+                String warnMessage = "Some pieces of information are sent after the end of a period\nor after the end of the experiment.\nDo you want to correct this mistake?";
+                Utils.logger.warn(warnMessage);
+                noProblem = false;
+            }
+        } else {
+            // This is a non-numeric message, so send it to all players now.
+            if (item.getCategory().equals("All players") || item.getCategory().equals("GLOBAL")) {
+                NetworkCore.sendToAllPlayers(new org.eclipsetrader.jessx.net.Information(item.getContent()));
+            } else {
+                NetworkCore.sendToPlayerCategory(new org.eclipsetrader.jessx.net.Information(item.getContent()), item.getCategory());
+            }
         }
     }
-}
     Iterator<String> iter = NetworkCore.getPlayerList().keySet().iterator();
     while (iter.hasNext()) {
       String login = iter.next();

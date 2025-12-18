@@ -23,7 +23,14 @@ public class MessageTimer extends Thread {
     private List<InformationItem> listInformationSorted;
 
     public MessageTimer(final List<InformationItem> informations) {
-        this.listInformation = new ArrayList<>(informations);
+        this.listInformation = new ArrayList<>();
+        for (InformationItem item : informations) {
+            boolean isTimeNumeric = item.getTime().chars().allMatch(Character::isDigit);
+            boolean isPeriodNumeric = item.getPeriod().chars().allMatch(Character::isDigit);
+            if (isTimeNumeric && isPeriodNumeric) {
+                this.listInformation.add(item);
+            }
+        }
         this.checkInformationsToSend(this.listInformation);
         this.listInformationSorted = this.sort();
         Utils.logger.info("MessageTimer created...");
@@ -50,14 +57,7 @@ public class MessageTimer extends Thread {
     public void checkInformationsToSend(final List<InformationItem> information) {
         final int periodCount = BusinessCore.getGeneralParameters().getPeriodCount();
         final int periodDuration = BusinessCore.getGeneralParameters().getPeriodDuration();
-        information.removeIf(item -> {
-            boolean isTimeNumeric = item.getTime().chars().allMatch(Character::isDigit);
-            boolean isPeriodNumeric = item.getPeriod().chars().allMatch(Character::isDigit);
-            if (isTimeNumeric && isPeriodNumeric) {
-                return Integer.parseInt(item.getTime()) >= periodDuration || Integer.parseInt(item.getPeriod()) > periodCount;
-            }
-            return false;
-        });
+        information.removeIf(item -> Integer.parseInt(item.getTime()) >= periodDuration || Integer.parseInt(item.getPeriod()) > periodCount);
     }
 
     @Override

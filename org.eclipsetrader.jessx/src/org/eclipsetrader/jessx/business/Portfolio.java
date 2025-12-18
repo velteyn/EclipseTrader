@@ -42,7 +42,8 @@ public class Portfolio implements XmlExportable, XmlLoadable, NetworkWritable, N
   }
   
   public int getOwnings(String assetName) {
-    return ((Integer)this.ownings.get(assetName)).intValue();
+    Integer quantity = (Integer) this.ownings.get(assetName);
+    return quantity != null ? quantity.intValue() : 0;
   }
   
   public HashMap getNonInvestedOwnings() {
