@@ -734,6 +734,19 @@ public class Level2View extends ViewPart {
     }
 
     public void setSecurity(ISecurity security) {
+        if (security != null) {
+            setPartName(security.getName());
+            setTitleToolTip(NLS.bind(VIEW_TITLE_TOOLTIP, new Object[] { security.getName() }));
+            
+            if (security.getName() != null) {
+                symbol.setText(security.getName());
+            }
+            IFeedIdentifier id = (IFeedIdentifier) security.getAdapter(IFeedIdentifier.class);
+            if (id != null && id.getSymbol() != null) {
+                symbol.setText(id.getSymbol());
+            }
+        }
+
         IFeedConnector connector = null;
 
         IMarket[] market = marketService.getMarkets();
@@ -746,6 +759,16 @@ public class Level2View extends ViewPart {
 
         if (connector == null) {
             connector = CoreActivator.getDefault().getDefaultConnector();
+        }
+        
+        if (connector == null) {
+            IFeedConnector[] connectors = feedService.getConnectors();
+            for (IFeedConnector c : connectors) {
+                if ("org.eclipsetrader.jessx.connector".equals(c.getId())) {
+                    connector = c;
+                    break;
+                }
+            }
         }
 
         if (connector instanceof IFeedConnector2) {

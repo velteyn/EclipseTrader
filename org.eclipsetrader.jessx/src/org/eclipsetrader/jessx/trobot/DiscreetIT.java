@@ -1,4 +1,4 @@
-﻿package org.eclipsetrader.jessx.trobot;
+package org.eclipsetrader.jessx.trobot;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -164,7 +164,7 @@ public class DiscreetIT extends Animator {
           lo.setPrice(orderPrice);
           lo.setQuantity(QA);
           lo.setSide(0);
-          Utils.logger.info(String.format("DiscreetIT bot %s sending BUY order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), institname, lo.getPrice()));
+          Utils.logger.info(String.format("DiscreetIT bot %s sending BUY order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), assetname, lo.getPrice()));
           getRobotCore().send((NetworkWritable)lo);
           continue;
         } 
@@ -293,7 +293,7 @@ public class DiscreetIT extends Animator {
           lo.setPrice(orderPrice);
           lo.setQuantity(QB);
           lo.setSide(1);
-          Utils.logger.info(String.format("DiscreetIT bot %s sending SELL order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), institname, lo.getPrice()));
+          Utils.logger.info(String.format("DiscreetIT bot %s sending SELL order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), assetname, lo.getPrice()));
           getRobotCore().send((NetworkWritable)lo);
         } 
       } 

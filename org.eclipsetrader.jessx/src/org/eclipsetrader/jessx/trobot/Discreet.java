@@ -1,8 +1,9 @@
-﻿package org.eclipsetrader.jessx.trobot;
+package org.eclipsetrader.jessx.trobot;
 
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
+import org.eclipsetrader.jessx.business.Institution;
 import org.eclipsetrader.jessx.business.Order;
 import org.eclipsetrader.jessx.business.OrderBook;
 import org.eclipsetrader.jessx.business.operations.LimitOrder;
@@ -26,7 +27,9 @@ public class Discreet extends Animator {
       String instit = iterInstit.next();
       if ((new Date()).getTime() - ((Date)getDatesLastOrder().get(instit)).getTime() > NextWakeUp(instit) && (
         (LinkedList)getOrderBooks().get(instit)).size() > 0) {
-        Utils.logger.info(String.format("Discreet bot %s is acting on institution %s", getLogin(), instit));
+        Institution institution = getRobotCore().getInstitution(instit);
+        String symbol = institution.getAssetName();
+        Utils.logger.info(String.format("Discreet bot %s is acting on institution %s (%s)", getLogin(), instit, symbol));
         OrderBook ob = ((LinkedList<OrderBook>)getOrderBooks().get(instit)).getLast();
         int side = (int)Math.round(Math.random());
         if (ob.getAsk().size() >= 1 && ob.getBid().size() >= 1 && side == 0) {
@@ -78,7 +81,7 @@ public class Discreet extends Animator {
           lo.setPrice(orderPrice);
           lo.setQuantity((int)(Math.random() * 50.0D));
           lo.setSide(0);
-          Utils.logger.info(String.format("Discreet bot %s sending BUY order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), instit, lo.getPrice()));
+          Utils.logger.info(String.format("Discreet bot %s sending BUY order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), symbol, lo.getPrice()));
           getRobotCore().send((NetworkWritable)lo);
           continue;
         } 
@@ -131,7 +134,7 @@ public class Discreet extends Animator {
           lo.setPrice(orderPrice);
           lo.setQuantity(1 + (int)(Math.random() * 49.0D));
           lo.setSide(1);
-          Utils.logger.info(String.format("Discreet bot %s sending SELL order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), instit, lo.getPrice()));
+          Utils.logger.info(String.format("Discreet bot %s sending SELL order for %d shares of %s at %.2f", getLogin(), lo.getQuantity(), symbol, lo.getPrice()));
           getRobotCore().send((NetworkWritable)lo);
         } 
       } 
