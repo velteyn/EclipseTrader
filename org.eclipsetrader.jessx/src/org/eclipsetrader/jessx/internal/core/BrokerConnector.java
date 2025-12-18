@@ -1264,7 +1264,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 			Element orderElement = new Element("Order");
 			orderElement.setAttribute("id", String.valueOf(new Random().nextInt()));
-			orderElement.setAttribute("side", order.getSide() == IOrderSide.Buy ? "1" : "0");
+			orderElement.setAttribute("side", order.getSide() == IOrderSide.Buy ? "0" : "1");
 			orderElement.setAttribute("timestamp", String.valueOf(System.currentTimeMillis()));
 			root.addContent(orderElement);
 
