@@ -1,4 +1,4 @@
-﻿package org.eclipsetrader.jessx.business;
+package org.eclipsetrader.jessx.business;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -26,6 +26,8 @@ public class Scenario implements XmlExportable, XmlLoadable {
 	private Vector infoListners = new Vector();
 
     private List<NewsItem> newsItems = new ArrayList<NewsItem>();
+	
+	private List<NewsListener> newsListeners = new ArrayList<NewsListener>();
 
 	private String password = "";
 
@@ -204,11 +206,30 @@ public class Scenario implements XmlExportable, XmlLoadable {
                 Element newsElem = newsIter.next();
                 String priority = newsElem.getAttributeValue("priority");
                 String asset = newsElem.getAttributeValue("asset");
+                String sentiment = newsElem.getAttributeValue("sentiment");
+                if (sentiment == null) {
+                    sentiment = "NEUTRAL";
+                }
                 String text = newsElem.getText();
-                newsItems.add(new NewsItem(priority, asset, text));
+                newsItems.add(new NewsItem(priority, asset, text, sentiment));
             }
+            fireNewsLoaded();
         }
 	}
+
+    public void addNewsListener(NewsListener listener) {
+        newsListeners.add(listener);
+    }
+
+    public void removeNewsListener(NewsListener listener) {
+        newsListeners.remove(listener);
+    }
+
+    protected void fireNewsLoaded() {
+        for (NewsListener listener : newsListeners) {
+            listener.newsLoaded(newsItems);
+        }
+    }
 
     public List<NewsItem> getNewsItems() {
         return newsItems;

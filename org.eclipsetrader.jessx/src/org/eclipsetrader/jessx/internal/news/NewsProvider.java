@@ -26,12 +26,22 @@ import org.eclipsetrader.news.core.IHeadLine;
 import org.eclipsetrader.news.core.INewsProvider;
 import org.eclipsetrader.news.internal.repository.HeadLine;
 
-public class NewsProvider implements INewsProvider {
+import org.eclipsetrader.jessx.business.NewsListener;
+import org.eclipsetrader.jessx.internal.JessxActivator;
+import org.eclipsetrader.news.core.INewsService;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+
+public class NewsProvider implements INewsProvider, NewsListener {
 
     private boolean isRunning = false;
     private List<IHeadLine> headlines = new ArrayList<IHeadLine>();
 
     public NewsProvider() {
+        Scenario scenario = BusinessCore.getScenario();
+        if (scenario != null) {
+            scenario.addNewsListener(this);
+        }
         refresh();
     }
 
@@ -74,6 +84,21 @@ public class NewsProvider implements INewsProvider {
                 securities[0] = new Security(item.getAsset(), null);
                 headlines.add(new HeadLine(new Date(), "JessX", item.getText(), securities, ""));
             }
+        }
+    }
+
+    @Override
+    public void newsLoaded(List<NewsItem> newsItems) {
+        refresh();
+        
+        BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
+        ServiceReference serviceReference = context.getServiceReference(INewsService.class.getName());
+        if (serviceReference != null) {
+            INewsService service = (INewsService) context.getService(serviceReference);
+            if (service != null) {
+                service.addHeadLines(getHeadLines());
+            }
+            context.ungetService(serviceReference);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿package org.eclipsetrader.jessx.trobot;
+package org.eclipsetrader.jessx.trobot;
 
 import java.io.IOException;
 import java.util.AbstractList;
@@ -11,6 +11,7 @@ import java.util.Timer;
 import org.eclipsetrader.jessx.business.Deal;
 import org.eclipsetrader.jessx.business.Institution;
 import org.eclipsetrader.jessx.business.Operator;
+import org.eclipsetrader.jessx.business.Order;
 import org.eclipsetrader.jessx.business.OrderBook;
 import org.eclipsetrader.jessx.business.Portfolio;
 import org.eclipsetrader.jessx.business.operations.LimitOrder;
@@ -46,7 +47,10 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
   
   private HashMap<String, Date> datesLastOrder;
   
+  private BotType botType;
+  
   public Robot(int name) {
+    this.botType = BotType.values()[name % BotType.values().length];
     this.deals = new LinkedList<Deal>();
     this.news = new LinkedList<NewsItem>();
     this.dividendInfos = new LinkedList<DividendInfo>();
@@ -157,7 +161,11 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
             String priority = newsElem.getAttributeValue("priority");
             String asset = newsElem.getAttributeValue("asset");
             String text = newsElem.getText();
-            news.add(new NewsItem(priority, asset, text));
+            String sentiment = newsElem.getAttributeValue("sentiment");
+            if (sentiment == null) {
+                sentiment = "NEUTRAL";
+            }
+            news.add(new NewsItem(priority, asset, text, sentiment));
         }
     }
   }
@@ -211,19 +219,40 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
       LinkedList<NewsItem> news = getNews();
       for (NewsItem item : news) {
           if (item.getAsset().equals(institution)) {
-                if (item.getPriority().equals("HIGH")) {
-                    if (item.getText().contains("rise")) {
-                        buy(institution, 100);
-                    } else if (item.getText().contains("fall")) {
-                        sell(institution, 100);
+              String sentiment = item.getSentiment();
+              if (sentiment == null) sentiment = "NEUTRAL";
+              
+              int quantity = 0;
+              if (this.botType == BotType.POOR) {
+                  quantity = 10;
+              } else if (this.botType == BotType.MEDIUM) {
+                  quantity = 50;
+              } else {
+                  quantity = 200;
+              }
+
+              if ("BAD".equalsIgnoreCase(sentiment)) {
+                  if (this.botType == BotType.POOR) quantity = 50; 
+                  sell(institution, quantity);
+              } else if ("GOOD".equalsIgnoreCase(sentiment)) {
+                  buy(institution, quantity);
+              }
+              
+              if ("NEUTRAL".equalsIgnoreCase(sentiment)) {
+                    if (item.getPriority().equals("HIGH")) {
+                        if (item.getText().contains("rise")) {
+                            buy(institution, 100);
+                        } else if (item.getText().contains("fall")) {
+                            sell(institution, 100);
+                        }
+                    } else if (item.getPriority().equals("MEDIUM")) {
+                        if (item.getText().contains("rise")) {
+                            buy(institution, 50);
+                        } else if (item.getText().contains("fall")) {
+                            sell(institution, 50);
+                        }
                     }
-                } else if (item.getPriority().equals("MEDIUM")) {
-                    if (item.getText().contains("rise")) {
-                        buy(institution, 50);
-                    } else if (item.getText().contains("fall")) {
-                        sell(institution, 50);
-                    }
-                }
+              }
           }
       }
   }
@@ -231,23 +260,50 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
   protected abstract String chooseName(int paramInt);
   
   protected void buy(String institution, int quantity) {
+      float price = getMarketPrice(institution, 0);
       LimitOrder lo = new LimitOrder();
       lo.setEmitter(getLogin());
       lo.setInstitutionName(institution);
-      lo.setPrice(100);
+      lo.setPrice(price);
       lo.setQuantity(quantity);
       lo.setSide(0);
       getRobotCore().send((NetworkWritable)lo);
   }
 
   protected void sell(String institution, int quantity) {
+      float price = getMarketPrice(institution, 1);
       LimitOrder lo = new LimitOrder();
       lo.setEmitter(getLogin());
       lo.setInstitutionName(institution);
-      lo.setPrice(100);
+      lo.setPrice(price);
       lo.setQuantity(quantity);
       lo.setSide(1);
       getRobotCore().send((NetworkWritable)lo);
+  }
+  
+  private float getMarketPrice(String institution, int side) {
+      LinkedList<OrderBook> books = orderBooks.get(institution);
+      if (books != null && !books.isEmpty()) {
+          OrderBook ob = books.getLast();
+          if (side == 0) { 
+               if (ob.getAsk().size() > 0) {
+                   return ((Order)ob.getAsk().elementAt(0)).getOrderPrice(0);
+               }
+          } else { 
+               if (ob.getBid().size() > 0) {
+                   return ((Order)ob.getBid().elementAt(0)).getOrderPrice(1);
+               }
+          }
+      }
+      return 100.0f;
+  }
+
+  public BotType getBotType() {
+      return botType;
+  }
+
+  public void setBotType(BotType botType) {
+      this.botType = botType;
   }
 
   public AbstractList<Deal> getDeals() {
