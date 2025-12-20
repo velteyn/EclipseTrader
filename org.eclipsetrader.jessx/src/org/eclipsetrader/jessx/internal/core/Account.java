@@ -11,6 +11,8 @@
 
 package org.eclipsetrader.jessx.internal.core;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.core.runtime.ListenerList;
@@ -20,6 +22,9 @@ import org.eclipsetrader.core.trading.IPosition;
 import org.eclipsetrader.core.trading.IPositionListener;
 import org.eclipsetrader.core.trading.ITransaction;
 import org.eclipsetrader.core.trading.PositionEvent;
+import org.eclipsetrader.jessx.internal.JessxActivator;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.IStatus;
 
 public class Account implements IAccount {
 
@@ -29,12 +34,22 @@ public class Account implements IAccount {
     private List<ITransaction> transactions = new ArrayList<ITransaction>();
     private List<IPosition> positions = new ArrayList<IPosition>();
     private ListenerList listeners = new ListenerList(ListenerList.IDENTITY);
+    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     public Account(String id, String description, Cash balance) {
         this.id = id;
         this.description = description;
         this.balance = balance;
     }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
+    }
+
 
     /* (non-Javadoc)
      * @see org.eclipsetrader.core.trading.IAccount#getId()
@@ -61,7 +76,10 @@ public class Account implements IAccount {
     }
 
     public void setBalance(Cash balance) {
+        Cash oldBalance = this.balance;
         this.balance = balance;
+        JessxActivator.log(new Status(IStatus.INFO, JessxActivator.PLUGIN_ID, "Account " + id + " balance updated: " + balance));
+        propertyChangeSupport.firePropertyChange("balance", oldBalance, balance);
     }
 
     /* (non-Javadoc)
@@ -81,6 +99,7 @@ public class Account implements IAccount {
     }
 
     public void setPositions(IPosition[] newPositions) {
+        JessxActivator.log(new Status(IStatus.INFO, JessxActivator.PLUGIN_ID, "Account " + id + " updating positions. New count: " + newPositions.length));
         List<IPosition> added = new ArrayList<IPosition>();
         List<IPosition> removed = new ArrayList<IPosition>();
         List<IPosition> currentPositions = new ArrayList<IPosition>(this.positions);
@@ -110,11 +129,16 @@ public class Account implements IAccount {
         }
 
         for (IPosition position : added) {
+            JessxActivator.log(new Status(IStatus.INFO, JessxActivator.PLUGIN_ID, "Firing Position Opened: " + position.getSecurity().getName()));
             firePositionOpened(new PositionEvent(this, position));
         }
         for (IPosition position : removed) {
+            JessxActivator.log(new Status(IStatus.INFO, JessxActivator.PLUGIN_ID, "Firing Position Closed: " + position.getSecurity().getName()));
             firePositionClosed(new PositionEvent(this, position));
         }
+        
+        // Also fire a property change for "positions" in case someone listens to it
+        propertyChangeSupport.firePropertyChange("positions", null, this.positions);
     }
 
 

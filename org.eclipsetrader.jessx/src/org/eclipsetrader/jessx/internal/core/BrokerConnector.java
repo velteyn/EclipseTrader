@@ -56,7 +56,9 @@ import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipsetrader.core.Cash;
 import org.eclipsetrader.core.feed.FeedIdentifier;
 import org.eclipsetrader.core.feed.FeedProperties;
@@ -85,6 +87,7 @@ import org.eclipsetrader.core.views.IHolding;
 import org.eclipsetrader.core.trading.BrokerException;
 import org.eclipsetrader.core.trading.IAccount;
 import org.eclipsetrader.core.trading.IBroker;
+import org.eclipsetrader.core.trading.IPosition;
 import org.eclipsetrader.core.trading.IOrder;
 import org.eclipsetrader.core.trading.IOrderChangeListener;
 import org.eclipsetrader.core.trading.IOrderMonitor;
@@ -407,12 +410,14 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	public void objectReceived(Document doc) {
 		logger.info("Broker received " + doc.getRootElement().getName());
 		if (doc.getRootElement().getName().equals("Portfolio")) {
+			logger.info("Broker received Portfolio update: " + doc.getRootElement().toString());
 			List<Position> list = new ArrayList<Position>();
 			Element portfolio = doc.getRootElement();
 
 			if (portfolio.getAttributeValue("cash") != null) {
 				double cash = Double.parseDouble(portfolio.getAttributeValue("cash"));
 				account.setBalance(new Cash(cash, Currency.getInstance("USD")));
+				logger.info("Updated Account Cash: " + cash);
 			}
 
 			List<Element> secList = portfolio.getChildren("Owning");
@@ -429,10 +434,14 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						long quantity = Long.parseLong(amount);
 						double price = Double.parseDouble(sec.getAttributeValue("price"));
 						list.add(new Position(security, quantity, price));
+						logger.info("Updated Position: " + secName + ", Qty=" + quantity + ", Price=" + price);
 					}
 				}
 			}
 			account.setPositions(list.toArray(new Position[list.size()]));
+			
+			// Notify listeners about portfolio change (if any logic depends on it, although Account typically doesn't notify views directly)
+			// But we can check if we need to refresh anything.
 		}
 		if (doc.getRootElement().getName().equals("OrderBook")) {
 			Element orderBook = doc.getRootElement();
@@ -639,7 +648,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 			final IMarketService marketService = (IMarketService) context.getService(marketServiceReference);
 			final org.eclipsetrader.core.feed.IFeedService feedService = (org.eclipsetrader.core.feed.IFeedService) context.getService(feedServiceReference);
 			try {
-				Display.getDefault().asyncExec(new Runnable() {
+				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
 						IRepositoryRunnable runnable = new IRepositoryRunnable() {
@@ -871,6 +880,38 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		}
 
 		List<IOrderRoute> routes = new ArrayList<IOrderRoute>();
+		
+		// Filter based on PlayerType permissions
+		try {
+			String login = ClientCore.getLogin();
+			if (login != null) {
+				Player player = NetworkCore.getPlayer(login);
+				if (player != null && player.getPlayerCategory() != null) {
+					Scenario scenario = BusinessCore.getScenario();
+					if (scenario != null) {
+						PlayerType pt = scenario.getPlayerType(player.getPlayerCategory());
+						if (pt != null) {
+							Vector<?> allowed = pt.getInstitutionsWherePlaying();
+							if (allowed != null) {
+								for (Object obj : allowed) {
+									String instName = (String) obj;
+									if (BusinessCore.getInstitution(instName) != null) {
+										routes.add(new OrderRoute(instName, instName));
+									}
+								}
+								// If we found allowed routes, return them. 
+								// If the list is empty, it means the player has no access, so returning empty is correct.
+								return routes.toArray(new IOrderRoute[routes.size()]);
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Error determining allowed routes for player", e);
+		}
+
+		// Fallback: return all institutions if we can't determine player permissions
 		for (Object institution : BusinessCore.getInstitutions().values()) {
 			routes.add(new OrderRoute(((org.eclipsetrader.jessx.business.Institution) institution).getName(), ((org.eclipsetrader.jessx.business.Institution) institution).getName()));
 		}
@@ -1256,8 +1297,57 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		fireUpdateNotifications(new OrderDelta[] { new OrderDelta(OrderDelta.KIND_ADDED, orderMonitor), });
 	}
 
-	public void sendOrder(IOrder order) {
+	public void sendOrder(final IOrder order) {
 		try {
+			// Validate that the selected Institution (Route) trades the requested Security
+			String institutionName = order.getRoute().getId();
+			org.eclipsetrader.jessx.business.Institution institution = BusinessCore.getInstitution(institutionName);
+			if (institution != null) {
+				String quotedAsset = institution.getAssetName();
+				String orderSymbol = getSymbolFromSecurity(order.getSecurity());
+				if (orderSymbol != null && !orderSymbol.equals(quotedAsset)) {
+					String msg = "Invalid Route: Institution " + institutionName + " trades " + quotedAsset + ", but order is for " + orderSymbol;
+					logger.error(msg);
+					Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, msg);
+					JessxActivator.log(status);
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							Shell shell = Display.getDefault().getActiveShell();
+							MessageDialog.openError(shell, "Order Routing Error", 
+								"Cannot send order to " + institutionName + ".\n" +
+								"This market only trades " + quotedAsset + ", but your order is for " + orderSymbol + ".");
+						}
+					});
+					return;
+				}
+			}
+
+			// Validate Portfolio for Sell Orders
+			if (order.getSide() == IOrderSide.Sell) {
+				long quantityOwned = 0;
+				if (account.getPositions() != null) {
+					for (IPosition p : account.getPositions()) {
+						if (p.getSecurity().equals(order.getSecurity())) {
+							quantityOwned = p.getQuantity();
+							break;
+						}
+					}
+				}
+				
+				if (quantityOwned < order.getQuantity()) {
+					final long owned = quantityOwned;
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							Shell shell = Display.getDefault().getActiveShell();
+							MessageDialog.openError(shell, "Order Error", 
+								"Cannot sell " + order.getQuantity() + " shares of " + order.getSecurity().getName() + ".\n" +
+								"You only own " + owned + " shares.");
+						}
+					});
+					return; // Abort order
+				}
+			}
+
 			Element root = new Element("Operation");
 			root.setAttribute("emitter", ClientCore.getLogin());
 			root.setAttribute("institution", order.getRoute().getId());

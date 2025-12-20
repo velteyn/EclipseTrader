@@ -86,8 +86,10 @@
       <Information Content="Volatile environment; mixed signals" Category="GLOBAL" Period="all" Time="policy" />
     </Information>
     <News>
-      <Item priority="HIGH" asset="AAT">AAT reports unexpected spike in demand</Item>
-      <Item priority="LOW" asset="MSFT">MSFT faces temporary supply constraints</Item>
+      <Item priority="HIGH" asset="AAT" sentiment="GOOD">AAT reports unexpected demand spike</Item>
+      <Item priority="HIGH" asset="AAT" sentiment="BAD">AAT faces supply chain disruption</Item>
+      <Item priority="MEDIUM" asset="MSFT" sentiment="BAD">MSFT faces temporary supply constraints</Item>
+      <Item priority="HIGH" asset="MSFT" sentiment="GOOD">MSFT beats earnings expectations</Item>
     </News>
   </Scenario>
 </JessXSetup>

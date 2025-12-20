@@ -83,8 +83,10 @@
       <Information Content="Bearish environment; higher costs" Category="GLOBAL" Period="all" Time="policy" />
     </Information>
     <News>
-      <Item priority="LOW" asset="AAT">AAT lowers dividend guidance</Item>
-      <Item priority="LOW" asset="MSFT">MSFT delays product rollout</Item>
+      <Item priority="HIGH" asset="AAT" sentiment="BAD">AAT slashes dividend guidance by 50%</Item>
+      <Item priority="MEDIUM" asset="AAT" sentiment="BAD">AAT reports Q3 loss, misses estimates</Item>
+      <Item priority="HIGH" asset="MSFT" sentiment="BAD">MSFT delays key product rollout indefinitely</Item>
+      <Item priority="MEDIUM" asset="MSFT" sentiment="NEUTRAL">MSFT announces restructuring plan</Item>
     </News>
   </Scenario>
 </JessXSetup>

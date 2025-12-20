@@ -101,8 +101,10 @@
       <Information Content="Bullish environment; lower costs" Category="GLOBAL" Period="all" Time="policy" />
     </Information>
     <News>
-      <Item priority="HIGH" asset="AAT">AAT announces strong guidance</Item>
-      <Item priority="MEDIUM" asset="MSFT">MSFT expands cloud margins</Item>
+      <Item priority="HIGH" asset="AAT" sentiment="GOOD">AAT raises full-year guidance</Item>
+      <Item priority="MEDIUM" asset="AAT" sentiment="GOOD">AAT announces stock buyback program</Item>
+      <Item priority="HIGH" asset="MSFT" sentiment="GOOD">MSFT cloud margins expand to record highs</Item>
+      <Item priority="MEDIUM" asset="MSFT" sentiment="GOOD">MSFT acquires promising AI startup</Item>
     </News>
   </Scenario>
 </JessXSetup>

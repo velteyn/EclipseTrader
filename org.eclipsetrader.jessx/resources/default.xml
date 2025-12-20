@@ -86,10 +86,47 @@
       </Operator>
     </Operators>
   </Institution>
+  <Institution type="OrderMarket" name="GPLRF Market" quotedAsset="GPLRF">
+    <KeepOrderBook allow="true" />
+    <OperationsCost>
+      <Operation name="Market Order" percentageCost="2.0" minimalCost="1.0" />
+      <Operation name="Delete Order" percentageCost="2.0" minimalCost="1.0" />
+      <Operation name="Limit Order" percentageCost="2.0" minimalCost="1.0" />
+      <Operation name="Best Limit Order" percentageCost="2.0" minimalCost="0.0" />
+    </OperationsCost>
+    <Operators>
+      <Operator name="Operator GPLRF" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+    </Operators>
+  </Institution>
+  <Institution type="OrderMarket" name="MSFT Market" quotedAsset="MSFT">
+    <KeepOrderBook allow="true" />
+    <OperationsCost>
+      <Operation name="Market Order" percentageCost="2.0" minimalCost="1.0" />
+      <Operation name="Delete Order" percentageCost="2.0" minimalCost="1.0" />
+      <Operation name="Limit Order" percentageCost="2.0" minimalCost="1.0" />
+      <Operation name="Best Limit Order" percentageCost="2.0" minimalCost="0.0" />
+    </OperationsCost>
+    <Operators>
+      <Operator name="Operator MSFT" orderbookVisibility="5">
+        <GrantedOperation name="Market Order" />
+        <GrantedOperation name="Delete Order" />
+        <GrantedOperation name="Limit Order" />
+        <GrantedOperation name="Best Limit Order" />
+      </Operator>
+    </Operators>
+  </Institution>
   <Scenario>
     <PlayerType name="Poor">
       <OperatorsPlayed>
         <Operator name="Operator 2 on BANK CANARIE" />
+        <Operator name="Operator 1 on PLS Exchange" />
+        <Operator name="Operator GPLRF on GPLRF Market" />
+        <Operator name="Operator MSFT on MSFT Market" />
       </OperatorsPlayed>
       <Portfolio cash="3000.0">
         <Owning asset="AAT" qtty="400" />
@@ -103,9 +140,13 @@
       <Information Content="Transaction costs apply per operation" Category="GLOBAL" Period="all" Time="policy" />
     </Information>
     <News>
-      <Item priority="HIGH" asset="AAT">AAT dividend outlook improves</Item>
-      <Item priority="LOW" asset="GPLRF">GPLRF faces minor regulatory delay</Item>
-      <Item priority="MEDIUM" asset="MSFT">MSFT posts steady quarterly results</Item>
+      <Item priority="HIGH" asset="AAT" sentiment="GOOD">AAT dividend outlook improves significantly</Item>
+      <Item priority="MEDIUM" asset="AAT" sentiment="BAD">AAT CEO resigns unexpectedly</Item>
+      <Item priority="LOW" asset="GPLRF" sentiment="BAD">GPLRF faces minor regulatory delay</Item>
+      <Item priority="HIGH" asset="GPLRF" sentiment="GOOD">GPLRF secures major government contract</Item>
+      <Item priority="MEDIUM" asset="MSFT" sentiment="NEUTRAL">MSFT posts steady quarterly results</Item>
+      <Item priority="HIGH" asset="MSFT" sentiment="GOOD">MSFT unveils breakthrough AI technology</Item>
+      <Item priority="LOW" asset="PLS" sentiment="NEUTRAL">PLS maintains stable production levels</Item>
     </News>
   </Scenario>
   <Chat />
