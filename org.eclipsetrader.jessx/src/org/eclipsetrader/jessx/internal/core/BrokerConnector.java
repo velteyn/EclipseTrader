@@ -41,7 +41,6 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.CoreException;
@@ -76,18 +75,12 @@ import org.eclipsetrader.core.instruments.ISecurity;
 import org.eclipsetrader.core.instruments.Stock;
 import org.eclipsetrader.core.markets.IMarket;
 import org.eclipsetrader.core.markets.IMarketService;
-import org.eclipsetrader.core.repositories.IPropertyConstants;
 import org.eclipsetrader.core.repositories.IRepository;
 import org.eclipsetrader.core.repositories.IRepositoryRunnable;
 import org.eclipsetrader.core.repositories.IRepositoryService;
-import org.eclipsetrader.core.repositories.IStore;
-import org.eclipsetrader.core.repositories.IStoreProperties;
-import org.eclipsetrader.core.repositories.StoreProperties;
-import org.eclipsetrader.core.views.IHolding;
 import org.eclipsetrader.core.trading.BrokerException;
 import org.eclipsetrader.core.trading.IAccount;
 import org.eclipsetrader.core.trading.IBroker;
-import org.eclipsetrader.core.trading.IPosition;
 import org.eclipsetrader.core.trading.IOrder;
 import org.eclipsetrader.core.trading.IOrderChangeListener;
 import org.eclipsetrader.core.trading.IOrderMonitor;
@@ -96,6 +89,7 @@ import org.eclipsetrader.core.trading.IOrderSide;
 import org.eclipsetrader.core.trading.IOrderStatus;
 import org.eclipsetrader.core.trading.IOrderType;
 import org.eclipsetrader.core.trading.IOrderValidity;
+import org.eclipsetrader.core.trading.IPosition;
 import org.eclipsetrader.core.trading.Order;
 import org.eclipsetrader.core.trading.OrderChangeEvent;
 import org.eclipsetrader.core.trading.OrderDelta;
@@ -192,7 +186,9 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		} else {
 			instance.id = id;
 			instance.name = name;
-			instance.account = new Account(instance.getId(), instance.getName(), new Cash(100000.0, Currency.getInstance("USD")));
+			if (instance.account == null) {
+				instance.account = new Account(instance.getId(), instance.getName(), new Cash(100000.0, Currency.getInstance("USD")));
+			}
 		}
 		return instance;
 	}
@@ -411,14 +407,15 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		logger.info("Broker received " + doc.getRootElement().getName());
 		if (doc.getRootElement().getName().equals("Portfolio")) {
 			logger.info("Broker received Portfolio update: " + doc.getRootElement().toString());
-			List<Position> list = new ArrayList<Position>();
+			final List<Position> list = new ArrayList<Position>();
 			Element portfolio = doc.getRootElement();
 
+			Double cashUpdate = null;
 			if (portfolio.getAttributeValue("cash") != null) {
-				double cash = Double.parseDouble(portfolio.getAttributeValue("cash"));
-				account.setBalance(new Cash(cash, Currency.getInstance("USD")));
-				logger.info("Updated Account Cash: " + cash);
+				cashUpdate = Double.parseDouble(portfolio.getAttributeValue("cash"));
+				logger.info("Updated Account Cash: " + cashUpdate);
 			}
+			final Double finalCash = cashUpdate;
 
 			List<Element> secList = portfolio.getChildren("Owning");
 			for (Element sec : secList) {
@@ -429,16 +426,28 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 					security = getSecurityFromSymbol(secName);
 				}
 				if (security != null) {
-					String amount = sec.getAttributeValue("amount");
+					String amount = sec.getAttributeValue("qtty");
 					if (amount != null) {
 						long quantity = Long.parseLong(amount);
-						double price = Double.parseDouble(sec.getAttributeValue("price"));
+						double price = 0.0;
+						if (sec.getAttributeValue("price") != null) {
+							price = Double.parseDouble(sec.getAttributeValue("price"));
+						}
 						list.add(new Position(security, quantity, price));
 						logger.info("Updated Position: " + secName + ", Qty=" + quantity + ", Price=" + price);
 					}
 				}
 			}
-			account.setPositions(list.toArray(new Position[list.size()]));
+
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					if (finalCash != null) {
+						account.setBalance(new Cash(finalCash, Currency.getInstance("USD")));
+					}
+					account.setPositions(list.toArray(new Position[list.size()]));
+				}
+			});
 			
 			// Notify listeners about portfolio change (if any logic depends on it, although Account typically doesn't notify views directly)
 			// But we can check if we need to refresh anything.
