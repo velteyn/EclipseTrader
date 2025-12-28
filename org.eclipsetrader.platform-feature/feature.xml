@@ -148,20 +148,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipsetrader.platform.doc.isv"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipsetrader.platform.doc.user"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipsetrader.ui.charts.indicators"
          download-size="0"
          install-size="0"
