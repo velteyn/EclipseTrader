@@ -368,6 +368,7 @@ public class JessxActivator extends AbstractUIPlugin {
 			// Copy default.xml to state location if needed
 			File file = getStateLocation().append("default.xml").toFile();
 			if (!file.exists()) {
+                file.getParentFile().mkdirs();
 				URL url = FileLocator.find(getBundle(), new Path("resources/default.xml"), null);
 				if (url != null) {
 					try (InputStream in = url.openStream(); 

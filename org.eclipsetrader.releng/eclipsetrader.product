@@ -16,6 +16,8 @@
    <launcherArgs>
       -clearPersistedState
       -clean
+      --add-modules
+      jdk.incubator.vector
    </launcherArgs>
 
    <windowImages i16="/org.eclipsetrader.platform/eclipse.gif" i32="/org.eclipsetrader.platform/eclipse32.gif" i48="/org.eclipsetrader.platform/eclipse48.gif"/>

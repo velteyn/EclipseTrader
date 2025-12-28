@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<list next_id="4">
-    <trade id="1" date="2025-10-25 10:00:00" security="local:securities#9" quantity="100" price="10.5"/>
-    <trade id="2" date="2025-10-25 11:00:00" security="local:securities#9" quantity="50" price="11.0"/>
-    <trade id="3" date="2025-10-25 12:00:00" security="local:securities#11" quantity="200" price="5.0"/>
-</list>
