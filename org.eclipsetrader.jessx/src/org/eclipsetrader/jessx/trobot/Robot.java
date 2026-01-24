@@ -50,6 +50,7 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
   private BotType botType;
   
   public Robot(int name) {
+    setDaemon(true);
     this.botType = BotType.values()[name % BotType.values().length];
     this.deals = new LinkedList<Deal>();
     this.news = new LinkedList<NewsItem>();

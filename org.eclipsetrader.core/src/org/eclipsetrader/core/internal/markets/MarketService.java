@@ -90,6 +90,7 @@ public class MarketService extends Observable implements IMarketService, Runnabl
         if (thread == null) {
             stopping = false;
             thread = new Thread(this);
+            thread.setDaemon(true);
             thread.start();
         }
     }

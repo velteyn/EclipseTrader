@@ -1,4 +1,4 @@
-﻿// 
+// 
 //This program is free software; GNU license ; USE AT YOUR RISK , WITHOUT ANY WARRANTY
 // 
 
@@ -27,6 +27,7 @@ class CellFading extends Thread
         this.cells = new Vector();
         this.jTableAsk = ask;
         this.jTableBid = bid;
+        setDaemon(true);
     }
     
     @Override

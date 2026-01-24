@@ -53,6 +53,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -113,6 +114,7 @@ import org.eclipsetrader.jessx.server.net.Player;
 import org.eclipsetrader.jessx.utils.gui.MessageTimer;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -227,20 +229,9 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 		}
 
 		try {
-			File file = JessxActivator.getDefault().getStateLocation().append("default.xml").toFile();
-			if (!file.exists()) {
-				URL url = FileLocator.find(JessxActivator.getDefault().getBundle(), new Path("resources/default.xml"), null);
-				if (url != null) {
-					try (InputStream in = url.openStream(); OutputStream out = new FileOutputStream(file)) {
-						byte[] buf = new byte[1024];
-						int len;
-						while ((len = in.read(buf)) > 0) {
-							out.write(buf, 0, len);
-						}
-					}
-				}
-			}
-
+			Bundle bundle = Platform.getBundle(JessxActivator.PLUGIN_ID);
+			File stateLocation = Platform.getStateLocation(bundle).toFile();
+			File file = new File(stateLocation, "default.xml");
 			if (file.exists()) {
 				try (InputStream is = new FileInputStream(file)) {
 					srv = new Server(is, false);
@@ -248,16 +239,22 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 					srv.startServer();
 				}
 			} else {
-				Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Default scenario file not found");
-				JessxActivator.log(status);
+				Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Default scenario file not found. The plugin activator should have created it.");
+				Platform.getLog(bundle).log(status);
 			}
 		} catch (Exception e) {
 			Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error loading default scenario", e);
-			JessxActivator.log(status);
+			Bundle bundle = Platform.getBundle(JessxActivator.PLUGIN_ID);
+			if (bundle != null) {
+				Platform.getLog(bundle).log(status);
+			} else {
+				e.printStackTrace();
+			}
 		}
 
 		if (thread == null || !thread.isAlive()) {
 			thread = new Thread(this, getName() + " - Orders Monitor"); //$NON-NLS-1$
+			thread.setDaemon(true);
 			logger.info("Starting " + thread.getName()); //$NON-NLS-1$
 			thread.start();
 		}
@@ -405,6 +402,19 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 	@Override
 	public void objectReceived(Document doc) {
 		logger.info("Broker received " + doc.getRootElement().getName());
+		if (doc.getRootElement().getName().equals("Warn")) {
+			final String message = doc.getRootElement().getText();
+			logger.warn("Server Warning: " + message);
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					Shell shell = Display.getDefault().getActiveShell();
+					if (shell != null) {
+						MessageDialog.openWarning(shell, "JessX Server Warning", message);
+					}
+				}
+			});
+		}
 		if (doc.getRootElement().getName().equals("Portfolio")) {
 			logger.info("Broker received Portfolio update: " + doc.getRootElement().toString());
 			final List<Position> list = new ArrayList<Position>();
@@ -444,6 +454,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 				public void run() {
 					if (finalCash != null) {
 						account.setBalance(new Cash(finalCash, Currency.getInstance("USD")));
+						account.setDescription("JESSX Account (Cash: " + BrokerConnector.this.amountFormatter.format(finalCash) + ")");
 					}
 					account.setPositions(list.toArray(new Position[list.size()]));
 				}
@@ -491,6 +502,17 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
 								((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription)
 										.setBook(new org.eclipsetrader.core.feed.Book(bids.toArray(new IBookEntry[bids.size()]), asks.toArray(new IBookEntry[asks.size()])));
+
+								if (!bids.isEmpty() || !asks.isEmpty()) {
+									double bestBid = bids.isEmpty() ? 0.0 : bids.get(0).getPrice();
+									double bestAsk = asks.isEmpty() ? 0.0 : asks.get(0).getPrice();
+									long bidSize = bids.isEmpty() ? 0 : bids.get(0).getQuantity();
+									long askSize = asks.isEmpty() ? 0 : asks.get(0).getQuantity();
+
+									((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription)
+											.setQuote(new Quote(bestBid, bestAsk, bidSize, askSize));
+								}
+
 								StreamingConnector.getInstance().wakeupNotifyThread();
 							}
 						}
@@ -738,17 +760,19 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 							Thread.sleep(100);
 						}
 						if (thePlayer == null) {
-							logger.error("JessX-Setup: Timed out waiting for ThePlayer to connect. Setup aborted.");
+							String msg = "JessX-Setup: Timed out waiting for ThePlayer to connect. Setup aborted.";
+							logger.error(msg);
+							JessxActivator.log(msg);
 							return;
 						}
-						logger.info("JessX-Setup: ThePlayer is connected. Now loading bots...");
+						JessxActivator.log("JessX-Setup: ThePlayer is connected. Now loading bots...");
 
 						// 3. Load bots ONLY after ThePlayer is connected
 						srv.loadBots();
 
 						// 4. Wait for all bots to connect
 						int expectedTotalPlayers = 42; // 41 bots + 1 ThePlayer
-						logger.info("JessX-Setup: Waiting for all " + (expectedTotalPlayers - 1) + " bots to connect...");
+						JessxActivator.log("JessX-Setup: Waiting for all " + (expectedTotalPlayers - 1) + " bots to connect...");
 						for (int i = 0; i < 200; i++) { // Wait up to 20 seconds
 							if (NetworkCore.getPlayerList().size() >= expectedTotalPlayers) {
 								break;
@@ -757,21 +781,23 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						}
 
 						if (NetworkCore.getPlayerList().size() < expectedTotalPlayers) {
-							logger.error("JessX-Setup: Timed out waiting for all bots to connect. " + NetworkCore.getPlayerList().size() + "/" + expectedTotalPlayers + " connected. Aborting.");
+							String msg = "JessX-Setup: Timed out waiting for all bots to connect. " + NetworkCore.getPlayerList().size() + "/" + expectedTotalPlayers + " connected. Aborting.";
+							logger.error(msg);
+							JessxActivator.log(msg);
 							return;
 						}
-						logger.info("JessX-Setup: All " + NetworkCore.getPlayerList().size() + " players are connected.");
+						JessxActivator.log("JessX-Setup: All " + NetworkCore.getPlayerList().size() + " players are connected.");
 
 						// 5. Initialize General Parameters
-						logger.info("JessX-Setup: Initializing general parameters...");
+						JessxActivator.log("JessX-Setup: Initializing general parameters...");
 						GeneralParametersLocal generalParams = new GeneralParametersLocal();
 						generalParams.initializeGeneralParameters();
 						BusinessCore.setGeneralParameters(generalParams);
-						logger.info("JessX-Setup: General parameters initialized and set in BusinessCore.");
+						JessxActivator.log("JessX-Setup: General parameters initialized and set in BusinessCore.");
 
 						// 6. Assign categories and start experiment (with retry
 						// logic)
-						logger.info("JessX-Setup: All players connected. Assigning categories and attempting to start experiment...");
+						JessxActivator.log("JessX-Setup: All players connected. Assigning categories and attempting to start experiment...");
 
 						Scenario scn = BusinessCore.getScenario();
 						Map plTypes = scn.getPlayerTypes();
@@ -804,7 +830,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 							// Try to start the experiment.
 							if (NetworkCore.getExperimentManager().beginExperiment()) {
 								new MessageTimer((Vector) BusinessCore.getScenario().getListInformation().clone()).start();
-								logger.info("JessX-Setup: Experiment started successfully.");
+								JessxActivator.log("JessX-Setup: Experiment started successfully.");
 								experimentStarted = true;
 								break; // Exit the retry loop on success
 							}
@@ -815,10 +841,13 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						}
 
 						if (!experimentStarted) {
-							logger.error("JessX-Setup: Failed to start experiment after multiple retries. Preconditions not met. Check server logs.");
+							String msg = "JessX-Setup: Failed to start experiment after multiple retries. Preconditions not met. Check server logs.";
+							logger.error(msg);
+							JessxActivator.log(msg);
 						}
 					} catch (Exception e) {
 						logger.error("Error in JessX setup thread", e);
+						JessxActivator.log(new org.eclipse.core.runtime.Status(org.eclipse.core.runtime.IStatus.ERROR, JessxActivator.PLUGIN_ID, "Error in JessX setup thread", e));
 					}
 				}
 			}, "JessX-Setup").start();

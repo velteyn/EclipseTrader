@@ -41,8 +41,11 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.CountDownLatch;
 
+import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.server.Server;
 import org.eclipsetrader.jessx.utils.Utils;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.IStatus;
 
 
 /***************************************************************/
@@ -62,17 +65,34 @@ public class ClientConnectionPoint extends Thread {
     private String AddressIP;
 
   public ClientConnectionPoint() {
-  super("ClientConnectionPoint");
+    super("ClientConnectionPoint");
+    setDaemon(true);
+  }
+
+  private void initializeServerSocket() {
     try {
-      this.serverSocket = new ServerSocket(Integer.parseInt(Utils.appsProperties.getProperty("ServerWaitingPort")));
-      Utils.logger.info("Server socket created. Counting down serverReadyLatch.");
+      String portStr = Utils.appsProperties.getProperty("ServerWaitingPort");
+      int port = 6290;
+      if (portStr != null) {
+          try {
+              port = Integer.parseInt(portStr);
+          } catch (NumberFormatException e) {
+              Utils.logger.warn("Invalid port property: " + portStr + ". Using default 6290.");
+          }
+      }
+      this.serverSocket = new ServerSocket(port);
+      Utils.logger.info("Server socket created on port " + port + ". Counting down serverReadyLatch.");
+      if (JessxActivator.getDefault() != null) {
+          JessxActivator.log("Server socket created on port " + port);
+      }
       serverReadyLatch.countDown();
     }
-    catch (NumberFormatException ex) {
-        Utils.logger.error("Property ServerWaitingPort is not an integer. Could not initialise SocketServer. " + ex.toString(), ex);
-    }
-    catch (IOException ex) {
-        Utils.logger.error("An Input/output exception has occured while trying to initiate the serverSocket" + ex.toString(), ex);
+    catch (Exception ex) {
+        String msg = "Error initializing server socket: " + ex.toString();
+        Utils.logger.error(msg, ex);
+        if (JessxActivator.getDefault() != null) {
+            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, msg, ex));
+        }
     }
   }
 
@@ -96,6 +116,16 @@ public class ClientConnectionPoint extends Thread {
    *
    */
   public void attenteConnexion() {
+   if (serverSocket == null) {
+       initializeServerSocket();
+       if (serverSocket == null) {
+           Utils.logger.error("Server socket is null. Cannot accept connections.");
+           if (JessxActivator.getDefault() != null) {
+               JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, "Server socket is null. Cannot accept connections."));
+           }
+           return;
+       }
+   }
 
    try {
      AddressIP=serverSocket.getInetAddress().getLocalHost().getHostAddress();
@@ -109,8 +139,10 @@ public class ClientConnectionPoint extends Thread {
    while (Server.getServerState() == Server.SERVER_STATE_ONLINE) {
      try {
        Utils.logger.info("ClientConnectionPoint waiting for a client...");
+       if (JessxActivator.getDefault() != null) JessxActivator.log("ClientConnectionPoint waiting for a client...");
        Socket clientSocket = serverSocket.accept();
        Utils.logger.info("ClientConnectionPoint accepted a new client connection. Starting handler thread.");
+       if (JessxActivator.getDefault() != null) JessxActivator.log("ClientConnectionPoint accepted a new client connection.");
        new Thread(new PreConnectionClient(clientSocket)).start();
      }
      catch (Exception ex1) {

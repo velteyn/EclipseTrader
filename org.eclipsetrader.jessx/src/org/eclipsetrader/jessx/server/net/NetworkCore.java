@@ -114,7 +114,7 @@ public abstract class NetworkCore {
 	}
 
 	public static void arePlayersReady(String explanation) {
-	    (new Thread() {
+	    Thread t = new Thread() {
 	        public void run() {
 
 	          boolean allPlayersReady = false;
@@ -135,7 +135,9 @@ public abstract class NetworkCore {
 	          }
 	          NetworkCore.getExperimentManager().beginNewPeriod();
 	        }
-	      }).start();
+	      };
+	      t.setDaemon(true);
+	      t.start();
 	}
 
 	private static void firePlayerAdded(String playerName) {

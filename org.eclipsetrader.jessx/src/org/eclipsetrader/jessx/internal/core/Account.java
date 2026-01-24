@@ -67,6 +67,12 @@ public class Account implements IAccount {
         return description;
     }
 
+    public void setDescription(String description) {
+        String oldDescription = this.description;
+        this.description = description;
+        propertyChangeSupport.firePropertyChange("description", oldDescription, description);
+    }
+
     /* (non-Javadoc)
      * @see org.eclipsetrader.core.trading.IAccount#getBalance()
      */

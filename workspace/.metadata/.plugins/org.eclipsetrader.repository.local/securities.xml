@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<list next_id="12">
-    <security id="9" type="org.eclipsetrader.core.instruments.Security" factory="org.eclipsetrader.core.internal.repositories.DefaultElementFactory">
-        <name>Recovered Security 9</name>
-    </security>
-    <security id="11" type="org.eclipsetrader.core.instruments.Security" factory="org.eclipsetrader.core.internal.repositories.DefaultElementFactory">
-        <name>Recovered Security 11</name>
-    </security>
-</list>

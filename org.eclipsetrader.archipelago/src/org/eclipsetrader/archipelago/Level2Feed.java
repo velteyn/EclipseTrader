@@ -193,6 +193,7 @@ public class Level2Feed implements IFeedConnector2, Runnable, IExecutableExtensi
         if (thread == null) {
             stopping = false;
             thread = new Thread(this);
+            thread.setDaemon(true);
           //  thread.start();  EDOARDO This connector is dead not starting it 
            // datasvr.tradearca.com service is permanently DOWN !! 
         }

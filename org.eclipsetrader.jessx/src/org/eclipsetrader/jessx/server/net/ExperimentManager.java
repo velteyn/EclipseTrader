@@ -75,14 +75,26 @@ public class ExperimentManager extends Thread implements Constants {
     int i = 0;
     boolean noProblem = true;
     while ( i < size & noProblem) {
-      if (Integer.parseInt(((String[])information.get(i))[3]) >= 
-        periodDuration || 
-        Integer.parseInt(((String[])information.get(i))[2]) > 
-        periodCount) {
-        String warnMessage = "Some pieces of information are sent after the end of a period\nor after the end of the experiment.\nDo you want to correct this mistake?";
-        Utils.logger.warn(warnMessage);
-        noProblem = false;
-      } 
+      try {
+          String timeStr = ((String[])information.get(i))[3];
+          String periodStr = ((String[])information.get(i))[2];
+          
+          // Skip check for non-numeric values like "all" or "policy"
+          boolean isTimeNumeric = timeStr.matches("-?\\d+");
+          boolean isPeriodNumeric = periodStr.matches("-?\\d+");
+          
+          if (isTimeNumeric && isPeriodNumeric) {
+              if (Integer.parseInt(timeStr) >= periodDuration || 
+                  Integer.parseInt(periodStr) > periodCount) {
+                String warnMessage = "Some pieces of information are sent after the end of a period\nor after the end of the experiment.\nDo you want to correct this mistake?";
+                Utils.logger.warn(warnMessage);
+                noProblem = false;
+              }
+          }
+      } catch (Exception e) {
+          // Ignore parsing errors for non-numeric fields
+          Utils.logger.debug("Skipping validation for non-numeric information fields: " + e.getMessage());
+      }
       i++;
     } 
     Iterator<String> iter = NetworkCore.getPlayerList().keySet().iterator();
@@ -160,7 +172,8 @@ public class ExperimentManager extends Thread implements Constants {
   }
   
   public ExperimentManager() {
-    this.experimentState = 0;
+    this.experimentState = EXP_OFF;
+    setDaemon(true);
     start();
   }
   

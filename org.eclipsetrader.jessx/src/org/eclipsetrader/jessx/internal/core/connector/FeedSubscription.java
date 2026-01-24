@@ -38,6 +38,7 @@ import org.eclipsetrader.jessx.internal.core.repository.IdentifierType;
 public class FeedSubscription implements IFeedSubscription2 {
 
     private StreamingConnector connector;
+    private SnapshotConnector snapshotConnector;
     private IPrice price;
     private ITrade trade;
     private IQuote quote;
@@ -60,6 +61,7 @@ public class FeedSubscription implements IFeedSubscription2 {
     }
 
     public FeedSubscription(SnapshotConnector snapshotConnector, IdentifierType identifierType2) {
+    	 this.snapshotConnector = snapshotConnector;
     	 this.identifierType = identifierType2;
 	}
 
@@ -76,7 +78,12 @@ public class FeedSubscription implements IFeedSubscription2 {
      */
     @Override
     public void dispose() {
-        connector.disposeSubscription(this);
+    	if (connector != null) {
+            connector.disposeSubscription(this);
+    	}
+    	else if (snapshotConnector != null) {
+    		snapshotConnector.disposeSubscription(this);
+    	}
     }
 
     protected int incrementInstanceCount() {
