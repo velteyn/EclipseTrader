@@ -8,11 +8,13 @@
 
 name: Java CI with Maven
 permissions:
-  contents: read
+  contents: write
 
 on:
   push:
     branches: [ "master" ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ "master" ]
 
@@ -35,6 +37,12 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: org.eclipsetrader.releng/target/products/*.zip
 
     - name: Upload product artifact
       uses: actions/upload-artifact@v4
