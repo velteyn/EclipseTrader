@@ -9,6 +9,7 @@ import java.util.Properties;
 import javax.swing.UIManager;
 
 import org.eclipsetrader.jessx.business.BusinessCore;
+import org.eclipsetrader.jessx.internal.JessxActivator;
 import org.eclipsetrader.jessx.server.net.NetworkCore;
 import org.eclipsetrader.jessx.trobot.Discreet;
 import org.eclipsetrader.jessx.trobot.DiscreetIT;
@@ -107,6 +108,12 @@ public class Server
 
  
     public void loadBots(){
+        try {
+            if (JessxActivator.getDefault() != null) {
+                JessxActivator.log("Server: loadBots called. Starting bot connections...");
+            }
+        } catch (Throwable t) {}
+        
         final int temp = 10;
         final int tempIT = 10;
         
@@ -174,6 +181,11 @@ public class Server
     public static void InitLogs() {
         // Log4j configuration removed
         Utils.logger.debug("Logging enabled. Starting logging...");
+        try {
+            if (JessxActivator.getDefault() != null) {
+                JessxActivator.log("Server: Logging initialized.");
+            }
+        } catch (Throwable t) {}
     }
     
     public static void main(final String[] args) {

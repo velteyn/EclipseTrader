@@ -34,6 +34,8 @@ public class Portfolio implements XmlExportable, XmlLoadable, NetworkWritable, N
   private HashMap nonInvestedOwnings = new HashMap<Object, Object>();
   
   private HashMap investedOwnings = new HashMap<Object, Object>();
+
+  private HashMap<String, Float> averagePrices = new HashMap<String, Float>();
   
   private Vector listeners = new Vector();
   
@@ -173,6 +175,7 @@ public class Portfolio implements XmlExportable, XmlLoadable, NetworkWritable, N
   }
   
   public void boughtAssets(String assetName, float amount, int quantity) {
+    updateAveragePriceForBuy(assetName, quantity, amount);
     addToCash(-amount);
     addToNonInvestedCash(-amount);
     addToOwnings(quantity, assetName);
@@ -180,8 +183,10 @@ public class Portfolio implements XmlExportable, XmlLoadable, NetworkWritable, N
   }
   
   public void boughtAssetsInOrderBook(String assetName, float dealPrice, int quantity, String institutionName, float percentageCost, float minimalCost) {
-    addToCash(-quantity * dealPrice - 
-        operationCost(quantity, dealPrice, percentageCost, minimalCost));
+    float cost = quantity * dealPrice + operationCost(quantity, dealPrice, percentageCost, minimalCost);
+    updateAveragePriceForBuy(assetName, quantity, cost);
+
+    addToCash(-cost);
     addToNonInvestedCash(quantity * operationCost(1, dealPrice, percentageCost, minimalCost) - 
         operationCost(quantity, dealPrice, percentageCost, minimalCost));
     addToInvestedCash(-quantity * (dealPrice + quantity * operationCost(1, dealPrice, percentageCost, minimalCost)), institutionName);
@@ -190,6 +195,7 @@ public class Portfolio implements XmlExportable, XmlLoadable, NetworkWritable, N
   }
   
   public void soldAssets(String assetName, float amount, int quantity) {
+    updateAveragePriceForSell(assetName, quantity, amount);
     addToCash(amount);
     addToNonInvestedCash(amount);
     addToOwnings(-quantity, assetName);
@@ -197,7 +203,10 @@ public class Portfolio implements XmlExportable, XmlLoadable, NetworkWritable, N
   }
   
   public void soldAssetsInOrderBook(String assetName, float dealPrice, int quantity, String institutionName, float percentageCost, float minimalCost) {
-    addToCash(quantity * dealPrice - operationCost(quantity, dealPrice, percentageCost, minimalCost));
+    float proceeds = quantity * dealPrice - operationCost(quantity, dealPrice, percentageCost, minimalCost);
+    updateAveragePriceForSell(assetName, quantity, proceeds);
+    
+    addToCash(proceeds);
     addToInvestedCash(-quantity * operationCost(1, dealPrice, percentageCost, minimalCost), institutionName);
     addToNonInvestedCash(quantity * dealPrice + 
         quantity * operationCost(1, dealPrice, percentageCost, minimalCost) - 
@@ -253,8 +262,8 @@ public class Portfolio implements XmlExportable, XmlLoadable, NetworkWritable, N
       String key = owningsIter.next();
       node.addContent((Content)(new Element("Owning"))
           .setAttribute("asset", key)
-          .setAttribute("qtty", 
-            Integer.toString(getOwnings(key))));
+          .setAttribute("qtty", Integer.toString(getOwnings(key)))
+          .setAttribute("price", Float.toString(getAveragePrice(key))));
     } 
   }
   
@@ -276,6 +285,11 @@ public class Portfolio implements XmlExportable, XmlLoadable, NetworkWritable, N
         return;
       } 
       setOwnings(asset, Integer.parseInt(qtty));
+      
+      String price = owning.getAttributeValue("price");
+      if (price != null) {
+          setAveragePrice(asset, Float.parseFloat(price));
+      }
     } 
   }
   
@@ -319,6 +333,63 @@ public class Portfolio implements XmlExportable, XmlLoadable, NetworkWritable, N
       ((PortfolioListener)this.listeners.elementAt(i))
         .portfolioModified(new PortfolioEvent(assetName, 
             3)); 
+  }
+  
+  public float getAveragePrice(String assetName) {
+    if (this.averagePrices.containsKey(assetName))
+      return ((Float)this.averagePrices.get(assetName)).floatValue(); 
+    return 0.0F;
+  }
+
+  public void setAveragePrice(String assetName, float price) {
+    this.averagePrices.put(assetName, new Float(price));
+  }
+  
+  private void updateAveragePriceForBuy(String assetName, int quantity, float totalCost) {
+      int oldQty = getOwnings(assetName);
+      float oldAvg = getAveragePrice(assetName);
+      
+      int newQty = oldQty + quantity;
+      
+      if (newQty == 0) {
+          setAveragePrice(assetName, 0.0f);
+          return;
+      }
+
+      if (oldQty >= 0 && quantity > 0) {
+          // Opening or adding to Long
+          float oldTotal = oldQty * oldAvg;
+          float newTotal = oldTotal + totalCost;
+          setAveragePrice(assetName, newTotal / newQty);
+      }
+      // If Short (oldQty < 0) and buying (quantity > 0), we are covering.
+      // Average Entry Price (for the remaining short position) remains the same.
+  }
+  
+  private void updateAveragePriceForSell(String assetName, int quantity, float totalProceeds) {
+      int oldQty = getOwnings(assetName);
+      // quantity is positive (number of shares sold)
+      
+      int newQty = oldQty - quantity;
+      
+      if (newQty == 0) {
+          setAveragePrice(assetName, 0.0f);
+          return;
+      }
+      
+      if (oldQty <= 0) {
+          // We were 0 or Short. Selling more increases Short position.
+          // Calculate new weighted average for Short.
+          float oldAvg = getAveragePrice(assetName); // Avg Short Price
+          // oldQty is negative or 0.
+          
+          float oldTotalVal = Math.abs(oldQty) * oldAvg;
+          float newTotalVal = oldTotalVal + totalProceeds;
+          int totalShares = Math.abs(newQty); // newQty is negative
+          
+          setAveragePrice(assetName, newTotalVal / totalShares);
+      }
+      // If oldQty > 0 (Long), Selling reduces position. Avg Buy Price stays same.
   }
   
   private void jbInit() throws Exception {}

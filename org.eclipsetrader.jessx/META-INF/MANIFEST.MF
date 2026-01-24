@@ -4,6 +4,7 @@ Bundle-Name: Jessx
 Bundle-SymbolicName: org.eclipsetrader.jessx; singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipsetrader.jessx.internal.JessxActivator
+Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.net;bundle-version="1.2.200",

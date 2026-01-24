@@ -265,7 +265,14 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
 		}
 		final String javaversion = System.getProperty("java.version");
 		this.send(new LoginMessage(login, password, javaversion));
-		thread.start();
+		if (thread == null) {
+			stopping = false;
+			thread = new Thread(this, name + " - Data Reader");
+		}
+		if (!thread.isAlive()) {
+			thread.setDaemon(true);
+			thread.start();
+		}
 	}
 
 	private void setState(final int newState) {
@@ -300,11 +307,10 @@ public class SnapshotConnector implements Runnable, IFeedConnector, IExecutableE
 
 		if (thread != null) {
 			try {
-				synchronized (thread) {
-					thread.notify();
+				if (socket != null && !socket.isClosed()) {
+					socket.close();
 				}
-				thread.join(30 * 1000);
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping thread", e);
 				JessxActivator.log(status);
 			}

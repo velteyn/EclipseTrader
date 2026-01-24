@@ -33,3 +33,5 @@ bin/
 eclipsetrader-build/
 **/eclipsetrader-build/
 fragment.jar
+.mylyn/
+**/.mylyn

@@ -151,6 +151,7 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 
         if (thread == null || !thread.isAlive()) {
             thread = new Thread(this, getName() + " - Orders Monitor"); //$NON-NLS-1$
+            thread.setDaemon(true);
             logger.info("Starting " + thread.getName()); //$NON-NLS-1$
             thread.start();
         }

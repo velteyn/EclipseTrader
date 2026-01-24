@@ -217,9 +217,15 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
     }
 
     protected void disposeSubscription(FeedSubscription subscription) {
+        if (subscription == null) {
+            return;
+        }
         synchronized (symbolSubscriptions) {
             if (subscription.decrementInstanceCount() <= 0) {
                 IdentifierType identifierType = subscription.getIdentifierType();
+                if (identifierType == null) {
+                    return;
+                }
 
                 if (subscription.getIdentifier() != null) {
                     PropertyChangeSupport propertyChangeSupport = (PropertyChangeSupport) subscription.getIdentifier().getAdapter(PropertyChangeSupport.class);
@@ -363,11 +369,13 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
 
         if (notificationThread == null || !notificationThread.isAlive()) {
             notificationThread = new Thread(notificationRunnable, name + " - Notification"); //$NON-NLS-1$
+            notificationThread.setDaemon(true);
             notificationThread.start();
         }
 
         if (thread == null || !thread.isAlive()) {
             thread = new Thread(this, name + " - Data Reader"); //$NON-NLS-1$
+            thread.setDaemon(true);
             thread.start();
         }
     }
@@ -381,7 +389,6 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
                 if (socket != null && !socket.isClosed()) {
                     socket.close();
                 }
-                thread.join(30 * 1000);
             } catch (Exception e) {
                 Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping thread", e); //$NON-NLS-1$
                 JessxActivator.log(status);
@@ -394,8 +401,7 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
                 synchronized (notificationThread) {
                     notificationThread.notify();
                 }
-                notificationThread.join(30 * 1000);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 Status status = new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error stopping notification thread", e); //$NON-NLS-1$
                 JessxActivator.log(status);
             }
@@ -422,8 +428,8 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
         sTit2 = new HashSet<String>();
 
         // Apertura del socket verso il server
+        Proxy socksProxy = Proxy.NO_PROXY;
         try {
-            Proxy socksProxy = Proxy.NO_PROXY;
             if (JessxActivator.getDefault() != null) {
                 BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();
                 ServiceReference reference = context.getServiceReference(IProxyService.class.getName());
@@ -439,22 +445,39 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
                     context.ungetService(reference);
                 }
             }
-            socket = new Socket(socksProxy);
-            socket.connect(new InetSocketAddress(streamingServer, streamingPort));
-            os = socket.getOutputStream();
-            is = new DataInputStream(socket.getInputStream());
         } catch (Exception e) {
-            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error connecting to streaming server", e)); //$NON-NLS-1$
-            try {
-                if (socket != null) {
-                    socket.close();
-                    socket = null;
-                }
-            } catch (Exception e1) {
-                // Do nothing
-            }
-            return;
+            JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error configuring proxy", e));
         }
+            int retryCount = 0;
+            boolean connected = false;
+            while (!connected && !isStopping() && retryCount < 20) {
+                try {
+                    socket = new Socket(socksProxy);
+                    socket.connect(new InetSocketAddress(streamingServer, streamingPort));
+                    os = socket.getOutputStream();
+                    is = new DataInputStream(socket.getInputStream());
+                    connected = true;
+                } catch (Exception e) {
+                    retryCount++;
+                    if (retryCount >= 20) {
+                        JessxActivator.log(new Status(IStatus.ERROR, JessxActivator.PLUGIN_ID, 0, "Error connecting to streaming server after " + retryCount + " retries", e)); //$NON-NLS-1$
+                        try {
+                            if (socket != null) {
+                                socket.close();
+                                socket = null;
+                            }
+                        } catch (Exception e1) {
+                            // Do nothing
+                        }
+                        return;
+                    }
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ie) {}
+                }
+            }
+            
+            if (!connected) return;
 
         while (!isStopping()) {
             if (subscriptionsChanged) {
@@ -544,6 +567,7 @@ public class StreamingConnector implements Runnable, IFeedConnector2, IExecutabl
 
         if (!isStopping()) {
             thread = new Thread(this, name + " - Data Reader"); //$NON-NLS-1$
+            thread.setDaemon(true);
             try {
                 Thread.sleep(2 * 1000);
             } catch (Exception e) {

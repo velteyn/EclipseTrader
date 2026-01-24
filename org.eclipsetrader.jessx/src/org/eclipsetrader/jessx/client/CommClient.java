@@ -38,6 +38,7 @@ class CommClient extends Thread
     
     CommClient() {
         this.state = 0;
+        setDaemon(true);
     }
     
     private void setState(final int newState) {

@@ -22,6 +22,7 @@ public class MessageTimer extends Thread
         this.listInformation = (Vector)Informations.clone();
         this.listInformationSorted = (Vector)this.sort().clone();
         Utils.logger.info("MessageTimer created...");
+        setDaemon(true);
     }
     
     public Vector sort() {
@@ -48,7 +49,16 @@ public class MessageTimer extends Thread
         final int periodDuration = BusinessCore.getGeneralParameters().getPeriodDuration();
         final int size = information.size();
         for (int i = size - 1; i >= 0; --i) {
-            if (Integer.parseInt(((String[])information.get(i))[3]) >= periodDuration || Integer.parseInt(((String[])information.get(i))[2]) > periodCount) {
+            try {
+                String[] info = (String[]) information.get(i);
+                if (Integer.parseInt(info[3]) >= periodDuration || Integer.parseInt(info[2]) > periodCount) {
+                    information.remove(i);
+                }
+            } catch (NumberFormatException e) {
+                // Remove entries with non-numeric values (e.g. "policy", "all") as they cannot be scheduled by timer
+                information.remove(i);
+            } catch (Exception e) {
+                Utils.logger.warn("Error checking information: " + e.getMessage());
                 information.remove(i);
             }
         }

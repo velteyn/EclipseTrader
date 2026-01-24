@@ -38,6 +38,7 @@ class CommRobot extends Thread
     public CommRobot(final RobotCore robotCore) {
         this.state = 0;
         this.robotCore = robotCore;
+        setDaemon(true);
     }
     
     public void connect(final String hostName, final String login, final String password) throws IOException {

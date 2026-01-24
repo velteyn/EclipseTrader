@@ -174,6 +174,7 @@ public class Player extends Thread implements PortfolioListener {
   }
   
   public void listenToClient() {
+    setDaemon(true);
     start();
   }
   
