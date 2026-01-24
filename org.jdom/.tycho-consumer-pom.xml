@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eclipsetrader</groupId>
+  <artifactId>org.jdom</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>JDOM (External)</name>
+  <description>Delegates to Maven Central version of JDOM 2.x.</description>
+  <dependencies>
+    <dependency>
+      <groupId>net.sf.cglib</groupId>
+      <artifactId>net.sf.cglib</artifactId>
+      <version>3.3.0</version>
+      <scope>compile</scope>
+      <optional>false</optional>
+    </dependency>
+  </dependencies>
+</project>
