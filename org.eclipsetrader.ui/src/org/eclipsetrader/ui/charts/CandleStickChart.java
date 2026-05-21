@@ -34,9 +34,9 @@ public class CandleStickChart implements IChartObject, ISummaryBarDecorator, IAd
     private IDataSeries dataSeries;
 
     private int width = 5;
-    private RGB outlineColor = new RGB(0, 0, 0);
-    private RGB positiveColor = new RGB(254, 254, 254);
-    private RGB negativeColor = new RGB(0, 0, 0);
+    private RGB outlineColor = new RGB(64, 64, 64);
+    private RGB positiveColor = new RGB(38, 166, 154); // Modern Green
+    private RGB negativeColor = new RGB(239, 83, 80); // Modern Red
 
     private IAdaptable[] values;
     private List<Candle> pointArray;
@@ -51,6 +51,9 @@ public class CandleStickChart implements IChartObject, ISummaryBarDecorator, IAd
 
     public CandleStickChart(IDataSeries dataSeries) {
         this.dataSeries = dataSeries;
+        this.outlineColor = new RGB(64, 64, 64);
+        this.positiveColor = new RGB(38, 166, 154); // Modern Green
+        this.negativeColor = new RGB(239, 83, 80); // Modern Red
 
         numberFormat.setGroupingUsed(true);
         numberFormat.setMinimumIntegerDigits(1);
@@ -194,7 +197,7 @@ public class CandleStickChart implements IChartObject, ISummaryBarDecorator, IAd
             return dateFormat.format(ohlc.getDate()) + " O:" + numberFormat.format(ohlc.getOpen()) + //$NON-NLS-1$
             " H:" + numberFormat.format(ohlc.getHigh()) + //$NON-NLS-1$
             " L:" + numberFormat.format(ohlc.getLow()) + //$NON-NLS-1$
-            " C:" + numberFormat.format(ohlc.getHigh()); //$NON-NLS-1$
+            " C:" + numberFormat.format(ohlc.getClose()); //$NON-NLS-1$
         }
         return dataSeries.getName();
     }

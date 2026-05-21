@@ -32,14 +32,14 @@ public class MainChartFactory implements IChartObjectFactory {
     private MainRenderStyle style = MainRenderStyle.Candles;
     private OHLCField lineField = OHLCField.Close;
 
-    private RGB lineColor;
+    private RGB lineColor = new RGB(33, 150, 243);
 
-    private RGB barPositiveColor;
-    private RGB barNegativeColor;
+    private RGB barPositiveColor = new RGB(38, 166, 154);
+    private RGB barNegativeColor = new RGB(239, 83, 80);
 
-    private RGB candlePositiveColor;
-    private RGB candleNegativeColor;
-    private RGB candleOutlineColor;
+    private RGB candlePositiveColor = new RGB(38, 166, 154);
+    private RGB candleNegativeColor = new RGB(239, 83, 80);
+    private RGB candleOutlineColor = new RGB(64, 64, 64);
 
     public MainChartFactory() {
     }

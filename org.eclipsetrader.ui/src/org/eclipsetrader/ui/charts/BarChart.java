@@ -31,8 +31,8 @@ public class BarChart implements IChartObject, ISummaryBarDecorator, IAdaptable 
     private IDataSeries dataSeries;
 
     private int width = 5;
-    private RGB positiveColor = new RGB(0, 254, 0);
-    private RGB negativeColor = new RGB(254, 0, 0);
+    private RGB positiveColor = new RGB(38, 166, 154); // Modern Green
+    private RGB negativeColor = new RGB(239, 83, 80); // Modern Red
 
     private IAdaptable[] values;
     private List<Bar> pointArray;
@@ -201,7 +201,7 @@ public class BarChart implements IChartObject, ISummaryBarDecorator, IAdaptable 
             return dateFormat.format(ohlc.getDate()) + " O:" + numberFormat.format(ohlc.getOpen()) + //$NON-NLS-1$
             " H:" + numberFormat.format(ohlc.getHigh()) + //$NON-NLS-1$
             " L:" + numberFormat.format(ohlc.getLow()) + //$NON-NLS-1$
-            " C:" + numberFormat.format(ohlc.getHigh()); //$NON-NLS-1$
+            " C:" + numberFormat.format(ohlc.getClose()); //$NON-NLS-1$
         }
         return dataSeries.getName();
     }

@@ -32,8 +32,8 @@ public class HistogramBarChart implements IChartObject, ISummaryBarDecorator, IA
     private IDataSeries dataSeries;
 
     private int width = 5;
-    private RGB positiveColor = new RGB(0, 254, 0);
-    private RGB negativeColor = new RGB(254, 0, 0);
+    private RGB positiveColor = new RGB(38, 166, 154); // Modern Green
+    private RGB negativeColor = new RGB(239, 83, 80); // Modern Red
 
     private IAdaptable[] values;
     private List<Bar> pointArray = new ArrayList<Bar>(2048);

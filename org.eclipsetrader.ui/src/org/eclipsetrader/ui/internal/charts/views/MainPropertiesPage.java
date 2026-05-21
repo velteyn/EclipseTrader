@@ -77,7 +77,7 @@ public class MainPropertiesPage extends PropertyPage {
         label = new Label(content, SWT.NONE);
         label.setText("Line");
         lineColor = new ColorSelector(content);
-        lineColor.setColorValue(new RGB(0, 0, 255));
+        lineColor.setColorValue(new RGB(33, 150, 243));
         lineColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
@@ -85,7 +85,7 @@ public class MainPropertiesPage extends PropertyPage {
         label = new Label(content, SWT.NONE);
         label.setText("Bars");
         barPositiveColor = new ColorSelector(content);
-        barPositiveColor.setColorValue(new RGB(0, 0, 255));
+        barPositiveColor.setColorValue(new RGB(38, 166, 154));
         barPositiveColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setText("Positive");
@@ -94,7 +94,7 @@ public class MainPropertiesPage extends PropertyPage {
 
         label = new Label(content, SWT.NONE);
         barNegativeColor = new ColorSelector(content);
-        barNegativeColor.setColorValue(new RGB(0, 0, 255));
+        barNegativeColor.setColorValue(new RGB(239, 83, 80));
         barNegativeColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setText("Negative");
@@ -104,7 +104,7 @@ public class MainPropertiesPage extends PropertyPage {
         label = new Label(content, SWT.NONE);
         label.setText("Candles");
         candlePositiveColor = new ColorSelector(content);
-        candlePositiveColor.setColorValue(new RGB(0, 0, 255));
+        candlePositiveColor.setColorValue(new RGB(38, 166, 154));
         candlePositiveColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setText("Positive");
@@ -113,7 +113,7 @@ public class MainPropertiesPage extends PropertyPage {
 
         label = new Label(content, SWT.NONE);
         candleNegativeColor = new ColorSelector(content);
-        candleNegativeColor.setColorValue(new RGB(0, 0, 255));
+        candleNegativeColor.setColorValue(new RGB(239, 83, 80));
         candleNegativeColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setText("Negative");
@@ -122,7 +122,7 @@ public class MainPropertiesPage extends PropertyPage {
 
         label = new Label(content, SWT.NONE);
         candleOutlineColor = new ColorSelector(content);
-        candleOutlineColor.setColorValue(new RGB(0, 0, 255));
+        candleOutlineColor.setColorValue(new RGB(64, 64, 64));
         candleOutlineColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setText("Outline");

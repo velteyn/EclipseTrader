@@ -186,7 +186,7 @@ public class HistogramAreaChart implements IChartObject, ISummaryBarDecorator, I
                 return dateFormat.format(ohlc.getDate()) + " O:" + numberFormat.format(ohlc.getOpen()) + //$NON-NLS-1$
                 " H:" + numberFormat.format(ohlc.getHigh()) + //$NON-NLS-1$
                 " L:" + numberFormat.format(ohlc.getLow()) + //$NON-NLS-1$
-                " C:" + numberFormat.format(ohlc.getHigh()); //$NON-NLS-1$
+                " C:" + numberFormat.format(ohlc.getClose()); //$NON-NLS-1$
             }
             return dataSeries.getName() + ": " + numberFormat.format(dataSeries.getLast().getAdapter(Number.class)); //$NON-NLS-1$
         }
@@ -380,7 +380,7 @@ public class HistogramAreaChart implements IChartObject, ISummaryBarDecorator, I
                 "\r\nO:" + numberFormat.format(ohlc.getOpen()) + //$NON-NLS-1$
                 "\r\nH:" + numberFormat.format(ohlc.getHigh()) + //$NON-NLS-1$
                 "\r\nL:" + numberFormat.format(ohlc.getLow()) + //$NON-NLS-1$
-                "\r\nC:" + numberFormat.format(ohlc.getHigh()); //$NON-NLS-1$
+                "\r\nC:" + numberFormat.format(ohlc.getClose()); //$NON-NLS-1$
             }
             return dataSeries.getName() + ": " + numberFormat.format(value.getAdapter(Number.class)); //$NON-NLS-1$
         }

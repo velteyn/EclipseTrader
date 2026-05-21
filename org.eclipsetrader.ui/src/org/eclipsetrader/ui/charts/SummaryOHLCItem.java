@@ -15,6 +15,8 @@ import java.text.NumberFormat;
 
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -35,9 +37,17 @@ public class SummaryOHLCItem {
         changeLabel = new Label(parent, SWT.NONE);
         label = new Label(parent, SWT.NONE);
 
-        foreground = parent.getDisplay().getSystemColor(SWT.COLOR_BLUE);
-        positiveForeground = parent.getDisplay().getSystemColor(SWT.COLOR_GREEN);
-        negativeForeground = parent.getDisplay().getSystemColor(SWT.COLOR_RED);
+        label.addDisposeListener(new DisposeListener() {
+
+            @Override
+            public void widgetDisposed(DisposeEvent e) {
+                dispose();
+            }
+        });
+
+        foreground = new Color(parent.getDisplay(), 33, 150, 243);
+        positiveForeground = new Color(parent.getDisplay(), 38, 166, 154);
+        negativeForeground = new Color(parent.getDisplay(), 239, 83, 80);
 
         numberFormat.setMinimumFractionDigits(0);
         numberFormat.setMaximumFractionDigits(4);
@@ -74,7 +84,7 @@ public class SummaryOHLCItem {
 
     public void setOHLC(IOHLC currentOHLC, IOHLC previousOHLC) {
         if (currentOHLC != null) {
-            label.setText(NLS.bind("O={0} H={1} L={2} C={3}", new Object[] { //$NON-NLS-1$
+            label.setText(NLS.bind("O:{0} H:{1} L:{2} C:{3}", new Object[] { //$NON-NLS-1$
                     numberFormat.format(currentOHLC.getOpen()),
                     numberFormat.format(currentOHLC.getHigh()),
                     numberFormat.format(currentOHLC.getLow()),
@@ -105,5 +115,17 @@ public class SummaryOHLCItem {
         label.setForeground(foreground);
 
         label.getParent().layout();
+    }
+
+    public void dispose() {
+        if (foreground != null) {
+            foreground.dispose();
+        }
+        if (positiveForeground != null) {
+            positiveForeground.dispose();
+        }
+        if (negativeForeground != null) {
+            negativeForeground.dispose();
+        }
     }
 }

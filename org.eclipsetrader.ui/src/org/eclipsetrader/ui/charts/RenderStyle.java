@@ -17,6 +17,7 @@ public enum RenderStyle {
     Dash("dash", Messages.RenderStyle_DashText), //$NON-NLS-1$
     Histogram("histogram", Messages.RenderStyle_HistogramText), //$NON-NLS-1$
     HistogramBars("histogram-bars", Messages.RenderStyle_HistogramBarsText), //$NON-NLS-1$
+    Candles("candles", Messages.RenderStyle_CandlesText), //$NON-NLS-1$
     Invisible("invisible", Messages.RenderStyle_Invisible); //$NON-NLS-1$
 
     private String name;

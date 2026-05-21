@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipsetrader.core.charts.IDataSeries;
 import org.eclipsetrader.core.feed.IOHLC;
+import org.eclipsetrader.ui.charts.CandleStickChart;
 import org.eclipsetrader.ui.charts.HistogramAreaChart;
 import org.eclipsetrader.ui.charts.HistogramBarChart;
 import org.eclipsetrader.ui.charts.IChartObject;
@@ -133,6 +134,8 @@ public class Util {
                 return new HistogramBarChart(result);
             case Histogram:
                 return new HistogramAreaChart(result, color);
+            case Candles:
+                return new CandleStickChart(result, null, null, null);
             case Invisible:
                 lineStyle = LineStyle.Invisible;
                 break;
