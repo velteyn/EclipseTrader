@@ -535,7 +535,11 @@ public class BrokerConnector implements IBroker, IExecutableExtension, IExecutab
 						if (identifier != null) {
 							IFeedSubscription2 subscription = StreamingConnector.getInstance().subscribeLevel2(identifier);
 							if (subscription != null) {
-								Trade tradeData = new Trade(new Date(deal.getTimestamp()), (double) deal.getDealPrice(), (long) deal.getQuantity(), (long) deal.getQuantity());
+								long timestamp = deal.getTimestamp();
+								if (timestamp < 946684800000L) { // Before year 2000
+									timestamp = System.currentTimeMillis();
+								}
+								Trade tradeData = new Trade(new Date(timestamp), (double) deal.getDealPrice(), (long) deal.getQuantity(), (long) deal.getQuantity());
 								((org.eclipsetrader.jessx.internal.core.connector.FeedSubscription) subscription).setTrade(tradeData);
 
 								BundleContext context = JessxActivator.getDefault().getBundle().getBundleContext();

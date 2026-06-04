@@ -99,7 +99,11 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
         String instit = iterInstit.next();
         long Delay = BasicNextWakeUp();
         Task task = new Task(this, Delay);
-        ((Timer)this.mySchedulers.get(instit)).schedule(task, Delay);
+        try {
+            ((Timer)this.mySchedulers.get(instit)).schedule(task, Delay);
+        } catch (IllegalStateException e) {
+            // Timer already cancelled, happens during period transitions
+        }
       } 
     } 
   }
@@ -191,7 +195,11 @@ public abstract class Robot extends Thread implements ExperimentDeveloppmentList
         String instit = iterInstit.next();
         long Delay = BasicNextWakeUp();
         Task task = new Task(this, Delay);
-        ((Timer)this.mySchedulers.get(instit)).schedule(task, Delay);
+        try {
+            ((Timer)this.mySchedulers.get(instit)).schedule(task, Delay);
+        } catch (IllegalStateException e) {
+            // Timer already cancelled
+        }
       } 
     } 
   }
