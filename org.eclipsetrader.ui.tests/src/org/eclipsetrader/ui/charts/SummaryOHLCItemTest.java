@@ -49,7 +49,7 @@ public class SummaryOHLCItemTest extends TestCase {
     public void testSetOHLC() throws Exception {
         SummaryOHLCItem control = new SummaryOHLCItem(shell, SWT.DATE);
         control.setOHLC(new OHLC(new Date(), 1.0, 2.0, 3.0, 4.0, 100L), new OHLC(new Date(), 5.0, 6.0, 7.0, 8.0, 100L));
-        assertEquals("O=1 H=2 L=3 C=4", control.label.getText());
+        assertEquals("O:1 H:2 L:3 C:4", control.label.getText());
         assertEquals(control.percentFormat.format(-50.0) + "%", control.changeLabel.getText());
     }
 
@@ -70,7 +70,7 @@ public class SummaryOHLCItemTest extends TestCase {
     public void testSetNullPreviousOHLC() throws Exception {
         SummaryOHLCItem control = new SummaryOHLCItem(shell, SWT.DATE);
         control.setOHLC(new OHLC(new Date(), 1.0, 2.0, 3.0, 4.0, 100L), null);
-        assertEquals("O=1 H=2 L=3 C=4", control.label.getText());
+        assertEquals("O:1 H:2 L:3 C:4", control.label.getText());
         assertEquals("", control.changeLabel.getText());
     }
 }

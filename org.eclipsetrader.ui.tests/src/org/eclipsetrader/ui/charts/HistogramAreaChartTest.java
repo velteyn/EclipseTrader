@@ -57,7 +57,7 @@ public class HistogramAreaChartTest extends TestCase {
 
         HistogramAreaChart o = new HistogramAreaChart(dataSeries, null);
 
-        String expected = dateFormat.format(ohlc.getDate()) + " O:" + numberFormat.format(ohlc.getOpen()) + " H:" + numberFormat.format(ohlc.getHigh()) + " L:" + numberFormat.format(ohlc.getLow()) + " C:" + numberFormat.format(ohlc.getHigh());
+        String expected = dateFormat.format(ohlc.getDate()) + " O:" + numberFormat.format(ohlc.getOpen()) + " H:" + numberFormat.format(ohlc.getHigh()) + " L:" + numberFormat.format(ohlc.getLow()) + " C:" + numberFormat.format(ohlc.getClose());
         assertEquals(expected, o.getToolTip());
     }
 
@@ -80,7 +80,7 @@ public class HistogramAreaChartTest extends TestCase {
         Polygon p = o.new Polygon();
         p.setValue(new AdaptableWrapper(ohlc));
 
-        String expected = dataSeries.getName() + "\r\nD:" + dateFormat.format(ohlc.getDate()) + "\r\nO:" + numberFormat.format(ohlc.getOpen()) + "\r\nH:" + numberFormat.format(ohlc.getHigh()) + "\r\nL:" + numberFormat.format(ohlc.getLow()) + "\r\nC:" + numberFormat.format(ohlc.getHigh());
+        String expected = dataSeries.getName() + "\r\nD:" + dateFormat.format(ohlc.getDate()) + "\r\nO:" + numberFormat.format(ohlc.getOpen()) + "\r\nH:" + numberFormat.format(ohlc.getHigh()) + "\r\nL:" + numberFormat.format(ohlc.getLow()) + "\r\nC:" + numberFormat.format(ohlc.getClose());
         ;
         assertEquals(expected, p.getToolTip());
     }
