@@ -53,6 +53,7 @@
         <module>org.eclipsetrader.directaworld</module>
         <module>org.eclipsetrader.directaworld-feature</module>
         <module>org.eclipsetrader.jessx</module>
+        <module>org.eclipsetrader.jessx.test</module>
         <module>org.eclipsetrader.jessx-feature</module>
         <module>org.eclipsetrader.news</module>
         <module>org.eclipsetrader.platform</module>

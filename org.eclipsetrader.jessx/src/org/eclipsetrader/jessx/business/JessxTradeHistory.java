@@ -1,8 +1,5 @@
 package org.eclipsetrader.jessx.business;
 
-import java.util.Date;
-
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipsetrader.core.repositories.IPropertyConstants;
@@ -13,6 +10,7 @@ import org.eclipsetrader.core.repositories.IStoreProperties;
 import org.eclipsetrader.core.repositories.StoreProperties;
 import org.eclipsetrader.core.views.IHolding;
 import org.eclipsetrader.jessx.internal.JessxActivator;
+import org.eclipsetrader.jessx.internal.core.JessxTime;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -79,14 +77,14 @@ public class JessxTradeHistory {
                     properties = new StoreProperties();
                 }
                 properties.setProperty(IPropertyConstants.OBJECT_TYPE, IHolding.class.getName());
-                properties.setProperty(IPropertyConstants.PURCHASE_DATE, new Date(finalDeal.getTimestamp()));
+                properties.setProperty(IPropertyConstants.PURCHASE_DATE, JessxTime.toAbsoluteDate(finalDeal.getTimestamp()));
                 properties.setProperty(IPropertyConstants.SECURITY, security);
                 properties.setProperty(IPropertyConstants.PURCHASE_QUANTITY, (long) finalDeal.getQuantity());
                 properties.setProperty(IPropertyConstants.PURCHASE_PRICE, (double) finalDeal.getDealPrice());
                 
                 // Add debug logging for properties
                 JessxActivator.log(String.format("[TRADE LIFECYCLE - 2.5] Saving trade properties: Date=%s, Qty=%d, Price=%f", 
-                    new Date(finalDeal.getTimestamp()), (long) finalDeal.getQuantity(), (double) finalDeal.getDealPrice()));
+                    JessxTime.toAbsoluteDate(finalDeal.getTimestamp()), (long) finalDeal.getQuantity(), (double) finalDeal.getDealPrice()));
                 
                 store.putProperties(properties, monitor);
 
