@@ -15,8 +15,11 @@ import java.text.NumberFormat;
 
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipsetrader.core.feed.IOHLC;
 
@@ -31,13 +34,30 @@ public class SummaryOHLCItem {
     Color positiveForeground;
     Color negativeForeground;
 
+    // Colors created by this control; must be disposed to avoid resource leaks
+    private final Color ownedForeground;
+    private final Color ownedPositiveForeground;
+    private final Color ownedNegativeForeground;
+
     public SummaryOHLCItem(Composite parent, int style) {
         changeLabel = new Label(parent, SWT.NONE);
         label = new Label(parent, SWT.NONE);
 
-        foreground = parent.getDisplay().getSystemColor(SWT.COLOR_BLUE);
-        positiveForeground = parent.getDisplay().getSystemColor(SWT.COLOR_GREEN);
-        negativeForeground = parent.getDisplay().getSystemColor(SWT.COLOR_RED);
+        Display display = parent.getDisplay();
+        ownedForeground = new Color(display, display.getSystemColor(SWT.COLOR_BLUE).getRGB());
+        ownedPositiveForeground = new Color(display, display.getSystemColor(SWT.COLOR_GREEN).getRGB());
+        ownedNegativeForeground = new Color(display, display.getSystemColor(SWT.COLOR_RED).getRGB());
+        foreground = ownedForeground;
+        positiveForeground = ownedPositiveForeground;
+        negativeForeground = ownedNegativeForeground;
+
+        label.addDisposeListener(new DisposeListener() {
+
+            @Override
+            public void widgetDisposed(DisposeEvent e) {
+                dispose();
+            }
+        });
 
         numberFormat.setMinimumFractionDigits(0);
         numberFormat.setMaximumFractionDigits(4);
@@ -105,5 +125,17 @@ public class SummaryOHLCItem {
         label.setForeground(foreground);
 
         label.getParent().layout();
+    }
+
+    public void dispose() {
+        if (ownedForeground != null && !ownedForeground.isDisposed()) {
+            ownedForeground.dispose();
+        }
+        if (ownedPositiveForeground != null && !ownedPositiveForeground.isDisposed()) {
+            ownedPositiveForeground.dispose();
+        }
+        if (ownedNegativeForeground != null && !ownedNegativeForeground.isDisposed()) {
+            ownedNegativeForeground.dispose();
+        }
     }
 }

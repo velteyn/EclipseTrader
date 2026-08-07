@@ -194,7 +194,7 @@ public class CandleStickChart implements IChartObject, ISummaryBarDecorator, IAd
             return dateFormat.format(ohlc.getDate()) + " O:" + numberFormat.format(ohlc.getOpen()) + //$NON-NLS-1$
             " H:" + numberFormat.format(ohlc.getHigh()) + //$NON-NLS-1$
             " L:" + numberFormat.format(ohlc.getLow()) + //$NON-NLS-1$
-            " C:" + numberFormat.format(ohlc.getHigh()); //$NON-NLS-1$
+            " C:" + numberFormat.format(ohlc.getClose()); //$NON-NLS-1$
         }
         return dataSeries.getName();
     }
