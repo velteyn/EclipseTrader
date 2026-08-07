@@ -36,7 +36,9 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      # SWT-based bundles (e.g. org.eclipsetrader.jessx) activate a GTK Display during
+      # bundle activation; a virtual display is required for their tests to run headless.
+      run: xvfb-run -a mvn -B package --file pom.xml
 
     - name: Release
       uses: softprops/action-gh-release@v2
