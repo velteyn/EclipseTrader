@@ -11,6 +11,11 @@ import org.junit.jupiter.api.Test;
 public class JessxTimeTest {
 
     @Test
+    void ciVerificationProbe() {
+        assertTrue(false, "CI test-execution probe: this must run and fail");
+    }
+
+    @Test
     void elapsedValueResolvesToCurrentEraArrivalTime() {
         long elapsed = 3_600_000L; // one hour into the period
         Date result = JessxTime.toAbsoluteDate(elapsed);
