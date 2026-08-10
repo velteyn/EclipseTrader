@@ -361,10 +361,11 @@ public class BarChart implements IChartObject, ISummaryBarDecorator, IAdaptable 
         }
 
         public void paint(IGraphics graphics) {
+            int barWidth = Math.max(width, 3);
             graphics.setForegroundColor(color);
             graphics.drawLine(x, yHigh, x, yLow);
-            graphics.drawLine(x - width / 2, yOpen, x, yOpen);
-            graphics.drawLine(x, yClose, x + width / 2, yClose);
+            graphics.drawLine(x - barWidth / 2, yOpen, x, yOpen);
+            graphics.drawLine(x, yClose, x + barWidth / 2, yClose);
         }
 
         public boolean containsPoint(int x, int y) {

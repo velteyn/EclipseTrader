@@ -354,17 +354,20 @@ public class CandleStickChart implements IChartObject, ISummaryBarDecorator, IAd
         }
 
         public void paint(IGraphics graphics) {
+            int bodyWidth = Math.max(width, 2);
             graphics.setForegroundColor(outlineColor);
             graphics.drawLine(x, yHigh, x, yLow);
             if (yOpen < yClose) {
+                int bodyHeight = Math.max(yClose - yOpen, 1);
                 graphics.setBackgroundColor(fillColor);
-                graphics.fillRectangle(x - width / 2, yOpen, width, yClose - yOpen);
-                graphics.drawRectangle(x - width / 2, yOpen, width - 1, yClose - yOpen - 1);
+                graphics.fillRectangle(x - bodyWidth / 2, yOpen, bodyWidth, bodyHeight);
+                graphics.drawRectangle(x - bodyWidth / 2, yOpen, bodyWidth - 1, bodyHeight - 1);
             }
             else {
+                int bodyHeight = Math.max(yOpen - yClose, 1);
                 graphics.setBackgroundColor(fillColor);
-                graphics.fillRectangle(x - width / 2, yClose, width, yOpen - yClose);
-                graphics.drawRectangle(x - width / 2, yClose, width - 1, yOpen - yClose - 1);
+                graphics.fillRectangle(x - bodyWidth / 2, yClose, bodyWidth, bodyHeight);
+                graphics.drawRectangle(x - bodyWidth / 2, yClose, bodyWidth - 1, bodyHeight - 1);
             }
         }
 
