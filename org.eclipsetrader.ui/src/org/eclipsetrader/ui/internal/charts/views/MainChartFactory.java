@@ -184,7 +184,7 @@ public class MainChartFactory implements IChartObjectFactory {
      */
     @Override
     public void setParameters(IChartParameters parameters) {
-        style = parameters.hasParameter("style") ? MainRenderStyle.getStyleFromName(parameters.getString("style")) : MainRenderStyle.Bars;
+        style = parameters.hasParameter("style") ? MainRenderStyle.getStyleFromName(parameters.getString("style")) : MainRenderStyle.Candles;
 
         lineColor = parameters.getColor("line-color");
 
