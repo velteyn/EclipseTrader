@@ -31,10 +31,13 @@ public class BarChart implements IChartObject, ISummaryBarDecorator, IAdaptable 
     private IDataSeries dataSeries;
 
     private int width = 5;
-    private RGB positiveColor = new RGB(0, 254, 0);
-    private RGB negativeColor = new RGB(254, 0, 0);
+    private RGB positiveColor = ChartThemes.getDefault().getPositive();
+    private RGB negativeColor = ChartThemes.getDefault().getNegative();
 
     private IAdaptable[] values;
+    private Date firstDate;
+    private Date lastDate;
+    private int pixelWidth;
     private List<Bar> pointArray;
     private boolean valid;
     private boolean hasFocus;
@@ -89,6 +92,11 @@ public class BarChart implements IChartObject, ISummaryBarDecorator, IAdaptable 
      */
     @Override
     public void setDataBounds(DataBounds dataBounds) {
+        this.width = dataBounds.horizontalSpacing;
+        if (isSameRange(dataBounds)) {
+            return;
+        }
+
         List<IAdaptable> l = new ArrayList<IAdaptable>(2048);
         for (IAdaptable value : dataSeries.getValues()) {
             Date date = (Date) value.getAdapter(Date.class);
@@ -96,9 +104,25 @@ public class BarChart implements IChartObject, ISummaryBarDecorator, IAdaptable 
                 l.add(value);
             }
         }
-        this.values = l.toArray(new IAdaptable[l.size()]);
-        this.width = dataBounds.horizontalSpacing;
+        IAdaptable[] visible = l.toArray(new IAdaptable[l.size()]);
+        this.values = OHLCDownsampler.downsample(visible, dataBounds.width);
+        this.firstDate = dataBounds.first;
+        this.lastDate = dataBounds.last;
+        this.pixelWidth = dataBounds.width;
         this.valid = false;
+    }
+
+    private boolean isSameRange(DataBounds dataBounds) {
+        if (values == null || pixelWidth != dataBounds.width) {
+            return false;
+        }
+        if (firstDate != dataBounds.first && (firstDate == null || !firstDate.equals(dataBounds.first))) {
+            return false;
+        }
+        if (lastDate != dataBounds.last && (lastDate == null || !lastDate.equals(dataBounds.last))) {
+            return false;
+        }
+        return true;
     }
 
     /* (non-Javadoc)
@@ -107,6 +131,9 @@ public class BarChart implements IChartObject, ISummaryBarDecorator, IAdaptable 
     @Override
     public void invalidate() {
         this.valid = false;
+        this.values = null;
+        this.firstDate = null;
+        this.lastDate = null;
     }
 
     /* (non-Javadoc)

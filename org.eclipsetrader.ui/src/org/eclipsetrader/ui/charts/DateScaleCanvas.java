@@ -45,6 +45,7 @@ public class DateScaleCanvas {
 
     private Canvas horizontalScaleCanvas;
     private Image horizontalScaleImage;
+    private int horizontalScaleImageZoom;
     private Label label;
 
     private TimeSpan resolutionTimeSpan;
@@ -136,8 +137,13 @@ public class DateScaleCanvas {
                 horizontalScaleImage.dispose();
             }
         }
-        if (horizontalScaleImage == null || horizontalScaleImage.isDisposed()) {
-            horizontalScaleImage = new Image(horizontalScaleCanvas.getDisplay(), clientArea.width, clientArea.height);
+        int zoom = ChartUtils.getZoom(horizontalScaleCanvas);
+        if (horizontalScaleImage == null || horizontalScaleImage.isDisposed() || horizontalScaleImageZoom != zoom) {
+            if (horizontalScaleImage != null && !horizontalScaleImage.isDisposed()) {
+                horizontalScaleImage.dispose();
+            }
+            horizontalScaleImage = ChartUtils.createBackingImage(horizontalScaleCanvas, clientArea);
+            horizontalScaleImageZoom = zoom;
             needsRedraw = true;
         }
 
