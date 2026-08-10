@@ -1113,8 +1113,28 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
                 periodActions[i] = new ContributionItem(list.get(i));
             }
         } catch (Exception e) {
+            periodActions = createDefaultPeriodActions();
             e.printStackTrace();
         }
+        if (periodActions == null) {
+            periodActions = createDefaultPeriodActions();
+        }
+    }
+
+    private ContributionItem[] createDefaultPeriodActions() {
+        PeriodList list = new PeriodList();
+        list.add(new Period("2 Years", TimeSpan.years(2), TimeSpan.days(1)));
+        list.add(new Period("1 Year", TimeSpan.years(1), TimeSpan.days(1)));
+        list.add(new Period("6 Months", TimeSpan.months(6), TimeSpan.days(1)));
+        list.add(new Period("3 Months", TimeSpan.months(3), TimeSpan.days(1)));
+        list.add(new Period("1 Month", TimeSpan.months(1), TimeSpan.days(1)));
+        list.add(new Period("5 Days", TimeSpan.days(5), TimeSpan.minutes(5)));
+        list.add(new Period("1 Day", TimeSpan.days(1), TimeSpan.minutes(1)));
+        ContributionItem[] actions = new ContributionItem[list.size()];
+        for (int i = 0; i < actions.length; i++) {
+            actions[i] = new ContributionItem(list.get(i));
+        }
+        return actions;
     }
 
     public void setPeriodActionSelection(TimeSpan period, TimeSpan resolution) {
