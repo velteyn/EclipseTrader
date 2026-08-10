@@ -72,7 +72,8 @@ public class ScalarDownsamplerModernTest {
         IAdaptable[] result = ScalarDownsampler.downsample(source, 2);
 
         Assertions.assertEquals(2, result.length);
-        Assertions.assertEquals(100.0, ((Number) result[0].getAdapter(Number.class)).doubleValue(), 0.001);
+        Assertions.assertEquals(10.0, ((Number) result[0].getAdapter(Number.class)).doubleValue(), 0.001);
+        Assertions.assertEquals(100.0, ((Number) result[1].getAdapter(Number.class)).doubleValue(), 0.001);
     }
 
     @Test
