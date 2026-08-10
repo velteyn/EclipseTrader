@@ -22,6 +22,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipsetrader.core.charts.IDataSeries;
+import org.eclipsetrader.core.charts.ScalarDownsampler;
 
 /**
  * Draws a line chart.

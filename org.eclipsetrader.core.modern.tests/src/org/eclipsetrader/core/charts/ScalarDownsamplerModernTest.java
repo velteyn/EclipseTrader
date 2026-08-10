@@ -1,4 +1,4 @@
-package org.eclipsetrader.ui.charts;
+package org.eclipsetrader.core.charts;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipsetrader.core.charts.NumberValue;

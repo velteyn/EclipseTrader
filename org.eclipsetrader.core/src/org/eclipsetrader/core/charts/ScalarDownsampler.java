@@ -9,7 +9,7 @@
  *     Marco Maccaferri - initial API and implementation
  */
 
-package org.eclipsetrader.ui.charts;
+package org.eclipsetrader.core.charts;
 
 import java.util.Date;
 

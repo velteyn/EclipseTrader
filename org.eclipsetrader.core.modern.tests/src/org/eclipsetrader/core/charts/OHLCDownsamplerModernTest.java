@@ -1,4 +1,4 @@
-package org.eclipsetrader.ui.charts;
+package org.eclipsetrader.core.charts;
 
 import org.eclipsetrader.core.feed.IOHLC;
 import org.eclipsetrader.core.feed.OHLC;

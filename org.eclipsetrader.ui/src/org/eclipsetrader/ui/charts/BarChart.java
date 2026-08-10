@@ -23,6 +23,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipsetrader.core.charts.IDataSeries;
 import org.eclipsetrader.core.charts.OHLCDataSeries;
+import org.eclipsetrader.core.charts.OHLCDownsampler;
 import org.eclipsetrader.core.feed.IOHLC;
 import org.eclipsetrader.core.feed.TimeSpan;
 
