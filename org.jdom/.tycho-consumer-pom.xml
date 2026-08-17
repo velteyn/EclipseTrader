@@ -6,14 +6,6 @@
   <artifactId>org.jdom</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <name>JDOM (External)</name>
-  <description>Delegates to Maven Central version of JDOM 2.x.</description>
-  <dependencies>
-    <dependency>
-      <groupId>net.sf.cglib</groupId>
-      <artifactId>net.sf.cglib</artifactId>
-      <version>3.3.0</version>
-      <scope>compile</scope>
-      <optional>false</optional>
-    </dependency>
-  </dependencies>
+  <description>Delegates to embedded jdom-1.1.3.jar.</description>
+  <dependencies/>
 </project>

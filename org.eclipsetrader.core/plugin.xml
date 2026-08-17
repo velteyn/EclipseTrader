@@ -45,6 +45,13 @@
             id="org.eclipsetrader.core.internal.repositories.DefaultElementFactory"
             name="Default Element Factory">
       </factory>
-   </extension>
+    </extension>
+
+    <extension
+          point="org.eclipse.core.runtime.preferences">
+       <initializer
+             class="org.eclipsetrader.core.internal.PreferenceInitializer">
+       </initializer>
+    </extension>
 
 </plugin>

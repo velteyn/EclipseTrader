@@ -1,0 +1,32 @@
+/*
+ * Copyright (c) 2004-2011 Marco Maccaferri and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Marco Maccaferri - initial API and implementation
+ */
+
+package org.eclipsetrader.ui.charts;
+
+import org.eclipse.swt.graphics.RGB;
+
+/**
+ * Holds the available chart themes.
+ *
+ * @since 1.0
+ */
+public final class ChartThemes {
+
+    private static final ChartTheme DEFAULT = new ChartTheme(
+            new RGB(33, 150, 243), new RGB(38, 166, 154), new RGB(239, 83, 80), new RGB(64, 64, 64), new RGB(224, 224, 224), new RGB(255, 255, 255));
+
+    private ChartThemes() {
+    }
+
+    public static ChartTheme getDefault() {
+        return DEFAULT;
+    }
+}

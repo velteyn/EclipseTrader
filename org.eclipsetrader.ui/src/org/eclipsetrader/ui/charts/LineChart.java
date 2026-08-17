@@ -22,6 +22,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipsetrader.core.charts.IDataSeries;
+import org.eclipsetrader.core.charts.ScalarDownsampler;
 
 /**
  * Draws a line chart.
@@ -33,10 +34,13 @@ public class LineChart implements IChartObject, ISummaryBarDecorator, IAdaptable
     private IDataSeries dataSeries;
 
     private LineStyle style;
-    private RGB color;
+    private RGB color = ChartThemes.getDefault().getLine();
     private int width = 5;
 
     private IAdaptable[] values;
+    private Date firstDate;
+    private Date lastDate;
+    private int pixelWidth;
     private Point[] pointArray;
     private boolean valid;
     private boolean hasFocus;
@@ -52,7 +56,9 @@ public class LineChart implements IChartObject, ISummaryBarDecorator, IAdaptable
     public LineChart(IDataSeries dataSeries, LineStyle style, RGB color) {
         this.dataSeries = dataSeries;
         this.style = style;
-        this.color = color;
+        if (color != null) {
+            this.color = color;
+        }
 
         numberFormat.setGroupingUsed(true);
         numberFormat.setMinimumIntegerDigits(1);
@@ -73,6 +79,11 @@ public class LineChart implements IChartObject, ISummaryBarDecorator, IAdaptable
      */
     @Override
     public void setDataBounds(DataBounds dataBounds) {
+        this.width = dataBounds.horizontalSpacing;
+        if (isSameRange(dataBounds)) {
+            return;
+        }
+
         List<IAdaptable> l = new ArrayList<IAdaptable>(2048);
         for (IAdaptable value : dataSeries.getValues()) {
             Date date = (Date) value.getAdapter(Date.class);
@@ -80,9 +91,25 @@ public class LineChart implements IChartObject, ISummaryBarDecorator, IAdaptable
                 l.add(value);
             }
         }
-        this.values = l.toArray(new IAdaptable[l.size()]);
-        this.width = dataBounds.horizontalSpacing;
+        IAdaptable[] visible = l.toArray(new IAdaptable[l.size()]);
+        this.values = ScalarDownsampler.downsample(visible, dataBounds.width);
+        this.firstDate = dataBounds.first;
+        this.lastDate = dataBounds.last;
+        this.pixelWidth = dataBounds.width;
         this.valid = false;
+    }
+
+    private boolean isSameRange(DataBounds dataBounds) {
+        if (values == null || pixelWidth != dataBounds.width) {
+            return false;
+        }
+        if (firstDate != dataBounds.first && (firstDate == null || !firstDate.equals(dataBounds.first))) {
+            return false;
+        }
+        if (lastDate != dataBounds.last && (lastDate == null || !lastDate.equals(dataBounds.last))) {
+            return false;
+        }
+        return true;
     }
 
     /* (non-Javadoc)
@@ -111,6 +138,9 @@ public class LineChart implements IChartObject, ISummaryBarDecorator, IAdaptable
     @Override
     public void invalidate() {
         this.valid = false;
+        this.values = null;
+        this.firstDate = null;
+        this.lastDate = null;
     }
 
     /* (non-Javadoc)

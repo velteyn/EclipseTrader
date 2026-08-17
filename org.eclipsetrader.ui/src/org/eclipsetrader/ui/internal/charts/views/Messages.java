@@ -26,6 +26,12 @@ public class Messages extends NLS {
     public static String ChartViewPart_UpdateAction;
     public static String ChartViewPart_ZoomInAction;
     public static String ChartViewPart_ZoomOutAction;
+    public static String ChartViewPart_CandlestickAction;
+    public static String ChartViewPart_BarAction;
+    public static String ChartViewPart_LineChartAction;
+    public static String ChartViewPart_HistogramAction;
+    public static String ChartViewPart_ChartTypeMenu;
+    public static String ChartViewPart_PeriodMenu;
     public static String CurrentBookFactory_Name;
     public static String CurrentPriceLineFactory_Name;
     public static String CustomPeriodDialog_BeginDateLabel;

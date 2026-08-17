@@ -21,6 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipsetrader.core.charts.IDataSeries;
+import org.eclipsetrader.core.charts.ScalarDownsampler;
 
 /**
  * Draw an historgram bar chart.
@@ -32,10 +33,13 @@ public class HistogramBarChart implements IChartObject, ISummaryBarDecorator, IA
     private IDataSeries dataSeries;
 
     private int width = 5;
-    private RGB positiveColor = new RGB(0, 254, 0);
-    private RGB negativeColor = new RGB(254, 0, 0);
+    private RGB positiveColor = ChartThemes.getDefault().getPositive();
+    private RGB negativeColor = ChartThemes.getDefault().getNegative();
 
     private IAdaptable[] values;
+    private Date firstDate;
+    private Date lastDate;
+    private int pixelWidth;
     private List<Bar> pointArray = new ArrayList<Bar>(2048);
     private boolean valid;
     private boolean hasFocus;
@@ -58,6 +62,11 @@ public class HistogramBarChart implements IChartObject, ISummaryBarDecorator, IA
      */
     @Override
     public void setDataBounds(DataBounds dataBounds) {
+        this.width = dataBounds.horizontalSpacing - 1;
+        if (isSameRange(dataBounds)) {
+            return;
+        }
+
         List<IAdaptable> l = new ArrayList<IAdaptable>(2048);
         for (IAdaptable value : dataSeries.getValues()) {
             Date date = (Date) value.getAdapter(Date.class);
@@ -65,9 +74,25 @@ public class HistogramBarChart implements IChartObject, ISummaryBarDecorator, IA
                 l.add(value);
             }
         }
-        this.values = l.toArray(new IAdaptable[l.size()]);
-        this.width = dataBounds.horizontalSpacing - 1;
+        IAdaptable[] visible = l.toArray(new IAdaptable[l.size()]);
+        this.values = ScalarDownsampler.downsample(visible, dataBounds.width);
+        this.firstDate = dataBounds.first;
+        this.lastDate = dataBounds.last;
+        this.pixelWidth = dataBounds.width;
         this.valid = false;
+    }
+
+    private boolean isSameRange(DataBounds dataBounds) {
+        if (values == null || pixelWidth != dataBounds.width) {
+            return false;
+        }
+        if (firstDate != dataBounds.first && (firstDate == null || !firstDate.equals(dataBounds.first))) {
+            return false;
+        }
+        if (lastDate != dataBounds.last && (lastDate == null || !lastDate.equals(dataBounds.last))) {
+            return false;
+        }
+        return true;
     }
 
     /* (non-Javadoc)
@@ -76,6 +101,9 @@ public class HistogramBarChart implements IChartObject, ISummaryBarDecorator, IA
     @Override
     public void invalidate() {
         this.valid = false;
+        this.values = null;
+        this.firstDate = null;
+        this.lastDate = null;
     }
 
     /* (non-Javadoc)

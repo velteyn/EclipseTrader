@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Market Simulator
+Bundle-SymbolicName: org.eclipsetrader.market.sim; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipsetrader.market.sim.internal.MarketSimActivator
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: EclipseTrader.org
+Require-Bundle: org.eclipsetrader.core;bundle-version="1.0.0",
+ org.eclipse.core.runtime,
+ org.eclipse.swt
+Export-Package: org.eclipsetrader.market.sim.engine,
+ org.eclipsetrader.market.sim.risk,
+ org.eclipsetrader.market.sim.agent,
+ org.eclipsetrader.market.sim.clock,
+ org.eclipsetrader.market.sim.feed
