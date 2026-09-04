@@ -16,19 +16,19 @@ This documentation hub provides an in-depth analysis of the system's architectur
 | **[UI Workbench & Charting System](ui-workbench-and-charts.md)** | Details on RCP views (Portfolio View, Level II Market Depth View, Order Dialog), Draw2D charting engine (`ChartViewPart`, `IChartObject`), technical indicator extensions, and SWT widget cleanup. |
 | **[Broker & Feed Connector System](broker-and-feed-connectors.md)** | Guide to connector extension points, active brokers (`JessX`, `Paper`), and status of legacy deactivated connectors (`Directa`, `Yahoo Finance`, `Borsa Italiana`). |
 | **[Unfulfilled Roadmap & Missing Features](missing-features-and-unfulfilled-roadmap.md)** | Forensic analysis of dead git branches (`feature/modernize-chart-rendering`, `attempt-upgrade-eclipse`, `feature/ai-gm-news-integration`, `origin-bot-attempt`), failed AI coding attempts, missing market features, and compiler/runtime limitations. |
-| **[Strategic Roadmap & Future TODO List](todo-and-future-vision.md)** | Actionable TODO roadmap for project evolution: FIX protocol exchange connectors, smart LLM-driven trading bots, intelligent dynamic news via Ollama/llama.cpp, an AI Market Game Master (GM) orchestrator, and Java 21/25 migration strategy. |
+| **[Strategic Roadmap, Domain Vision & TODO List](todo-and-future-vision.md)** | Actionable TODO roadmap clarifying Market Simulation vs Live Execution, smart LLM-driven trading bots, intelligent news via Ollama/llama.cpp, an AI Market Game Master (GM) orchestrator, simulation time-series databases, and Java 21/25 migration strategy. |
 
 ---
 
-## About EclipseTrader
+## About EclipseTrader & JESSX Market Simulator
 
-**EclipseTrader** is a sophisticated financial market analysis and stock trading platform built on the Java Eclipse Rich Client Platform (RCP) framework. Originally created by Marco Maccaferri in 2011, the codebase has evolved into a specialized stock market simulation testbed.
+**EclipseTrader with JESSX** is fundamentally an **Agent-Based Market Simulator and Experimental Economics Laboratory**. Rather than acting merely as a terminal for executing trades on external live brokerages, its inner core is a self-contained, closed-loop stock exchange.
 
-The centerpiece of the platform is the **JESSX Plugin**, an embedded multi-agent market simulation engine. JESSX allows financial researchers, algorithmic developers, and market microstructures enthusiasts to execute simulated trading sessions, deploy autonomous trading bots, stream real-time Level II order books and candlestick charts, and evaluate trading strategies in a controlled environment.
+The centerpiece of the platform is the **JESSX Plugin**, an embedded multi-agent market simulation engine. JESSX enables financial researchers, algorithmic developers, and market microstructure enthusiasts to execute simulated trading sessions, deploy autonomous trading bots, stream real-time Level II order books and candlestick charts, and analyze agent behavior under controlled economic scenarios.
 
 ```
 +-------------------------------------------------------------------------------+
-|                            ECLIPSETRADER SYSTEM                               |
+|                        JESSX SIMULATION SYSTEM                                |
 |                                                                               |
 |  +--------------------+  +-----------------------+  +----------------------+  |
 |  | Core Platform      |  | JESSX Simulator       |  | Technical Charts     |  |
