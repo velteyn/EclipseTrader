@@ -49,6 +49,8 @@ public class TraderPerspective implements IPerspectiveFactory {
         // Right.
         IPlaceholderFolderLayout right = layout.createPlaceholderFolder("right", IPageLayout.RIGHT, (float) 0.75, UIConstants.EDITOR_AREA); //$NON-NLS-1$
         right.addPlaceholder("org.eclipsetrader.ui.views.level2:*"); //$NON-NLS-1$
+        right.addPlaceholder("org.eclipsetrader.ui.views.orders:*"); //$NON-NLS-1$
+        right.addPlaceholder("org.eclipsetrader.ui.views.tickers:*"); //$NON-NLS-1$
 
         // Add "new wizards".
         layout.addNewWizardShortcut("org.eclipsetrader.ui.wizards.new.stock");//$NON-NLS-1$
@@ -59,8 +61,17 @@ public class TraderPerspective implements IPerspectiveFactory {
         layout.addShowViewShortcut("org.eclipsetrader.ui.views.navigator"); //$NON-NLS-1$
         layout.addShowViewShortcut("org.eclipsetrader.ui.views.markets"); //$NON-NLS-1$
         layout.addShowViewShortcut("org.eclipsetrader.ui.views.repositories"); //$NON-NLS-1$
+        layout.addShowViewShortcut("org.eclipsetrader.ui.views.watchlist"); //$NON-NLS-1$
+        layout.addShowViewShortcut("org.eclipsetrader.ui.views.level2"); //$NON-NLS-1$
+        layout.addShowViewShortcut("org.eclipsetrader.ui.views.orders"); //$NON-NLS-1$
+        layout.addShowViewShortcut("org.eclipsetrader.ui.views.tickers"); //$NON-NLS-1$
 
         // Add default action sets
         layout.addActionSet("org.eclipsetrader.ui.launcher");
+        layout.addActionSet("org.eclipsetrader.ui.charts.tools");
+        layout.addActionSet("org.eclipsetrader.ui.charts.zoom");
+
+        // Add "perspectives".
+        layout.addPerspectiveShortcut("org.eclipsetrader.ui.charts"); //$NON-NLS-1$
     }
 }

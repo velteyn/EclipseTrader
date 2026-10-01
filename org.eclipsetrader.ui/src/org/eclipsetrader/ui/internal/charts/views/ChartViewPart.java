@@ -96,6 +96,7 @@ import org.eclipsetrader.ui.charts.ChartView;
 import org.eclipsetrader.ui.charts.ChartViewItem;
 import org.eclipsetrader.ui.charts.IChartEditorListener;
 import org.eclipsetrader.ui.charts.IChartObject;
+import org.eclipsetrader.ui.charts.IChartObjectFactory;
 import org.eclipsetrader.ui.internal.UIActivator;
 import org.eclipsetrader.ui.internal.charts.DataImportJob;
 import org.eclipsetrader.ui.internal.charts.ImportDataPage;
@@ -148,6 +149,11 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
     private Action currentBookAction;
     private CurrentBookFactory currentBookFactory;
     private TradeFactory tradeFactory;
+
+    private Action candleAction;
+    private Action barAction;
+    private Action lineAction;
+    private Action histogramAction;
 
     IMemento memento;
     IPreferenceStore preferenceStore;
@@ -335,7 +341,18 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
         IToolBarManager toolBarManager = actionBars.getToolBarManager();
         toolBarManager.add(new Separator("additions")); //$NON-NLS-1$
         toolBarManager.add(updateAction);
-        
+        toolBarManager.add(new Separator());
+        toolBarManager.add(candleAction);
+        toolBarManager.add(barAction);
+        toolBarManager.add(lineAction);
+        toolBarManager.add(histogramAction);
+        toolBarManager.add(new Separator());
+        if (periodActions != null) {
+            for (int i = 0; i < periodActions.length; i++) {
+                toolBarManager.add(periodActions[i]);
+            }
+        }
+
         if (dialogSettings != null) {
             TimeSpan periodTimeSpan = TimeSpan.fromString(dialogSettings.get(K_PERIOD));
             TimeSpan resolutionTimeSpan = TimeSpan.fromString(dialogSettings.get(K_RESOLUTION));
@@ -471,7 +488,7 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
             public void run() {
             }
         };
-        pasteAction.setId("copy"); //$NON-NLS-1$
+        pasteAction.setId("paste"); //$NON-NLS-1$
         pasteAction.setActionDefinitionId("org.eclipse.ui.edit.paste"); //$NON-NLS-1$
         pasteAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
         pasteAction.setDisabledImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));
@@ -556,6 +573,61 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
                 }
             }
         };
+
+        candleAction = new Action("Candlestick", IAction.AS_RADIO_BUTTON) {
+
+            @Override
+            public void run() {
+                switchChartType(MainRenderStyle.Candles);
+            }
+        };
+        candleAction.setToolTipText(Messages.ChartViewPart_CandlestickAction);
+
+        barAction = new Action("OHLC Bars", IAction.AS_RADIO_BUTTON) {
+
+            @Override
+            public void run() {
+                switchChartType(MainRenderStyle.Bars);
+            }
+        };
+        barAction.setToolTipText(Messages.ChartViewPart_BarAction);
+
+        lineAction = new Action("Line", IAction.AS_RADIO_BUTTON) {
+
+            @Override
+            public void run() {
+                switchChartType(MainRenderStyle.Line);
+            }
+        };
+        lineAction.setToolTipText(Messages.ChartViewPart_LineChartAction);
+
+        histogramAction = new Action("Area", IAction.AS_RADIO_BUTTON) {
+
+            @Override
+            public void run() {
+                switchChartType(MainRenderStyle.Histogram);
+            }
+        };
+        histogramAction.setToolTipText(Messages.ChartViewPart_HistogramAction);
+    }
+
+    void switchChartType(MainRenderStyle style) {
+        IViewItem[] rows = view.getItems();
+        for (int i = 0; i < rows.length; i++) {
+            ChartRowViewItem rowItem = (ChartRowViewItem) rows[i];
+            IViewItem[] children = rowItem.getItems();
+            if (children != null) {
+                for (int j = 0; j < children.length; j++) {
+                    ChartViewItem viewItem = (ChartViewItem) children[j];
+                    IChartObjectFactory factory = viewItem.getFactory();
+                    if (factory instanceof MainChartFactory) {
+                        ((MainChartFactory) factory).setStyle(style);
+                        rowItem.refresh();
+                    }
+                }
+            }
+        }
+        refreshChart();
     }
 
     /* (non-Javadoc)
@@ -658,6 +730,23 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
             @Override
             public void menuAboutToShow(IMenuManager menuManager) {
                 menuManager.add(new Separator("top")); //$NON-NLS-1$
+
+                MenuManager chartTypeMenu = new MenuManager(Messages.ChartViewPart_ChartTypeMenu);
+                chartTypeMenu.add(candleAction);
+                chartTypeMenu.add(barAction);
+                chartTypeMenu.add(lineAction);
+                chartTypeMenu.add(histogramAction);
+                menuManager.add(chartTypeMenu);
+
+                MenuManager periodMenu = new MenuManager(Messages.ChartViewPart_PeriodMenu);
+                if (periodActions != null) {
+                    for (int i = 0; i < periodActions.length; i++) {
+                        periodMenu.add(periodActions[i]);
+                    }
+                }
+                menuManager.add(periodMenu);
+
+                menuManager.add(new Separator());
                 menuManager.add(cutAction);
                 menuManager.add(copyAction);
                 menuManager.add(pasteAction);
@@ -1024,8 +1113,28 @@ public class ChartViewPart extends ViewPart implements ISaveablePart {
                 periodActions[i] = new ContributionItem(list.get(i));
             }
         } catch (Exception e) {
+            periodActions = createDefaultPeriodActions();
             e.printStackTrace();
         }
+        if (periodActions == null) {
+            periodActions = createDefaultPeriodActions();
+        }
+    }
+
+    private ContributionItem[] createDefaultPeriodActions() {
+        PeriodList list = new PeriodList();
+        list.add(new Period("2 Years", TimeSpan.years(2), TimeSpan.days(1)));
+        list.add(new Period("1 Year", TimeSpan.years(1), TimeSpan.days(1)));
+        list.add(new Period("6 Months", TimeSpan.months(6), TimeSpan.days(1)));
+        list.add(new Period("3 Months", TimeSpan.months(3), TimeSpan.days(1)));
+        list.add(new Period("1 Month", TimeSpan.months(1), TimeSpan.days(1)));
+        list.add(new Period("5 Days", TimeSpan.days(5), TimeSpan.minutes(5)));
+        list.add(new Period("1 Day", TimeSpan.days(1), TimeSpan.minutes(1)));
+        ContributionItem[] actions = new ContributionItem[list.size()];
+        for (int i = 0; i < actions.length; i++) {
+            actions[i] = new ContributionItem(list.get(i));
+        }
+        return actions;
     }
 
     public void setPeriodActionSelection(TimeSpan period, TimeSpan resolution) {

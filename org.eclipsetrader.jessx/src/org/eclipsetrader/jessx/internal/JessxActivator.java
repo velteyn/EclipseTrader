@@ -407,7 +407,7 @@ public class JessxActivator extends AbstractUIPlugin {
 					log("JESSX security pre-registration complete");
 				}
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			IStatus status = new Status(IStatus.WARNING, PLUGIN_ID, 
 				"Could not pre-register JESSX securities. Charts may fail to initialize.", e);
 			getLog().log(status);
@@ -415,7 +415,14 @@ public class JessxActivator extends AbstractUIPlugin {
 	}
 	
 	private void populateTickersView() {
-		org.eclipse.swt.widgets.Display.getDefault().asyncExec(new Runnable() {
+		org.eclipse.swt.widgets.Display display;
+		try {
+			display = org.eclipse.swt.widgets.Display.getDefault();
+		} catch (Throwable t) {
+			log("Headless environment detected; skipping Tickers view population.");
+			return;
+		}
+		display.asyncExec(new Runnable() {
 			public void run() {
 				try {
 					// Access UIActivator safely

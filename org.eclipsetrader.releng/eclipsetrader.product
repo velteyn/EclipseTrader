@@ -53,6 +53,7 @@
       <feature id="org.eclipsetrader.platform-feature" version="0.0.0"/>
       <feature id="org.eclipsetrader.brokers.paper-feature" version="0.0.0"/>
       <feature id="org.eclipsetrader.jessx-feature" version="0.0.0"/>
+      <feature id="org.eclipsetrader.market.sim-feature" version="0.0.0"/>
    </features>
 
    <configurations>

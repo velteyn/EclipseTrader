@@ -43,6 +43,8 @@ public class Graphics implements IGraphics {
 
     public Graphics(Drawable drawable, Point location, IAxis horizontalAxis, IAxis verticalAxis) {
         this.gc = new GC(drawable);
+        this.gc.setAntialias(SWT.ON);
+        this.gc.setTextAntialias(SWT.ON);
 
         this.horizontalAxis = horizontalAxis;
         this.verticalAxis = verticalAxis;

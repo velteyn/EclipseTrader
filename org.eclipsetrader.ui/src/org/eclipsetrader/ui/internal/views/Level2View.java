@@ -346,6 +346,15 @@ public class Level2View extends ViewPart {
                     activeConnector.setText(this.connector.getName());
                 }
             }
+            if (this.connector == null) {
+                IFeedConnector connector = CoreActivator.getDefault().getDefaultConnector();
+                if (connector instanceof IFeedConnector2) {
+                    this.connector = (IFeedConnector2) connector;
+                    if (this.connector != null) {
+                        activeConnector.setText(this.connector.getName());
+                    }
+                }
+            }
 
             if (s != null && connector != null) {
                 subscription = this.connector.subscribeLevel2(s);

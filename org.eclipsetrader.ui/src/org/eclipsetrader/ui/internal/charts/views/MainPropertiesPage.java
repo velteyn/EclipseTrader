@@ -15,7 +15,6 @@ import org.eclipse.jface.preference.ColorSelector;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -23,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.dialogs.PropertyPage;
+import org.eclipsetrader.ui.charts.ChartThemes;
 
 public class MainPropertiesPage extends PropertyPage {
 
@@ -77,7 +77,7 @@ public class MainPropertiesPage extends PropertyPage {
         label = new Label(content, SWT.NONE);
         label.setText("Line");
         lineColor = new ColorSelector(content);
-        lineColor.setColorValue(new RGB(0, 0, 255));
+        lineColor.setColorValue(ChartThemes.getDefault().getLine());
         lineColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
@@ -85,7 +85,7 @@ public class MainPropertiesPage extends PropertyPage {
         label = new Label(content, SWT.NONE);
         label.setText("Bars");
         barPositiveColor = new ColorSelector(content);
-        barPositiveColor.setColorValue(new RGB(0, 0, 255));
+        barPositiveColor.setColorValue(ChartThemes.getDefault().getPositive());
         barPositiveColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setText("Positive");
@@ -94,7 +94,7 @@ public class MainPropertiesPage extends PropertyPage {
 
         label = new Label(content, SWT.NONE);
         barNegativeColor = new ColorSelector(content);
-        barNegativeColor.setColorValue(new RGB(0, 0, 255));
+        barNegativeColor.setColorValue(ChartThemes.getDefault().getNegative());
         barNegativeColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setText("Negative");
@@ -104,7 +104,7 @@ public class MainPropertiesPage extends PropertyPage {
         label = new Label(content, SWT.NONE);
         label.setText("Candles");
         candlePositiveColor = new ColorSelector(content);
-        candlePositiveColor.setColorValue(new RGB(0, 0, 255));
+        candlePositiveColor.setColorValue(ChartThemes.getDefault().getPositive());
         candlePositiveColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setText("Positive");
@@ -113,7 +113,7 @@ public class MainPropertiesPage extends PropertyPage {
 
         label = new Label(content, SWT.NONE);
         candleNegativeColor = new ColorSelector(content);
-        candleNegativeColor.setColorValue(new RGB(0, 0, 255));
+        candleNegativeColor.setColorValue(ChartThemes.getDefault().getNegative());
         candleNegativeColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setText("Negative");
@@ -122,7 +122,7 @@ public class MainPropertiesPage extends PropertyPage {
 
         label = new Label(content, SWT.NONE);
         candleOutlineColor = new ColorSelector(content);
-        candleOutlineColor.setColorValue(new RGB(0, 0, 255));
+        candleOutlineColor.setColorValue(ChartThemes.getDefault().getOutline());
         candleOutlineColor.getButton().setData("label", label);
         label = new Label(content, SWT.NONE);
         label.setText("Outline");

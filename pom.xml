@@ -54,6 +54,9 @@
         <module>org.eclipsetrader.directaworld-feature</module>
         <module>org.eclipsetrader.jessx</module>
         <module>org.eclipsetrader.jessx.test</module>
+        <module>org.eclipsetrader.market.sim</module>
+        <module>org.eclipsetrader.market.sim.tests</module>
+        <module>org.eclipsetrader.market.sim-feature</module>
         <module>org.eclipsetrader.jessx-feature</module>
         <module>org.eclipsetrader.news</module>
         <module>org.eclipsetrader.platform</module>

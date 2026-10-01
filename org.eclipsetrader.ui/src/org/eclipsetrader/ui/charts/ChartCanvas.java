@@ -53,6 +53,8 @@ public class ChartCanvas {
 
     private Image image;
     private Image verticalScaleImage;
+    private int imageZoom;
+    private int verticalScaleImageZoom;
 
     private Label label;
 
@@ -250,8 +252,13 @@ public class ChartCanvas {
                 image.dispose();
             }
         }
-        if (image == null || image.isDisposed()) {
-            image = new Image(canvas.getDisplay(), clientArea.width, clientArea.height);
+        int zoom = ChartUtils.getZoom(canvas);
+        if (image == null || image.isDisposed() || imageZoom != zoom) {
+            if (image != null && !image.isDisposed()) {
+                image.dispose();
+            }
+            image = ChartUtils.createBackingImage(canvas, clientArea);
+            imageZoom = zoom;
             needsRedraw = true;
         }
 
@@ -360,8 +367,13 @@ public class ChartCanvas {
                 verticalScaleImage.dispose();
             }
         }
-        if (verticalScaleImage == null || verticalScaleImage.isDisposed()) {
-            verticalScaleImage = new Image(verticalScaleCanvas.getDisplay(), clientArea.width, clientArea.height);
+        int zoom = ChartUtils.getZoom(verticalScaleCanvas);
+        if (verticalScaleImage == null || verticalScaleImage.isDisposed() || verticalScaleImageZoom != zoom) {
+            if (verticalScaleImage != null && !verticalScaleImage.isDisposed()) {
+                verticalScaleImage.dispose();
+            }
+            verticalScaleImage = ChartUtils.createBackingImage(verticalScaleCanvas, clientArea);
+            verticalScaleImageZoom = zoom;
             needsRedraw = true;
         }
 

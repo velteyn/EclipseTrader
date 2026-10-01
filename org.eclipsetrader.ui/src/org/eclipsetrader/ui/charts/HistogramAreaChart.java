@@ -23,6 +23,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipsetrader.core.charts.IDataSeries;
+import org.eclipsetrader.core.charts.ScalarDownsampler;
 import org.eclipsetrader.core.feed.IOHLC;
 
 /**
@@ -36,11 +37,14 @@ public class HistogramAreaChart implements IChartObject, ISummaryBarDecorator, I
     private OHLCField field;
 
     private IAdaptable[] values;
+    private Date firstDate;
+    private Date lastDate;
+    private int pixelWidth;
     private List<Polygon> pointArray = new ArrayList<Polygon>(2048);
     private boolean valid;
     private boolean focus;
 
-    private RGB color = new RGB(0, 0, 0);
+    private RGB color = ChartThemes.getDefault().getLine();
     private RGB fillColor;
 
     private SummaryDateItem dateItem;
@@ -81,6 +85,10 @@ public class HistogramAreaChart implements IChartObject, ISummaryBarDecorator, I
      */
     @Override
     public void setDataBounds(DataBounds dataBounds) {
+        if (isSameRange(dataBounds)) {
+            return;
+        }
+
         List<IAdaptable> l = new ArrayList<IAdaptable>(2048);
         for (IAdaptable value : dataSeries.getValues()) {
             Date date = (Date) value.getAdapter(Date.class);
@@ -88,8 +96,25 @@ public class HistogramAreaChart implements IChartObject, ISummaryBarDecorator, I
                 l.add(value);
             }
         }
-        this.values = l.toArray(new IAdaptable[l.size()]);
+        IAdaptable[] visible = l.toArray(new IAdaptable[l.size()]);
+        this.values = ScalarDownsampler.downsample(visible, dataBounds.width);
+        this.firstDate = dataBounds.first;
+        this.lastDate = dataBounds.last;
+        this.pixelWidth = dataBounds.width;
         this.valid = false;
+    }
+
+    private boolean isSameRange(DataBounds dataBounds) {
+        if (values == null || pixelWidth != dataBounds.width) {
+            return false;
+        }
+        if (firstDate != dataBounds.first && (firstDate == null || !firstDate.equals(dataBounds.first))) {
+            return false;
+        }
+        if (lastDate != dataBounds.last && (lastDate == null || !lastDate.equals(dataBounds.last))) {
+            return false;
+        }
+        return true;
     }
 
     /* (non-Javadoc)
@@ -98,6 +123,9 @@ public class HistogramAreaChart implements IChartObject, ISummaryBarDecorator, I
     @Override
     public void invalidate() {
         this.valid = false;
+        this.values = null;
+        this.firstDate = null;
+        this.lastDate = null;
     }
 
     /* (non-Javadoc)
